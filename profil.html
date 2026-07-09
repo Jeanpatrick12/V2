@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Mon profil</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:100}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+.sa-nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.sa-nav-link{font-size:13.5px;color:#555;padding:8px 14px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit}
+.sa-nav-link:hover{background:#f7f7f7;color:#111}
+.sa-nav-actions{display:flex;align-items:center;gap:4px;margin-left:16px}
+.sa-nav-cta{font-size:13.5px;color:white;background:#E84533;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;border:none;font-family:inherit;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sa-nav-cta:hover{background:#c93a2a}
+.sa-nav-divider{width:1px;height:32px;background:#e5e5e5;margin:0 6px;flex-shrink:0}
+.sa-nav-icon-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:5px 9px;border-radius:8px;color:#444;font-family:inherit}
+.sa-nav-icon-btn:hover{background:#f5f5f5;color:#111}
+.sa-nav-icon-btn i{font-size:19px}
+.sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
+.sa-nav-account-wrap{position:relative}
+.sa-nav-avatar{width:19px;height:19px;border-radius:50%;background:#E84533;color:white;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.sa-nav-badge{position:absolute;top:1px;right:3px;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px;line-height:1}
+.sa-account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);min-width:220px;padding:8px;z-index:200}
+.sa-account-dropdown.show{display:block}
+.sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px;word-break:break-all}
+.sa-account-dropdown-email i{color:#E84533;flex-shrink:0}
+.sa-account-dropdown-logout{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;color:#c0392b;padding:9px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.sa-account-dropdown-logout:hover{background:#fff0ee}
+
+.sa-page-header{max-width:760px;margin:0 auto;padding:2.75rem 40px 0.5rem}
+.sa-page-header h1{font-size:28px;font-weight:700;letter-spacing:-0.6px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.sa-page-header h1 i{color:#E84533}
+.sa-page-header p{font-size:14px;color:#888}
+.sa-page-body{max-width:760px;margin:0 auto;padding:1.75rem 40px 4rem}
+
+.sa-auth-gate{position:fixed;inset:0;background:#fff;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.sa-auth-gate-card{max-width:380px;text-align:center}
+.sa-auth-gate-card i{font-size:38px;color:#E84533;margin-bottom:14px;display:block}
+.sa-auth-gate-card h2{font-size:20px;font-weight:700;color:#111;margin-bottom:10px;letter-spacing:-0.3px}
+.sa-auth-gate-card p{font-size:13.5px;color:#777;line-height:1.6;margin-bottom:20px}
+.sa-auth-gate-card button{background:#E84533;color:#fff;border:none;padding:13px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+
+.sa-profile-card{border:1px solid #e8e8e8;border-radius:18px;padding:2rem}
+.sa-profile-top{display:flex;align-items:center;gap:18px;margin-bottom:1.8rem;padding-bottom:1.8rem;border-bottom:1px solid #f0f0f0}
+.sa-profile-avatar-wrap{position:relative;flex-shrink:0}
+.sa-profile-avatar{width:84px;height:84px;border-radius:50%;background:#E84533;color:#fff;font-size:30px;font-weight:700;display:flex;align-items:center;justify-content:center;background-size:cover;background-position:center}
+.sa-profile-avatar-edit{position:absolute;bottom:-2px;right:-2px;width:30px;height:30px;border-radius:50%;background:#111;color:#fff;border:3px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px}
+.sa-profile-avatar-edit:hover{background:#E84533}
+.sa-profile-name{font-size:18px;font-weight:700;color:#111}
+.sa-profile-email{font-size:13px;color:#999;margin-top:2px}
+.sa-pfield{margin-bottom:16px}
+.sa-pfield label{display:block;font-size:12.5px;font-weight:600;color:#333;margin-bottom:5px}
+.sa-pfield input{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:13.5px;font-family:inherit;color:#111}
+.sa-pfield input:focus{outline:none;border-color:#E84533}
+.sa-pgrid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sa-profile-save{background:#111;color:#fff;border:none;padding:11px 22px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:7px;margin-top:6px}
+.sa-profile-save:hover{background:#E84533}
+
+@media(max-width:700px){
+  .sa-nav{padding:0 24px}
+  .sa-nav-icon-btn .sa-nav-icon-label{display:none}
+  .sa-page-header,.sa-page-body{padding-left:24px;padding-right:24px}
+  .sa-pgrid-2{grid-template-columns:1fr}
+}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+
+<div class="sa-auth-gate" id="authGate">
+  <div class="sa-auth-gate-card">
+    <i class="ti ti-lock"></i>
+    <h2>Connectez-vous pour voir votre profil</h2>
+    <p>Cette page rassemble vos informations personnelles et votre photo de profil.</p>
+    <button onclick="window.location.href='connexion?redirect=' + encodeURIComponent('profil')">Se connecter ou créer un compte</button>
+  </div>
+</div>
+
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='./'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="sa-nav-links">
+      <button class="sa-nav-link" onclick="window.location.href='./'">Accueil</button>
+      <button class="sa-nav-link" onclick="window.location.href='guide'">Guide</button>
+      <button class="sa-nav-link" onclick="window.location.href='annonces'">Annonces</button>
+      <button class="sa-nav-link" onclick="window.open('professionnels','_blank')">Professionnels</button>
+    </div>
+    <div class="sa-nav-actions">
+      <button class="sa-nav-cta" onclick="window.open('deposer','_blank')">
+        <i class="ti ti-plus"></i> Déposer une annonce
+      </button>
+      <div class="sa-nav-divider"></div>
+      <button class="sa-nav-icon-btn" onclick="window.location.href='recherches'">
+        <i class="ti ti-search"></i>
+        <span class="sa-nav-icon-label">Mes recherches</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'">
+        <i class="ti ti-heart"></i>
+        <span class="sa-nav-badge" data-nav-fav-badge></span>
+        <span class="sa-nav-icon-label">Favoris</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='messages'">
+        <i class="ti ti-message-2"></i>
+        <span class="sa-nav-badge" data-nav-msg-badge></span>
+        <span class="sa-nav-icon-label">Messages</span>
+      </button>
+      <div class="sa-nav-account-wrap" data-nav-account>
+        <button class="sa-nav-icon-btn">
+          <i class="ti ti-user"></i>
+          <span class="sa-nav-icon-label">Se connecter</span>
+        </button>
+        <div class="sa-account-dropdown"></div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="sa-page-header">
+  <h1><i class="ti ti-user-circle"></i> Mon profil</h1>
+  <p>Vos informations personnelles, telles que renseignées à la création de votre compte.</p>
+</div>
+
+<div class="sa-page-body">
+  <div class="sa-profile-card">
+    <div class="sa-profile-top">
+      <div class="sa-profile-avatar-wrap">
+        <div class="sa-profile-avatar" id="pAvatar"></div>
+        <div class="sa-profile-avatar-edit" onclick="document.getElementById('pPhotoInput').click()" title="Changer la photo"><i class="ti ti-edit"></i></div>
+        <input type="file" id="pPhotoInput" accept="image/*" style="display:none" onchange="onPhotoChange(this)">
+      </div>
+      <div>
+        <div class="sa-profile-name" id="pName"></div>
+        <div class="sa-profile-email" id="pEmailDisplay"></div>
+      </div>
+    </div>
+
+    <div class="sa-pgrid-2">
+      <div class="sa-pfield"><label>Prénom</label><input type="text" id="pPrenom"></div>
+      <div class="sa-pfield"><label>Nom</label><input type="text" id="pNom"></div>
+    </div>
+    <div class="sa-pfield"><label>Email</label><input type="email" id="pEmail"></div>
+
+    <button class="sa-profile-save" onclick="saveProfile()"><i class="ti ti-device-floppy"></i> Enregistrer les modifications</button>
+  </div>
+
+</div>
+
+<script>
+let photoData = null;
+
+function render() {
+  const user = SA.getUser();
+  if (!user) { document.getElementById('authGate').style.display = 'flex'; return; }
+
+  photoData = user.photo || null;
+  refreshAvatar(user);
+  document.getElementById('pName').textContent = (user.prenom || '') + ' ' + (user.nom || '');
+  document.getElementById('pEmailDisplay').textContent = user.email || '';
+  document.getElementById('pPrenom').value = user.prenom || '';
+  document.getElementById('pNom').value = user.nom || '';
+  document.getElementById('pEmail').value = user.email || '';
+}
+
+function refreshAvatar(user) {
+  const av = document.getElementById('pAvatar');
+  if (photoData) {
+    av.style.backgroundImage = "url('" + photoData + "')";
+    av.textContent = '';
+  } else {
+    av.style.backgroundImage = '';
+    av.textContent = (user.prenom || '?').charAt(0).toUpperCase();
+  }
+}
+
+function onPhotoChange(input) {
+  const file = input.files[0];
+  if (!file) return;
+  SA.compressImageFile(file).then(dataUrl => {
+    photoData = dataUrl;
+    refreshAvatar(SA.getUser());
+  });
+}
+
+async function saveProfile() {
+  const prenom = document.getElementById('pPrenom').value.trim();
+  const nom = document.getElementById('pNom').value.trim();
+  const email = document.getElementById('pEmail').value.trim();
+  if (!prenom || !email) { SA.toast("Le prénom et l'email sont requis", 'ti-alert-triangle'); return; }
+  await SA.updateUser({ prenom, nom, email, photo: photoData });
+  SA.toast('Profil mis à jour', 'ti-circle-check');
+  render();
+}
+
+SA.init().then(function(){
+  render();
+  setTimeout(function(){
+    var dropdown=document.querySelector('.sa-account-dropdown');
+    if(!dropdown||!SA.getUser())return;
+    var docs=[];
+    try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+    var badge=docs.length?'<span style="background:#E84533;color:white;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;margin-left:6px">'+docs.length+'</span>':'';
+    var btn=document.createElement('button');
+    btn.className='sa-account-dropdown-logout';
+    btn.style.color='#333';
+    btn.innerHTML='<i class="ti ti-files"></i> Mes documents'+badge;
+    btn.onclick=function(){window.location='/documents';};
+    var btns=dropdown.querySelectorAll('button');
+    if(btns.length)dropdown.insertBefore(btn,btns[btns.length-1]);
+    else dropdown.appendChild(btn);
+  },200);
+});
+
+function openMesDocsOverlay(){
+  var docs=[];
+  try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var icons={visite:'ti-door-enter',offre:'ti-file-euro',acceptation:'ti-circle-check',contre:'ti-arrows-exchange',refus:'ti-x',cles:'ti-key'};
+  var colors={visite:'#ff7a68',offre:'#3b82f6',acceptation:'#16a34a',contre:'#d97706',refus:'#dc2626',cles:'#ca8a04'};
+  var overlay=document.createElement('div');
+  overlay.id='mesDocsOverlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  var inner='<div style="background:white;border-radius:18px;width:100%;max-width:580px;max-height:80vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.3)">';
+  inner+='<div style="display:flex;align-items:center;justify-content:space-between;padding:22px 24px 16px;border-bottom:1px solid #f0f0f0">';
+  inner+='<div style="font-size:17px;font-weight:800;color:#111;display:flex;align-items:center;gap:8px"><i class="ti ti-files" style="color:#E84533"></i> Mes documents</div>';
+  inner+='<button onclick="document.getElementById(\'mesDocsOverlay\').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1"><i class="ti ti-x"></i></button></div>';
+  inner+='<div style="padding:18px 24px">';
+  if(!docs.length){
+    inner+='<div style="text-align:center;padding:40px 20px;color:#999"><i class="ti ti-files" style="font-size:36px;display:block;margin-bottom:12px;color:#ddd"></i>Aucun document sauvegardé</div>';
+  } else {
+    docs.forEach(function(d,idx){
+      var ico=icons[d.type]||'ti-file-text', col=colors[d.type]||'#E84533';
+      inner+='<div id="docRow'+idx+'" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid #f0f0f0;border-radius:12px;margin-bottom:10px;transition:opacity .3s">';
+      inner+='<div style="width:38px;height:38px;border-radius:10px;background:#f8f9fb;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti '+ico+'" style="color:'+col+';font-size:18px"></i></div>';
+      inner+='<div style="flex:1"><div style="font-size:14px;font-weight:600;color:#111">'+d.title+'</div><div style="font-size:11.5px;color:#aaa;margin-top:2px">'+d.date+'</div></div>';
+      inner+='<div style="display:flex;gap:6px">';
+      inner+='<button onclick="viewDocOverlay('+idx+')" style="padding:8px 14px;background:#E84533;color:white;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">Ouvrir</button>';
+      inner+='<button onclick="deleteDocOverlay('+idx+')" style="padding:8px 10px;background:#f5f5f5;color:#999;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit" title="Supprimer"><i class="ti ti-trash"></i></button>';
+      inner+='</div></div>';
+    });
+  }
+  inner+='</div></div>';
+  overlay.innerHTML=inner;
+  overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});
+  document.body.appendChild(overlay);
+}
+
+function viewDocOverlay(idx){
+  var docs=[];
+  try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var doc=docs[idx];
+  if(!doc)return;
+  var styles=Array.from(document.querySelectorAll('style')).map(function(s){return s.outerHTML;}).join('');
+  var w=window.open('','_blank');
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+doc.title+'</title>'+
+    '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">'+
+    styles+'<style>body{background:#f4f5f7;padding:30px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}@media print{body{padding:0;background:white}}</style>'+
+    '</head><body>'+doc.html+'</body></html>');
+  w.document.close();
+}
+
+function deleteDocOverlay(idx){
+  var docs=[];
+  try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var row=document.getElementById('docRow'+idx);
+  if(row){row.style.opacity='0';setTimeout(function(){
+    docs.splice(idx,1);
+    localStorage.setItem('sa_user_docs',JSON.stringify(docs));
+    document.getElementById('mesDocsOverlay').remove();
+    openMesDocsOverlay();
+  },300);}
+}
+</script>
+</body>
+</html>

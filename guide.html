@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendre sans agent — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+/* ── Reset & base ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111;background:#f7f8fa;line-height:1}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+
+/* ── Nav (same as index) ── */
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:200}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{width:32px;height:32px;background:#E84533;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sa-logo i{color:white;font-size:16px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-.3px}
+.sa-brand span{color:#E84533}
+.sa-nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.sa-nav-link{font-size:13.5px;color:#555;padding:8px 14px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit;transition:all .15s}
+.sa-nav-link:hover{background:#f7f7f7;color:#111}
+.sa-nav-link.active{color:#E84533;background:#fff0ee;font-weight:600}
+.sa-nav-link.pro-highlight{color:#E84533;background:#fff0ee}
+.sa-nav-link.pro-highlight:hover{background:#ffe2dd}
+.sa-nav-actions{display:flex;align-items:center;gap:8px;margin-left:16px}
+.sa-nav-cta{font-size:13.5px;color:white;background:#E84533;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;border:none;font-family:inherit;display:flex;align-items:center;gap:6px;transition:background .15s}
+.sa-nav-cta:hover{background:#c93a2a}
+.sa-nav-divider{width:1px;height:32px;background:#e5e5e5;margin:0 4px}
+.sa-nav-icon-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:5px 9px;border-radius:8px;color:#444;font-family:inherit;transition:all .15s}
+.sa-nav-icon-btn:hover{background:#f5f5f5;color:#111}
+.sa-nav-icon-btn i{font-size:19px}
+.sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
+.sa-nav-badge{position:absolute;top:2px;right:2px;background:#E84533;color:white;font-size:8.5px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px;line-height:1}
+
+/* ── Hero ── */
+.v-hero{background:linear-gradient(135deg,#0c1622 0%,#152233 60%,#1c2e44 100%);padding:72px 40px 80px;position:relative;overflow:hidden}
+.v-hero::after{content:'';position:absolute;right:-120px;top:-80px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(232,69,51,.12) 0%,transparent 70%);pointer-events:none}
+.v-hero-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:80px;align-items:center}
+.v-hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,122,104,.12);border:1px solid rgba(255,122,104,.3);border-radius:999px;padding:6px 14px;font-size:11.5px;font-weight:700;color:#ff7a68;letter-spacing:.05em;margin-bottom:22px}
+.v-hero h1{font-size:46px;font-weight:700;color:white;line-height:1.1;letter-spacing:-.8px;margin-bottom:18px}
+.v-hero h1 em{color:#ff7a68;font-style:normal}
+.v-hero-sub{font-size:16px;color:rgba(255,255,255,.55);line-height:1.75;margin-bottom:32px;max-width:460px}
+.v-hero-cta{display:flex;align-items:center;gap:12px}
+.v-hero-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:10px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s}
+.v-hero-btn-primary{background:#E84533;color:white}
+.v-hero-btn-primary:hover{background:#c93a2a;transform:translateY(-1px)}
+.v-hero-btn-secondary{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15)}
+.v-hero-btn-secondary:hover{background:rgba(255,255,255,.13)}
+.v-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.v-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 20px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.v-stat:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.18)}
+.v-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.v-stat::after{content:'';position:absolute;top:-40px;left:-20px;width:120px;height:120px;border-radius:50%;opacity:.14;pointer-events:none;filter:blur(24px)}
+.v-stat:nth-child(1)::before,.v-stat:nth-child(1)::after{background:#E84533}
+.v-stat:nth-child(2)::before,.v-stat:nth-child(2)::after{background:#ff7a68}
+.v-stat:nth-child(3)::before,.v-stat:nth-child(3)::after{background:rgba(255,255,255,.3)}
+.v-stat:nth-child(4)::before,.v-stat:nth-child(4)::after{background:rgba(255,255,255,.15)}
+.v-stat:nth-child(1) .v-stat-val{color:#ff7a68}
+.v-stat:nth-child(2) .v-stat-val{color:#ffa08c}
+.v-stat:nth-child(3) .v-stat-val{color:rgba(255,255,255,.92)}
+.v-stat:nth-child(4) .v-stat-val{color:rgba(255,255,255,.7)}
+.v-stat-val{font-size:36px;font-weight:900;letter-spacing:-.5px}
+.v-stat-lbl{font-size:11.5px;color:rgba(255,255,255,.55);margin-top:6px;line-height:1.4}
+
+/* ── Step progress bar (sticky) ── */
+.v-progress-bar{background:white;border-bottom:1px solid #ebebeb;position:sticky;top:64px;z-index:100}
+.v-progress-inner{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:stretch;height:52px;gap:0;overflow-x:auto;scrollbar-width:none}
+.v-progress-inner::-webkit-scrollbar{display:none}
+.v-progress-step{display:flex;align-items:center;gap:8px;padding:0 16px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0;transition:all .2s;position:relative}
+.v-progress-step:hover{background:#fafafa}
+.v-progress-step.active{border-bottom-color:#ff7a68}
+.v-progress-step.done .v-ps-num{background:#ecfdf5;border-color:#6ee7b7;color:#1a8c4e}
+.v-ps-num{width:22px;height:22px;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#aaa;flex-shrink:0;transition:all .2s}
+.v-progress-step.active .v-ps-num{background:#E84533;border-color:#E84533;color:white}
+.v-ps-label{font-size:12.5px;color:#888;font-weight:600;transition:color .2s}
+.v-progress-step.active .v-ps-label{color:#ff7a68}
+.v-progress-step.done .v-ps-label{color:#1a8c4e}
+.v-ps-sep{color:#ddd;font-size:16px;flex-shrink:0;margin:0 2px}
+
+/* ── Page layout ── */
+.v-layout{max-width:1240px;margin:0 auto;padding:20px 40px 40px;display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+
+/* ── Timeline steps ── */
+.v-timeline{position:relative;padding-left:52px}
+.v-timeline::before{content:'';position:absolute;left:19px;top:24px;bottom:24px;width:2px;background:linear-gradient(to bottom,#e8e8e8,#e8e8e8);border-radius:1px}
+.v-t-step{position:relative;margin-bottom:8px;scroll-margin-top:120px}
+.v-t-step::before{content:'';position:absolute;left:-52px;top:20px;width:20px;height:2px;background:#e8e8e8}
+.v-t-step.active::before{background:#E84533}
+.v-t-step.done::before{background:#6ee7b7}
+.v-t-dot{position:absolute;left:-64px;top:12px;width:26px;height:26px;border-radius:50%;border:2px solid #ddd;background:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#aaa;transition:all .25s;z-index:1}
+.v-t-step.active .v-t-dot{background:#E84533;border-color:#E84533;color:white;box-shadow:0 0 0 4px rgba(232,69,51,.12)}
+.v-t-step.done .v-t-dot{background:#ecfdf5;border-color:#6ee7b7;color:#1a8c4e;font-size:14px}
+
+/* ── Step card ── */
+.v-card{background:white;border-radius:16px;border:1.5px solid #ebebeb;overflow:hidden;transition:border-color .25s,box-shadow .25s}
+.v-card.active{border-color:#E84533;box-shadow:0 4px 24px rgba(232,69,51,.08)}
+.v-card-head{display:flex;align-items:center;gap:12px;padding:13px 18px;cursor:pointer;user-select:none}
+.v-card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:#f7f8fa;color:#aaa;transition:all .25s}
+.v-card.active .v-card-icon{background:#fff5f3;color:#ff7a68}
+.v-card.done .v-card-icon{background:#ecfdf5;color:#1a8c4e}
+.v-card-info{flex:1;min-width:0}
+.v-card-title{font-size:14.5px;font-weight:800;color:#111;line-height:1.2}
+.v-card-sub{font-size:12.5px;color:#888;margin-top:3px}
+.v-card-chevron{color:#ccc;font-size:20px;transition:transform .25s;flex-shrink:0}
+.v-card.active .v-card-chevron{transform:rotate(180deg);color:#ff7a68}
+.v-card-body{display:none;border-top:1px solid #f2f2f2}
+.v-card.active .v-card-body{display:block}
+.v-card-desc{font-size:13px;color:#555;line-height:1.7;padding:14px 20px 10px}
+
+/* ── Checklist ── */
+.v-checklist{padding:0 20px}
+.v-check{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px solid #f7f8fa;cursor:pointer;transition:background .1s}
+.v-check:hover{background:#fafafa;margin:0 -20px;padding:8px 20px}
+.v-check-box{width:20px;height:20px;border-radius:6px;border:2px solid #ddd;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.v-check-box.on{background:#E84533;border-color:#E84533}
+.v-check-box.on::after{content:'✓';font-size:11px;color:white;font-weight:800}
+.v-check-txt{font-size:13.5px;color:#333;line-height:1.55}
+.v-check-txt.on{color:#bbb;text-decoration:line-through}
+
+/* ── Tips ── */
+.v-tip{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:10px;margin:16px 24px;font-size:13px;line-height:1.6}
+.v-tip-blue{background:#f0f7ff;color:#1e3a8a}
+.v-tip-blue i{color:#3b82f6;font-size:16px;margin-top:1px;flex-shrink:0}
+.v-tip-red{background:#fff5f4;color:#991b1b}
+.v-tip-red i{color:#E84533;font-size:16px;margin-top:1px;flex-shrink:0}
+.v-tip-green{background:#f0fdf4;color:#14532d}
+.v-tip-green i{color:#16a34a;font-size:16px;margin-top:1px;flex-shrink:0}
+
+/* ── Card actions ── */
+.v-card-actions{display:flex;align-items:center;gap:10px;padding:12px 20px 18px;flex-wrap:wrap}
+.v-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s}
+.v-btn-primary{background:#E84533;color:white}
+.v-btn-primary:hover{background:#c93a2a}
+.v-btn-ghost{background:#f7f8fa;color:#555;border:1.5px solid #e8e8e8}
+.v-btn-ghost:hover{background:#f0f0f0}
+.v-btn-done{background:#ecfdf5;color:#1a8c4e;border:1.5px solid #a7f3d0}
+.v-btn-done:hover{background:#d1fae5}
+.v-inline-link{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:#ff7a68;background:rgba(255,122,104,.08);border:1px solid rgba(255,122,104,.2);border-radius:5px;padding:2px 7px;margin-left:6px;text-decoration:none;white-space:nowrap;vertical-align:middle;transition:background .15s}
+.v-inline-link:hover{background:rgba(255,122,104,.18)}
+.v-head-done{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;background:#f0fdf4;border:1.5px solid #a7f3d0;color:#1a8c4e;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .15s}
+.v-head-done:hover{background:#dcfce7}
+.v-card.done .v-head-done{background:#dcfce7;border-color:#6ee7b7;color:#15803d;pointer-events:none}
+
+/* ── Sidebar ── */
+.v-sidebar{display:flex;flex-direction:column;gap:16px;position:sticky;top:120px}
+
+/* ── Progress widget ── */
+.v-progress-widget{background:white;border-radius:16px;border:1.5px solid #ebebeb;padding:20px}
+.v-pw-title{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px}
+.v-pw-steps{display:flex;flex-direction:column;gap:2px}
+.v-pw-step{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:9px;cursor:pointer;transition:background .15s}
+.v-pw-step:hover{background:#f7f8fa}
+.v-pw-step.active{background:#fff5f4}
+.v-pw-num{width:22px;height:22px;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#aaa;flex-shrink:0;transition:all .2s}
+.v-pw-step.active .v-pw-num{background:#E84533;border-color:#E84533;color:white}
+.v-pw-step.done .v-pw-num{background:#ecfdf5;border-color:#6ee7b7;color:#1a8c4e}
+.v-pw-label{font-size:12.5px;color:#777;font-weight:500;transition:color .2s}
+.v-pw-step.active .v-pw-label{color:#ff7a68;font-weight:700}
+.v-pw-step.done .v-pw-label{color:#1a8c4e}
+.v-pw-bar{height:5px;background:#f0f0f0;border-radius:3px;margin-top:14px;overflow:hidden}
+.v-pw-fill{height:100%;background:linear-gradient(to right,#E84533,#ff6b5b);border-radius:3px;transition:width .4s ease}
+.v-pw-count{font-size:12px;color:#888;margin-top:8px;font-weight:600}
+
+/* ── Doc cards widget ── */
+.v-docs-widget{background:white;border-radius:16px;border:1.5px solid #ebebeb;overflow:hidden}
+.v-dw-head{background:linear-gradient(135deg,#0c1622,#1c2e44);padding:18px 20px;display:flex;align-items:center;gap:10px}
+.v-dw-head i{font-size:20px;color:#E84533}
+.v-dw-head-text h3{font-size:14px;font-weight:800;color:white}
+.v-dw-head-text p{font-size:11.5px;color:rgba(255,255,255,.45);margin-top:2px}
+.v-dw-body{padding:12px}
+.v-doc-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;border:1.5px solid #ebebeb;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.v-doc-card:last-child{margin-bottom:0}
+.v-doc-card:hover{border-color:#E84533;background:#fff5f4}
+.v-doc-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.v-doc-info{flex:1;min-width:0}
+.v-doc-name{font-size:13px;font-weight:700;color:#111}
+.v-doc-desc{font-size:11.5px;color:#888;margin-top:2px}
+.v-doc-arrow{color:#ccc;font-size:16px;flex-shrink:0}
+.v-doc-card:hover .v-doc-arrow{color:#E84533}
+
+/* ── Helper widget ── */
+.v-helper-widget{background:white;border-radius:16px;border:1.5px solid #ebebeb;overflow:hidden}
+.v-hw-head{background:linear-gradient(135deg,#0c1622,#1c2e44);padding:18px 20px;display:flex;align-items:center;gap:10px}
+.v-hw-head i{font-size:22px;color:#E84533}
+.v-hw-head-text h3{font-size:14px;font-weight:800;color:white}
+.v-hw-head-text p{font-size:11.5px;color:rgba(255,255,255,.45);margin-top:2px}
+.v-hw-body{padding:16px}
+.v-field{margin-bottom:12px}
+.v-label{font-size:11.5px;font-weight:700;color:#555;margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.04em}
+.v-input{width:100%;border:1.5px solid #e8e8e8;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:inherit;color:#111;outline:none;background:white;transition:border-color .15s}
+.v-input:focus{border-color:#E84533}
+.v-select{width:100%;border:1.5px solid #e8e8e8;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:inherit;color:#111;outline:none;background:white;appearance:none;transition:border-color .15s}
+.v-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.v-gen-out{background:#f7f8fa;border:1.5px dashed #e0e0e0;border-radius:10px;padding:14px;font-size:13px;color:#333;line-height:1.7;white-space:pre-wrap;min-height:70px;margin-top:10px;font-family:inherit}
+
+/* ── CTA section ── */
+.v-cta-section{background:linear-gradient(135deg,#0c1622,#1c2e44);padding:64px 40px;margin-top:0}
+.v-cta-inner{max-width:1240px;margin:0 auto;text-align:center}
+.v-cta-inner h2{font-size:32px;font-weight:800;color:white;margin-bottom:12px}
+.v-cta-inner p{font-size:15px;color:rgba(255,255,255,.5);margin-bottom:28px}
+
+/* ── Modal ── */
+.v-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(10,15,25,.65);backdrop-filter:blur(3px)}
+.v-modal{background:white;border-radius:20px;width:780px;max-width:calc(100vw - 32px);max-height:90vh;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column}
+.v-modal-head{display:flex;align-items:center;gap:14px;padding:22px 28px;border-bottom:1px solid #ebebeb;flex-shrink:0}
+.v-modal-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.v-modal-title{font-size:18px;font-weight:800;color:#111}
+.v-modal-sub{font-size:12.5px;color:#888;margin-top:2px}
+.v-modal-close{margin-left:auto;background:#f7f8fa;border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#555;font-size:18px;flex-shrink:0}
+.v-modal-body{overflow-y:auto;padding:28px}
+.v-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.v-modal-grid .full{grid-column:1/-1}
+
+/* ── Document preview ── */
+/* ── Document preview — redesign professionnel ── */
+.v-doc-preview{background:white;border:1.5px solid #e0e1e6;border-radius:14px;overflow:hidden;margin-top:20px;font-size:13.5px;line-height:1.75;color:#111}
+.v-doc-preview .doc-header{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:18px 24px 16px}
+.v-doc-preview .doc-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.v-doc-preview .doc-logo{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:rgba(255,255,255,.85);letter-spacing:.04em}
+.v-doc-preview .doc-logo-badge{width:22px;height:22px;background:#E84533;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:white;flex-shrink:0}
+.v-doc-preview .doc-meta{text-align:right;font-size:10.5px;color:rgba(255,255,255,.4);line-height:1.6}
+.v-doc-preview .doc-title-band{border-top:1px solid rgba(255,255,255,.1);padding-top:14px;display:flex;align-items:center;gap:12px}
+.v-doc-preview .doc-title-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.v-doc-preview .doc-title{font-size:16px;font-weight:800;color:white;letter-spacing:-.2px}
+.v-doc-preview .doc-subtitle{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+/* Body */
+.v-doc-preview .doc-body{padding:22px 24px 20px}
+/* Parties */
+.v-doc-preview .doc-parties{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.v-doc-preview .doc-party{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:10px;padding:11px 13px}
+.v-doc-preview .doc-party-label{font-size:9.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.v-doc-preview .doc-party-name{font-size:14px;font-weight:700;color:#111}
+/* Address */
+.v-doc-preview .doc-address{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px}
+.v-doc-preview .doc-address-ico{color:#E84533;font-size:16px;flex-shrink:0;margin-top:1px}
+.v-doc-preview .doc-address-label{font-size:9.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.v-doc-preview .doc-address-val{font-size:14px;font-weight:700;color:#111}
+/* Section */
+.v-doc-preview .doc-section{margin-bottom:16px}
+.v-doc-preview .doc-section-title{font-size:10.5px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;padding-bottom:7px;border-bottom:1.5px solid #f0f0f2;display:flex;align-items:center;gap:6px}
+/* Key-value rows */
+.v-doc-preview .doc-kv{display:flex;margin-bottom:5px;border:1px solid #eeeff2;border-radius:8px;overflow:hidden}
+.v-doc-preview .doc-kv-k{font-size:11.5px;font-weight:700;color:#666;background:#f4f5f7;padding:8px 12px;min-width:155px;flex-shrink:0;border-right:1px solid #eeeff2}
+.v-doc-preview .doc-kv-v{font-size:12.5px;font-weight:600;color:#111;padding:8px 12px;flex:1}
+.v-doc-preview .doc-kv-v.big{font-size:16px;font-weight:800;color:#0f172a}
+/* Legal text */
+.v-doc-preview .doc-legal{font-size:13px;color:#444;line-height:1.85;background:#fafbfc;border:1px solid #eeeef2;border-radius:10px;padding:14px 16px}
+/* Signatures */
+.v-doc-preview .doc-sigs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;padding-top:18px;border-top:1.5px solid #f0f0f2}
+.v-doc-preview .doc-sig-box{border:1.5px solid #e4e5ea;border-radius:10px;overflow:hidden}
+.v-doc-preview .doc-sig-header{background:#f4f5f7;padding:8px 12px;font-size:10px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e4e5ea}
+.v-doc-preview .doc-sig-body{padding:12px 14px}
+.v-doc-preview .doc-sig-space{min-height:80px;border:1.5px dashed #d8dce6;border-radius:7px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;padding:8px}
+.v-doc-preview .doc-sig-fields{display:flex;gap:10px}
+.v-doc-preview .doc-sig-field{font-size:10.5px;color:#777;flex:1;padding-bottom:14px;border-bottom:1px solid #e0e2e8}
+/* Footer */
+.v-doc-preview .doc-footer{background:#f8f9fb;border-top:1px solid #eeeff2;padding:10px 20px;text-align:center;font-size:10.5px;color:#bbb;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.v-doc-preview .doc-footer-dot{width:3px;height:3px;background:#ddd;border-radius:50%;display:inline-block;vertical-align:middle}
+
+/* ── Tools panel (estimation links, etc.) ── */
+.v-tools-panel{background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:12px;margin:0 24px 16px;overflow:hidden}
+.v-tools-head{display:flex;align-items:center;gap:8px;padding:11px 16px;background:#f0f1f5;border-bottom:1px solid #e4e5ea;font-size:12px;font-weight:700;color:#555;letter-spacing:.02em}
+.v-tools-head i{color:#E84533;font-size:15px}
+.v-tool-row{display:flex;align-items:center;gap:14px;padding:11px 16px;border-bottom:1px solid #eeeff2;transition:background .12s}
+.v-tool-row:last-child{border-bottom:none}
+.v-tool-row:hover{background:#f2f3f7}
+.v-tool-info{flex:1;min-width:0}
+.v-tool-name{font-size:13.5px;font-weight:700;color:#111;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.v-tool-desc{font-size:12px;color:#888;margin-top:3px;line-height:1.45}
+.v-badge-official{font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em;white-space:nowrap}
+.v-tool-open{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;background:white;border:1.5px solid #E84533;color:#E84533;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.v-tool-open:hover{background:#E84533;color:white}
+
+/* ── Inline doc cards (within step body) ── */
+.v-doc-inline{display:flex;align-items:center;gap:12px;padding:11px 16px;background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:10px;margin:0 24px 8px;cursor:pointer;transition:all .15s}
+.v-doc-inline:hover{border-color:#E84533;background:#fff5f4}
+.v-doc-inline-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.v-doc-inline-info{flex:1}
+.v-doc-inline-name{font-size:13px;font-weight:700;color:#111}
+.v-doc-inline-desc{font-size:11.5px;color:#888;margin-top:1px}
+.v-doc-inline:hover .v-doc-inline-arrow{color:#E84533}
+.v-doc-inline-arrow{color:#ccc;font-size:16px;flex-shrink:0;transition:color .15s}
+.v-docs-label{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;padding:14px 24px 6px}
+
+/* ── Responsive layout ── */
+@media(max-width:1000px){
+  .v-layout{grid-template-columns:1fr;padding:24px 20px 60px}
+  .v-sidebar{position:static;top:auto}
+}
+/* ── Account dropdown (required for sa-shared.js) ── */
+.sa-nav-account-wrap{position:relative}
+.sa-account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);min-width:220px;padding:8px;z-index:300}
+.sa-account-dropdown.show{display:block}
+.sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px;word-break:break-all}
+.sa-account-dropdown-email i{color:#E84533;flex-shrink:0}
+.sa-account-dropdown-logout{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;color:#555;padding:9px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.sa-account-dropdown-logout:hover{background:#f8f8f8}
+.sa-nav-avatar{width:28px;height:28px;background:#E84533;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+
+/* ── Nav responsive (medium screens before mobile breakpoint) ── */
+.sa-nav{flex-wrap:nowrap}
+@media(max-width:1100px){
+  .sa-nav-links{display:none!important}
+  .sa-nav-cta{display:none!important}
+  .sa-nav-divider{display:none!important}
+  .sa-hamburger{display:flex!important}
+}
+
+/* ── Print ── */
+@media print {
+  .sa-nav-wrapper,.v-progress-bar,.v-sidebar,.v-modal-head button,.v-modal-close,.v-btn,.no-print{display:none!important}
+  .v-overlay{display:block!important;position:static;background:none}
+  .v-modal{position:static;transform:none;width:100%;max-height:none;box-shadow:none;border:none;border-radius:0}
+  body{background:white;padding:0}
+  .v-doc-preview{border:none;padding:20px 0}
+}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+
+<!-- NAV -->
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='/'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="sa-nav-links">
+      <button class="sa-nav-link" onclick="window.location.href='/'">Accueil</button>
+      <button class="sa-nav-link active">Guide</button>
+      <button class="sa-nav-link" onclick="window.location.href='annonces'">Annonces</button>
+      <button class="sa-nav-link pro-highlight" onclick="window.open('professionnels','_blank')">Professionnels</button>
+    </div>
+    <div class="sa-nav-actions">
+      <button class="sa-nav-cta" onclick="window.location.href='deposer'"><i class="ti ti-plus"></i> Déposer une annonce</button>
+      <div class="sa-nav-divider"></div>
+      <button class="sa-nav-icon-btn" onclick="window.location.href='recherches'"><i class="ti ti-search"></i><span class="sa-nav-icon-label">Mes recherches</span></button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'"><i class="ti ti-heart"></i><span class="sa-nav-badge" data-nav-fav-badge></span><span class="sa-nav-icon-label">Favoris</span></button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='messages'"><i class="ti ti-message-2"></i><span class="sa-nav-badge" data-nav-msg-badge></span><span class="sa-nav-icon-label">Messages</span></button>
+      <div class="sa-nav-account-wrap" data-nav-account>
+        <button class="sa-nav-icon-btn"><i class="ti ti-user"></i><span class="sa-nav-icon-label">Se connecter</span></button>
+        <div class="sa-account-dropdown"></div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- HERO -->
+<div class="v-hero">
+  <div class="v-hero-inner">
+    <div>
+      <div class="v-hero-badge"><i class="ti ti-shield-check"></i> Guide officiel — 100% gratuit</div>
+      <h1>Vendez votre bien<br><em>sans agent</em>,<br>étape par étape</h1>
+      <p class="v-hero-sub">Tout ce qu'il vous faut pour vendre sereinement, sans commission d'agence. 9 étapes guidées, des checklists, des conseils et des documents prêts à imprimer.</p>
+      <div class="v-hero-cta">
+        <button class="v-hero-btn v-hero-btn-primary" onclick="openStep(1);document.getElementById('ts1').scrollIntoView({behavior:'smooth'})"><i class="ti ti-rocket"></i> Commencer le guide</button>
+        <button class="v-hero-btn v-hero-btn-secondary" onclick="window.location.href='deposer-gate'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+      </div>
+    </div>
+    <div class="v-stats-grid">
+      <div class="v-stat"><div class="v-stat-val">1%</div><div class="v-stat-lbl">commission SansAgents,<br>uniquement si vente conclue</div></div>
+      <div class="v-stat"><div class="v-stat-val">0 €</div><div class="v-stat-lbl">frais de publication<br>de l'annonce</div></div>
+      <div class="v-stat"><div class="v-stat-val">9</div><div class="v-stat-lbl">étapes guidées<br>et illustrées</div></div>
+      <div class="v-stat"><div class="v-stat-val">6</div><div class="v-stat-lbl">documents officiels<br>à générer gratuitement</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP PROGRESS BAR -->
+<div class="v-progress-bar">
+  <div class="v-progress-inner">
+    <div class="v-progress-step active" id="pb1" onclick="jumpToStep(1)"><div class="v-ps-num" id="pbn1">1</div><span class="v-ps-label">Estimer</span></div>
+    <span class="v-ps-sep">›</span>
+    <div class="v-progress-step" id="pb2" onclick="jumpToStep(2)"><div class="v-ps-num" id="pbn2">2</div><span class="v-ps-label">Documents</span></div>
+    <span class="v-ps-sep">›</span>
+    <div class="v-progress-step" id="pb3" onclick="jumpToStep(3)"><div class="v-ps-num" id="pbn3">3</div><span class="v-ps-label">Annonce</span></div>
+    <span class="v-ps-sep">›</span>
+    <div class="v-progress-step" id="pb4" onclick="jumpToStep(4)"><div class="v-ps-num" id="pbn4">4</div><span class="v-ps-label">Photos</span></div>
+    <span class="v-ps-sep">›</span>
+    <div class="v-progress-step" id="pb5" onclick="jumpToStep(5)"><div class="v-ps-num" id="pbn5">5</div><span class="v-ps-label">Publier</span></div>
+    <span class="v-ps-sep">›</span>
+    <div class="v-progress-step" id="pb6" onclick="jumpToStep(6)"><div class="v-ps-num" id="pbn6">6</div><span class="v-ps-label">Visites</span></div>
+    <span class="v-ps-sep">›</span>
+    <div class="v-progress-step" id="pb7" onclick="jumpToStep(7)"><div class="v-ps-num" id="pbn7">7</div><span class="v-ps-label">Offre</span></div>
+    <span class="v-ps-sep">›</span>
+    <div class="v-progress-step" id="pb8" onclick="jumpToStep(8)"><div class="v-ps-num" id="pbn8">8</div><span class="v-ps-label">Négocier</span></div>
+    <span class="v-ps-sep">›</span>
+    <div class="v-progress-step" id="pb9" onclick="jumpToStep(9)"><div class="v-ps-num" id="pbn9">9</div><span class="v-ps-label">Signer</span></div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="v-layout">
+
+  <!-- MAIN : TIMELINE -->
+  <div>
+    <div class="v-timeline">
+
+      <!-- STEP 1 -->
+      <div class="v-t-step active" id="ts1">
+        <div class="v-t-dot" id="td1">1</div>
+        <div class="v-card active" id="sc1">
+          <div class="v-card-head" onclick="openStep(1)">
+            <div class="v-card-icon"><i class="ti ti-chart-line"></i></div>
+            <div class="v-card-info"><div class="v-card-title">Estimer son bien</div><div class="v-card-sub">Fixer le bon prix de vente</div></div>
+            <button class="v-head-done" onclick="event.stopPropagation();markDone(1)" title="Marquer comme terminé"><i class="ti ti-check"></i> Terminée</button>
+            <i class="ti ti-chevron-down v-card-chevron"></i>
+          </div>
+          <div class="v-card-body">
+            <p class="v-card-desc">Le prix est la clé du succès. Un bien surestimé peut rester des mois sans offre ; un bien sous-estimé vous fait perdre de l'argent. Croisez plusieurs sources pour trouver la fourchette juste, puis définissez votre prix de vente et votre prix plancher.</p>
+            <div class="v-checklist">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Consulter les ventes récentes au m² dans ma rue et mon quartier (cf. outils ci-dessous)</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Comparer 3 à 5 biens similaires vendus récemment dans le secteur</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Ajuster selon l'état général, l'étage, l'exposition et la vue</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Intégrer une marge de négociation raisonnable (~3 à 5%)</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Définir mon prix plancher — en dessous duquel je ne descends pas</span></div>
+            </div>
+            <div class="v-tools-panel">
+              <div class="v-tools-head"><i class="ti ti-chart-bar"></i> Outils recommandés pour estimer votre prix au m²</div>
+              <div class="v-tool-row">
+                <div class="v-tool-info">
+                  <div class="v-tool-name">DVF Étalab <span class="v-badge-official">OFFICIEL</span></div>
+                  <div class="v-tool-desc">Toutes les transactions immobilières réelles enregistrées en France — données gouvernementales</div>
+                </div>
+                <a href="https://app.dvf.etalab.gouv.fr/" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
+              </div>
+              <div class="v-tool-row">
+                <div class="v-tool-info">
+                  <div class="v-tool-name">Notaires de France <span class="v-badge-official">OFFICIEL</span></div>
+                  <div class="v-tool-desc">Prix moyen au m² par ville et type de bien — mis à jour chaque trimestre</div>
+                </div>
+                <a href="https://www.immobilier.notaires.fr/fr/prix-immobilier" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
+              </div>
+              <div class="v-tool-row">
+                <div class="v-tool-info">
+                  <div class="v-tool-name">Castorus</div>
+                  <div class="v-tool-desc">Suivi de l'historique des prix d'annonces dans votre ville, par quartier et type de bien</div>
+                </div>
+                <a href="https://www.castorus.com/" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
+              </div>
+              <div class="v-tool-row">
+                <div class="v-tool-info">
+                  <div class="v-tool-name">MeilleursAgents</div>
+                  <div class="v-tool-desc">Estimation automatique par adresse + évolution du marché local sur 5 ans</div>
+                </div>
+                <a href="https://www.meilleursagents.com/prix-immobilier/" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
+              </div>
+              <div class="v-tool-row">
+                <div class="v-tool-info">
+                  <div class="v-tool-name">PAP Estimation</div>
+                  <div class="v-tool-desc">Estimateur entre particuliers — comparatif des annonces similaires actives</div>
+                </div>
+                <a href="https://www.pap.fr/" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
+              </div>
+            </div>
+            <div class="v-docs-label">Document à remplir</div>
+            <div class="v-doc-inline" onclick="openDocModal('prix')">
+              <div class="v-doc-inline-ico" style="background:#f0f7ff"><i class="ti ti-table" style="color:#3b82f6"></i></div>
+              <div class="v-doc-inline-info"><div class="v-doc-inline-name">Fiche d'estimation de prix</div><div class="v-doc-inline-desc">Notez les prix au m² consultés, calculez votre prix cible et votre prix plancher</div></div>
+              <i class="ti ti-chevron-right v-doc-inline-arrow"></i>
+            </div>
+            <div class="v-card-actions"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="v-t-step" id="ts2">
+        <div class="v-t-dot" id="td2">2</div>
+        <div class="v-card" id="sc2">
+          <div class="v-card-head" onclick="openStep(2)">
+            <div class="v-card-icon"><i class="ti ti-files"></i></div>
+            <div class="v-card-info"><div class="v-card-title">Préparer les documents</div><div class="v-card-sub">Diagnostics obligatoires et dossier vendeur</div></div>
+            <button class="v-head-done" onclick="event.stopPropagation();markDone(2)" title="Marquer comme terminé"><i class="ti ti-check"></i> Terminée</button>
+            <i class="ti ti-chevron-down v-card-chevron"></i>
+          </div>
+          <div class="v-card-body">
+            <p class="v-card-desc">Anticipez — certains documents (DDT, titre de propriété) peuvent prendre plusieurs semaines à obtenir. Cochez chaque document au fur et à mesure que vous le rassemblez.</p>
+            <div class="v-tip" style="background:#f0fdf4;border-color:#bbf7d0;color:#166534;margin-top:0"><i class="ti ti-circle-check" style="color:#16a34a"></i><span><strong>Pas de panique.</strong> Vous n'avez pas besoin de tout réunir avant de publier. Les diagnostics et le titre de propriété ne sont exigibles qu'à la signature du compromis.</span></div>
+
+            <!-- Catégorie 1 : Identité et propriété -->
+            <div style="margin:16px 20px 8px;background:#1e293b;border-left:4px solid #E84533;border-radius:9px;padding:10px 14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="toggleSec('sec-identite',this)"><i class="ti ti-shield-check" style="color:#ff7a68;font-size:17px;flex-shrink:0"></i><div><div style="margin-bottom:6px"><span style="background:#E84533;color:white;font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase">Obligatoires</span></div><div style="font-size:12.5px;font-weight:700;color:white">Identité et propriété</div></div><i class="ti ti-chevron-right sec-chev" style="color:rgba(255,255,255,.4);font-size:20px;flex-shrink:0;transition:transform .25s;transform:rotate(90deg);margin-left:auto"></i></div>
+            <div id="sec-identite"><div class="v-checklist" style="margin-bottom:4px">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-id" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Pièce d'identité valide</div><div style="font-size:12px;color:#888;margin-top:2px">CNI ou passeport en cours de validité</div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)" style="border-bottom:none"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-lock" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Titre de propriété</div><div style="font-size:12px;color:#888;margin-top:2px">Acte authentique notarié — demandez-le rapidement, délai jusqu'à plusieurs semaines</div></div></div>
+            </div></div>
+
+            <!-- Catégorie 2 : DDT -->
+            <div style="margin:16px 20px 8px;background:#1e293b;border-left:4px solid #E84533;border-radius:9px;padding:10px 14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="toggleSec('sec-ddt',this)"><i class="ti ti-certificate" style="color:#ff7a68;font-size:17px;flex-shrink:0"></i><div><div style="margin-bottom:6px"><span style="background:#E84533;color:white;font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase">Obligatoires</span></div><div style="font-size:12.5px;font-weight:700;color:white">Diagnostics techniques (DDT)</div></div><i class="ti ti-chevron-right sec-chev" style="color:rgba(255,255,255,.4);font-size:20px;flex-shrink:0;transition:transform .25s;transform:rotate(90deg);margin-left:auto"></i></div>
+            <div id="sec-ddt"><div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:9px;padding:9px 13px;font-size:12px;color:#475569;margin:0 20px 8px;line-height:1.6"><i class="ti ti-clock" style="vertical-align:middle;margin-right:5px;color:#94a3b8"></i>Ces diagnostics sont établis par un <strong style="color:#1e293b">diagnostiqueur certifié</strong>. Prévoyez <strong style="color:#1e293b">2 à 3 semaines</strong> pour les obtenir.</div>
+            <div class="v-checklist" style="margin-bottom:4px">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-leaf" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">DPE — Diagnostic de Performance Énergétique</div><div style="font-size:12px;color:#888;margin-top:2px">Validité 10 ans — inclut les étiquettes énergie et climat</div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-map-pins" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">ERP — État des Risques et Pollutions</div><div style="font-size:12px;color:#888;margin-top:2px">À refaire à chaque vente · validité 6 mois — <a class="v-inline-link" href="https://www.service-public.fr/particuliers/vosdroits/F10798" target="_blank" onclick="event.stopPropagation()"><i class="ti ti-external-link"></i> service-public.fr</a></div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-bolt" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Électricité <span style="font-size:11.5px;font-weight:400;color:#aaa">— si installation &gt; 15 ans</span></div><div style="font-size:12px;color:#aaa;margin-top:2px">Conditionnel</div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-flame" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Gaz <span style="font-size:11.5px;font-weight:400;color:#aaa">— si installation &gt; 15 ans</span></div><div style="font-size:12px;color:#aaa;margin-top:2px">Conditionnel</div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-droplet" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Plomb (CREP) <span style="font-size:11.5px;font-weight:400;color:#aaa">— si construction avant 1949</span></div><div style="font-size:12px;color:#aaa;margin-top:2px">Conditionnel</div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-microscope" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Amiante <span style="font-size:11.5px;font-weight:400;color:#aaa">— si construction avant 1997</span></div><div style="font-size:12px;color:#aaa;margin-top:2px">Conditionnel</div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-ripple" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Assainissement <span style="font-size:11.5px;font-weight:400;color:#aaa">— si fosse septique</span></div><div style="font-size:12px;color:#aaa;margin-top:2px">Conditionnel</div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-bug" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Termites <span style="font-size:11.5px;font-weight:400;color:#aaa">— si zone à risque</span></div><div style="font-size:12px;color:#aaa;margin-top:2px">Conditionnel</div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)" style="border-bottom:none"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-receipt-tax" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Dernier avis de taxe foncière</div><div style="font-size:12px;color:#888;margin-top:2px">Permet la répartition prorata vendeur/acheteur pour l'année en cours</div></div></div>
+            </div></div>
+
+            <!-- Catégorie 3 : Recommandés -->
+            <div style="margin:16px 20px 8px;background:#1e293b;border-left:4px solid #d97706;border-radius:9px;padding:10px 14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="toggleSec('sec-reco',this)"><i class="ti ti-star" style="color:#fbbf24;font-size:17px;flex-shrink:0"></i><div><div style="margin-bottom:6px"><span style="background:#d97706;color:white;font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase">Recommandés</span></div><div style="font-size:12.5px;font-weight:700;color:white">Rassurer l'acheteur</div></div><i class="ti ti-chevron-right sec-chev" style="color:rgba(255,255,255,.4);font-size:20px;flex-shrink:0;transition:transform .25s;transform:rotate(90deg);margin-left:auto"></i></div>
+            <div id="sec-reco"><div class="v-checklist" style="margin-bottom:4px">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fffbeb;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-ruler-2" style="color:#d97706;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Plans du bien</div><div style="font-size:12px;color:#888;margin-top:2px">Permettent à l'acheteur de visualiser la configuration et d'anticiper des travaux</div></div></div>
+              <div class="v-check" onclick="toggleCheck(this)" style="border-bottom:none"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fffbeb;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-tool" style="color:#d97706;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Factures de travaux + garanties décennales</div><div style="font-size:12px;color:#888;margin-top:2px">Rassurent l'acheteur sur l'entretien du bien et les rénovations récentes</div></div></div>
+            </div></div>
+
+            <!-- Bloc appartement / copropriété -->
+            <div style="margin:16px 20px 0;border-radius:12px;overflow:hidden;border:1px solid #334155">
+              <div style="background:#1e293b;padding:10px 14px;display:flex;align-items:flex-start;gap:10px">
+                <i class="ti ti-building" style="color:#94a3b8;font-size:16px;flex-shrink:0;margin-top:2px"></i>
+                <div>
+                  <div style="font-size:12.5px;font-weight:800;color:white;letter-spacing:.01em">En copropriété uniquement</div>
+                  <div style="font-size:11px;color:#94a3b8;margin-top:2px;line-height:1.5">Appartement, studio ou duplex. <span style="color:#cbd5e1">Maison individuelle → ignorez cette section.</span></div>
+                </div>
+              </div>
+              <div style="background:#f8fafc;padding:8px 6px">
+                <div class="v-check" onclick="toggleCheck(this)" style="border-color:#e2e8f0"><div class="v-check-box"></div><div style="width:28px;height:28px;border-radius:6px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-ruler" style="color:#3b82f6;font-size:13px"></i></div><span class="v-check-txt"><strong>Loi Carrez</strong> — Mesurage officiel de la surface privative (obligatoire en copropriété)</span></div>
+                <div class="v-check" onclick="toggleCheck(this)" style="border-color:#e2e8f0;border-bottom:none"><div class="v-check-box"></div><div style="width:28px;height:28px;border-radius:6px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-file-text" style="color:#3b82f6;font-size:13px"></i></div><span class="v-check-txt"><strong>Règlement de copropriété</strong> + PV des 3 dernières AG + relevé de charges annuel</span></div>
+              </div>
+            </div>
+            <div class="v-tip v-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Attention :</strong> Sans DDT complet, la vente peut être annulée ou vous exposer à des recours en garantie des vices cachés de la part de l'acheteur.</span></div>
+            <div class="v-card-actions">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="v-t-step" id="ts3">
+        <div class="v-t-dot" id="td3">3</div>
+        <div class="v-card" id="sc3">
+          <div class="v-card-head" onclick="openStep(3)">
+            <div class="v-card-icon"><i class="ti ti-pencil"></i></div>
+            <div class="v-card-info"><div class="v-card-title">Rédiger l'annonce</div><div class="v-card-sub">Un texte accrocheur et complet</div></div>
+            <button class="v-head-done" onclick="event.stopPropagation();markDone(3)" title="Marquer comme terminé"><i class="ti ti-check"></i> Terminée</button>
+            <i class="ti ti-chevron-down v-card-chevron"></i>
+          </div>
+          <div class="v-card-body">
+            <p class="v-card-desc">Une bonne annonce répond aux questions des acheteurs avant qu'ils n'aient à les poser. Précis, positif et honnête : évitez les superlatifs creux ("magnifique", "exceptionnel") et misez sur des informations concrètes.</p>
+            <div class="v-checklist">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Titre accrocheur : type de bien, surface et quartier</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Description pièce par pièce avec les surfaces</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Points forts : luminosité, vue, rénovations récentes, exposition</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Environnement : transports, commerces, écoles, parcs à proximité</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Charges et copropriété si applicable</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Relecture : aucune faute d'orthographe, ton positif et professionnel</span></div>
+            </div>
+            <div class="v-tip v-tip-blue">
+              <i class="ti ti-wand"></i><span><strong>Plan de rédaction personnalisé inclus dans le formulaire.</strong> À partir des informations que vous saisissez, nous générons un plan structuré et adapté à votre bien — une trame claire à compléter à votre rythme, section par section, en y ajoutant votre touche personnelle.</span>
+            </div>
+            <div class="v-tip" style="background:#f0fdf4;border-color:#bbf7d0;color:#166534;margin-top:8px">
+              <i class="ti ti-checklist" style="color:#16a34a"></i><span><strong>Longueur idéale :</strong> 150 à 300 mots. Trop court = peu rassurant, trop long = rebutant. Structurez en 3 parties : description du bien, équipements et points forts, environnement / quartier.</span>
+            </div>
+            <div class="v-card-actions">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="v-t-step" id="ts4">
+        <div class="v-t-dot" id="td4">4</div>
+        <div class="v-card" id="sc4">
+          <div class="v-card-head" onclick="openStep(4)">
+            <div class="v-card-icon"><i class="ti ti-camera"></i></div>
+            <div class="v-card-info"><div class="v-card-title">Prendre les photos</div><div class="v-card-sub">Valoriser votre bien visuellement</div></div>
+            <button class="v-head-done" onclick="event.stopPropagation();markDone(4)" title="Marquer comme terminé"><i class="ti ti-check"></i> Terminée</button>
+            <i class="ti ti-chevron-down v-card-chevron"></i>
+          </div>
+          <div class="v-card-body">
+            <p class="v-card-desc">Les photos sont le premier contact des acheteurs avec votre bien. De bonnes photos peuvent multiplier vos contacts par 3. Un smartphone récent suffit si vous suivez quelques règles simples.</p>
+            <div class="v-checklist">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Ranger, dépersonnaliser et désencombrer chaque pièce</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Photographier en pleine journée avec la lumière naturelle maximale</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Toujours en mode paysage, depuis les angles des pièces</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Toutes les pièces + salle de bain + cuisine + extérieur + façade</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Vérifier la netteté, l'horizon horizontal, l'absence de flou</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Minimum 8 photos, idéalement 15 à 20</span></div>
+            </div>
+            <div class="v-tip v-tip-blue"><i class="ti ti-bulb"></i><span><strong>Astuce :</strong> Ouvrez tous les rideaux, allumez toutes les lumières même en journée, rangez les câbles. La première photo doit être la pièce de vie ou la façade.</span></div>
+            <div class="v-card-actions">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="v-t-step" id="ts5">
+        <div class="v-t-dot" id="td5">5</div>
+        <div class="v-card" id="sc5">
+          <div class="v-card-head" onclick="openStep(5)">
+            <div class="v-card-icon"><i class="ti ti-rocket"></i></div>
+            <div class="v-card-info"><div class="v-card-title">Publier l'annonce</div><div class="v-card-sub">Mise en ligne gratuite sur SansAgents</div></div>
+            <button class="v-head-done" onclick="event.stopPropagation();markDone(5)" title="Marquer comme terminé"><i class="ti ti-check"></i> Terminée</button>
+            <i class="ti ti-chevron-down v-card-chevron"></i>
+          </div>
+          <div class="v-card-body">
+            <p class="v-card-desc">Publiez votre annonce gratuitement sur SansAgents en moins de 10 minutes. Elle sera visible immédiatement par tous les acheteurs actifs sur la plateforme.</p>
+            <div class="v-checklist">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Créer ou se connecter à votre compte SansAgents</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Remplir le formulaire : type, localisation, caractéristiques, photos, prix</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Uploader les photos dans le bon ordre (la meilleure en premier)</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Vérifier l'aperçu de l'annonce avant de valider</span></div>
+            </div>
+            <div class="v-tip v-tip-green"><i class="ti ti-info-circle"></i><span><strong>Rappel :</strong> La publication est 100% gratuite. La commission de 1% n'est due qu'en cas de vente effectivement conclue — jamais sur une location.</span></div>
+            <div class="v-card-actions">
+              <button class="v-btn v-btn-primary" onclick="window.location.href='deposer-gate'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div class="v-t-step" id="ts6">
+        <div class="v-t-dot" id="td6">6</div>
+        <div class="v-card" id="sc6">
+          <div class="v-card-head" onclick="openStep(6)">
+            <div class="v-card-icon"><i class="ti ti-door-enter"></i></div>
+            <div class="v-card-info"><div class="v-card-title">Gérer les visites</div><div class="v-card-sub">Accueillir les acheteurs potentiels</div></div>
+            <button class="v-head-done" onclick="event.stopPropagation();markDone(6)" title="Marquer comme terminé"><i class="ti ti-check"></i> Terminée</button>
+            <i class="ti ti-chevron-down v-card-chevron"></i>
+          </div>
+          <div class="v-card-body">
+            <p class="v-card-desc">La visite est un moment décisif. Soyez disponible, honnête sur les éventuels défauts et faites signer un bon de visite à chaque visiteur — c'est votre protection légale essentielle.</p>
+            <div class="v-checklist">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Préparer le bien : propre, rangé, bien éclairé</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Avoir le dossier de diagnostics techniques à portée</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt"><strong>Faire signer un bon de visite à chaque visiteur</strong> (cf. document ci-dessous)</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Être prêt à répondre aux questions : charges, travaux, voisinage, syndic</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Ne pas révéler votre prix plancher ni votre urgence à vendre</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Prendre note des retours pour ajuster l'annonce si nécessaire</span></div>
+            </div>
+            <div class="v-tip v-tip-red"><i class="ti ti-shield-check"></i><span><strong>Protection importante :</strong> Le bon de visite prouve que l'acheteur a découvert votre bien via SansAgents. Sans ce document, un agent immobilier pourrait prétendre avoir présenté l'acheteur et réclamer une commission.</span></div>
+            <div class="v-docs-label">Document à utiliser</div>
+            <div class="v-doc-inline" onclick="openDocModal('visite')">
+              <div class="v-doc-inline-ico" style="background:#fff5f4"><i class="ti ti-door-enter" style="color:#E84533"></i></div>
+              <div class="v-doc-inline-info"><div class="v-doc-inline-name">Bon de visite</div><div class="v-doc-inline-desc">À faire signer par chaque visiteur — votre protection légale essentielle</div></div>
+              <i class="ti ti-chevron-right v-doc-inline-arrow"></i>
+            </div>
+            <div class="v-card-actions"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 7 -->
+      <div class="v-t-step" id="ts7">
+        <div class="v-t-dot" id="td7">7</div>
+        <div class="v-card" id="sc7">
+          <div class="v-card-head" onclick="openStep(7)">
+            <div class="v-card-icon"><i class="ti ti-file-euro"></i></div>
+            <div class="v-card-info"><div class="v-card-title">Recevoir une offre</div><div class="v-card-sub">Comprendre et analyser les offres reçues</div></div>
+            <button class="v-head-done" onclick="event.stopPropagation();markDone(7)" title="Marquer comme terminé"><i class="ti ti-check"></i> Terminée</button>
+            <i class="ti ti-chevron-down v-card-chevron"></i>
+          </div>
+          <div class="v-card-body">
+            <p class="v-card-desc">Une offre d'achat est un engagement écrit de l'acheteur à un prix donné. Lisez-la attentivement : montant, conditions suspensives, délais. Vous pouvez l'accepter, la refuser ou formuler une contre-proposition.</p>
+            <div class="v-checklist">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Vérifier l'identité et la solvabilité de l'acheteur</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Lire les conditions suspensives (obtention de prêt, vente d'un autre bien…)</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Vérifier la date limite de validité de l'offre</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Ne pas accepter plusieurs offres simultanément</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Répondre par écrit dans les délais indiqués</span></div>
+            </div>
+            <div class="v-tip v-tip-red"><i class="ti ti-alert-triangle"></i><span>Une offre au prix de l'annonce vous engage moralement. Répondez rapidement par écrit, même pour un refus.</span></div>
+            <div class="v-docs-label">Documents disponibles</div>
+            <div class="v-doc-inline" onclick="openDocModal('offre')">
+              <div class="v-doc-inline-ico" style="background:#f0fdf4"><i class="ti ti-file-text" style="color:#16a34a"></i></div>
+              <div class="v-doc-inline-info"><div class="v-doc-inline-name">Modèle d'offre d'achat</div><div class="v-doc-inline-desc">Document type pour formaliser une offre reçue par écrit</div></div>
+              <i class="ti ti-chevron-right v-doc-inline-arrow"></i>
+            </div>
+            <div class="v-doc-inline" onclick="openDocModal('contre')">
+              <div class="v-doc-inline-ico" style="background:#fffbeb"><i class="ti ti-arrows-exchange" style="color:#d97706"></i></div>
+              <div class="v-doc-inline-info"><div class="v-doc-inline-name">Contre-proposition</div><div class="v-doc-inline-desc">Répondre à une offre insuffisante en proposant un prix différent</div></div>
+              <i class="ti ti-chevron-right v-doc-inline-arrow"></i>
+            </div>
+            <div class="v-doc-inline" onclick="openDocModal('refus')">
+              <div class="v-doc-inline-ico" style="background:#fef2f2"><i class="ti ti-x" style="color:#dc2626"></i></div>
+              <div class="v-doc-inline-info"><div class="v-doc-inline-name">Refus d'offre</div><div class="v-doc-inline-desc">Décliner une offre d'achat de manière formelle et courtoise</div></div>
+              <i class="ti ti-chevron-right v-doc-inline-arrow"></i>
+            </div>
+            <div class="v-card-actions">
+              <button class="v-btn v-btn-ghost" onclick="window.open('https://www.anil.org/votre-projet/vous-etes-acheteur-locataire/achat-immobilier/faire-une-offre-dachat/','_blank')"><i class="ti ti-external-link"></i> ANIL — Guide des offres d'achat <span style="font-size:11px;opacity:.7;font-weight:500">(info officielle gratuite)</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 8 -->
+      <div class="v-t-step" id="ts8">
+        <div class="v-t-dot" id="td8">8</div>
+        <div class="v-card" id="sc8">
+          <div class="v-card-head" onclick="openStep(8)">
+            <div class="v-card-icon"><i class="ti ti-scale"></i></div>
+            <div class="v-card-info"><div class="v-card-title">Négocier</div><div class="v-card-sub">Trouver un accord gagnant-gagnant</div></div>
+            <button class="v-head-done" onclick="event.stopPropagation();markDone(8)" title="Marquer comme terminé"><i class="ti ti-check"></i> Terminée</button>
+            <i class="ti ti-chevron-down v-card-chevron"></i>
+          </div>
+          <div class="v-card-body">
+            <p class="v-card-desc">La négociation est normale et fait partie du processus. Connaître votre prix plancher à l'avance vous permet de négocier sereinement, sans céder sous la pression émotionnelle du moment.</p>
+            <div class="v-checklist">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Avoir défini mon prix plancher en amont, avant les visites</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Justifier mon prix par des comparables concrets (DVF, annonces similaires)</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Négocier aussi les conditions : délai de signature, mobilier inclus ou non</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Rester courtois, factuel et ne pas s'emballer émotionnellement</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Formaliser tout accord par une lettre d'acceptation écrite</span></div>
+            </div>
+            <div class="v-tip v-tip-blue"><i class="ti ti-bulb"></i><span><strong>Astuce :</strong> Proposer une concession non-financière (laisser les meubles, avancer la date de signature) peut combler un écart de prix sans descendre sous votre plancher.</span></div>
+            <div class="v-docs-label">Document à utiliser</div>
+            <div class="v-doc-inline" onclick="openDocModal('acceptation')">
+              <div class="v-doc-inline-ico" style="background:#f0fdf4"><i class="ti ti-circle-check" style="color:#16a34a"></i></div>
+              <div class="v-doc-inline-info"><div class="v-doc-inline-name">Lettre d'acceptation d'offre</div><div class="v-doc-inline-desc">Confirmez votre accord par écrit — indispensable pour engager les deux parties</div></div>
+              <i class="ti ti-chevron-right v-doc-inline-arrow"></i>
+            </div>
+            <div class="v-card-actions"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 9 -->
+      <div class="v-t-step" id="ts9">
+        <div class="v-t-dot" id="td9">9</div>
+        <div class="v-card" id="sc9">
+          <div class="v-card-head" onclick="openStep(9)">
+            <div class="v-card-icon"><i class="ti ti-certificate"></i></div>
+            <div class="v-card-info"><div class="v-card-title">Signer chez le notaire</div><div class="v-card-sub">Compromis puis acte authentique de vente</div></div>
+            <button class="v-head-done" onclick="event.stopPropagation();markDone(9)" title="Marquer la vente comme conclue"><i class="ti ti-trophy"></i> Vente conclue !</button>
+            <i class="ti ti-chevron-down v-card-chevron"></i>
+          </div>
+          <div class="v-card-body">
+            <p class="v-card-desc">La vente se finalise en deux étapes devant notaire : le compromis de vente (engagement réciproque), puis l'acte authentique (transfert définitif de propriété), généralement 3 à 4 mois plus tard.</p>
+            <div class="v-checklist">
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Choisir un notaire (le vôtre, celui de l'acheteur, ou les deux)</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Signer le compromis de vente devant notaire</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Laisser expirer le délai de rétractation de 10 jours de l'acheteur (Loi SRU)</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Attendre la levée des conditions suspensives (obtention du prêt)</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Fournir tous les documents demandés par le notaire dans les délais</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Signer l'acte authentique = transfert officiel de propriété ✅</span></div>
+              <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><span class="v-check-txt">Remettre les clés à l'acheteur 🎉</span></div>
+            </div>
+            <div class="v-tip v-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Délai SRU :</strong> L'acheteur a 10 jours après la signature du compromis pour se rétracter sans motif ni pénalité. Après ce délai, la vente est ferme pour les deux parties.</span></div>
+            <div class="v-docs-label">Document à utiliser</div>
+            <div class="v-doc-inline" onclick="openDocModal('cles')">
+              <div class="v-doc-inline-ico" style="background:#fefce8"><i class="ti ti-key" style="color:#ca8a04"></i></div>
+              <div class="v-doc-inline-info"><div class="v-doc-inline-name">Procès-verbal de remise des clés</div><div class="v-doc-inline-desc">Acte signé lors de la remise des clés — preuve officielle de la livraison du bien</div></div>
+              <i class="ti ti-chevron-right v-doc-inline-arrow"></i>
+            </div>
+            <div class="v-card-actions">
+              <button class="v-btn v-btn-ghost" onclick="window.open('https://www.notaires.fr/fr/annuaire','_blank')"><i class="ti ti-external-link"></i> Trouver un notaire</button>
+              <button class="v-btn v-btn-ghost" onclick="window.open('https://www.notaires.fr/fr/simulateurs-0','_blank')"><i class="ti ti-calculator"></i> Simulateur de frais de notaire</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /timeline -->
+  </div><!-- /main -->
+
+  <!-- SIDEBAR -->
+  <aside class="v-sidebar">
+
+    <!-- Progress widget -->
+    <div class="v-progress-widget">
+      <div class="v-pw-title">Ma progression</div>
+      <div class="v-pw-steps">
+        <div class="v-pw-step active" id="pw1" onclick="jumpToStep(1)"><div class="v-pw-num" id="pwn1">1</div><span class="v-pw-label">Estimer son bien</span></div>
+        <div class="v-pw-step" id="pw2" onclick="jumpToStep(2)"><div class="v-pw-num" id="pwn2">2</div><span class="v-pw-label">Préparer les documents</span></div>
+        <div class="v-pw-step" id="pw3" onclick="jumpToStep(3)"><div class="v-pw-num" id="pwn3">3</div><span class="v-pw-label">Rédiger l'annonce</span></div>
+        <div class="v-pw-step" id="pw4" onclick="jumpToStep(4)"><div class="v-pw-num" id="pwn4">4</div><span class="v-pw-label">Prendre les photos</span></div>
+        <div class="v-pw-step" id="pw5" onclick="jumpToStep(5)"><div class="v-pw-num" id="pwn5">5</div><span class="v-pw-label">Publier l'annonce</span></div>
+        <div class="v-pw-step" id="pw6" onclick="jumpToStep(6)"><div class="v-pw-num" id="pwn6">6</div><span class="v-pw-label">Gérer les visites</span></div>
+        <div class="v-pw-step" id="pw7" onclick="jumpToStep(7)"><div class="v-pw-num" id="pwn7">7</div><span class="v-pw-label">Recevoir une offre</span></div>
+        <div class="v-pw-step" id="pw8" onclick="jumpToStep(8)"><div class="v-pw-num" id="pwn8">8</div><span class="v-pw-label">Négocier</span></div>
+        <div class="v-pw-step" id="pw9" onclick="jumpToStep(9)"><div class="v-pw-num" id="pwn9">9</div><span class="v-pw-label">Signer chez le notaire</span></div>
+      </div>
+      <div class="v-pw-bar"><div class="v-pw-fill" id="pwFill" style="width:0%"></div></div>
+      <div class="v-pw-count" id="pwCount">0 / 9 étapes complétées</div>
+    </div>
+
+    <!-- Documents -->
+    <div class="v-docs-widget">
+      <div class="v-dw-head">
+        <i class="ti ti-files"></i>
+        <div class="v-dw-head-text"><h3>Documents officiels</h3><p>7 modèles gratuits et modifiables</p></div>
+      </div>
+      <div class="v-dw-body">
+        <div class="v-doc-card" onclick="openDocModal('prix')">
+          <div class="v-doc-ico" style="background:#f0f7ff"><i class="ti ti-table" style="color:#3b82f6"></i></div>
+          <div class="v-doc-info"><div class="v-doc-name">Fiche d'estimation</div><div class="v-doc-desc">Résumé des prix au m² consultés</div></div>
+          <i class="ti ti-chevron-right v-doc-arrow"></i>
+        </div>
+        <div class="v-doc-card" onclick="openDocModal('visite')">
+          <div class="v-doc-ico" style="background:#fff5f4"><i class="ti ti-door-enter" style="color:#E84533"></i></div>
+          <div class="v-doc-info"><div class="v-doc-name">Bon de visite</div><div class="v-doc-desc">À faire signer à chaque visiteur</div></div>
+          <i class="ti ti-chevron-right v-doc-arrow"></i>
+        </div>
+        <div class="v-doc-card" onclick="openDocModal('offre')">
+          <div class="v-doc-ico" style="background:#eff6ff"><i class="ti ti-file-euro" style="color:#3b82f6"></i></div>
+          <div class="v-doc-info"><div class="v-doc-name">Offre d'achat</div><div class="v-doc-desc">Modèle à remettre à l'acheteur</div></div>
+          <i class="ti ti-chevron-right v-doc-arrow"></i>
+        </div>
+        <div class="v-doc-card" onclick="openDocModal('acceptation')">
+          <div class="v-doc-ico" style="background:#f0fdf4"><i class="ti ti-circle-check" style="color:#16a34a"></i></div>
+          <div class="v-doc-info"><div class="v-doc-name">Lettre d'acceptation</div><div class="v-doc-desc">Confirmer un accord sur le prix</div></div>
+          <i class="ti ti-chevron-right v-doc-arrow"></i>
+        </div>
+        <div class="v-doc-card" onclick="openDocModal('contre')">
+          <div class="v-doc-ico" style="background:#fff7ed"><i class="ti ti-arrows-exchange" style="color:#ea580c"></i></div>
+          <div class="v-doc-info"><div class="v-doc-name">Contre-proposition</div><div class="v-doc-desc">Répondre à une offre trop basse</div></div>
+          <i class="ti ti-chevron-right v-doc-arrow"></i>
+        </div>
+        <div class="v-doc-card" onclick="openDocModal('refus')">
+          <div class="v-doc-ico" style="background:#fef2f2"><i class="ti ti-x" style="color:#dc2626"></i></div>
+          <div class="v-doc-info"><div class="v-doc-name">Refus d'offre</div><div class="v-doc-desc">Décliner une offre par écrit</div></div>
+          <i class="ti ti-chevron-right v-doc-arrow"></i>
+        </div>
+        <div class="v-doc-card" onclick="openDocModal('cles')">
+          <div class="v-doc-ico" style="background:#f0f9ff"><i class="ti ti-key" style="color:#0284c7"></i></div>
+          <div class="v-doc-info"><div class="v-doc-name">Remise des clés</div><div class="v-doc-desc">Attestation au moment de la vente</div></div>
+          <i class="ti ti-chevron-right v-doc-arrow"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prêt à publier -->
+    <div class="v-helper-widget" id="genWidget" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border:none">
+      <div class="v-hw-head" style="border-bottom:1px solid rgba(255,255,255,.08)">
+        <i class="ti ti-rocket" style="color:#ff7a68;font-size:22px"></i>
+        <div class="v-hw-head-text"><h3 style="color:white">Prêt à publier votre annonce ?</h3><p style="color:rgba(255,255,255,.5)">Passez à l'étape suivante</p></div>
+      </div>
+      <div class="v-hw-body" style="display:flex;flex-direction:column;gap:10px">
+        <p style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.6">Vous avez suivi le guide, préparé vos documents et vos photos — vous êtes prêt. Déposez votre annonce en quelques minutes et touchez des milliers d'acheteurs sans commission d'agence.</p>
+        <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,.7)"><i class="ti ti-check" style="color:#4ade80;font-size:14px"></i> Générateur de description inclus</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,.7)"><i class="ti ti-check" style="color:#4ade80;font-size:14px"></i> Documents officiels disponibles</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,.7)"><i class="ti ti-check" style="color:#4ade80;font-size:14px"></i> Publication gratuite, sans frais d'agence</div>
+        </div>
+        <button onclick="window.location.href='deposer-gate'" style="width:100%;padding:13px;background:#E84533;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s" onmouseover="this.style.background='#c73525'" onmouseout="this.style.background='#E84533'"><i class="ti ti-rocket"></i> Déposer mon annonce</button>
+      </div>
+    </div>
+
+  </aside>
+</div><!-- /layout -->
+
+<!-- CTA BOTTOM -->
+<div class="v-cta-section">
+  <div class="v-cta-inner">
+    <h2>Vous avez tout préparé ? Passez à l'action.</h2>
+    <p>Guide consulté, documents prêts, photos faites — déposez votre annonce en quelques minutes et vendez sans commission.</p>
+    <button class="v-hero-btn v-hero-btn-primary" style="font-size:15px;padding:14px 28px" onclick="window.location.href='deposer-gate'"><i class="ti ti-rocket"></i> Déposer mon annonce gratuitement</button>
+  </div>
+</div>
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- BON DE VISITE -->
+<div class="v-overlay" id="overlayVisite" onclick="closeModal('overlayVisite')">
+  <div class="v-modal" onclick="event.stopPropagation()">
+    <div class="v-modal-head">
+      <div class="v-modal-icon" style="background:#fff5f4"><i class="ti ti-door-enter" style="color:#E84533"></i></div>
+      <div><div class="v-modal-title">Bon de visite</div><div class="v-modal-sub">À faire signer à chaque visiteur avant la visite</div></div>
+      <button class="v-modal-close no-print" onclick="closeModal('overlayVisite')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="v-modal-body">
+      <div class="v-modal-grid">
+        <div class="full v-field"><label class="v-label">Adresse complète du bien</label><input class="v-input" id="bvAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="updateDoc('visite')"></div>
+        <div class="v-field"><label class="v-label">Nom du vendeur</label><input class="v-input" id="bvVendeur" placeholder="Jean Dupont" oninput="updateDoc('visite')"></div>
+        <div class="v-field"><label class="v-label">Nom du visiteur</label><input class="v-input" id="bvVisiteur" placeholder="Marie Martin" oninput="updateDoc('visite')"></div>
+        <div class="v-field"><label class="v-label">Date de la visite</label><input class="v-input" type="date" id="bvDate" oninput="updateDoc('visite')"></div>
+        <div class="v-field"><label class="v-label">Prix affiché (€)</label><input class="v-input" type="number" id="bvPrix" placeholder="250 000" oninput="updateDoc('visite')"></div>
+      </div>
+      <div class="v-doc-preview" id="docVisite"></div>
+      <div class="no-print" style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="openSigPanel('docVisite')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:#0f172a;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-signature"></i> Signer</button>
+        <button onclick="saveCurrDoc('visite','Bon de visite',this)" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-heart"></i> Sauvegarder</button>
+        <button onclick="printThisDoc('docVisite')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-printer"></i> PDF</button>
+        <button onclick="shareDoc('visite')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-user-share"></i> Partager</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OFFRE D'ACHAT -->
+<div class="v-overlay" id="overlayOffre" onclick="closeModal('overlayOffre')">
+  <div class="v-modal" onclick="event.stopPropagation()">
+    <div class="v-modal-head">
+      <div class="v-modal-icon" style="background:#eff6ff"><i class="ti ti-file-euro" style="color:#3b82f6"></i></div>
+      <div><div class="v-modal-title">Offre d'achat</div><div class="v-modal-sub">Modèle à compléter et remettre au vendeur</div></div>
+      <button class="v-modal-close no-print" onclick="closeModal('overlayOffre')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="v-modal-body">
+      <div class="v-modal-grid">
+        <div class="full v-field"><label class="v-label">Adresse du bien</label><input class="v-input" id="oaAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="updateDoc('offre')"></div>
+        <div class="v-field"><label class="v-label">Nom de l'acheteur</label><input class="v-input" id="oaAcheteur" placeholder="Marie Martin" oninput="updateDoc('offre')"></div>
+        <div class="v-field"><label class="v-label">Nom du vendeur</label><input class="v-input" id="oaVendeur" placeholder="Jean Dupont" oninput="updateDoc('offre')"></div>
+        <div class="v-field"><label class="v-label">Montant de l'offre (€)</label><input class="v-input" type="number" id="oaMontant" placeholder="245 000" oninput="updateDoc('offre')"></div>
+        <div class="v-field"><label class="v-label">Validité jusqu'au</label><input class="v-input" type="date" id="oaValidite" oninput="updateDoc('offre')"></div>
+        <div class="v-field"><label class="v-label">Date de l'offre</label><input class="v-input" type="date" id="oaDate" oninput="updateDoc('offre')"></div>
+      </div>
+      <div class="v-doc-preview" id="docOffre"></div>
+      <div class="no-print" style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="openSigPanel('docOffre')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:#0f172a;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-signature"></i> Signer</button>
+        <button onclick="saveCurrDoc('offre','Offre d\'achat',this)" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-heart"></i> Sauvegarder</button>
+        <button onclick="printThisDoc('docOffre')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-printer"></i> PDF</button>
+        <button onclick="shareDoc('offre')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-user-share"></i> Partager</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LETTRE D'ACCEPTATION -->
+<div class="v-overlay" id="overlayAcceptation" onclick="closeModal('overlayAcceptation')">
+  <div class="v-modal" onclick="event.stopPropagation()">
+    <div class="v-modal-head">
+      <div class="v-modal-icon" style="background:#f0fdf4"><i class="ti ti-circle-check" style="color:#16a34a"></i></div>
+      <div><div class="v-modal-title">Lettre d'acceptation d'offre</div><div class="v-modal-sub">Confirmation écrite d'un accord sur le prix de vente</div></div>
+      <button class="v-modal-close no-print" onclick="closeModal('overlayAcceptation')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="v-modal-body">
+      <div class="v-modal-grid">
+        <div class="full v-field"><label class="v-label">Adresse du bien</label><input class="v-input" id="laAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="updateDoc('acceptation')"></div>
+        <div class="v-field"><label class="v-label">Nom du vendeur</label><input class="v-input" id="laVendeur" placeholder="Jean Dupont" oninput="updateDoc('acceptation')"></div>
+        <div class="v-field"><label class="v-label">Nom de l'acheteur</label><input class="v-input" id="laAcheteur" placeholder="Marie Martin" oninput="updateDoc('acceptation')"></div>
+        <div class="v-field"><label class="v-label">Prix accepté (€)</label><input class="v-input" type="number" id="laPrix" placeholder="245 000" oninput="updateDoc('acceptation')"></div>
+        <div class="v-field"><label class="v-label">Date</label><input class="v-input" type="date" id="laDate" oninput="updateDoc('acceptation')"></div>
+      </div>
+      <div class="v-doc-preview" id="docAcceptation"></div>
+      <div class="no-print" style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="openSigPanel('docAcceptation')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:#0f172a;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-signature"></i> Signer</button>
+        <button onclick="saveCurrDoc('acceptation','Lettre d\'acceptation',this)" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-heart"></i> Sauvegarder</button>
+        <button onclick="printThisDoc('docAcceptation')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-printer"></i> PDF</button>
+        <button onclick="shareDoc('acceptation')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-user-share"></i> Partager</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTRE-PROPOSITION -->
+<div class="v-overlay" id="overlayContre" onclick="closeModal('overlayContre')">
+  <div class="v-modal" onclick="event.stopPropagation()">
+    <div class="v-modal-head">
+      <div class="v-modal-icon" style="background:#fff7ed"><i class="ti ti-arrows-exchange" style="color:#ea580c"></i></div>
+      <div><div class="v-modal-title">Courrier de contre-proposition</div><div class="v-modal-sub">Répondre à une offre trop basse avec un nouveau prix</div></div>
+      <button class="v-modal-close no-print" onclick="closeModal('overlayContre')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="v-modal-body">
+      <div class="v-modal-grid">
+        <div class="full v-field"><label class="v-label">Adresse du bien</label><input class="v-input" id="cpAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="updateDoc('contre')"></div>
+        <div class="v-field"><label class="v-label">Nom du vendeur</label><input class="v-input" id="cpVendeur" placeholder="Jean Dupont" oninput="updateDoc('contre')"></div>
+        <div class="v-field"><label class="v-label">Nom de l'acheteur</label><input class="v-input" id="cpAcheteur" placeholder="Marie Martin" oninput="updateDoc('contre')"></div>
+        <div class="v-field"><label class="v-label">Offre initiale (€)</label><input class="v-input" type="number" id="cpPrixInitial" placeholder="230 000" oninput="updateDoc('contre')"></div>
+        <div class="v-field"><label class="v-label">Contre-proposition (€)</label><input class="v-input" type="number" id="cpPrixContre" placeholder="245 000" oninput="updateDoc('contre')"></div>
+        <div class="v-field"><label class="v-label">Date</label><input class="v-input" type="date" id="cpDate" oninput="updateDoc('contre')"></div>
+        <div class="v-field"><label class="v-label">Valable jusqu'au</label><input class="v-input" type="date" id="cpLimite" oninput="updateDoc('contre')"></div>
+      </div>
+      <div class="v-doc-preview" id="docContre"></div>
+      <div class="no-print" style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="openSigPanel('docContre')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:#0f172a;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-signature"></i> Signer</button>
+        <button onclick="saveCurrDoc('contre','Contre-proposition',this)" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-heart"></i> Sauvegarder</button>
+        <button onclick="printThisDoc('docContre')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-printer"></i> PDF</button>
+        <button onclick="shareDoc('contre')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-user-share"></i> Partager</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REFUS D'OFFRE -->
+<div class="v-overlay" id="overlayRefus" onclick="closeModal('overlayRefus')">
+  <div class="v-modal" onclick="event.stopPropagation()">
+    <div class="v-modal-head">
+      <div class="v-modal-icon" style="background:#fef2f2"><i class="ti ti-x" style="color:#dc2626"></i></div>
+      <div><div class="v-modal-title">Lettre de refus d'offre</div><div class="v-modal-sub">Décliner une offre d'achat par écrit</div></div>
+      <button class="v-modal-close no-print" onclick="closeModal('overlayRefus')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="v-modal-body">
+      <div class="v-modal-grid">
+        <div class="full v-field"><label class="v-label">Adresse du bien</label><input class="v-input" id="roAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="updateDoc('refus')"></div>
+        <div class="v-field"><label class="v-label">Nom du vendeur</label><input class="v-input" id="roVendeur" placeholder="Jean Dupont" oninput="updateDoc('refus')"></div>
+        <div class="v-field"><label class="v-label">Nom de l'acheteur</label><input class="v-input" id="roAcheteur" placeholder="Marie Martin" oninput="updateDoc('refus')"></div>
+        <div class="v-field"><label class="v-label">Montant de l'offre refusée (€)</label><input class="v-input" type="number" id="roPrix" placeholder="220 000" oninput="updateDoc('refus')"></div>
+        <div class="v-field"><label class="v-label">Date</label><input class="v-input" type="date" id="roDate" oninput="updateDoc('refus')"></div>
+      </div>
+      <div class="v-doc-preview" id="docRefus"></div>
+      <div class="no-print" style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="openSigPanel('docRefus')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:#0f172a;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-signature"></i> Signer</button>
+        <button onclick="saveCurrDoc('refus','Lettre de refus',this)" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-heart"></i> Sauvegarder</button>
+        <button onclick="printThisDoc('docRefus')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-printer"></i> PDF</button>
+        <button onclick="shareDoc('refus')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-user-share"></i> Partager</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REMISE DES CLÉS -->
+<div class="v-overlay" id="overlayCles" onclick="closeModal('overlayCles')">
+  <div class="v-modal" onclick="event.stopPropagation()">
+    <div class="v-modal-head">
+      <div class="v-modal-icon" style="background:#f0f9ff"><i class="ti ti-key" style="color:#0284c7"></i></div>
+      <div><div class="v-modal-title">Attestation de remise des clés</div><div class="v-modal-sub">À signer le jour du transfert de propriété</div></div>
+      <button class="v-modal-close no-print" onclick="closeModal('overlayCles')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="v-modal-body">
+      <div class="v-modal-grid">
+        <div class="full v-field"><label class="v-label">Adresse du bien</label><input class="v-input" id="rkAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="updateDoc('cles')"></div>
+        <div class="v-field"><label class="v-label">Nom du vendeur</label><input class="v-input" id="rkVendeur" placeholder="Jean Dupont" oninput="updateDoc('cles')"></div>
+        <div class="v-field"><label class="v-label">Nom de l'acquéreur</label><input class="v-input" id="rkAcheteur" placeholder="Marie Martin" oninput="updateDoc('cles')"></div>
+        <div class="v-field"><label class="v-label">Prix de vente (€)</label><input class="v-input" type="number" id="rkPrix" placeholder="245 000" oninput="updateDoc('cles')"></div>
+        <div class="v-field"><label class="v-label">Nombre de clés remises</label><input class="v-input" type="number" id="rkCles" placeholder="3" oninput="updateDoc('cles')"></div>
+        <div class="full v-field"><label class="v-label">Date de remise</label><input class="v-input" type="date" id="rkDate" oninput="updateDoc('cles')"></div>
+      </div>
+      <div class="v-doc-preview" id="docCles"></div>
+      <div class="no-print" style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="openSigPanel('docCles')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:#0f172a;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-signature"></i> Signer</button>
+        <button onclick="saveCurrDoc('cles','Remise des clés',this)" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-heart"></i> Sauvegarder</button>
+        <button onclick="printThisDoc('docCles')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-printer"></i> PDF</button>
+        <button onclick="shareDoc('cles')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-user-share"></i> Partager</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FICHE D'ESTIMATION -->
+<div class="v-overlay" id="overlayPrix" onclick="closeModal('overlayPrix')">
+  <div class="v-modal" onclick="event.stopPropagation()">
+    <div class="v-modal-head">
+      <div class="v-modal-icon" style="background:#f0f7ff"><i class="ti ti-table" style="color:#3b82f6"></i></div>
+      <div><div class="v-modal-title">Fiche d'estimation</div><div class="v-modal-sub">Résumé de votre analyse de prix</div></div>
+      <button class="v-modal-close no-print" onclick="closeModal('overlayPrix')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="v-modal-body">
+      <div style="background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:#555;line-height:1.6">
+        <i class="ti ti-info-circle" style="color:#E84533;margin-right:6px"></i>
+        Renseignez la surface et le type de votre bien, saisissez les prix au m² relevés sur chaque site consulté, puis ajustez vos marges. La fiche calcule automatiquement votre prix cible et votre prix plancher.
+      </div>
+      <div class="v-modal-grid">
+        <div class="v-field"><label class="v-label">Surface du bien (m²)</label><input class="v-input" type="number" id="epSurface" placeholder="75" oninput="updatePrixDoc()"></div>
+        <div class="v-field"><label class="v-label">Type de bien</label>
+          <select class="v-input" id="epType" onchange="updatePrixDoc()">
+            <option>Appartement</option><option>Maison</option><option>Studio</option><option>Duplex</option><option>Terrain</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin:16px 0 8px;display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:14px;font-weight:800;color:#E84533;letter-spacing:.01em">Sources consultées</div>
+        <button onclick="addPrixRow()" style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:white;border:1.5px solid #E84533;color:#E84533;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><i class="ti ti-plus"></i> Ajouter une source</button>
+      </div>
+      <div style="font-size:12px;color:#888;margin-bottom:10px;line-height:1.5;padding:8px 10px;background:#f8f9fb;border-radius:7px;border-left:3px solid #e5e5e5"><i class="ti ti-bulb" style="color:#E84533;margin-right:5px"></i>La colonne <strong>Notes</strong> sert à préciser le contexte du comparable : adresse exacte, différences avec votre bien (étage, vue, état, surface…), date de la vente. Ces détails aident à justifier votre prix cible.</div>
+      <div id="epRows">
+        <div class="ep-row v-modal-grid" style="gap:8px;margin-bottom:8px;align-items:end">
+          <div class="v-field" style="min-width:0"><label class="v-label">Source</label>
+            <select class="v-input ep-src" onchange="updatePrixDoc()">
+              <option value="">— Choisir —</option>
+              <option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option>
+            </select>
+          </div>
+          <div class="v-field"><label class="v-label">Prix au m² (€)</label><input class="v-input ep-pm2" type="number" placeholder="3 500" oninput="updatePrixDoc()"></div>
+          <div class="v-field" style="position:relative"><label class="v-label">Notes</label><input class="v-input ep-note" type="text" placeholder="Rue X, même étage…" oninput="updatePrixDoc()"></div>
+        </div>
+        <div class="ep-row v-modal-grid" style="gap:8px;margin-bottom:8px;align-items:end">
+          <div class="v-field" style="min-width:0"><label class="v-label">Source</label>
+            <select class="v-input ep-src" onchange="updatePrixDoc()"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
+          </div>
+          <div class="v-field"><label class="v-label">Prix au m² (€)</label><input class="v-input ep-pm2" type="number" placeholder="3 500" oninput="updatePrixDoc()"></div>
+          <div class="v-field"><label class="v-label">Notes</label><input class="v-input ep-note" type="text" placeholder="" oninput="updatePrixDoc()"></div>
+        </div>
+        <div class="ep-row v-modal-grid" style="gap:8px;margin-bottom:8px;align-items:end">
+          <div class="v-field" style="min-width:0"><label class="v-label">Source</label>
+            <select class="v-input ep-src" onchange="updatePrixDoc()"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
+          </div>
+          <div class="v-field"><label class="v-label">Prix au m² (€)</label><input class="v-input ep-pm2" type="number" placeholder="3 500" oninput="updatePrixDoc()"></div>
+          <div class="v-field"><label class="v-label">Notes</label><input class="v-input ep-note" type="text" placeholder="" oninput="updatePrixDoc()"></div>
+        </div>
+      </div>
+      <div class="v-modal-grid" style="margin-top:8px">
+        <div class="v-field"><label class="v-label">Marge de négociation (%)</label><input class="v-input" type="number" id="epMarge" placeholder="4" min="0" max="20" oninput="updatePrixDoc()"></div>
+        <div class="v-field"><label class="v-label">Réduction max acceptée (%)</label><input class="v-input" type="number" id="epReduc" placeholder="7" min="0" max="30" oninput="updatePrixDoc()"></div>
+      </div>
+      <div class="v-doc-preview" id="docPrix" style="margin-top:16px"></div>
+      <div class="no-print" style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="savePrixDoc(this)" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-heart"></i> Sauvegarder</button>
+        <button onclick="printThisDoc('docPrix')" style="display:flex;align-items:center;gap:6px;padding:11px 14px;background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><i class="ti ti-printer"></i> PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<script>
+// ── State ──
+var done = JSON.parse(localStorage.getItem('sa_vendre_done')||'[]');
+var openSteps = new Set([1]);
+
+// ── Render all steps ──
+function renderAllSteps(){
+  for(var i=1;i<=9;i++){
+    var isDone=done.indexOf(i)!==-1;
+    var isOpen=openSteps.has(i);
+    document.getElementById('sc'+i).className='v-card'+(isOpen?' active':isDone?' done':'');
+    document.getElementById('ts'+i).className='v-t-step'+(isOpen?' active':isDone?' done':'');
+    document.getElementById('td'+i).textContent=isDone&&!isOpen?'✓':i;
+    document.getElementById('pb'+i).className='v-progress-step'+(isOpen?' active':isDone?' done':'');
+    document.getElementById('pbn'+i).textContent=isDone&&!isOpen?'✓':i;
+    document.getElementById('pw'+i).className='v-pw-step'+(isOpen?' active':isDone?' done':'');
+    document.getElementById('pwn'+i).textContent=isDone&&!isOpen?'✓':i;
+  }
+}
+
+// ── Toggle a step open/closed (card head + sidebar click) ──
+function openStep(n){
+  if(openSteps.has(n)){
+    openSteps.delete(n);
+  } else {
+    openSteps.add(n);
+    setTimeout(function(){document.getElementById('ts'+n).scrollIntoView({behavior:'smooth',block:'start'});},60);
+  }
+  renderAllSteps();
+}
+
+// ── Sidebar/progress-bar click: always open and scroll ──
+function jumpToStep(n){
+  var wasOpen=openSteps.has(n);
+  if(!wasOpen) openSteps.add(n);
+  renderAllSteps();
+  setTimeout(function(){document.getElementById('ts'+n).scrollIntoView({behavior:'smooth',block:'start'});},60);
+}
+
+function markDone(n){
+  if(done.indexOf(n)===-1)done.push(n);
+  localStorage.setItem('sa_vendre_done',JSON.stringify(done));
+  updateProgress();
+  openSteps.delete(n);
+  if(n<9){openSteps.add(n+1);setTimeout(function(){document.getElementById('ts'+(n+1)).scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  renderAllSteps();
+}
+
+function updateProgress(){
+  var pct=done.length/9*100;
+  document.getElementById('pwFill').style.width=pct+'%';
+  document.getElementById('pwCount').textContent=done.length+' / 9 étapes complétées';
+}
+
+function toggleSec(id, btn) {
+  var sec = document.getElementById(id);
+  var chev = btn.querySelector('.sec-chev');
+  var open = sec.style.display !== 'none';
+  sec.style.display = open ? 'none' : '';
+  if (chev) chev.style.transform = open ? 'rotate(0deg)' : 'rotate(90deg)';
+}
+
+function toggleCheck(el){
+  el.querySelector('.v-check-box').classList.toggle('on');
+  el.querySelector('.v-check-txt').classList.toggle('on');
+}
+
+function scrollToGen(){
+  var el=document.getElementById('genWidget');
+  if(!el) return;
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+  el.style.transition='box-shadow .3s';
+  el.style.boxShadow='0 0 0 3px rgba(255,122,104,.5)';
+  setTimeout(function(){el.style.boxShadow='';},2000);
+}
+
+// Init
+(function(){
+  updateProgress();
+  done.forEach(function(n){if(!openSteps.has(n)){var c=document.getElementById('sc'+n);if(c)c.className='v-card done';}});
+})();
+
+// ── Modals ──
+var _currentModal=null;
+var _docTypeMap={visite:'Visite',offre:'Offre',acceptation:'Acceptation',contre:'Contre',refus:'Refus',cles:'Cles',prix:'Prix'};
+function openDocModal(type){
+  var id='overlay'+_docTypeMap[type];
+  _currentModal=id;
+  document.getElementById(id).style.display='block';
+  document.body.style.overflow='hidden';
+  var today=new Date().toISOString().slice(0,10);
+  var d3=new Date(Date.now()+3*864e5).toISOString().slice(0,10);
+  if(type==='visite')document.getElementById('bvDate').value=today;
+  if(type==='offre'){document.getElementById('oaDate').value=today;document.getElementById('oaValidite').value=d3;}
+  if(type==='acceptation')document.getElementById('laDate').value=today;
+  if(type==='contre')document.getElementById('cpDate').value=today;
+  if(type==='refus')document.getElementById('roDate').value=today;
+  if(type==='cles')document.getElementById('rkDate').value=today;
+  updateDoc(type);
+}
+function closeModal(id){document.getElementById(id).style.display='none';document.body.style.overflow='';}
+
+// ── Helpers ──
+function fmtN(v){return v?parseInt(v).toLocaleString('fr-FR'):'__________';}
+function fmtD(s){if(!s)return '__________';var x=new Date(s);return isNaN(x)?s:x.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
+function todayFR(){return new Date().toLocaleDateString('fr-FR');}
+function refID(prefix){return prefix+'-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'-'+Math.floor(Math.random()*9000+1000);}
+function docHead(title,ref,ico,color,subtitle){
+  return '<div class="doc-header">'+
+    '<div class="doc-header-top">'+
+      '<div class="doc-logo"><div class="doc-logo-badge">SA</div>SansAgents.fr</div>'+
+      '<div class="doc-meta">Réf. '+ref+'<br>'+todayFR()+'</div>'+
+    '</div>'+
+    '<div class="doc-title-band">'+
+      '<div class="doc-title-ico" style="background:rgba(255,255,255,.1);color:'+color+'"><i class="ti '+ico+'"></i></div>'+
+      '<div><div class="doc-title">'+title+'</div><div class="doc-subtitle">'+subtitle+'</div></div>'+
+    '</div>'+
+  '</div>'+
+  '<div class="doc-body">';
+}
+function docBodyEnd(){return '</div>';}
+function docFoot(){
+  return '<div class="doc-footer">'+
+    '<span>SansAgents.fr</span><span class="doc-footer-dot"></span>'+
+    '<span>Généré le '+todayFR()+'</span><span class="doc-footer-dot"></span>'+
+    '<span>contact@sansagents.fr</span><span class="doc-footer-dot"></span>'+
+    '<span>Document entre particuliers — aucun intermédiaire</span>'+
+  '</div>';
+}
+function docParties(labels,names){
+  var html='<div class="doc-parties">';
+  for(var i=0;i<labels.length;i++) html+='<div class="doc-party"><div class="doc-party-label">'+labels[i]+'</div><div class="doc-party-name">'+names[i]+'</div></div>';
+  return html+'</div>';
+}
+function docAddress(adr){
+  return '<div class="doc-address"><i class="ti ti-map-pin doc-address-ico"></i><div><div class="doc-address-label">Bien immobilier</div><div class="doc-address-val">'+adr+'</div></div></div>';
+}
+function docKV(rows){
+  var html='';
+  rows.forEach(function(r){html+='<div class="doc-kv"><div class="doc-kv-k">'+r[0]+'</div><div class="doc-kv-v'+(r[2]?' big':'')+'">'+r[1]+'</div></div>';});
+  return html;
+}
+function docSection(title,ico,content){
+  return '<div class="doc-section"><div class="doc-section-title"><i class="ti '+ico+'"></i>'+title+'</div>'+content+'</div>';
+}
+function docLegal(text){return '<div class="doc-legal">'+text+'</div>';}
+function docSigs(sigs){
+  var html='<div class="doc-sigs">';
+  sigs.forEach(function(s){
+    html+='<div class="doc-sig-box">'+
+      '<div class="doc-sig-header">'+s.label+'<span style="font-weight:400;text-transform:none;letter-spacing:0;margin-left:6px;color:#aaa;font-size:9px">'+s.name+'</span></div>'+
+      '<div class="doc-sig-body">'+
+        '<div class="doc-sig-space"></div>'+
+        '<div class="doc-sig-fields">'+
+          '<span class="doc-sig-field">Date :</span>'+
+          (s.fields||[]).map(function(f){
+            if(f==='Lieu')return '<span class="doc-sig-field doc-sig-lieu">Lieu :</span>';
+            return '<span class="doc-sig-field">'+f+' :</span>';
+          }).join('')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  });
+  return html+'</div>';
+}
+
+// ── Document builders ──
+function updateDoc(type){
+  var html='';
+
+  if(type==='visite'){
+    var adr=document.getElementById('bvAdresse').value||'__________';
+    var vdr=document.getElementById('bvVendeur').value||'__________';
+    var vis=document.getElementById('bvVisiteur').value||'__________';
+    var dt=fmtD(document.getElementById('bvDate').value);
+    var px=fmtN(document.getElementById('bvPrix').value);
+    html=docHead('Bon de visite',refID('BV'),'ti-door-enter','#ff7a68','Protection du vendeur contre toute réclamation d\'agence')+
+      docAddress(adr)+
+      docParties(['Vendeur','Visiteur'],[vdr,vis])+
+      docSection('Détails de la visite','ti-calendar-event',
+        docKV([['Date de visite',dt],['Prix affiché',px+' €',true],['Mode de découverte','SansAgents.fr — entre particuliers']])
+      )+
+      docSection('Déclaration du visiteur','ti-file-text',
+        docLegal('Je soussigné(e) <strong>'+vis+'</strong> déclare avoir visité le bien immobilier ci-dessus le <strong>'+dt+'</strong>, présenté directement par le propriétaire <strong>'+vdr+'</strong>, sans l\'entremise d\'aucun professionnel de l\'immobilier.<br><br>J\'atteste avoir pris connaissance de ce bien <strong>exclusivement via la plateforme SansAgents.fr</strong>. En conséquence, aucun honoraire d\'intermédiaire ne pourra être réclamé par un tiers dans le cadre d\'une éventuelle transaction portant sur ce bien.')
+      )+
+      docSigs([
+        {label:'Signature du visiteur',name:vis,fields:['Lieu']},
+        {label:'Signature du vendeur',name:vdr,fields:['Lieu']}
+      ])+
+      docBodyEnd()+docFoot();
+    document.getElementById('docVisite').innerHTML=html;
+  }
+
+  if(type==='offre'){
+    var adr=document.getElementById('oaAdresse').value||'__________';
+    var ach=document.getElementById('oaAcheteur').value||'__________';
+    var vdr=document.getElementById('oaVendeur').value||'__________';
+    var mt=fmtN(document.getElementById('oaMontant').value);
+    var val=fmtD(document.getElementById('oaValidite').value);
+    var dt=fmtD(document.getElementById('oaDate').value);
+    html=docHead('Offre d\'achat',refID('OA'),'ti-file-euro','#3b82f6','Proposition d\'acquisition immobilière entre particuliers')+
+      docAddress(adr)+
+      docParties(['Acquéreur','Vendeur'],[ach,vdr])+
+      docSection('Conditions financières','ti-currency-euro',
+        docKV([['Montant proposé',mt+' €',true],['Prix nets vendeur','(frais de notaire non inclus)'],['Validité de l\'offre','Jusqu\'au '+val],['Date de l\'offre',dt]])
+      )+
+      docSection('Conditions suspensives','ti-shield-check',
+        docLegal('La présente offre est soumise aux conditions suspensives suivantes :<br><br>• <strong>Obtention d\'un financement</strong> : l\'acquéreur dispose d\'un délai légal pour obtenir un prêt immobilier aux conditions du marché.<br>• <strong>Absence de servitude cachée</strong> : le bien est vendu libre de toute charge non mentionnée.<br>• <strong>Signature d\'un compromis</strong> : cette offre ne constitue pas un engagement définitif ; elle ne sera ferme qu\'après signature d\'un compromis ou d\'une promesse synallagmatique de vente devant notaire.')
+      )+
+      docSigs([
+        {label:'Signature de l\'acquéreur',name:ach,fields:['Lieu']},
+        {label:'Réponse du vendeur',name:'☐ Acceptée   ☐ Refusée   ☐ Contre-prop.',fields:[]}
+      ])+
+      docBodyEnd()+docFoot();
+    document.getElementById('docOffre').innerHTML=html;
+  }
+
+  if(type==='acceptation'){
+    var adr=document.getElementById('laAdresse').value||'__________';
+    var vdr=document.getElementById('laVendeur').value||'__________';
+    var ach=document.getElementById('laAcheteur').value||'__________';
+    var px=fmtN(document.getElementById('laPrix').value);
+    var dt=fmtD(document.getElementById('laDate').value);
+    html=docHead('Lettre d\'acceptation d\'offre','#LA'+refID('').slice(-8),'ti-circle-check','#16a34a','Accord de principe du vendeur sur l\'offre d\'achat reçue')+
+      docAddress(adr)+
+      docParties(['Vendeur','Acquéreur'],[vdr,ach])+
+      docSection('Offre acceptée','ti-check',
+        docKV([['Montant accepté',px+' €',true],['Date d\'acceptation',dt],['Engagement','Accord de principe — sous réserve notaire']])
+      )+
+      docSection('Déclaration du vendeur','ti-file-text',
+        docLegal('Je soussigné(e) <strong>'+vdr+'</strong> déclare accepter l\'offre d\'achat présentée par <strong>'+ach+'</strong> pour le montant de <strong>'+px+' €</strong> nets vendeur, en date du <strong>'+dt+'</strong>.<br><br>Cette acceptation est donnée sous réserve de la signature d\'un compromis de vente chez le notaire et de la levée de l\'ensemble des conditions suspensives légales. Elle ne constitue pas un acte juridiquement contraignant mais formalise notre accord amiable de principe.')
+      )+
+      docSigs([
+        {label:'Signature du vendeur',name:vdr,fields:['Lieu']},
+        {label:'Accusé de réception',name:ach,fields:['Date de réception']}
+      ])+
+      docBodyEnd()+docFoot();
+    document.getElementById('docAcceptation').innerHTML=html;
+  }
+
+  if(type==='contre'){
+    var adr=document.getElementById('cpAdresse').value||'__________';
+    var vdr=document.getElementById('cpVendeur').value||'__________';
+    var ach=document.getElementById('cpAcheteur').value||'__________';
+    var pxInit=fmtN(document.getElementById('cpPrixInitial').value);
+    var pxCtr=fmtN(document.getElementById('cpPrixContre').value);
+    var lim=fmtD(document.getElementById('cpLimite').value);
+    var dt=fmtD(document.getElementById('cpDate').value);
+    html=docHead('Contre-proposition de vente',refID('CP'),'ti-arrows-exchange','#d97706','Réponse du vendeur à une offre d\'achat jugée insuffisante')+
+      docAddress(adr)+
+      docParties(['Vendeur','Acquéreur'],[vdr,ach])+
+      docSection('Négociation','ti-scale',
+        docKV([['Offre initiale reçue',pxInit+' €'],['Ma contre-proposition',pxCtr+' €',true],['Écart',pxInit&&pxCtr?fmtN(parseInt(pxCtr.replace(/\s/g,''))-parseInt(pxInit.replace(/\s/g,'')))+' €':'—'],['Validité de ma contre-prop.','Jusqu\'au '+lim]])
+      )+
+      docSection('Motivation du vendeur','ti-message',
+        docLegal('Je soussigné(e) <strong>'+vdr+'</strong> accuse réception de l\'offre présentée par <strong>'+ach+'</strong> en date du <strong>'+dt+'</strong> pour un montant de <strong>'+pxInit+' €</strong>.<br><br>Après analyse du marché immobilier local et au regard des caractéristiques du bien, je formule la contre-proposition mentionnée ci-dessus. Cette proposition est valable jusqu\'à la date indiquée. Passé ce délai, elle sera considérée comme caduque et je resterai libre d\'accepter d\'autres offres.')
+      )+
+      docSigs([
+        {label:'Signature du vendeur',name:vdr,fields:['Lieu']},
+        {label:'Réponse de l\'acquéreur',name:'☐ Acceptée   ☐ Refusée',fields:['Date']}
+      ])+
+      docBodyEnd()+docFoot();
+    document.getElementById('docContre').innerHTML=html;
+  }
+
+  if(type==='refus'){
+    var adr=document.getElementById('roAdresse').value||'__________';
+    var vdr=document.getElementById('roVendeur').value||'__________';
+    var ach=document.getElementById('roAcheteur').value||'__________';
+    var px=fmtN(document.getElementById('roPrix').value);
+    var dt=fmtD(document.getElementById('roDate').value);
+    html=docHead('Lettre de refus d\'offre d\'achat',refID('RO'),'ti-x','#dc2626','Décision formelle du vendeur de ne pas donner suite à l\'offre')+
+      docAddress(adr)+
+      docParties(['Vendeur','Acquéreur'],[vdr,ach])+
+      docSection('Offre refusée','ti-ban',
+        docKV([['Montant de l\'offre',px+' €'],['Date de l\'offre',dt],['Décision','Refus — offre non retenue']])
+      )+
+      docSection('Lettre de refus','ti-file-text',
+        docLegal('Je soussigné(e) <strong>'+vdr+'</strong> accuse réception de l\'offre d\'achat de <strong>'+ach+'</strong> portant sur le bien ci-dessus, pour un montant de <strong>'+px+' €</strong>, en date du <strong>'+dt+'</strong>.<br><br>Après mûre réflexion, et considérant que cette proposition ne correspond pas aux conditions auxquelles j\'envisage de céder ce bien, je suis contraint(e) de décliner cette offre.<br><br>Je reste disponible pour toute nouvelle proposition et vous encourage à me contacter si vous souhaitez reformuler une offre. Je vous remercie de l\'intérêt porté à ce bien.')
+      )+
+      docSigs([
+        {label:'Signature du vendeur',name:vdr,fields:['Lieu']},
+        {label:'Accusé de réception',name:ach,fields:['Date de réception']}
+      ])+
+      docBodyEnd()+docFoot();
+    document.getElementById('docRefus').innerHTML=html;
+  }
+
+  if(type==='cles'){
+    var adr=document.getElementById('rkAdresse').value||'__________';
+    var vdr=document.getElementById('rkVendeur').value||'__________';
+    var ach=document.getElementById('rkAcheteur').value||'__________';
+    var px=fmtN(document.getElementById('rkPrix').value);
+    var dt=fmtD(document.getElementById('rkDate').value);
+    var nb=document.getElementById('rkCles').value||'__';
+    html=docHead('Procès-verbal de remise des clés',refID('PV'),'ti-key','#ca8a04','Acte de livraison du bien — à signer le jour du transfert de propriété')+
+      docAddress(adr)+
+      docParties(['Vendeur','Acquéreur'],[vdr,ach])+
+      docSection('Détails de la transaction','ti-receipt',
+        docKV([['Prix de vente définitif',px+' €',true],['Date de remise',dt],['Nombre de clés remises',nb+' clé'+(parseInt(nb)>1?'s':'')]])
+      )+
+      docSection('Attestation','ti-file-check',
+        docLegal('Je soussigné(e) <strong>'+vdr+'</strong> atteste avoir remis ce jour, le <strong>'+dt+'</strong>, à <strong>'+ach+'</strong>, la totalité des <strong>'+nb+' clé(s)</strong> du bien immobilier référencé ci-dessus.<br><br>Cette remise intervient concomitamment à la signature de l\'acte authentique de vente et au paiement intégral du prix convenu. <strong>'+ach+'</strong> déclare prendre possession du bien en parfaite connaissance de son état, tel qu\'il a été constaté lors de la dernière visite préalable à la signature.')
+      )+
+      '<div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:#166534;display:flex;align-items:flex-start;gap:8px"><i class="ti ti-circle-check" style="font-size:16px;flex-shrink:0;margin-top:1px"></i><span><strong>Transfert de propriété effectif.</strong> À partir de la signature de ce document, l\'acquéreur est propriétaire du bien et en assume toutes les charges, taxes et responsabilités.</span></div>'+
+      docSigs([
+        {label:'Signature du vendeur',name:vdr,fields:['Lieu']},
+        {label:'Signature de l\'acquéreur',name:ach,fields:['Lieu']}
+      ])+
+      docBodyEnd()+docFoot();
+    document.getElementById('docCles').innerHTML=html;
+  }
+}
+
+// ── Description generator ──
+function generateDesc(){
+  var type=document.getElementById('hType').value;
+  var s=document.getElementById('hSurface').value||'___';
+  var p=document.getElementById('hPieces').value;
+  var ch=document.getElementById('hChambres').value;
+  var sdb=document.getElementById('hSdb').value;
+  var v=document.getElementById('hVille').value||'secteur recherché';
+  var dpe=document.getElementById('hDpe').value;
+  var chauf=document.getElementById('hChauffage').value;
+  var etat=document.getElementById('hEtat').value;
+  var a=document.getElementById('hAtouts').value;
+  var e=document.getElementById('hEtage').value;
+  var tc=type.charAt(0).toUpperCase()+type.slice(1);
+  var ps=p?p+' pièce'+(parseInt(p)>1?'s':''):'';
+  var arr=a?a.split(',').map(function(s){return s.trim();}).filter(Boolean):[];
+  var L=[];
+  var accord=(type==='appartement'||type==='studio'||type==='duplex')?'':type==='maison'?'e':'';
+  L.push(tc+(ps?' — '+ps:'')+(s?' — '+s+' m²':'')+(v?' — '+v:''));
+  L.push('');
+  L.push(tc+(ps?' '+ps:'')+' de '+s+' m²'+(v?' idéalement situé'+accord+' à '+v:'')+', '+(etat||'en bon état')+', vous est proposé directement par son propriétaire.');
+  L.push('');
+  if(e){L.push('📍 '+e+'.');L.push('');}
+  if(ch||sdb){
+    var details=[];
+    if(ch)details.push(ch+' chambre'+(parseInt(ch)>1?'s':''));
+    if(sdb)details.push(sdb+' salle'+(parseInt(sdb)>1?'s':'')+' de bain');
+    L.push('Composition : '+details.join(', ')+'.');L.push('');
+  }
+  if(dpe&&dpe!=='NC'){L.push('⚡ Étiquette énergétique : DPE '+dpe+'. '+(dpe==='A'||dpe==='B'?'Excellent bilan thermique.':dpe==='C'||dpe==='D'?'Bilan énergétique correct.':'Travaux de rénovation énergétique possibles.')+'  ');L.push('');}
+  if(chauf&&chauf!=='nc'){L.push('🔥 Chauffage : '+chauf+'.');L.push('');}
+  if(arr.length){L.push('✅ Points forts :');arr.forEach(function(x){L.push('   • '+x.charAt(0).toUpperCase()+x.slice(1));});L.push('');}
+  L.push('Bien vendu directement par le propriétaire via SansAgents.fr — sans frais d\'agence. Commission SansAgents de 1% uniquement en cas de vente conclue.');
+  L.push('');L.push('Visites sur rendez-vous uniquement. Contactez-nous via la messagerie SansAgents.');
+  document.getElementById('helperText').textContent=L.join('\n');
+  document.getElementById('helperResult').style.display='';
+}
+function copyDesc(){
+  navigator.clipboard.writeText(document.getElementById('helperText').textContent).then(function(){
+    var b=event.target.closest('button');b.innerHTML='<i class="ti ti-check"></i> Copié !';
+    setTimeout(function(){b.innerHTML='<i class="ti ti-copy"></i> Copier le texte';},2000);
+  });
+}
+
+// ── Scroll spy ──
+(function(){
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var n=parseInt(e.target.id.replace('ts',''));
+        for(var i=1;i<=9;i++){
+          document.getElementById('pb'+i).classList.toggle('active',i===n&&!openSteps.has(i)||i===n);
+        }
+      }
+    });
+  },{threshold:.25,rootMargin:'-120px 0px -55% 0px'});
+  for(var i=1;i<=9;i++){var el=document.getElementById('ts'+i);if(el)observer.observe(el);}
+})();
+
+SA.init().then(function(){
+  setTimeout(function(){
+    var dropdown=document.querySelector('.sa-account-dropdown');
+    if(!dropdown||!SA.getUser())return;
+    var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+    if(!docs.length)return;
+    var existing=Array.from(dropdown.querySelectorAll('button')).find(function(b){return b.textContent.indexOf('documents')!==-1||b.innerHTML.indexOf('ti-files')!==-1;});
+    if(existing){existing.innerHTML='<i class="ti ti-files"></i> Mes documents<span style="background:#E84533;color:white;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">'+docs.length+'</span>';}
+  },300);
+});
+
+function addPrixRow(){
+  var tpl='<div class="ep-row v-modal-grid" style="gap:8px;margin-bottom:8px;align-items:end">'+
+    '<div class="v-field" style="min-width:0"><label class="v-label">Source</label>'+
+    '<select class="v-input ep-src" onchange="updatePrixDoc()"><option value="">— Choisir —</option>'+
+    '<option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option>'+
+    '<option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select></div>'+
+    '<div class="v-field"><label class="v-label">Prix au m² (€)</label><input class="v-input ep-pm2" type="number" placeholder="3 500" oninput="updatePrixDoc()"></div>'+
+    '<div class="v-field"><label class="v-label">Notes</label><input class="v-input ep-note" type="text" placeholder="" oninput="updatePrixDoc()"></div></div>';
+  var rows=document.getElementById('epRows');
+  rows.insertAdjacentHTML('beforeend',tpl);
+}
+
+function updatePrixDoc(){
+  var surface=parseFloat(document.getElementById('epSurface').value)||0;
+  var type=document.getElementById('epType').value;
+  var marge=parseFloat(document.getElementById('epMarge').value)||0;
+  var reduc=parseFloat(document.getElementById('epReduc').value)||0;
+  var rows=document.querySelectorAll('#overlayPrix .ep-row');
+  var entries=[];
+  rows.forEach(function(r){
+    var src=r.querySelector('.ep-src').value;
+    var pm2=parseFloat(r.querySelector('.ep-pm2').value)||0;
+    var note=r.querySelector('.ep-note').value;
+    if(src&&pm2) entries.push({src:src,pm2:pm2,note:note});
+  });
+  var avg=entries.length?entries.reduce(function(a,b){return a+b.pm2;},0)/entries.length:0;
+  var prixCible=surface&&avg?Math.round(avg*surface*(1+marge/100)/1000)*1000:0;
+  var prixPlancher=prixCible?Math.round(prixCible*(1-reduc/100)/1000)*1000:0;
+  var fmt=function(n){return n?n.toLocaleString('fr-FR')+'&nbsp;€':'—'};
+  var fmt2=function(n){return n?n.toLocaleString('fr-FR')+'&nbsp;€/m²':'—'};
+  var rows_html=entries.map(function(e){
+    return '<tr><td style="padding:8px 12px;border-bottom:1px solid #f0f0f0">'+e.src+'</td>'
+      +'<td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:600">'+fmt2(e.pm2)+'</td>'
+      +(surface?'<td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;text-align:right;color:#555">'+fmt(Math.round(e.pm2*surface))+'</td>':'')
+      +'<td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;color:#888;font-size:12px">'+e.note+'</td></tr>';
+  }).join('');
+  if(!rows_html) rows_html='<tr><td colspan="4" style="padding:16px;text-align:center;color:#bbb;font-size:13px">Renseignez au moins une source ci-dessus</td></tr>';
+  var html='<div style="font-family:Georgia,serif;font-size:14px;line-height:1.6">'
+    +'<div style="text-align:center;margin-bottom:16px"><div style="font-size:17px;font-weight:700;color:#111">FICHE D\'ESTIMATION</div>'
+    +(type||surface?'<div style="font-size:13px;color:#666;margin-top:4px">'+(type||'')+(surface?' — '+surface+' m²':'')+'</div>':'')+'</div>'
+    +'<table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px">'
+    +'<thead><tr style="background:#f7f8fa"><th style="padding:8px 12px;text-align:left;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.05em">Source</th>'
+    +'<th style="padding:8px 12px;text-align:right;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.05em">Prix/m²</th>'
+    +(surface?'<th style="padding:8px 12px;text-align:right;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.05em">Estimation totale</th>':'')
+    +'<th style="padding:8px 12px;text-align:left;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.05em">Notes</th></tr></thead>'
+    +'<tbody>'+rows_html+'</tbody></table>';
+  if(avg){
+    html+='<table style="width:100%;border-collapse:collapse;font-size:13px">'
+      +'<tr><td style="padding:8px 12px;border-top:2px solid #111;font-weight:700">Moyenne estimée au m²</td><td style="padding:8px 12px;border-top:2px solid #111;text-align:right;font-weight:700">'+fmt2(Math.round(avg))+'</td></tr>';
+    if(prixCible) html+='<tr><td style="padding:8px 12px;background:#fff8f0;font-weight:700;color:#E84533">Prix de vente cible <span style="font-weight:400;font-size:12px;color:#888">(+'+marge+'% marge)</span></td><td style="padding:8px 12px;background:#fff8f0;text-align:right;font-weight:800;font-size:15px;color:#E84533">'+fmt(prixCible)+'</td></tr>';
+    if(prixPlancher) html+='<tr><td style="padding:8px 12px;background:#f0fdf4;color:#15803d;font-weight:700">Prix plancher <span style="font-weight:400;font-size:12px;color:#888">(−'+reduc+'% max)</span></td><td style="padding:8px 12px;background:#f0fdf4;text-align:right;font-weight:800;color:#15803d">'+fmt(prixPlancher)+'</td></tr>';
+    html+='</table>';
+  }
+  html+='</div>';
+  document.getElementById('docPrix').innerHTML=html;
+}
+
+// ── Signature system ──────────────────────────────
+var _sigTarget=null, _sigCtx=null, _sigDrawing=false, _sigHasDrawn=false;
+
+function openSigPanel(docId){
+  var preview=document.getElementById(docId);
+  if(!preview||!preview.innerHTML.trim()){SA.toast('Remplissez le document d\'abord','ti-alert-triangle');return;}
+  _sigTarget=docId;
+  var panel=document.getElementById('sigPanel');
+  panel.style.display='flex';
+  setTimeout(function(){
+    var canvas=document.getElementById('sigCanvas');
+    var dpr=window.devicePixelRatio||1;
+    canvas.width=canvas.offsetWidth*dpr;
+    canvas.height=120*dpr;
+    _sigCtx=canvas.getContext('2d');
+    _sigCtx.scale(dpr,dpr);
+    _sigCtx.strokeStyle='#111';_sigCtx.lineWidth=2.5;_sigCtx.lineCap='round';_sigCtx.lineJoin='round';
+    _sigHasDrawn=false;
+    document.getElementById('sigTypedName').value='';
+    document.getElementById('sigHint').style.display='';
+    function getPos(e){var r=canvas.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left),y:(t.clientY-r.top)};}
+    canvas.onmousedown=function(e){_sigDrawing=true;_sigHasDrawn=true;var p=getPos(e);_sigCtx.beginPath();_sigCtx.moveTo(p.x,p.y);document.getElementById('sigHint').style.display='none';};
+    canvas.onmousemove=function(e){if(!_sigDrawing)return;var p=getPos(e);_sigCtx.lineTo(p.x,p.y);_sigCtx.stroke();};
+    canvas.onmouseup=canvas.onmouseleave=function(){_sigDrawing=false;};
+    canvas.ontouchstart=function(e){e.preventDefault();_sigDrawing=true;_sigHasDrawn=true;var p=getPos(e);_sigCtx.beginPath();_sigCtx.moveTo(p.x,p.y);document.getElementById('sigHint').style.display='none';};
+    canvas.ontouchmove=function(e){e.preventDefault();if(!_sigDrawing)return;var p=getPos(e);_sigCtx.lineTo(p.x,p.y);_sigCtx.stroke();};
+    canvas.ontouchend=function(){_sigDrawing=false;};
+  },50);
+}
+
+function closeSigPanel(){document.getElementById('sigPanel').style.display='none';_sigTarget=null;}
+
+function clearSigCanvas(){
+  var canvas=document.getElementById('sigCanvas');
+  if(_sigCtx)_sigCtx.clearRect(0,0,canvas.width,canvas.height);
+  _sigHasDrawn=false;
+  document.getElementById('sigHint').style.display='';
+}
+
+function applySig(){
+  var name=document.getElementById('sigTypedName').value.trim();
+  if(!name&&!_sigHasDrawn){
+    var inp=document.getElementById('sigTypedName');
+    inp.style.borderColor='#E84533';setTimeout(function(){inp.style.borderColor='#e5e5e5';},2000);
+    return;
+  }
+  var today=new Date().toLocaleDateString('fr-FR');
+  var sigHtml;
+  if(_sigHasDrawn){
+    var img=document.getElementById('sigCanvas').toDataURL('image/png');
+    sigHtml='<div style="display:inline-block;text-align:left">'+
+      '<img src="'+img+'" style="height:46px;max-width:160px;display:block;margin-bottom:2px">'+
+      (name?'<div style="font-size:11px;color:#555;margin-bottom:2px">'+name+'</div>':'')+
+      '<div style="font-size:10px;color:#94a3b8;font-style:italic">Lu et approuvé · '+today+'</div>'+
+      '</div>';
+  } else {
+    sigHtml='<div style="display:inline-block;text-align:left">'+
+      '<span style="font-family:Georgia,Times,serif;font-size:20px;color:#111;font-style:italic;border-bottom:1.5px solid #333;padding:2px 6px;display:inline-block">'+name+'</span>'+
+      '<div style="font-size:10px;color:#94a3b8;font-style:italic;margin-top:4px">Lu et approuvé · '+today+'</div>'+
+      '</div>';
+  }
+  var lieu=document.getElementById('sigLieu').value.trim();
+  if(_sigTarget){
+    var preview=document.getElementById(_sigTarget);
+    if(preview){
+      var sp=preview.querySelectorAll('.dsig-sp,.doc-sig-space');
+      if(sp.length>0){sp[0].innerHTML=sigHtml;SA.toast('Signature appliquée ✓','ti-signature');}
+      var df=preview.querySelectorAll('.doc-sig-field');
+      df.forEach(function(f){
+        if(f.textContent.trim()==='Date :') f.textContent='Date : '+today;
+        if(f.classList.contains('doc-sig-lieu')&&lieu) f.textContent='Lieu : '+lieu;
+      });
+    }
+  }
+  document.getElementById('sigLieu').value='';
+  closeSigPanel();
+}
+
+// ── Print / PDF a single document ────────────────
+function printThisDoc(docId){
+  var el=document.getElementById(docId);
+  if(!el||!el.innerHTML.trim()){SA.toast('Remplissez le document avant d\'imprimer','ti-alert-triangle');return;}
+  var docCss='';document.querySelectorAll('style').forEach(function(s){docCss+=s.textContent;});
+  var pCss='@media print{'
+    +'@page{size:A4 portrait;margin:8mm}'
+    +'body{padding:0!important;margin:0!important;background:white!important}'
+    +'.no-print{display:none!important}'
+    +'*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'
+    +'.v-doc-preview{max-width:none!important;width:100%!important;zoom:0.82}'
+    +'.doc-section,.doc-parties,.doc-address{page-break-inside:avoid;break-inside:avoid}'
+    +'.doc-sigs,.doc-sig-box,.doc-footer{page-break-inside:avoid;break-inside:avoid}'
+    +'}';
+  var win=window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Document SansAgents</title>'
+    +'<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">'
+    +'<style>'+docCss+'body{font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;background:#f0f2f5;padding:24px}'+pCss+'</style>'
+    +'</head><body>'
+    +'<div class="no-print" style="max-width:720px;margin:0 auto 14px;display:flex;gap:10px;align-items:center;background:white;padding:12px 16px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.07)">'
+    +'<button onclick="window.print()" style="display:flex;align-items:center;gap:7px;padding:10px 20px;background:#E84533;color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit"><i class="ti ti-download"></i> Télécharger en PDF</button>'
+    +'<button onclick="window.close()" style="padding:10px 14px;background:#f5f5f5;color:#555;border:1.5px solid #e5e5e5;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit">Fermer</button>'
+    +'<span style="font-size:11px;color:#999;margin-left:4px;line-height:1.4">Dans la boîte de dialogue, sélectionnez <strong style="color:#555">Enregistrer en PDF</strong></span>'
+    +'</div>'
+    +'<div class="v-doc-preview" style="max-width:720px;margin:0 auto;box-shadow:0 4px 28px rgba(0,0,0,.1);border-radius:14px;overflow:hidden">'+el.innerHTML+'</div>'
+    +'</body></html>');
+  win.document.close();
+}
+
+// ── Document sharing (co-signature) ──────────────
+var SHARE_FIELDS={
+  visite:{a:'bvAdresse',v:'bvVendeur',vi:'bvVisiteur',d:'bvDate',p:'bvPrix'},
+  offre:{a:'oaAdresse',ac:'oaAcheteur',v:'oaVendeur',m:'oaMontant',vd:'oaValidite',d:'oaDate'},
+  acceptation:{a:'laAdresse',v:'laVendeur',ac:'laAcheteur',p:'laPrix',d:'laDate'},
+  contre:{a:'cpAdresse',v:'cpVendeur',ac:'cpAcheteur',pi:'cpPrixInitial',pc:'cpPrixContre',d:'cpDate',l:'cpLimite'},
+  refus:{a:'roAdresse',v:'roVendeur',ac:'roAcheteur',p:'roPrix',d:'roDate'},
+  cles:{a:'rkAdresse',v:'rkVendeur',ac:'rkAcheteur',p:'rkPrix',c:'rkCles',d:'rkDate'}
+};
+var SHARE_NAMES={visite:'Bon de visite',offre:'Offre d\'achat',acceptation:'Lettre d\'acceptation',contre:'Contre-proposition',refus:'Lettre de refus',cles:'Remise des clés'};
+
+function shareDoc(type){
+  var fl=SHARE_FIELDS[type];if(!fl)return;
+  var data={t:type};
+  for(var k in fl){var el=document.getElementById(fl[k]);if(el)data[k]=el.value;}
+  var enc;try{enc=btoa(unescape(encodeURIComponent(JSON.stringify(data))));}catch(e){SA.toast('Erreur lors de la création du lien','ti-alert-triangle');return;}
+  var base=window.location.origin+(window.location.pathname.replace(/[^/]*$/,'')||'/')+'guide';
+  var url=base+'?sign='+enc;
+  var modal=document.getElementById('saShareModal');
+  if(!modal){
+    modal=document.createElement('div');modal.id='saShareModal';
+    modal.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.82);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px';
+    modal.onclick=function(e){if(e.target===modal)modal.style.display='none';};
+    modal.innerHTML='<div style="background:white;border-radius:18px;padding:28px;max-width:460px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.25)">'
+      +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">'
+      +'<div style="width:44px;height:44px;border-radius:12px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-user-share" style="color:#16a34a;font-size:20px"></i></div>'
+      +'<div><div style="font-size:16px;font-weight:700;color:#111">Partager pour co-signature</div><div id="saShareName" style="font-size:12.5px;color:#888"></div></div>'
+      +'<button onclick="document.getElementById(\'saShareModal\').style.display=\'none\'" style="margin-left:auto;width:32px;height:32px;border-radius:8px;background:#f8f9fb;border:1.5px solid #e5e5e5;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888;font-size:15px;flex-shrink:0"><i class="ti ti-x"></i></button>'
+      +'</div>'
+      +'<p style="font-size:13px;color:#555;line-height:1.65;margin-bottom:14px">Envoyez ce lien à l\'autre partie. En l\'ouvrant, le document sera pré-rempli avec vos données — il ne restera plus qu\'à apposer sa signature.</p>'
+      +'<div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:11.5px;color:#555;word-break:break-all;line-height:1.5;max-height:72px;overflow:hidden" id="saShareUrl"></div>'
+      +'<div style="display:flex;gap:8px">'
+      +'<button id="saShareCopyBtn" onclick="copyShareLink()" style="flex:1;padding:12px;background:#0f172a;color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px"><i class="ti ti-copy"></i> Copier le lien</button>'
+      +'</div>'
+      +'</div>';
+    document.body.appendChild(modal);
+  }
+  document.getElementById('saShareName').textContent=SHARE_NAMES[type]||type;
+  document.getElementById('saShareUrl').textContent=url;
+  window._saShareUrl=url;window._saShareDocName=SHARE_NAMES[type]||type;
+  modal.style.display='flex';
+}
+
+function copyShareLink(){
+  navigator.clipboard.writeText(window._saShareUrl||'').then(function(){
+    var btn=document.getElementById('saShareCopyBtn');
+    if(btn){btn.innerHTML='<i class="ti ti-check"></i> Lien copié !';btn.style.background='#16a34a';}
+    setTimeout(function(){if(btn){btn.innerHTML='<i class="ti ti-copy"></i> Copier le lien';btn.style.background='#0f172a';}},2500);
+  });
+}
+
+function shareViaEmail(){
+  var n=window._saShareDocName||'Document';
+  var u=window._saShareUrl||'';
+  window.location.href='mailto:?subject='+encodeURIComponent(n+' — SansAgents')
+    +'&body='+encodeURIComponent('Bonjour,\n\nJe vous partage le document "'+n+'" pour consultation et signature.\n\n→ Lien : '+u+'\n\nEn ouvrant ce lien, le document sera pré-rempli. Il ne vous restera qu\'à apposer votre signature.\n\nCordialement');
+}
+
+// ── Auto-fill from shared link on page load ───────
+(function(){
+  var p=new URLSearchParams(window.location.search);
+  var s=p.get('sign');if(!s)return;
+  var data;try{data=JSON.parse(decodeURIComponent(escape(atob(s))));}catch(e){return;}
+  if(!data||!data.t)return;
+  setTimeout(function(){
+    openDocModal(data.t);
+    var fl=SHARE_FIELDS[data.t];if(!fl)return;
+    for(var k in fl){var el=document.getElementById(fl[k]);if(el&&data[k]!==undefined)el.value=data[k];}
+    updateDoc(data.t);
+    SA.toast('Document partagé — vérifiez les informations et apposez votre signature','ti-signature');
+  },700);
+})();
+
+// ── Save doc to localStorage ──────────────────────
+function saveCurrDoc(type,title,btn){
+  var idMap={visite:'docVisite',offre:'docOffre',acceptation:'docAcceptation',contre:'docContre',refus:'docRefus',cles:'docCles'};
+  var el=document.getElementById(idMap[type]);
+  if(!el||!el.innerHTML.trim()){SA.toast('Remplissez le document avant de sauvegarder','ti-alert-triangle');return;}
+  try{
+    var flds={};
+    var fl=SHARE_FIELDS[type];
+    if(fl){for(var k in fl){var fe=document.getElementById(fl[k]);if(fe)flds[k]=fe.value;}}
+    SA.saveDoc({type:type,title:title,html:el.outerHTML,fields:flds,date:new Date().toLocaleDateString('fr-FR')});
+    SA.toast('Sauvegardé dans vos documents','ti-heart');
+    if(btn){var ico=btn.querySelector('i');if(ico){ico.className='ti ti-heart-filled';ico.style.color='#E84533';}}
+  }catch(e){SA.toast('Erreur lors de la sauvegarde','ti-alert-triangle');}
+}
+
+function savePrixDoc(btn){
+  var el=document.getElementById('docPrix');
+  if(!el||!el.innerHTML.trim()){SA.toast('Renseignez la fiche avant de sauvegarder','ti-alert-triangle');return;}
+  try{
+    SA.saveDoc({type:'prix',title:'Fiche d\'estimation',html:el.outerHTML,fields:{},date:new Date().toLocaleDateString('fr-FR')});
+    SA.toast('Fiche sauvegardée','ti-heart');
+    if(btn){var ico=btn.querySelector('i');if(ico){ico.className='ti ti-heart-filled';ico.style.color='#E84533';}}
+  }catch(e){SA.toast('Erreur lors de la sauvegarde','ti-alert-triangle');}
+}
+
+// ── Mes Documents overlay (depuis le dropdown nav) ──
+function openMesDocsOverlay(){
+  document.querySelectorAll('.sa-account-dropdown.show').forEach(function(d){d.classList.remove('show');});
+  var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var icons={visite:'ti-door-enter',offre:'ti-file-euro',acceptation:'ti-circle-check',contre:'ti-arrows-exchange',refus:'ti-x',cles:'ti-key'};
+  var colors={visite:'#ff7a68',offre:'#3b82f6',acceptation:'#16a34a',contre:'#d97706',refus:'#dc2626',cles:'#ca8a04'};
+  var docCss=document.querySelector('style').textContent;
+  var overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(10,15,25,.7);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px';
+  var panel='<div style="background:white;border-radius:18px;width:100%;max-width:600px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.3)">'
+    +'<div style="display:flex;align-items:center;gap:12px;padding:20px 24px;border-bottom:1px solid #f0f0f0">'
+    +'<div style="width:38px;height:38px;background:#fff5f4;border-radius:10px;display:flex;align-items:center;justify-content:center"><i class="ti ti-files" style="color:#E84533;font-size:18px"></i></div>'
+    +'<div><div style="font-size:16px;font-weight:800;color:#111;letter-spacing:-.3px">Mes documents</div><div style="font-size:12.5px;color:#999;margin-top:1px">'+docs.length+' document'+(docs.length>1?'s':'')+' sauvegardé'+(docs.length>1?'s':''+'</div>')+'</div>'
+    +'<button onclick="this.closest(\'div[style*=fixed]\').remove()" style="margin-left:auto;background:none;border:none;font-size:22px;cursor:pointer;color:#bbb;padding:4px"><i class="ti ti-x"></i></button>'
+    +'</div>'
+    +'<div style="overflow-y:auto;padding:16px 24px 24px">';
+  if(!docs.length){
+    panel+='<div style="text-align:center;padding:40px 0;color:#bbb"><i class="ti ti-files" style="font-size:40px;display:block;margin-bottom:12px"></i><div style="font-size:14px">Aucun document sauvegardé</div><div style="font-size:12px;margin-top:6px">Remplissez et sauvegardez un document depuis les outils ci-dessous</div></div>';
+  } else {
+    docs.forEach(function(d,i){
+      var ico=icons[d.type]||'ti-file-text',col=colors[d.type]||'#E84533';
+      panel+='<div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border:1.5px solid #f0f0f0;border-radius:12px;margin-bottom:8px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor=\'#E84533\'" onmouseout="this.style.borderColor=\'#f0f0f0\'">'
+        +'<div style="width:40px;height:40px;border-radius:10px;background:#f8f9fb;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti '+ico+'" style="color:'+col+';font-size:18px"></i></div>'
+        +'<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#111">'+d.title+'</div><div style="font-size:12px;color:#aaa;margin-top:1px">Sauvegardé le '+d.date+'</div></div>'
+        +'<button onclick="viewDocInline('+i+')" style="padding:8px 14px;background:#0f172a;color:white;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px"><i class="ti ti-eye"></i> Ouvrir</button>'
+        +'<button onclick="deleteSavedDocOverlay('+i+',this)" style="padding:8px 10px;background:#fff0ee;border:1px solid #ffd5d0;border-radius:8px;cursor:pointer;color:#E84533;font-size:14px;margin-left:4px"><i class="ti ti-trash"></i></button>'
+        +'</div>';
+    });
+  }
+  panel+='</div></div>';
+  overlay.innerHTML=panel;
+  document.body.appendChild(overlay);
+  overlay.onclick=function(e){if(e.target===overlay)overlay.remove();};
+}
+
+function viewDocInline(idx){
+  var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  if(!docs[idx])return;
+  var d=docs[idx];
+  var allDocCss='';
+  document.querySelectorAll('style').forEach(function(s){allDocCss+=s.textContent;});
+  var fillJs2='window.addEventListener("load",function(){'
+    +'var doc=document.querySelector(".doc-wrap");'
+    +'if(!doc)return;'
+    +'var h=doc.offsetHeight;'
+    +'var a4=1062;'
+    +'if(h>0&&h<a4*0.88){'
+    +'  var z=Math.min(a4*0.93/h,1.18);'
+    +'  doc.style.zoom=z;'
+    +'  var s=document.getElementById("pzStyle");'
+    +'  if(s)s.textContent="@media print{.doc-wrap{zoom:"+z.toFixed(3)+"!important}}";'
+    +'}'
+    +'});';
+  var pCss2='@media print{'
+    +'@page{size:A4 portrait;margin:8mm}'
+    +'body{padding:0!important;background:white!important}'
+    +'.no-print{display:none!important}'
+    +'*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'
+    +'.doc-wrap{border-radius:14px!important;overflow:hidden!important;box-shadow:none!important}'
+    +'.doc-section,.doc-parties,.doc-address{page-break-inside:avoid;break-inside:avoid}'
+    +'.doc-sigs,.doc-sig-box,.doc-footer{page-break-inside:avoid;break-inside:avoid}'
+    +'}';
+  var win=window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+d.title+'</title>'
+    +'<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">'
+    +'<style id="pzStyle"></style>'
+    +'<style>'+allDocCss+'body{font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;background:#f0f2f5;padding:24px}.doc-wrap{max-width:720px;margin:0 auto;box-shadow:0 6px 32px rgba(0,0,0,.13);border-radius:16px;overflow:hidden}'+pCss2+'</style>'
+    +'</head><body>'
+    +'<div class="no-print" style="max-width:720px;margin:0 auto 14px;display:flex;gap:10px;align-items:center;background:white;padding:12px 16px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.07)">'
+    +'<button onclick="window.print()" style="display:flex;align-items:center;gap:7px;padding:10px 20px;background:#E84533;color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit"><i class="ti ti-download"></i> Télécharger en PDF</button>'
+    +'<button onclick="window.close()" style="padding:10px 14px;background:#f5f5f5;color:#555;border:1.5px solid #e5e5e5;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit">Fermer</button>'
+    +'<span style="font-size:11px;color:#999;margin-left:4px">Sélectionnez <strong style="color:#555">Enregistrer en PDF</strong> dans la boîte de dialogue</span>'
+    +'</div>'
+    +'<div class="doc-wrap">'+d.html+'</div>'
+    +'<script>'+fillJs2+'<\/script>'
+    +'</body></html>');
+  win.document.close();
+}
+
+function deleteSavedDocOverlay(idx,btn){
+  var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  docs.splice(idx,1);
+  localStorage.setItem('sa_user_docs',JSON.stringify(docs));
+  var row=btn.closest('div[style*="border:1.5px"]');
+  if(row){row.style.opacity='0';row.style.transition='opacity .3s';setTimeout(function(){row.remove();},300);}
+}
+</script>
+
+<!-- PANEL SIGNATURE -->
+<div id="sigPanel" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.85);z-index:10000;align-items:center;justify-content:center;padding:20px">
+  <div style="background:white;border-radius:18px;padding:24px;width:100%;max-width:440px;box-shadow:0 24px 60px rgba(0,0,0,.3)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:16px;font-weight:800;color:#0f172a;letter-spacing:-.3px;display:flex;align-items:center;gap:8px"><i class="ti ti-signature" style="color:#E84533"></i> Signer le document</div>
+      <button onclick="closeSigPanel()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#999;line-height:1;padding:0"><i class="ti ti-x"></i></button>
+    </div>
+    <p style="font-size:12.5px;color:#777;margin-bottom:12px;line-height:1.6">Dessinez votre signature dans le cadre, ou saisissez votre nom pour une signature dactylographiée.</p>
+    <div style="position:relative">
+      <canvas id="sigCanvas" style="border:2px solid #e5e5e5;border-radius:10px;touch-action:none;cursor:crosshair;background:#f9fafb;width:100%;height:120px;display:block"></canvas>
+      <div id="sigHint" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;color:#c0c0c0;pointer-events:none;white-space:nowrap">✍ Signez ici</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <input id="sigTypedName" type="text" placeholder="Votre nom complet (optionnel)" style="flex:1;padding:10px 12px;border:1.5px solid #e5e5e5;border-radius:9px;font-size:14px;font-family:inherit;outline:none" onfocus="this.style.borderColor='#E84533'" onblur="this.style.borderColor='#e5e5e5'">
+      <button onclick="clearSigCanvas()" style="padding:10px 14px;background:#f5f5f5;border:none;border-radius:9px;font-size:13px;cursor:pointer;color:#555;font-family:inherit">Effacer</button>
+    </div>
+    <div style="margin-top:8px">
+      <input id="sigLieu" type="text" placeholder="Ville de signature (ex : Paris)" style="width:100%;padding:10px 12px;border:1.5px solid #e5e5e5;border-radius:9px;font-size:14px;font-family:inherit;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#E84533'" onblur="this.style.borderColor='#e5e5e5'">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button onclick="closeSigPanel()" style="flex:1;padding:12px;background:#f5f5f5;color:#444;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-family:inherit">Annuler</button>
+      <button onclick="applySig()" style="flex:2;padding:12px;background:#0f172a;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px"><i class="ti ti-check"></i> Appliquer</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

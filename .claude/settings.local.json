@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n \"^render\\(\\);\\\\|^render\\(\\)$\" C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_annonce_detail.html C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_annonces.html C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_favoris.html C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_mes_annonces.html C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_messages.html C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_mon_profil.html C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_admin_pros.html C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_annuaire_pro_v5.html C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_pro_detail.html C:/Users/loic/.claude/Code/SansAgents/V2/sansagents_recherches.html)",
+      "Bash(sed -i \"s|<script>if \\(!SA.getUser\\(\\)\\) document.getElementById\\('authGate'\\).style.display = 'flex';</script>|<script>SA.init\\(\\).then\\(function\\(\\){ if \\(!SA.getUser\\(\\)\\) document.getElementById\\('authGate'\\).style.display = 'flex'; }\\);</script>|\" sansagents_formulaire_v16.html)",
+      "Bash(sed -i \"s|  function publish\\(\\) {|  async function publish\\(\\) {|\" sansagents_formulaire_v16.html)",
+      "Bash(sed -i \"s|    const listing = SA.addListing\\(collectFormData\\(\\)\\);|    const btn = document.getElementById\\('btnPublish'\\); btn.disabled = true;\\\\n    let listing;\\\\n    try { listing = await SA.addListing\\(collectFormData\\(\\)\\); } catch\\(e\\) { SA.toast\\('Erreur lors de la publication : ' + e.message, 'ti-alert-circle'\\); btn.disabled = false; return; }|\" sansagents_formulaire_v16.html)",
+      "Bash(sed -i \"s|  function publish\\(\\) {|  async function publish\\(\\) {|\" sansagents_inscription_pro.html)",
+      "Bash(sed -i \"s|    const pro = SA.addPro\\(collectFormData\\(\\)\\);|    const btn = document.querySelector\\('.btn-publish'\\);\\\\n    if \\(btn\\) btn.disabled = true;\\\\n    let pro;\\\\n    try { pro = await SA.addPro\\(collectFormData\\(\\)\\); } catch\\(e\\) { SA.toast\\(e.message === 'siret-invalid' ? 'Le SIRET doit contenir exactement 14 chiffres.' : 'Erreur : ' + e.message, 'ti-alert-circle'\\); if \\(btn\\) btn.disabled = false; return; }|\" sansagents_inscription_pro.html)",
+      "Bash(sed -i \"s|  document.addEventListener\\('DOMContentLoaded', fillJobSelect\\);\\\\n  fillJobSelect\\(\\);|  SA.init\\(\\).then\\(function\\(\\) { fillJobSelect\\(\\); }\\);|\" sansagents_inscription_pro.html)",
+      "Bash(python3 -c ' *)",
+      "Bash(sed -i 's/^function toggleFav\\(\\) {$/async function toggleFav\\(\\) {/' sansagents_annonce_detail.html)",
+      "Bash(sed -i 's/  const nowFav = SA.toggleFavorite\\(listingId\\);/  const nowFav = await SA.toggleFavorite\\(listingId\\);/' sansagents_annonce_detail.html)",
+      "Bash(sed -i 's/^function sendContactMessage\\(id\\) {$/async function sendContactMessage\\(id\\) {/' sansagents_annonce_detail.html)",
+      "Bash(sed -i 's/  const result = SA.sendMessage\\(id, text\\);/  const result = await SA.sendMessage\\(id, text\\);/' sansagents_annonce_detail.html)",
+      "Bash(sed -i 's/^function openConvo\\(id\\) {$/async function openConvo\\(id\\) {/' sansagents_messages.html)",
+      "Bash(sed -i 's/^function markSold\\(id, transaction\\) {$/async function markSold\\(id, transaction\\) {/' sansagents_mes_annonces.html)",
+      "Bash(sed -i 's/^function saveEdit\\(\\) {$/async function saveEdit\\(\\) {/' sansagents_mes_annonces.html)",
+      "Bash(sed -i 's/  SA.updateListing\\(editingId, {/  await SA.updateListing\\(editingId, {/' sansagents_mes_annonces.html)",
+      "WebFetch(domain:effulgent-caramel-75a7c6.netlify.app)"
+    ]
+  }
+}

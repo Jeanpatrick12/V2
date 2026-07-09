@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Documents obligatoires</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;background:#fff;line-height:1.65}
+.sa-legal-top{border-bottom:1px solid #efefef;padding:18px 40px;display:flex;align-items:center;gap:12px}
+.sa-legal-top .sa-logo{background:#E84533;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.sa-legal-top .sa-logo i{color:white;font-size:16px}
+.sa-legal-top .sa-brand{font-size:17px;font-weight:700;color:#111;cursor:pointer}
+.sa-legal-top .sa-brand span{color:#E84533}
+.sa-legal-back{margin-left:auto;font-size:13px;color:#666;text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer}
+.sa-legal-back:hover{color:#E84533}
+.sa-legal-wrap{max-width:760px;margin:0 auto;padding:3rem 24px 5rem}
+.sa-legal-wrap h1{font-size:30px;font-weight:700;letter-spacing:-0.5px;margin-bottom:8px;color:#111;display:flex;align-items:center;gap:12px}
+.sa-legal-wrap h1 i{color:#E84533}
+.sa-legal-sub{font-size:14.5px;color:#888;margin-bottom:2.5rem;max-width:560px}
+.sa-legal-wrap h2{font-size:18px;font-weight:700;color:#111;margin:2.2rem 0 0.8rem;letter-spacing:-0.2px;display:flex;align-items:center;gap:8px}
+.sa-legal-wrap h2 i{color:#E84533;font-size:18px}
+.sa-legal-wrap p{font-size:14px;color:#444;margin-bottom:0.9rem}
+.sa-doc-card{display:flex;gap:14px;border:1px solid #eee;border-radius:13px;padding:1rem 1.2rem;margin-bottom:10px;align-items:flex-start}
+.sa-doc-card i{color:#E84533;font-size:19px;margin-top:2px;flex-shrink:0}
+.sa-doc-card strong{display:block;font-size:13.5px;color:#222;margin-bottom:3px}
+.sa-doc-card span{font-size:12.5px;color:#888}
+.sa-doc-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;margin-left:8px;text-transform:uppercase}
+.sa-doc-badge.req{background:#fff0ee;color:#E84533}
+.sa-doc-badge.cond{background:#fff7e6;color:#b8860b}
+.sa-legal-callout{background:#fff8f7;border:1px solid #ffd9d2;border-radius:12px;padding:14px 18px;margin:1.5rem 0;font-size:13.5px;color:#a8392b}
+.sa-legal-callout i{color:#E84533;margin-right:6px}
+.sa-legal-callout a{color:#a8392b;font-weight:700;text-decoration:underline}
+.sa-legal-foot{border-top:1px solid #efefef;padding:2rem 24px;text-align:center}
+.sa-legal-foot a{color:#888;font-size:12.5px;text-decoration:none;margin:0 10px;cursor:pointer}
+.sa-legal-foot a:hover{color:#E84533}
+@media(max-width:600px){.sa-legal-top{padding:16px 20px}}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+<div class="sa-legal-top">
+  <div class="sa-logo" onclick="window.location.href='./'"><i class="ti ti-key"></i></div>
+  <div class="sa-brand" onclick="window.location.href='./'">Sans<span>Agents</span></div>
+  <a class="sa-legal-back" onclick="window.location.href='./'"><i class="ti ti-arrow-left"></i> Retour à l'accueil</a>
+</div>
+
+<div class="sa-legal-wrap">
+  <h1><i class="ti ti-file-text"></i> Documents obligatoires</h1>
+  <p class="sa-legal-sub">SansAgents vous met en relation directement avec l'acheteur ou le locataire, mais la loi impose certains documents avant de vendre ou de louer. Voici la liste à connaître.</p>
+
+  <h2><i class="ti ti-home-dollar"></i> Pour une vente</h2>
+  <div class="sa-doc-card"><i class="ti ti-bolt"></i><div><strong>Diagnostic de performance énergétique (DPE) <span class="sa-doc-badge req">Obligatoire</span></strong><span>Valable 10 ans. Doit figurer sur l'annonce dès sa publication.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-map-2"></i><div><strong>État des risques (ERP) <span class="sa-doc-badge req">Obligatoire</span></strong><span>Risques naturels, miniers, technologiques et sismiques de la zone.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-ruler-2"></i><div><strong>Mesurage loi Carrez <span class="sa-doc-badge req">Obligatoire</span></strong><span>Pour tout lot en copropriété (appartement). Ne s'applique pas aux maisons individuelles.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-bug"></i><div><strong>Diagnostic termites <span class="sa-doc-badge cond">Selon zones à risque</span></strong><span>Obligatoire dans les zones délimitées par arrêté préfectoral.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-flask"></i><div><strong>Diagnostic amiante <span class="sa-doc-badge cond">Si permis avant 1997</span></strong><span>Obligatoire pour tout bien dont le permis de construire est antérieur au 1er juillet 1997.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-droplet"></i><div><strong>Diagnostic plomb (CREP) <span class="sa-doc-badge cond">Si construit avant 1949</span></strong><span>Valable 1 an en cas de présence de plomb, illimité si absence constatée.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-plug"></i><div><strong>Diagnostics électricité et gaz <span class="sa-doc-badge cond">Si installation de plus de 15 ans</span></strong><span>Valables 3 ans.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-building-community"></i><div><strong>Documents de copropriété <span class="sa-doc-badge cond">Si appartement</span></strong><span>Règlement de copropriété, derniers procès-verbaux d'assemblée générale, carnet d'entretien de l'immeuble.</span></div></div>
+
+  <h2><i class="ti ti-key"></i> Pour une location</h2>
+  <div class="sa-doc-card"><i class="ti ti-bolt"></i><div><strong>DPE <span class="sa-doc-badge req">Obligatoire</span></strong><span>Doit figurer sur l'annonce.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-map-2"></i><div><strong>État des risques (ERP) <span class="sa-doc-badge req">Obligatoire</span></strong><span>Annexé au bail.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-clipboard-list"></i><div><strong>État des lieux d'entrée <span class="sa-doc-badge req">Obligatoire</span></strong><span>Réalisé contradictoirement entre le bailleur et le locataire.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-list-details"></i><div><strong>Inventaire du mobilier <span class="sa-doc-badge cond">Si location meublée</span></strong><span>Liste minimale fixée par décret, à signer à l'entrée et à la sortie.</span></div></div>
+  <div class="sa-doc-card"><i class="ti ti-flame"></i><div><strong>Audit énergétique <span class="sa-doc-badge cond">Si DPE classé F ou G</span></strong><span>Obligatoire depuis avril 2023 pour les maisons individuelles et immeubles en monopropriété.</span></div></div>
+
+  <div class="sa-legal-callout"><i class="ti ti-bulb"></i>SansAgents ne réalise pas ces diagnostics. Trouvez un diagnostiqueur certifié près de chez vous dans notre <a onclick="window.open('professionnels','_blank')">annuaire de professionnels</a>.</div>
+</div>
+
+<div class="sa-legal-foot">
+  <a onclick="window.location.href='cgu'">CGU</a>
+  <a onclick="window.location.href='confidentialite'">Confidentialité</a>
+  <a onclick="window.location.href='aide-signaler'">Signaler une agence</a>
+</div>
+</body>
+</html>

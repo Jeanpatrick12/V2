@@ -1,0 +1,677 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SansAgents — L'immobilier sans intermédiaire</title>
+<meta name="description" content="Vendez ou louez sans agence. SansAgents ne prélève que 1% de commission, uniquement si la vente se conclut.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+.savings-banner {
+  background: linear-gradient(135deg, #0f1923, #1a2c3d);
+  border-radius: 12px; padding: 16px; margin-top: 12px; text-align: center;
+}
+.savings-banner .lbl { font-size: 11.5px; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
+.savings-banner .amt { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; }
+.savings-banner .amt em { color: #4ade80; font-style: normal; }
+
+.m-section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+
+.m-savings-source { font-size: 10.5px; color: var(--text3); margin-top: 10px; line-height: 1.4; }
+
+.m-faq-item { border-bottom: 1px solid var(--border); }
+.m-faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0; cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--text);
+  gap: 10px;
+}
+.m-faq-q i { font-size: 16px; color: #ccc; transition: transform .2s; flex-shrink: 0; }
+.m-faq-q.open i { transform: rotate(180deg); color: var(--red); }
+.m-faq-a { font-size: 12.5px; color: var(--text2); line-height: 1.65; padding-bottom: 14px; display: none; }
+.m-faq-a.open { display: block; }
+
+.m-safety-card-stacked {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: #fffaf9; border: 1px solid #f0c9c0; border-left: 4px solid var(--red);
+  border-radius: 10px; padding: 14px; margin-bottom: 10px;
+}
+.m-safety-card-stacked i { font-size: 20px; color: var(--red); flex-shrink: 0; margin-top: 1px; }
+.m-safety-card-stacked-title { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.m-safety-card-stacked-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+.m-safety-alert {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: linear-gradient(135deg, #1a2c3d, #0f1923);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 18px;
+}
+.m-safety-alert-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(232,69,51,0.18); border: 1px solid rgba(232,69,51,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-safety-alert-icon i { color: #ff7a68; font-size: 20px; }
+.m-safety-alert-text { font-size: 12.5px; color: rgba(255,255,255,0.7); line-height: 1.5; }
+.m-safety-alert-text strong { color: white; }
+
+.m-promo-banner {
+  display: flex; align-items: center; gap: 12px;
+  background: linear-gradient(135deg, #1a2c3d, #0f1923);
+  border-radius: 12px; padding: 14px 16px; margin: 14px 0;
+}
+.m-promo-code-box {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(232,69,51,0.15); border: 1px solid rgba(232,69,51,0.3);
+  border-radius: 10px; padding: 10px 14px; flex-shrink: 0;
+}
+.m-promo-code-box i { color: #ff7a68; font-size: 18px; flex-shrink: 0; }
+.m-promo-code-text strong { color: #ff9a8c; font-size: 14px; font-weight: 800; display: block; margin-bottom: 2px; }
+.m-promo-code-text span { font-size: 11px; color: rgba(255,255,255,0.6); line-height: 1.4; display: block; }
+
+.m-pro-card-home {
+  flex-shrink: 0; width: 160px; border: 1px solid var(--border); border-radius: 14px;
+  padding: 16px 12px; background: white; cursor: pointer; text-align: center;
+}
+.m-pro-card-home:active { background: #fafafa; }
+.m-pro-card-avatar { width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; font-weight: 700; }
+.m-pro-card-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.m-pro-card-job { font-size: 11px; color: var(--red); font-weight: 600; margin-bottom: 6px; }
+.m-pro-card-rating { font-size: 11px; color: #888; display: flex; align-items: center; justify-content: center; gap: 3px; margin-bottom: 4px; }
+.m-pro-card-rating i { color: #f5a623; font-size: 12px; }
+.m-pro-card-loc { font-size: 11px; color: #aaa; display: flex; align-items: center; justify-content: center; gap: 3px; }
+
+.m-cta-section {
+  background: linear-gradient(135deg, #E84533 0%, #c0271a 100%);
+  padding: 44px var(--pad) 52px; text-align: center;
+}
+.m-cta-section h3 { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; margin-bottom: 10px; line-height: 1.3; }
+.m-cta-section p { font-size: 13px; color: rgba(255,255,255,0.82); margin-bottom: 22px; line-height: 1.55; }
+</style>
+</head>
+<body>
+
+<!-- ─── TOP NAV ─────────────────────────────────────────────── -->
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.location='/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+  <button class="m-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ─── SLIDE MENU ─────────────────────────────────────────── -->
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="window.location='/m/favoris'" id="menuFavoris"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="window.location='/m/mes-annonces'" id="menuMesAnnonces"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="window.location='/m/messages'" id="menuMessages"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+
+<!-- ─── HERO ───────────────────────────────────────────────── -->
+<div class="m-hero">
+  <div class="m-hero-badge"><div class="m-hero-dot"></div> Plateforme 100% entre particuliers</div>
+  <h1>L'immobilier <span>sans intermédiaire</span>, sans frais cachés</h1>
+  <p class="m-hero-sub">Vendez ou louez directement à un particulier et gardez 2 à 9% de plus dans votre poche. SansAgents ne prélève que 1% de commission.</p>
+  <!-- Stats carousel -->
+  <div class="m-carousel" style="margin: 0 -16px; padding: 0 16px;">
+    <div class="m-stat-pill m-carousel-item">
+      <div class="m-stat-num">Jusqu'à <em>12 500 €</em><br>économisés</div>
+      <div class="m-stat-label">sur une vente à 250 000 € vs. agence à 5%</div>
+    </div>
+    <div class="m-stat-pill m-carousel-item">
+      <div class="m-stat-num">Commission <em>à 1%</em></div>
+      <div class="m-stat-label">au lieu de 3–10% prélevés par une agence</div>
+    </div>
+    <div class="m-stat-pill m-carousel-item" style="margin-right:16px">
+      <div class="m-stat-num">Publication <em>gratuite</em></div>
+      <div class="m-stat-label">vente & location — aucun frais à l'avance</div>
+    </div>
+  </div>
+  <!-- CTA buttons — below stats -->
+  <div class="m-hero-ctas" style="margin-top:20px">
+    <div class="m-hero-cta primary" onclick="window.location='/m/deposer'">
+      <i class="ti ti-home-plus m-hero-cta-icon"></i>
+      <div class="m-hero-cta-title">Déposer une annonce</div>
+      <div class="m-hero-cta-sub">Gratuit, en quelques étapes</div>
+      <div class="m-hero-cta-link">Commencer <i class="ti ti-arrow-right"></i></div>
+    </div>
+    <div class="m-hero-cta secondary" onclick="window.location='/m/annonces'">
+      <i class="ti ti-search m-hero-cta-icon"></i>
+      <div class="m-hero-cta-title">Explorer les annonces</div>
+      <div class="m-hero-cta-sub">100% particuliers</div>
+      <div class="m-hero-cta-link">Rechercher <i class="ti ti-arrow-right"></i></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SEARCH BAR ─────────────────────────────────────────── -->
+<div style="padding: 20px var(--pad) 32px">
+  <div class="m-search">
+    <select class="m-search-select" id="searchType">
+      <option value="acheter">🏠 Acheter</option>
+      <option value="louer">🔑 Louer</option>
+    </select>
+    <input class="m-search-input" id="searchInput" type="text" placeholder="Ville, département, code postal…"
+           onkeydown="if(event.key==='Enter')goSearch()">
+    <button class="m-search-btn" onclick="goSearch()"><i class="ti ti-search"></i> Rechercher</button>
+  </div>
+  <div style="display:flex;gap:6px;overflow-x:auto;margin-top:10px;scrollbar-width:none;padding-bottom:2px">
+    <span style="font-size:11px;color:var(--text3);flex-shrink:0;line-height:28px">Populaire :</span>
+    <button onclick="quickSearch('Paris')" style="flex-shrink:0;padding:4px 12px;border:1.5px solid var(--border);border-radius:999px;font-size:12px;font-weight:600;color:var(--text2);background:white;font-family:inherit">Paris</button>
+    <button onclick="quickSearch('Lyon')" style="flex-shrink:0;padding:4px 12px;border:1.5px solid var(--border);border-radius:999px;font-size:12px;font-weight:600;color:var(--text2);background:white;font-family:inherit">Lyon</button>
+    <button onclick="quickSearch('Bordeaux')" style="flex-shrink:0;padding:4px 12px;border:1.5px solid var(--border);border-radius:999px;font-size:12px;font-weight:600;color:var(--text2);background:white;font-family:inherit">Bordeaux</button>
+    <button onclick="quickSearch('Marseille')" style="flex-shrink:0;padding:4px 12px;border:1.5px solid var(--border);border-radius:999px;font-size:12px;font-weight:600;color:var(--text2);background:white;font-family:inherit">Marseille</button>
+    <button onclick="quickSearch('Nantes')" style="flex-shrink:0;padding:4px 12px;border:1.5px solid var(--border);border-radius:999px;font-size:12px;font-weight:600;color:var(--text2);background:white;font-family:inherit">Nantes</button>
+  </div>
+</div>
+
+<!-- ─── TRUST BAR ─────────────────────────────────────────── -->
+<div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden">
+  <div class="m-carousel" style="padding: 0 var(--pad);">
+    <div class="m-trust-item m-carousel-item"><div class="m-trust-icon"><i class="ti ti-pig-money"></i></div><div><div class="m-trust-title">Publication gratuite</div><div class="m-trust-sub">Vente & location</div></div></div>
+    <div class="m-trust-item m-carousel-item"><div class="m-trust-icon"><i class="ti ti-receipt-2"></i></div><div><div class="m-trust-title">1% si vente conclue</div><div class="m-trust-sub">Jamais à l'avance</div></div></div>
+    <div class="m-trust-item m-carousel-item"><div class="m-trust-icon"><i class="ti ti-building-bank"></i></div><div><div class="m-trust-title">Acte chez le notaire</div><div class="m-trust-sub">Sécurité garantie</div></div></div>
+    <div class="m-trust-item m-carousel-item"><div class="m-trust-icon"><i class="ti ti-users-group"></i></div><div><div class="m-trust-title">Aucune agence</div><div class="m-trust-sub">Aucun intermédiaire</div></div></div>
+    <div class="m-trust-item m-carousel-item" style="border-right:none;margin-right:var(--pad)"><div class="m-trust-icon"><i class="ti ti-circle-off"></i></div><div><div class="m-trust-title">0€ locations</div><div class="m-trust-sub">Aucune commission</div></div></div>
+  </div>
+</div>
+
+<!-- ─── SAVINGS ──────────────────────────────────────────── -->
+<div class="m-section" style="background:white;border-top:none">
+  <div class="m-section-title">Gagnez des milliers d'euros en vendant sans agence</div>
+  <div class="m-section-sub" style="margin-top:6px">Les agences traditionnelles facturent entre 3% et 10% du prix de vente, en moyenne 5%. SansAgents, c'est 1%, point final.</div>
+  <div class="m-compare">
+    <div class="m-compare-card bad">
+      <div class="m-compare-label">Agence traditionnelle</div>
+      <div class="m-compare-big">12 500 €</div>
+      <div class="m-compare-detail">Commission moyenne de 5% sur un bien à 250 000 €</div>
+    </div>
+    <div class="m-compare-card good">
+      <div class="m-compare-label">Avec SansAgents</div>
+      <div class="m-compare-big">2 500 €</div>
+      <div class="m-compare-detail">Commission fixe de 1%, uniquement si la vente se conclut</div>
+    </div>
+  </div>
+  <div class="savings-banner">
+    <div class="lbl" id="savingsBannerLabel">Sur une vente à 250 000 €, vous gagnez</div>
+    <div class="amt" id="savingsAmt"><em>10 000 €</em> de plus dans votre poche</div>
+  </div>
+  <!-- Table -->
+  <!-- Table comparative redesignée -->
+  <div style="margin-top:16px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:white">
+    <div style="padding:10px 14px;display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#111;border-bottom:1px solid var(--border);background:#fafafa">
+      <i class="ti ti-calculator" style="color:var(--red)"></i> Calculez vos économies
+    </div>
+    <!-- En-têtes -->
+    <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;background:#0f1923;padding:8px 14px;gap:4px">
+      <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px">Prix de vente</div>
+      <div style="font-size:10px;font-weight:700;color:#ff7a68;text-transform:uppercase;letter-spacing:0.5px;text-align:center">Agence 5%</div>
+      <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px;text-align:center">SansAgents</div>
+      <div style="font-size:10px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:0.5px;text-align:center">Gain</div>
+    </div>
+    <!-- Lignes -->
+    <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;border-bottom:1px solid var(--bg);align-items:center">
+      <div style="font-size:13px;font-weight:600;color:#111">180 000 €</div>
+      <div style="font-size:12px;color:#c0392b;text-align:center;font-weight:600">9 000 €</div>
+      <div style="font-size:12px;color:#666;text-align:center">1 800 €</div>
+      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700">7 200 €</div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;border-bottom:1px solid var(--bg);align-items:center">
+      <div style="font-size:13px;font-weight:700;color:#111">250 000 €<br><span style="font-size:10px;color:var(--red);font-weight:600">Exemple type</span></div>
+      <div style="font-size:12px;color:#c0392b;text-align:center;font-weight:600">12 500 €</div>
+      <div style="font-size:12px;color:#666;text-align:center">2 500 €</div>
+      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700">10 000 €</div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;border-bottom:1px solid var(--bg);align-items:center">
+      <div style="font-size:13px;font-weight:600;color:#111">350 000 €</div>
+      <div style="font-size:12px;color:#c0392b;text-align:center;font-weight:600">17 500 €</div>
+      <div style="font-size:12px;color:#666;text-align:center">3 500 €</div>
+      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700">14 000 €</div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;border-bottom:1px solid var(--border);align-items:center">
+      <div style="font-size:13px;font-weight:600;color:#111">500 000 €</div>
+      <div style="font-size:12px;color:#c0392b;text-align:center;font-weight:600">25 000 €</div>
+      <div style="font-size:12px;color:#666;text-align:center">5 000 €</div>
+      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700">20 000 €</div>
+    </div>
+    <!-- Ligne personnalisée -->
+    <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;align-items:center;background:#fff5f4">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:white;background:var(--red);padding:3px 7px;border-radius:5px;margin-bottom:5px">
+          <i class="ti ti-calculator"></i> Votre prix
+        </div>
+        <input type="text" id="customPrice" placeholder="Votre montant…"
+          style="border:none;background:transparent;font-size:13px;font-family:inherit;color:#111;width:100%;outline:none;font-weight:700;display:block"
+          oninput="calcCustom(this.value)">
+      </div>
+      <div id="cAgence" style="font-size:12px;color:#c0392b;text-align:center;font-weight:600">—</div>
+      <div id="cSA" style="font-size:12px;color:#666;text-align:center">—</div>
+      <div id="cGain" style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700">—</div>
+    </div>
+  </div>
+  <p class="m-savings-source">Commission agence : moyenne nationale ~5% (réseaux traditionnels, 2025). Publication gratuite, aucune commission sur les locations.</p>
+</div>
+
+<!-- ─── HOW IT WORKS ─────────────────────────────────────── -->
+<div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:44px var(--pad)">
+  <div class="m-section-title" style="margin-bottom:6px">Comment ça marche</div>
+  <div class="m-section-sub" style="margin-bottom:18px">Le fonctionnement est différent selon que vous déposez une annonce ou que vous cherchez un bien. Choisissez votre profil.</div>
+  <div class="m-tabs" style="margin-bottom:18px">
+    <button class="m-tab-btn active" id="tabV" onclick="switchTab('v')">Je vends / je loue</button>
+    <button class="m-tab-btn" id="tabA" onclick="switchTab('a')">Je cherche un bien</button>
+  </div>
+  <div id="contentV">
+    <div class="m-step"><div class="m-step-num">1</div><div><div class="m-step-title">Choisissez le type de bien et la transaction</div><div class="m-step-desc">Maison, appartement, studio ou loft — vente ou location, vide ou meublée.</div></div></div>
+    <div class="m-step"><div class="m-step-num">2</div><div><div class="m-step-title">Décrivez votre bien et ajoutez vos photos</div><div class="m-step-desc">Surface, équipements, DPE, adresse — puis vos photos et vidéos en quelques clics.</div></div></div>
+    <div class="m-step"><div class="m-step-num">3</div><div><div class="m-step-title">Fixez votre prix avec des outils fiables</div><div class="m-step-desc">Données DVF, Notaires de France et Castorus pour estimer au juste prix.</div></div></div>
+    <div class="m-step"><div class="m-step-num">4</div><div><div class="m-step-title">Préparez vos documents obligatoires</div><div class="m-step-desc">La liste exacte s'affiche automatiquement selon votre situation.</div></div></div>
+    <div class="m-step"><div class="m-step-num">5</div><div><div class="m-step-title">Recevez des contacts directs et concluez</div><div class="m-step-desc">Aucun intermédiaire. Vous gérez les visites et la négociation vous-même.</div></div></div>
+    <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:14px">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="ti ti-clipboard-check" style="color:var(--red)"></i> Exemple — appartement en copropriété, vendu</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span style="background:#fff5f4;border:1px solid #ffc5bd;border-radius:6px;padding:4px 9px;font-size:11px;color:#c0392b;font-weight:500">Pièce d'identité</span>
+        <span style="background:#fff5f4;border:1px solid #ffc5bd;border-radius:6px;padding:4px 9px;font-size:11px;color:#c0392b;font-weight:500">Titre de propriété</span>
+        <span style="background:#fff5f4;border:1px solid #ffc5bd;border-radius:6px;padding:4px 9px;font-size:11px;color:#c0392b;font-weight:500">DPE</span>
+        <span style="background:#fff5f4;border:1px solid #ffc5bd;border-radius:6px;padding:4px 9px;font-size:11px;color:#c0392b;font-weight:500">Loi Carrez</span>
+        <span style="background:#fff5f4;border:1px solid #ffc5bd;border-radius:6px;padding:4px 9px;font-size:11px;color:#c0392b;font-weight:500">Règlement copropriété</span>
+        <span style="background:#fff5f4;border:1px solid #ffc5bd;border-radius:6px;padding:4px 9px;font-size:11px;color:#c0392b;font-weight:500">PV des 3 AG</span>
+        <span style="background:#fff5f4;border:1px solid #ffc5bd;border-radius:6px;padding:4px 9px;font-size:11px;color:#c0392b;font-weight:500">Pré-état daté</span>
+        <span style="background:#fff5f4;border:1px solid #ffc5bd;border-radius:6px;padding:4px 9px;font-size:11px;color:#c0392b;font-weight:500">Taxe foncière</span>
+      </div>
+      <div style="font-size:11px;color:#888;line-height:1.55;display:flex;gap:6px;align-items:flex-start;border-top:1px solid var(--bg);margin-top:10px;padding-top:10px"><i class="ti ti-bulb" style="color:var(--red);font-size:13px;flex-shrink:0;margin-top:1px"></i> Chaque document est expliqué en clair dans le formulaire de dépôt d'annonce.</div>
+    </div>
+    <button onclick="window.location='/m/vendre'" style="margin-top:14px;width:100%;padding:12px;background:white;border:1.5px solid #e0e0e4;border-radius:11px;font-size:13.5px;font-weight:700;color:#111;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
+      <i class="ti ti-book-2" style="color:var(--red)"></i> Consulter le guide complet du vendeur
+      <i class="ti ti-arrow-right" style="color:#aaa;margin-left:auto"></i>
+    </button>
+  </div>
+  <div id="contentA" style="display:none">
+    <div class="m-step"><div class="m-step-num">1</div><div><div class="m-step-title">Recherchez selon vos critères</div><div class="m-step-desc">Ville, budget, surface, type de bien — filtrez parmi des annonces 100% particuliers.</div></div></div>
+    <div class="m-step"><div class="m-step-num">2</div><div><div class="m-step-title">Contactez directement le propriétaire</div><div class="m-step-desc">Pas d'intermédiaire, pas de frais d'agence répercutés sur le prix.</div></div></div>
+    <div class="m-step"><div class="m-step-num">3</div><div><div class="m-step-title">Visitez et négociez en toute transparence</div><div class="m-step-desc">Vous échangez directement avec la personne qui connaît vraiment le bien.</div></div></div>
+    <div class="m-step"><div class="m-step-num">4</div><div><div class="m-step-title">Concluez votre achat ou votre location</div><div class="m-step-desc">Notaire pour la vente, bail conforme à la loi — sans surcoût d'agence.</div></div></div>
+  </div>
+</div>
+
+<!-- ─── SAFETY ───────────────────────────────────────────── -->
+<div class="m-section" style="background:white;border-top:1px solid var(--border)">
+  <div class="m-section-title" style="margin-bottom:6px">Comment se protéger entre particuliers</div>
+  <div class="m-section-sub" style="margin-bottom:16px">Sans agence pour filtrer les contacts, quelques précautions simples suffisent à éviter l'essentiel des arnaques.</div>
+  <div class="m-safety-alert" style="margin: 0 0 16px">
+    <div class="m-safety-alert-icon"><i class="ti ti-shield-exclamation"></i></div>
+    <div class="m-safety-alert-text"><strong>À lire avant tout échange :</strong> ces 4 règles simples vous protègent des arnaques les plus fréquentes entre particuliers.</div>
+  </div>
+  <div class="m-carousel" style="margin:0 -16px;padding:0 16px">
+    <div class="m-carousel-item m-safety-card-stacked" style="width:72vw;max-width:260px;flex-shrink:0;margin-bottom:0">
+      <i class="ti ti-user-check"></i>
+      <div><div class="m-safety-card-stacked-title">Vérifiez l'identité</div><div class="m-safety-card-stacked-desc">Demandez une pièce d'identité avant toute visite ou avant de communiquer des documents sensibles.</div></div>
+    </div>
+    <div class="m-carousel-item m-safety-card-stacked" style="width:72vw;max-width:260px;flex-shrink:0;margin-bottom:0">
+      <i class="ti ti-building-bank"></i>
+      <div><div class="m-safety-card-stacked-title">Le notaire reste garant</div><div class="m-safety-card-stacked-desc">Pour une vente, l'acte est toujours signé chez un notaire, qui vérifie la légalité de la transaction.</div></div>
+    </div>
+    <div class="m-carousel-item m-safety-card-stacked" style="width:72vw;max-width:260px;flex-shrink:0;margin-bottom:0">
+      <i class="ti ti-credit-card-off"></i>
+      <div><div class="m-safety-card-stacked-title">Ne payez jamais avant la visite</div><div class="m-safety-card-stacked-desc">Aucun virement, acompte ou dépôt de garantie avant d'avoir visité le bien en personne.</div></div>
+    </div>
+    <div class="m-carousel-item m-safety-card-stacked" style="width:72vw;max-width:260px;flex-shrink:0;margin-bottom:0;margin-right:16px">
+      <i class="ti ti-flag"></i>
+      <div><div class="m-safety-card-stacked-title">Signalez les comportements suspects</div><div class="m-safety-card-stacked-desc">Toute annonce ou contact suspect peut être signalé depuis votre espace personnel.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ANNONCES RÉCENTES ──────────────────────────────── -->
+<div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:44px 0 28px">
+  <div style="padding:0 var(--pad);margin-bottom:16px">
+    <div class="m-section-title" style="margin-bottom:6px">Annonces récentes</div>
+    <div class="m-section-sub" style="margin-bottom:0">Un aperçu des biens disponibles en ce moment, partout en France.</div>
+  </div>
+  <div class="m-carousel" style="padding:0 var(--pad)" id="listingsCarousel">
+    <!-- Rempli par JS -->
+  </div>
+  <div style="padding: 16px var(--pad) 0">
+    <button class="m-btn m-btn-outline m-btn-full" onclick="window.location='/m/annonces'">
+      <i class="ti ti-building-estate"></i> Voir toutes les annonces
+    </button>
+  </div>
+</div>
+
+<!-- ─── PROFESSIONNELS ────────────────────────────────── -->
+<div class="m-section" style="background:white;border-top:1px solid var(--border)">
+  <div class="m-section-title" style="margin-bottom:6px">Besoin d'un professionnel ?</div>
+  <div class="m-section-sub" style="margin-bottom:16px">Notaires, artisans, diagnostiqueurs… des professionnels de confiance avec une réduction exclusive pour les utilisateurs de SansAgents.</div>
+  <div class="m-carousel" id="prosCarousel" style="padding-bottom:4px">
+    <!-- Rempli par JS -->
+  </div>
+  <!-- Promo banner -->
+  <div style="background:linear-gradient(135deg,#1a2c3d,#0f1923);border-radius:12px;padding:16px;margin-top:16px">
+    <div style="font-size:13px;font-weight:700;color:white;margin-bottom:6px">Un grand projet immobilier ou des travaux à prévoir ?</div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:14px">Consultez les fiches, comparez les avis et trouvez le bon professionnel selon votre ville et votre besoin.</div>
+    <div style="display:flex;align-items:center;gap:10px;background:rgba(232,69,51,0.15);border:1px solid rgba(232,69,51,0.3);border-radius:10px;padding:10px 14px;margin-bottom:14px">
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(232,69,51,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-discount-2" style="color:#ff7a68;font-size:18px"></i></div>
+      <div><div style="color:#ff9a8c;font-size:14px;font-weight:800;margin-bottom:1px">-5% sur votre devis</div><div style="font-size:11px;color:rgba(255,255,255,0.6);line-height:1.4">Mentionnez le code <strong style="color:rgba(255,255,255,0.9)">SANSAGENTS5</strong> au professionnel pour en bénéficier.</div></div>
+    </div>
+    <button class="m-btn m-btn-primary m-btn-full" onclick="window.location='/m/professionnels'">
+      <i class="ti ti-arrow-right"></i> Voir l'annuaire
+    </button>
+  </div>
+</div>
+
+<!-- ─── FAQ ───────────────────────────────────────────── -->
+<div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:44px var(--pad)">
+  <div class="m-section-title" style="margin-bottom:6px">Questions fréquentes</div>
+  <div class="m-section-sub" style="margin-bottom:20px">Tout ce que vous devez savoir avant de vous lancer.</div>
+  <div style="background:white;border-radius:12px;padding:0 var(--pad)">
+    <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Comment fonctionne SansAgents concrètement ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">Vous déposez une annonce en 7 étapes (type de bien, caractéristiques, photos, prix, documents, contact, récapitulatif), et les acheteurs ou locataires intéressés vous contactent directement, sans intermédiaire. Vous gérez vous-même les visites, la négociation et la conclusion de la transaction.</div></div>
+    <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Les agences peuvent-elles publier sur SansAgents ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">Non. Seuls les particuliers non professionnels peuvent publier une annonce. Toute annonce d'agence est supprimée et peut faire l'objet de poursuites judiciaires conformément aux CGU.</div></div>
+    <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Combien ça coûte exactement ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">La publication est toujours gratuite. En cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.</div></div>
+    <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Quand dois-je payer la commission de 1% ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">Uniquement au moment où la vente est effectivement conclue, jamais avant. Si votre bien ne se vend pas, vous ne payez rien.</div></div>
+    <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Comment savoir quels documents sont obligatoires ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">La plateforme génère automatiquement la liste exacte des documents requis selon le type de bien, la transaction et le bail, avec une explication en clair pour chaque document.</div></div>
+    <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Que se passe-t-il si mon logement est en zone tendue ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">La plateforme vous alerte si l'encadrement des loyers s'applique à votre ville, pour que vous fixiez un loyer conforme à la loi avant publication.</div></div>
+    <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Suis-je accompagné sur le plan juridique ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">SansAgents vous guide sur les obligations légales mais n'est pas un cabinet juridique. Pour la vente, l'acte est toujours signé chez un notaire, garant de la légalité.</div></div>
+    <div class="m-faq-item" style="border-bottom:none"><div class="m-faq-q" onclick="toggleFaq(this)">Puis-je modifier ou retirer mon annonce après publication ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">Oui, vous pouvez modifier le prix, les photos ou la description, et retirer votre annonce à tout moment depuis votre espace, sans frais.</div></div>
+  </div>
+</div>
+
+<!-- ─── SÉPARATEUR BLANC ──────────────────────────────── -->
+<div style="background:white;padding:48px var(--pad);text-align:center;border-top:1px solid var(--border)">
+  <div style="font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">SansAgents</div>
+  <div style="font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.6px;line-height:1.25;margin-bottom:10px">L'immobilier enfin<br>accessible, sans<br>intermédiaire.</div>
+  <div style="font-size:13px;color:var(--text2);line-height:1.6">Rejoignez des milliers de particuliers<br>qui vendent et louent sans agence.</div>
+</div>
+
+<!-- ─── CTA FINAL ─────────────────────────────────────── -->
+<div class="m-cta-section">
+  <h3>Prêt à vendre ou louer sans agence ?</h3>
+  <p>Publication gratuite, sans engagement. 1% de commission sur la vente uniquement (jamais sur une location), et seulement si elle se conclut.</p>
+  <button onclick="window.location='/m/deposer'" style="margin-bottom:12px;width:100%;padding:14px;background:white;color:#0f172a;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 12px rgba(0,0,0,0.15)">
+    <i class="ti ti-home-plus"></i> Déposer mon annonce gratuitement
+  </button>
+  <button onclick="window.location='/m/annonces'" style="width:100%;padding:13px;background:#0f172a;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3)">
+    <i class="ti ti-search"></i> Explorer les annonces
+  </button>
+</div>
+
+<!-- ─── FOOTER ────────────────────────────────────────── -->
+<!-- ─── FOOTER ────────────────────────────────────────────── -->
+<footer style="background:#0c1117;color:#888;border-top:1px solid #1e2530">
+  <!-- Logo + tagline -->
+  <div style="padding:24px var(--pad) 20px;border-bottom:1px solid #1e2530;display:flex;align-items:center;gap:10px">
+    <div style="background:var(--red);border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <i class="ti ti-key" style="color:white;font-size:13px"></i>
+    </div>
+    <div>
+      <div style="font-size:15px;font-weight:800;color:white;letter-spacing:-0.3px">Sans<span style="color:var(--red)">Agents</span></div>
+      <div style="font-size:11px;color:#4a5568;margin-top:1px">L'immobilier entre particuliers</div>
+    </div>
+  </div>
+  <!-- Links -->
+  <div style="padding:24px var(--pad);border-bottom:1px solid #1e2530;display:grid;grid-template-columns:1fr 1fr;gap:24px 20px">
+    <div>
+      <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Annonces</div>
+      <a href="/m/annonces?transaction=vente" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Acheter</a>
+      <a href="/m/annonces?transaction=location" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Louer</a>
+      <a href="/m/annonces" style="display:block;font-size:13px;color:#6b7585">Toutes les annonces</a>
+    </div>
+    <div>
+      <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Vendre</div>
+      <a href="/m/vendre" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Guide vendeur</a>
+      <a href="/m/documents" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes documents</a>
+      <a href="/m/deposer" style="display:block;font-size:13px;color:#6b7585">Déposer une annonce</a>
+    </div>
+    <div>
+      <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Professionnels</div>
+      <a href="/m/professionnels" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Trouver un pro</a>
+      <a href="/m/professionnels#rejoindre" style="display:block;font-size:13px;color:#6b7585">Rejoindre le réseau</a>
+    </div>
+    <div>
+      <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Mon compte</div>
+      <a href="/m/profil" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mon profil</a>
+      <a href="/m/mes-annonces" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes annonces</a>
+      <a href="/m/favoris" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes favoris</a>
+      <a href="/m/messages" style="display:block;font-size:13px;color:#6b7585">Messages</a>
+    </div>
+  </div>
+  <!-- Legal -->
+  <div style="padding:18px var(--pad);display:flex;flex-wrap:wrap;gap:10px 18px;border-bottom:1px solid #1e2530">
+    <a href="/cgu" style="font-size:12px;color:#4a5568">CGU</a>
+    <a href="/confidentialite" style="font-size:12px;color:#4a5568">Confidentialité</a>
+    <a href="/mentions-legales" style="font-size:12px;color:#4a5568">Mentions légales</a>
+    <a href="/contact" style="font-size:12px;color:#4a5568">Contact</a>
+  </div>
+  <!-- Copyright -->
+  <div style="padding:14px var(--pad);font-size:11.5px;color:#3a4455">© 2026 SansAgents — L'immobilier entre particuliers</div>
+</footer>
+
+<!-- ─── BOTTOM NAV ──────────────────────────────────── -->
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab active" onclick="window.location='/m/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
+    <span>Déposer</span>
+  </button>
+  <button class="m-tab" onclick="window.location='/m/messages'" id="botMessages"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" id="botProfile" onclick="handleAuthClick()"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+// ── Navigation menu ──────────────────────────────────────────
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('sideMenu').classList.toggle('open');
+  document.getElementById('menuOverlay').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('menuOverlay').classList.remove('open');
+}
+
+// ── Auth ─────────────────────────────────────────────────────
+function handleAuthClick() {
+  const user = SA.getUser();
+  if (user) window.location = '/m/profil';
+  else window.location = '/connexion?redirect=/m/';
+}
+function updateAuthUI(user) {
+  document.getElementById('menuAuthLabel').textContent = user ? (user.email ? user.email.split('@')[0] : 'Mon profil') : 'Se connecter';
+  document.getElementById('menuLogout').style.display = user ? '' : 'none';
+  document.getElementById('botProfileLabel').textContent = user ? 'Profil' : 'Connexion';
+}
+
+// ── Tabs ─────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.getElementById('contentV').style.display = tab === 'v' ? '' : 'none';
+  document.getElementById('contentA').style.display = tab === 'a' ? '' : 'none';
+  document.getElementById('tabV').className = 'm-tab-btn' + (tab === 'v' ? ' active' : '');
+  document.getElementById('tabA').className = 'm-tab-btn' + (tab === 'a' ? ' active' : '');
+}
+
+// ── FAQ ──────────────────────────────────────────────────────
+function toggleFaq(el) {
+  var answer = el.nextElementSibling;
+  var isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.m-faq-a').forEach(function(a) { a.classList.remove('open'); });
+  document.querySelectorAll('.m-faq-q').forEach(function(q) { q.classList.remove('open'); });
+  if (!isOpen) { answer.classList.add('open'); el.classList.add('open'); }
+}
+
+// ── Search ───────────────────────────────────────────────────
+function goSearch() {
+  var type = document.getElementById('searchType').value;
+  var city = document.getElementById('searchInput').value.trim();
+  var url = '/m/annonces?transaction=' + type;
+  if (city) url += '&ville=' + encodeURIComponent(city);
+  window.location = url;
+}
+function quickSearch(city) {
+  document.getElementById('searchInput').value = city;
+  goSearch();
+}
+
+// ── Savings calculator ───────────────────────────────────────
+function fmt(n) { return n.toLocaleString('fr-FR') + ' €'; }
+function calcCustom(raw) {
+  var clean = raw.replace(/\D/g, '');
+  var price = parseInt(clean, 10);
+  var agCell = document.getElementById('cAgence');
+  var saCell = document.getElementById('cSA');
+  var gainCell = document.getElementById('cGain');
+  var bannerLabel = document.getElementById('savingsBannerLabel');
+  var bannerAmt = document.getElementById('savingsAmt');
+
+  if (!clean || isNaN(price) || price < 1000) {
+    agCell.innerHTML = '—';
+    saCell.textContent = '—';
+    gainCell.innerHTML = '—';
+    bannerLabel.textContent = 'Sur une vente à 250 000 €, vous gagnez';
+    bannerAmt.innerHTML = '<em>10 000 €</em> de plus dans votre poche';
+    return;
+  }
+  var agence = Math.round(price * 0.05);
+  var sa = Math.round(price * 0.01);
+  var gain = agence - sa;
+  agCell.innerHTML = '<strong style="color:var(--red)">' + fmt(agence) + '</strong>';
+  saCell.textContent = fmt(sa);
+  gainCell.innerHTML = '<strong style="color:#1a8c4e">' + fmt(gain) + '</strong>';
+  document.getElementById('customPrice').value = price.toLocaleString('fr-FR');
+  bannerLabel.textContent = 'Sur une vente à ' + fmt(price) + ', vous gagnez';
+  bannerAmt.innerHTML = '<em>' + fmt(gain) + '</em> de plus dans votre poche';
+}
+
+// ── Render listings carousel ─────────────────────────────────
+function renderListings(listings) {
+  var el = document.getElementById('listingsCarousel');
+  var recent = listings
+    .filter(function(l) { return l.status !== 'sold'; })
+    .sort(function(a, b) {
+      var da = a.created_at || a.date || '';
+      var db = b.created_at || b.date || '';
+      return db.localeCompare(da);
+    })
+    .slice(0, 6);
+  if (!recent.length) {
+    el.innerHTML = '<p style="color:var(--text3);font-size:13px;padding:10px 0">Aucune annonce pour le moment.</p>';
+    return;
+  }
+  var GRADIENTS = {
+    vente: 'linear-gradient(135deg,#4f6d9e,#7890b8)',
+    location: 'linear-gradient(135deg,#4a7c6b,#6aaa90)'
+  };
+  el.innerHTML = recent.map(function(l) {
+    var photoStyle;
+    if (l.photos && l.photos[0]) {
+      photoStyle = 'background-image:url("' + l.photos[0].replace(/"/g,'%22') + '");background-size:cover;background-position:center';
+    } else {
+      photoStyle = 'background:' + (GRADIENTS[l.transaction] || 'linear-gradient(135deg,#8b5a5a,#b87070)');
+    }
+    var price = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (l.transaction === 'location' ? '/mois' : '') : '';
+    var prixM2 = (l.price && l.surface) ? Math.round(l.price / l.surface).toLocaleString('fr-FR') + ' €/m²' : '';
+    var badge = l.transaction === 'vente' ? 'vente' : 'location';
+    var badgeLabel = l.transaction === 'vente' ? 'Vente' : 'Location';
+    var typeCapital = l.type ? l.type.charAt(0).toUpperCase() + l.type.slice(1) : '';
+    var title = l.titre || (typeCapital + (l.ville ? ' — ' + l.ville : ''));
+    var pieces = l.pieces ? l.pieces + ' pièce' + (parseInt(l.pieces) > 1 ? 's' : '') : '';
+    return '<div class="m-listing-card m-carousel-item" onclick="SA.openListing(\'' + l.id + '\')">' +
+      '<div class="m-listing-img" style="' + photoStyle + '">' +
+        '<span class="m-listing-badge ' + badge + '">' + badgeLabel + '</span>' +
+      '</div>' +
+      '<div class="m-listing-body">' +
+        '<div class="m-listing-price" style="color:#111">' + price + (prixM2 ? '<span style="font-size:10px;font-weight:500;color:#999;margin-left:5px">' + prixM2 + '</span>' : '') + '</div>' +
+        '<div class="m-listing-title">' + title + '</div>' +
+        '<div class="m-listing-meta">' +
+          (l.surface ? '<span><i class="ti ti-ruler-2"></i> ' + l.surface + ' m²</span>' : '') +
+          (pieces ? '<span><i class="ti ti-door"></i> ' + pieces + '</span>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('') + '<div style="width:1px;flex-shrink:0;margin-right:6px"></div>';
+}
+
+// ── Render pros carousel ──────────────────────────────────────
+function renderPros(pros) {
+  var el = document.getElementById('prosCarousel');
+  var sample = pros.slice(0, 5);
+  if (!sample.length) {
+    el.innerHTML = '<div style="padding:0 var(--pad);display:grid;grid-template-columns:1fr 1fr;gap:12px" id="prosGrid"></div>';
+    renderStaticPros();
+    return;
+  }
+  var colors = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c'];
+  el.innerHTML = sample.map(function(p, i) {
+    var color = colors[i % colors.length];
+    var initials = (p.name || p.nom || 'P').charAt(0).toUpperCase();
+    var rating = p.rating ? Math.round(p.rating * 10) / 10 : 5;
+    var stars = Math.round(rating);
+    var starsHtml = '<i class="ti ti-star-filled"></i> ' + rating.toFixed(1);
+    var job = p.metier || p.profession || p.job || p.category || p.categorie || p.type || p.specialite || 'Professionnel';
+    return '<div class="m-pro-card-home m-carousel-item" onclick="window.location=\'/m/professionnels\'">' +
+      '<div class="m-pro-card-avatar" style="background:' + color + '">' + initials + '</div>' +
+      '<div class="m-pro-card-name">' + (p.name || p.nom || 'Professionnel') + '</div>' +
+      '<div class="m-pro-card-job">' + job + '</div>' +
+      '<div class="m-pro-card-rating">' + starsHtml + '</div>' +
+      (p.ville ? '<div class="m-pro-card-loc"><i class="ti ti-map-pin"></i> ' + p.ville + '</div>' : '') +
+    '</div>';
+  }).join('') + '<div style="width:1px;flex-shrink:0;margin-right:6px"></div>';
+}
+
+function renderStaticPros() {
+  var grid = document.getElementById('prosGrid');
+  if (!grid) return;
+  var staticPros = [
+    {name:'Maître Lefebvre',job:'Notaire',rating:4.9,city:'Lyon',color:'#2563eb',icon:'ti-stamp'},
+    {name:'Karim Benali',job:'Électricien',rating:4.8,city:'Bordeaux',color:'#E84533',icon:'ti-bulb'},
+    {name:'Julie Marchand',job:'Diagnostiqueur DPE',rating:5.0,city:'Paris',color:'#1a8c4e',icon:'ti-ruler-2'},
+    {name:'Thomas Petit',job:'Carreleur',rating:4.7,city:'Lille',color:'#9333ea',icon:'ti-brick'}
+  ];
+  grid.innerHTML = staticPros.map(function(p) {
+    return '<div style="border:1px solid var(--border);border-radius:12px;padding:14px 10px;background:white;cursor:pointer;text-align:center" onclick="window.location=\'/m/professionnels\'">' +
+      '<div style="width:44px;height:44px;border-radius:50%;margin:0 auto 8px;background:' + p.color + ';display:flex;align-items:center;justify-content:center">' +
+        '<i class="ti ' + p.icon + '" style="color:white;font-size:18px"></i>' +
+      '</div>' +
+      '<div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px">' + p.name + '</div>' +
+      '<div style="font-size:11px;color:var(--red);font-weight:600;margin-bottom:6px">' + p.job + '</div>' +
+      '<div style="font-size:11px;color:#888;display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:3px"><i class="ti ti-star-filled" style="color:#f5a623;font-size:12px"></i> ' + p.rating.toFixed(1) + '</div>' +
+      '<div style="font-size:11px;color:#aaa;display:flex;align-items:center;justify-content:center;gap:3px"><i class="ti ti-map-pin" style="font-size:10px"></i> ' + p.city + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── Init ──────────────────────────────────────────────────────
+SA.init().then(function() {
+  updateAuthUI(SA.getUser());
+  renderListings(SA.getAllListings());
+  if (SA.getAllPros) {
+    var pros = SA.getAllPros();
+    if (pros && pros.length) { renderPros(pros); return; }
+  }
+  renderPros([]);
+});
+</script>
+</body>
+</html>
+
+
+
+
+
+

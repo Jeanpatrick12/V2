@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Accord de vente</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<link rel="stylesheet" href="sa-mobile.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fafafa;min-height:100vh}
+
+/* NAV */
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:100}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+.sa-nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.sa-nav-link{font-size:13.5px;color:#555;padding:8px 14px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit}
+.sa-nav-link:hover{background:#f7f7f7;color:#111}
+.sa-nav-actions{display:flex;align-items:center;gap:4px;margin-left:16px}
+.sa-nav-cta{font-size:13.5px;color:white;background:#E84533;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;border:none;font-family:inherit;display:flex;align-items:center;gap:6px}
+.sa-nav-cta:hover{background:#c93a2a}
+.sa-nav-divider{width:1px;height:32px;background:#e5e5e5;margin:0 6px;flex-shrink:0}
+.sa-nav-icon-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:5px 9px;border-radius:8px;color:#444;font-family:inherit}
+.sa-nav-icon-btn i{font-size:19px}
+.sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
+.sa-nav-account-wrap{position:relative}
+.sa-nav-avatar{width:19px;height:19px;border-radius:50%;background:#E84533;color:white;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.sa-nav-badge{position:absolute;top:1px;right:3px;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px}
+.sa-account-dropdown{display:none;position:absolute;top:calc(100%+8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);min-width:220px;padding:8px;z-index:200}
+.sa-account-dropdown.show{display:block}
+.sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px}
+.sa-account-dropdown-email i{color:#E84533;flex-shrink:0}
+.sa-account-dropdown-logout{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;color:#c0392b;padding:9px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.sa-account-dropdown-logout:hover{background:#fff0ee}
+
+/* LAYOUT */
+.accord-page{max-width:900px;margin:0 auto;padding:3rem 40px 5rem}
+.accord-header{margin-bottom:2rem}
+.accord-header h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px;display:flex;align-items:center;gap:12px}
+.accord-header h1 i{color:#E84533}
+.accord-header p{font-size:14px;color:#777;line-height:1.6}
+
+/* ÉTAPES */
+.accord-steps{display:flex;align-items:center;gap:0;margin-bottom:2.5rem;background:white;border:1px solid #e8e8e8;border-radius:14px;padding:4px;overflow:hidden}
+.accord-step-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 8px;border-radius:10px;border:none;background:none;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:600;color:#888;transition:all .15s;white-space:nowrap}
+.accord-step-btn.active{background:#E84533;color:white}
+.accord-step-btn.done{color:#1a8c4e}
+.accord-step-btn i{font-size:15px}
+.accord-step-sep{width:1px;height:28px;background:#f0f0f0;flex-shrink:0}
+
+/* SECTIONS */
+.accord-section{background:white;border:1px solid #e8e8e8;border-radius:18px;padding:1.8rem 2rem;margin-bottom:1.2rem;display:none}
+.accord-section.active{display:block}
+.accord-section-title{font-size:11.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1.2rem;display:flex;align-items:center;gap:7px;padding-bottom:10px;border-bottom:1px solid #f5f5f5}
+.accord-section-title i{color:#E84533;font-size:14px}
+
+/* FORMULAIRE */
+.accord-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.afield{margin-bottom:14px}
+.afield label{display:block;font-size:12.5px;font-weight:600;color:#333;margin-bottom:5px}
+.afield input,.afield select,.afield textarea{width:100%;padding:10px 12px;border:1px solid #e0e0e0;border-radius:9px;font-size:14px;font-family:inherit;color:#111;outline:none;transition:border-color .15s}
+.afield input:focus,.afield select:focus,.afield textarea:focus{border-color:#E84533}
+.afield textarea{min-height:80px;resize:vertical}
+.afield-note{font-size:11.5px;color:#bbb;margin-top:4px}
+
+/* PRIX / COMMISSION */
+.prix-box{background:linear-gradient(135deg,#fff5f3,#ffe9e5);border:1px solid #ffd4cb;border-radius:14px;padding:1.5rem 1.8rem;margin-bottom:1.5rem}
+.prix-box-title{font-size:12px;font-weight:700;color:#E84533;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.prix-main{font-size:32px;font-weight:700;color:#111;letter-spacing:-1px;margin-bottom:4px}
+.prix-comm{font-size:14px;color:#555;display:flex;align-items:center;gap:6px}
+.prix-comm strong{color:#E84533}
+.comm-box{background:linear-gradient(135deg,#0f1923,#1a2c3d);border-radius:14px;padding:1.4rem 1.8rem;color:white;margin-bottom:1.5rem}
+.comm-box-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.comm-rows{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.comm-row-item{background:rgba(255,255,255,.07);border-radius:10px;padding:12px 14px}
+.comm-row-label{font-size:11.5px;color:rgba(255,255,255,.45);margin-bottom:4px}
+.comm-row-val{font-size:17px;font-weight:700;color:white}
+.comm-row-val.accent{color:#ff7a68}
+
+/* NAVIGATION ÉTAPES */
+.accord-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid #f5f5f5}
+.accord-btn-prev{background:none;border:1.5px solid #ddd;color:#555;font-size:13.5px;font-weight:600;padding:11px 20px;border-radius:9px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:7px}
+.accord-btn-next{background:#E84533;border:none;color:white;font-size:13.5px;font-weight:700;padding:11px 24px;border-radius:9px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:7px}
+.accord-btn-next:hover{background:#c93a2a}
+.accord-btn-next:disabled{opacity:.45;cursor:not-allowed}
+
+/* DOCUMENT FINAL */
+.doc-preview{border:2px solid #e8e8e8;border-radius:16px;overflow:hidden;background:white;margin-bottom:1.5rem}
+.doc-preview-header{background:linear-gradient(135deg,#0f1923,#1a2c3d);padding:1.8rem 2.2rem;display:flex;align-items:center;justify-content:space-between}
+.doc-logo{display:flex;align-items:center;gap:10px}
+.doc-logo-box{background:#E84533;border-radius:7px;width:34px;height:34px;display:flex;align-items:center;justify-content:center}
+.doc-logo-box i{color:white;font-size:17px}
+.doc-brand{font-size:17px;font-weight:700;color:white}
+.doc-brand span{color:#ff7a68}
+.doc-title-right{text-align:right}
+.doc-title-right p{font-size:12px;color:rgba(255,255,255,.5)}
+.doc-title-right strong{font-size:14px;color:white;font-weight:700}
+.doc-body{padding:2rem 2.2rem}
+.doc-section{margin-bottom:1.6rem}
+.doc-section-label{font-size:10.5px;font-weight:700;color:#E84533;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #fff0ee}
+.doc-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;font-size:13.5px;border-bottom:1px solid #f7f7f7}
+.doc-row:last-child{border-bottom:none}
+.doc-row-key{color:#888;font-weight:500;flex-shrink:0;min-width:140px}
+.doc-row-val{color:#111;font-weight:600;text-align:right}
+.doc-highlight{background:linear-gradient(135deg,#fff5f3,#ffe9e5);border-radius:12px;padding:1.2rem 1.5rem;margin-top:1rem;display:flex;align-items:center;justify-content:space-between}
+.doc-highlight-label{font-size:13px;color:#E84533;font-weight:600}
+.doc-highlight-val{font-size:22px;font-weight:700;color:#E84533;letter-spacing:-0.5px}
+.doc-commission{background:linear-gradient(135deg,#0f1923,#1a2c3d);border-radius:12px;padding:1.2rem 1.5rem;margin-top:10px;display:flex;align-items:center;justify-content:space-between}
+.doc-commission-label{font-size:13px;color:rgba(255,255,255,.6);font-weight:500}
+.doc-commission-val{font-size:16px;font-weight:700;color:#ff7a68}
+.doc-footer{background:#f8f8f8;padding:1.2rem 2.2rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#aaa}
+.doc-footer strong{color:#777}
+
+/* Actions */
+.accord-actions{display:flex;gap:12px;flex-wrap:wrap}
+.accord-action-btn{display:flex;align-items:center;gap:8px;padding:13px 22px;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none;transition:all .15s}
+.accord-action-btn.print{background:#0f1923;color:white}
+.accord-action-btn.print:hover{background:#1a2c3d}
+.accord-action-btn.share{background:#fff0ee;color:#E84533;border:1.5px solid #ffd4cb}
+.accord-action-btn.share:hover{background:#ffe2dd}
+.accord-action-btn.commission{background:#E84533;color:white}
+.accord-action-btn.commission:hover{background:#c93a2a}
+
+/* Payment info */
+.payment-box{background:white;border:1px solid #e8e8e8;border-radius:16px;padding:1.6rem 1.8rem}
+.payment-box h3{font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+.payment-box h3 i{color:#E84533}
+.payment-box p{font-size:13.5px;color:#777;margin-bottom:1.2rem;line-height:1.6}
+.payment-method{display:flex;align-items:center;gap:14px;background:#f8f8f8;border-radius:11px;padding:14px 16px;margin-bottom:10px}
+.payment-method i{font-size:22px;color:#E84533;flex-shrink:0}
+.payment-method-title{font-size:14px;font-weight:700;color:#111;margin-bottom:2px}
+.payment-method-sub{font-size:12.5px;color:#888}
+.iban-box{background:#f0f0f0;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:13px;color:#333;margin-top:8px;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between}
+.iban-copy{background:#E84533;color:white;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+
+@media print {
+  .sa-nav-wrapper,.accord-steps,.accord-section:not(.active),.accord-nav,.accord-actions,.payment-box{display:none!important}
+  body{background:white}
+  .accord-page{padding:0;max-width:100%}
+  .doc-preview{border:none}
+}
+</style>
+</head>
+<body>
+
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='./'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="sa-nav-links">
+      <button class="sa-nav-link" onclick="window.location.href='./'">Accueil</button>
+      <button class="sa-nav-link" onclick="window.location.href='annonces'">Annonces</button>
+    </div>
+    <div class="sa-nav-actions">
+      <div class="sa-nav-account-wrap" data-nav-account>
+        <button class="sa-nav-icon-btn"><i class="ti ti-user"></i><span class="sa-nav-icon-label">Se connecter</span></button>
+        <div class="sa-account-dropdown"></div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="accord-page">
+  <div class="accord-header">
+    <h1><i class="ti ti-file-certificate"></i> Accord de vente / location</h1>
+    <p>Formalisez votre transaction en quelques étapes. Ce document constitue une preuve écrite de l'accord entre les deux parties et déclenche la commission SansAgents de <strong>1% du prix de vente final</strong>.</p>
+  </div>
+
+  <!-- Étapes -->
+  <div class="accord-steps">
+    <button class="accord-step-btn active" id="stepBtn1" onclick="goToStep(1)"><i class="ti ti-home"></i> Le bien</button>
+    <div class="accord-step-sep"></div>
+    <button class="accord-step-btn" id="stepBtn2" onclick="goToStep(2)"><i class="ti ti-user"></i> Vendeur</button>
+    <div class="accord-step-sep"></div>
+    <button class="accord-step-btn" id="stepBtn3" onclick="goToStep(3)"><i class="ti ti-user-check"></i> Acheteur</button>
+    <div class="accord-step-sep"></div>
+    <button class="accord-step-btn" id="stepBtn4" onclick="goToStep(4)"><i class="ti ti-currency-euro"></i> Prix final</button>
+    <div class="accord-step-sep"></div>
+    <button class="accord-step-btn" id="stepBtn5" onclick="goToStep(5)"><i class="ti ti-file-check"></i> Document</button>
+  </div>
+
+  <!-- Étape 1 : Le bien -->
+  <div class="accord-section active" id="step1">
+    <div class="accord-section-title"><i class="ti ti-home"></i> Informations sur le bien</div>
+    <div class="accord-grid">
+      <div class="afield">
+        <label>Type de transaction</label>
+        <select id="f_transaction" onchange="updateCommission()">
+          <option value="vente">Vente</option>
+          <option value="location">Location</option>
+        </select>
+      </div>
+      <div class="afield">
+        <label>Type de bien</label>
+        <select id="f_type">
+          <option>Appartement</option>
+          <option>Maison</option>
+          <option>Studio</option>
+          <option>Loft / Atelier</option>
+          <option>Terrain</option>
+          <option>Local commercial</option>
+        </select>
+      </div>
+    </div>
+    <div class="afield">
+      <label>Adresse complète du bien</label>
+      <input type="text" id="f_adresse" placeholder="12 rue de la Paix, 75001 Paris">
+    </div>
+    <div class="accord-grid">
+      <div class="afield">
+        <label>Surface (m²)</label>
+        <input type="number" id="f_surface" placeholder="85">
+      </div>
+      <div class="afield">
+        <label>Nombre de pièces</label>
+        <input type="number" id="f_pieces" placeholder="4">
+      </div>
+    </div>
+    <div class="accord-nav">
+      <span></span>
+      <button class="accord-btn-next" onclick="goToStep(2)">Suivant — Vendeur <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- Étape 2 : Vendeur -->
+  <div class="accord-section" id="step2">
+    <div class="accord-section-title"><i class="ti ti-user"></i> Informations sur le vendeur / bailleur</div>
+    <div class="accord-grid">
+      <div class="afield"><label>Prénom</label><input type="text" id="f_v_prenom" placeholder="Marie"></div>
+      <div class="afield"><label>Nom</label><input type="text" id="f_v_nom" placeholder="Dupont"></div>
+    </div>
+    <div class="afield"><label>Adresse personnelle</label><input type="text" id="f_v_adresse" placeholder="5 avenue des Fleurs, 69001 Lyon"></div>
+    <div class="accord-grid">
+      <div class="afield"><label>Email</label><input type="email" id="f_v_email" placeholder="marie.dupont@email.com"></div>
+      <div class="afield"><label>Téléphone</label><input type="tel" id="f_v_tel" placeholder="06 12 34 56 78"></div>
+    </div>
+    <div class="afield"><label>Date de naissance</label><input type="date" id="f_v_naissance"></div>
+    <div class="accord-nav">
+      <button class="accord-btn-prev" onclick="goToStep(1)"><i class="ti ti-arrow-left"></i> Retour</button>
+      <button class="accord-btn-next" onclick="goToStep(3)">Suivant — Acheteur <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- Étape 3 : Acheteur -->
+  <div class="accord-section" id="step3">
+    <div class="accord-section-title"><i class="ti ti-user-check"></i> Informations sur l'acheteur / locataire</div>
+    <div class="accord-grid">
+      <div class="afield"><label>Prénom</label><input type="text" id="f_a_prenom" placeholder="Thomas"></div>
+      <div class="afield"><label>Nom</label><input type="text" id="f_a_nom" placeholder="Bernard"></div>
+    </div>
+    <div class="afield"><label>Adresse actuelle</label><input type="text" id="f_a_adresse" placeholder="8 rue des Lilas, 33000 Bordeaux"></div>
+    <div class="accord-grid">
+      <div class="afield"><label>Email</label><input type="email" id="f_a_email" placeholder="thomas.bernard@email.com"></div>
+      <div class="afield"><label>Téléphone</label><input type="tel" id="f_a_tel" placeholder="06 98 76 54 32"></div>
+    </div>
+    <div class="afield"><label>Date de naissance</label><input type="date" id="f_a_naissance"></div>
+    <div class="accord-nav">
+      <button class="accord-btn-prev" onclick="goToStep(2)"><i class="ti ti-arrow-left"></i> Retour</button>
+      <button class="accord-btn-next" onclick="goToStep(4)">Suivant — Prix final <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- Étape 4 : Prix -->
+  <div class="accord-section" id="step4">
+    <div class="accord-section-title"><i class="ti ti-currency-euro"></i> Prix de vente / loyer final convenu</div>
+
+    <div class="afield" style="margin-bottom:1.5rem">
+      <label>Prix de vente final signé (€) — montant réel de la transaction</label>
+      <input type="number" id="f_prix" placeholder="350000" oninput="updateCommission()" style="font-size:22px;font-weight:700;padding:14px 16px">
+      <div class="afield-note">C'est ce montant — et non le prix affiché dans l'annonce — qui sert de base au calcul de la commission SansAgents.</div>
+    </div>
+
+    <div class="prix-box" id="prixBox" style="display:none">
+      <div class="prix-box-title">Prix convenu</div>
+      <div class="prix-main" id="prixAffiche">—</div>
+      <div class="prix-comm">Commission SansAgents : <strong id="commAffiche">—</strong> (1% du prix final)</div>
+    </div>
+
+    <div class="comm-box" id="commBox" style="display:none">
+      <div class="comm-box-title">Détail de la commission</div>
+      <div class="comm-rows">
+        <div class="comm-row-item"><div class="comm-row-label">Prix de vente</div><div class="comm-row-val" id="cd_prix">—</div></div>
+        <div class="comm-row-item"><div class="comm-row-label">Taux SansAgents</div><div class="comm-row-val">1 %</div></div>
+        <div class="comm-row-item"><div class="comm-row-label">Commission due</div><div class="comm-row-val accent" id="cd_comm">—</div></div>
+        <div class="comm-row-item"><div class="comm-row-label">Économie vs agence (3%)</div><div class="comm-row-val" style="color:#4cb85c" id="cd_eco">—</div></div>
+      </div>
+    </div>
+
+    <div class="afield">
+      <label>Date de signature de l'acte (prévue)</label>
+      <input type="date" id="f_date_signature">
+    </div>
+    <div class="afield">
+      <label>Conditions particulières <span style="color:#bbb;font-weight:400">(facultatif)</span></label>
+      <textarea id="f_conditions" placeholder="Ex : vente sous condition d'obtention d'un prêt immobilier, mobilier inclus, travaux à la charge de l'acheteur..."></textarea>
+    </div>
+    <div class="accord-nav">
+      <button class="accord-btn-prev" onclick="goToStep(3)"><i class="ti ti-arrow-left"></i> Retour</button>
+      <button class="accord-btn-next" id="btnGenerate" onclick="generateDocument()" disabled>Générer le document <i class="ti ti-file-certificate"></i></button>
+    </div>
+  </div>
+
+  <!-- Étape 5 : Document -->
+  <div class="accord-section" id="step5">
+    <div class="accord-section-title"><i class="ti ti-file-check"></i> Votre accord de vente SansAgents</div>
+
+    <div class="doc-preview" id="docPreview">
+      <div class="doc-preview-header">
+        <div class="doc-logo">
+          <div class="doc-logo-box"><i class="ti ti-key"></i></div>
+          <div class="doc-brand">Sans<span>Agents</span></div>
+        </div>
+        <div class="doc-title-right">
+          <p>Document généré le</p>
+          <strong id="doc_date_gen">—</strong>
+        </div>
+      </div>
+      <div class="doc-body">
+        <div id="doc_type_banner" style="background:#fff0ee;border-radius:10px;padding:10px 14px;margin-bottom:1.4rem;font-size:13.5px;color:#E84533;font-weight:600;display:flex;align-items:center;gap:8px">
+          <i class="ti ti-file-certificate"></i> <span id="doc_type_label">ACCORD DE VENTE ENTRE PARTICULIERS</span>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-label">Le bien immobilier</div>
+          <div class="doc-row"><span class="doc-row-key">Type</span><span class="doc-row-val" id="doc_type">—</span></div>
+          <div class="doc-row"><span class="doc-row-key">Adresse</span><span class="doc-row-val" id="doc_adresse">—</span></div>
+          <div class="doc-row"><span class="doc-row-key">Surface</span><span class="doc-row-val" id="doc_surface">—</span></div>
+          <div class="doc-row"><span class="doc-row-key">Pièces</span><span class="doc-row-val" id="doc_pieces">—</span></div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-label">Le vendeur / bailleur</div>
+          <div class="doc-row"><span class="doc-row-key">Identité</span><span class="doc-row-val" id="doc_v_nom">—</span></div>
+          <div class="doc-row"><span class="doc-row-key">Adresse</span><span class="doc-row-val" id="doc_v_adresse">—</span></div>
+          <div class="doc-row"><span class="doc-row-key">Email</span><span class="doc-row-val" id="doc_v_email">—</span></div>
+          <div class="doc-row"><span class="doc-row-key">Téléphone</span><span class="doc-row-val" id="doc_v_tel">—</span></div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-label">L'acheteur / locataire</div>
+          <div class="doc-row"><span class="doc-row-key">Identité</span><span class="doc-row-val" id="doc_a_nom">—</span></div>
+          <div class="doc-row"><span class="doc-row-key">Adresse</span><span class="doc-row-val" id="doc_a_adresse">—</span></div>
+          <div class="doc-row"><span class="doc-row-key">Email</span><span class="doc-row-val" id="doc_a_email">—</span></div>
+          <div class="doc-row"><span class="doc-row-key">Téléphone</span><span class="doc-row-val" id="doc_a_tel">—</span></div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-label">Conditions de la transaction</div>
+          <div class="doc-row"><span class="doc-row-key">Date de signature</span><span class="doc-row-val" id="doc_date_sig">—</span></div>
+          <div id="doc_conditions_row" class="doc-row" style="display:none"><span class="doc-row-key">Conditions</span><span class="doc-row-val" id="doc_conditions">—</span></div>
+          <div class="doc-highlight">
+            <div class="doc-highlight-label">Prix de vente final convenu</div>
+            <div class="doc-highlight-val" id="doc_prix">—</div>
+          </div>
+          <div class="doc-commission">
+            <div class="doc-commission-label">Commission SansAgents (1% du prix final)</div>
+            <div class="doc-commission-val" id="doc_commission">—</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f8f8;border-radius:10px;padding:14px 16px;font-size:12.5px;color:#888;line-height:1.6;margin-top:1rem">
+          <strong style="color:#555">Clause SansAgents :</strong> Les deux parties reconnaissent avoir utilisé la plateforme SansAgents.fr pour cette transaction et s'engagent au paiement de la commission de 1% du prix de vente final signé à SansAgents, conformément aux Conditions Générales d'Utilisation acceptées lors de la publication de l'annonce.
+        </div>
+      </div>
+      <div class="doc-footer">
+        <span>Document généré par <strong>SansAgents.fr</strong> — contact@sansagents.fr</span>
+        <span id="doc_ref">Réf. —</span>
+      </div>
+    </div>
+
+    <div class="accord-actions" style="margin-bottom:1.5rem">
+      <button class="accord-action-btn print" onclick="window.print()"><i class="ti ti-printer"></i> Imprimer / Télécharger PDF</button>
+      <button class="accord-action-btn share" onclick="copyLink()"><i class="ti ti-copy"></i> Copier le résumé</button>
+    </div>
+
+    <div class="payment-box">
+      <h3><i class="ti ti-coin"></i> Payer la commission SansAgents</h3>
+      <p>Conformément aux CGU, la commission de <strong id="pay_comm">—</strong> est due à SansAgents suite à cette transaction. Elle peut être réglée par virement bancaire ou bientôt par carte en ligne.</p>
+      <div class="payment-method">
+        <i class="ti ti-building-bank"></i>
+        <div>
+          <div class="payment-method-title">Virement bancaire</div>
+          <div class="payment-method-sub">Mentionnez la référence du document en objet du virement</div>
+          <div class="iban-box">
+            <span id="iban_display">FR76 XXXX XXXX XXXX XXXX XXXX XXX</span>
+            <button class="iban-copy" onclick="copyIban()">Copier</button>
+          </div>
+        </div>
+      </div>
+      <div class="payment-method" style="opacity:.6">
+        <i class="ti ti-credit-card"></i>
+        <div>
+          <div class="payment-method-title">Paiement en ligne — bientôt disponible</div>
+          <div class="payment-method-sub">Paiement par carte bancaire sécurisé via Stripe</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accord-nav" style="border-top:none;padding-top:0">
+      <button class="accord-btn-prev" onclick="goToStep(4)"><i class="ti ti-arrow-left"></i> Modifier</button>
+      <span style="font-size:13px;color:#aaa">Document prêt — imprimez-le et conservez-en un exemplaire signé.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+SA.init().then(function() { SA.mountNavAuth(); });
+
+let currentStep = 1;
+
+function goToStep(n) {
+  currentStep = n;
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById('step' + i).classList.toggle('active', i === n);
+    const btn = document.getElementById('stepBtn' + i);
+    btn.classList.toggle('active', i === n);
+    btn.classList.toggle('done', i < n);
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function fmtEur(n) {
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+}
+
+function updateCommission() {
+  const prix = parseFloat(document.getElementById('f_prix').value) || 0;
+  const prixBox = document.getElementById('prixBox');
+  const commBox = document.getElementById('commBox');
+  const btn = document.getElementById('btnGenerate');
+  if (prix > 0) {
+    const comm = Math.round(prix * 0.01);
+    const agence = Math.round(prix * 0.03);
+    document.getElementById('prixAffiche').textContent = fmtEur(prix);
+    document.getElementById('commAffiche').textContent = fmtEur(comm);
+    document.getElementById('cd_prix').textContent = fmtEur(prix);
+    document.getElementById('cd_comm').textContent = fmtEur(comm);
+    document.getElementById('cd_eco').textContent = '− ' + fmtEur(agence - comm);
+    prixBox.style.display = 'block';
+    commBox.style.display = 'block';
+    btn.disabled = false;
+  } else {
+    prixBox.style.display = 'none';
+    commBox.style.display = 'none';
+    btn.disabled = true;
+  }
+}
+
+function generateDocument() {
+  const prix = parseFloat(document.getElementById('f_prix').value) || 0;
+  const comm = Math.round(prix * 0.01);
+  const trans = document.getElementById('f_transaction').value;
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
+  const ref = 'SA-' + now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + Math.floor(Math.random()*9000+1000);
+
+  // Remplir le document
+  document.getElementById('doc_date_gen').textContent = dateStr;
+  document.getElementById('doc_type_label').textContent = trans === 'vente' ? 'ACCORD DE VENTE ENTRE PARTICULIERS' : 'ACCORD DE LOCATION ENTRE PARTICULIERS';
+  document.getElementById('doc_type').textContent = document.getElementById('f_type').value + (trans === 'location' ? ' — mise en location' : ' — mise en vente');
+  document.getElementById('doc_adresse').textContent = document.getElementById('f_adresse').value || '—';
+  const surf = document.getElementById('f_surface').value;
+  const pcs = document.getElementById('f_pieces').value;
+  document.getElementById('doc_surface').textContent = surf ? surf + ' m²' : '—';
+  document.getElementById('doc_pieces').textContent = pcs ? pcs + ' pièce' + (pcs > 1 ? 's' : '') : '—';
+
+  const vPr = document.getElementById('f_v_prenom').value;
+  const vNo = document.getElementById('f_v_nom').value;
+  document.getElementById('doc_v_nom').textContent = (vPr + ' ' + vNo).trim() || '—';
+  document.getElementById('doc_v_adresse').textContent = document.getElementById('f_v_adresse').value || '—';
+  document.getElementById('doc_v_email').textContent = document.getElementById('f_v_email').value || '—';
+  document.getElementById('doc_v_tel').textContent = document.getElementById('f_v_tel').value || '—';
+
+  const aPr = document.getElementById('f_a_prenom').value;
+  const aNo = document.getElementById('f_a_nom').value;
+  document.getElementById('doc_a_nom').textContent = (aPr + ' ' + aNo).trim() || '—';
+  document.getElementById('doc_a_adresse').textContent = document.getElementById('f_a_adresse').value || '—';
+  document.getElementById('doc_a_email').textContent = document.getElementById('f_a_email').value || '—';
+  document.getElementById('doc_a_tel').textContent = document.getElementById('f_a_tel').value || '—';
+
+  const dateSig = document.getElementById('f_date_signature').value;
+  document.getElementById('doc_date_sig').textContent = dateSig ? new Date(dateSig).toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' }) : '—';
+
+  const cond = document.getElementById('f_conditions').value.trim();
+  if (cond) {
+    document.getElementById('doc_conditions').textContent = cond;
+    document.getElementById('doc_conditions_row').style.display = 'flex';
+  }
+
+  document.getElementById('doc_prix').textContent = fmtEur(prix);
+  document.getElementById('doc_commission').textContent = fmtEur(comm);
+  document.getElementById('pay_comm').textContent = fmtEur(comm);
+  document.getElementById('doc_ref').textContent = 'Réf. ' + ref;
+
+  goToStep(5);
+}
+
+function copyLink() {
+  const prix = parseFloat(document.getElementById('f_prix').value) || 0;
+  const comm = Math.round(prix * 0.01);
+  const vPr = document.getElementById('f_v_prenom').value;
+  const vNo = document.getElementById('f_v_nom').value;
+  const aPr = document.getElementById('f_a_prenom').value;
+  const aNo = document.getElementById('f_a_nom').value;
+  const text =
+    'ACCORD DE VENTE — SansAgents\n' +
+    '-------------------------------\n' +
+    'Bien : ' + document.getElementById('f_type').value + ', ' + document.getElementById('f_adresse').value + '\n' +
+    'Vendeur : ' + vPr + ' ' + vNo + '\n' +
+    'Acheteur : ' + aPr + ' ' + aNo + '\n' +
+    'Prix final : ' + fmtEur(prix) + '\n' +
+    'Commission SansAgents : ' + fmtEur(comm) + '\n' +
+    'Généré via SansAgents.fr';
+  navigator.clipboard.writeText(text).then(function() {
+    SA.toast('Résumé copié dans le presse-papiers', 'ti-copy');
+  });
+}
+
+function copyIban() {
+  navigator.clipboard.writeText('FR76 XXXX XXXX XXXX XXXX XXXX XXX').then(function() {
+    SA.toast('IBAN copié', 'ti-copy');
+  });
+}
+</script>
+</body>
+</html>

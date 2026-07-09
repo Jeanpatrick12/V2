@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Politique de confidentialité</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;background:#fff;line-height:1.65}
+.sa-legal-top{border-bottom:1px solid #efefef;padding:18px 40px;display:flex;align-items:center;gap:12px}
+.sa-legal-top .sa-logo{background:#E84533;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.sa-legal-top .sa-logo i{color:white;font-size:16px}
+.sa-legal-top .sa-brand{font-size:17px;font-weight:700;color:#111;cursor:pointer}
+.sa-legal-top .sa-brand span{color:#E84533}
+.sa-legal-back{margin-left:auto;font-size:13px;color:#666;text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer}
+.sa-legal-back:hover{color:#E84533}
+.sa-legal-wrap{max-width:760px;margin:0 auto;padding:3rem 24px 5rem}
+.sa-legal-wrap h1{font-size:30px;font-weight:700;letter-spacing:-0.5px;margin-bottom:8px;color:#111}
+.sa-legal-updated{font-size:12.5px;color:#999;margin-bottom:2.5rem}
+.sa-legal-wrap h2{font-size:18px;font-weight:700;color:#111;margin:2.2rem 0 0.8rem;letter-spacing:-0.2px}
+.sa-legal-wrap h3{font-size:14.5px;font-weight:700;color:#333;margin:1.3rem 0 0.5rem}
+.sa-legal-wrap p{font-size:14px;color:#444;margin-bottom:0.9rem}
+.sa-legal-wrap ul{font-size:14px;color:#444;margin:0 0 0.9rem 1.3rem}
+.sa-legal-wrap li{margin-bottom:0.4rem}
+.sa-legal-wrap strong{color:#222}
+.sa-legal-toc{background:#fafafa;border:1px solid #eee;border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:2rem}
+.sa-legal-toc h4{font-size:11.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.sa-legal-toc a{display:block;font-size:13.5px;color:#444;text-decoration:none;padding:4px 0}
+.sa-legal-toc a:hover{color:#E84533}
+.sa-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:13px}
+.sa-table th{text-align:left;background:#fafafa;padding:9px 12px;font-size:11.5px;color:#888;text-transform:uppercase;letter-spacing:.03em;border-bottom:2px solid #eee}
+.sa-table td{padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#444;vertical-align:top}
+.sa-legal-foot{border-top:1px solid #efefef;padding:2rem 24px;text-align:center}
+.sa-legal-foot a{color:#888;font-size:12.5px;text-decoration:none;margin:0 10px;cursor:pointer}
+.sa-legal-foot a:hover{color:#E84533}
+@media(max-width:600px){.sa-legal-top{padding:16px 20px}.sa-table{font-size:12px}}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+<div class="sa-legal-top">
+  <div class="sa-logo" onclick="window.location.href='./'"><i class="ti ti-key"></i></div>
+  <div class="sa-brand" onclick="window.location.href='./'">Sans<span>Agents</span></div>
+  <a class="sa-legal-back" onclick="window.location.href='./'"><i class="ti ti-arrow-left"></i> Retour à l'accueil</a>
+</div>
+
+<div class="sa-legal-wrap">
+  <h1>Politique de confidentialité</h1>
+  <div class="sa-legal-updated">Dernière mise à jour : juin 2026</div>
+
+  <div class="sa-legal-toc">
+    <h4>Sommaire</h4>
+    <a href="#responsable">1. Responsable du traitement</a>
+    <a href="#donnees">2. Données collectées</a>
+    <a href="#finalites">3. Finalités et base légale</a>
+    <a href="#destinataires">4. Destinataires des données</a>
+    <a href="#duree">5. Durée de conservation</a>
+    <a href="#droits">6. Vos droits</a>
+    <a href="#securite">7. Sécurité</a>
+    <a href="#transferts">8. Transferts hors Union européenne</a>
+    <a href="#cookies">9. Cookies</a>
+    <a href="#contact">10. Contact et réclamation</a>
+  </div>
+
+  <h2 id="responsable">1. Responsable du traitement</h2>
+  <p>SansAgents, [forme juridique et adresse — voir Mentions légales], est responsable du traitement des données personnelles collectées via la plateforme, au sens du Règlement Général sur la Protection des Données (RGPD).</p>
+
+  <h2 id="donnees">2. Données collectées</h2>
+  <table class="sa-table">
+    <tr><th>Catégorie</th><th>Exemples</th></tr>
+    <tr><td>Identité et contact</td><td>Prénom, nom, e-mail, numéro de téléphone</td></tr>
+    <tr><td>Données d'annonce</td><td>Adresse du bien, photos, description, prix, caractéristiques</td></tr>
+    <tr><td>Données de messagerie</td><td>Contenu des messages échangés entre utilisateurs</td></tr>
+    <tr><td>Données techniques</td><td>Adresse IP, type de navigateur, pages consultées</td></tr>
+    <tr><td>Données professionnelles (annuaire)</td><td>SIRET, zone d'intervention, avis clients</td></tr>
+  </table>
+
+  <h2 id="finalites">3. Finalités et base légale</h2>
+  <ul>
+    <li><strong>Exécution du contrat :</strong> création de compte, publication d'annonces, mise en relation, messagerie.</li>
+    <li><strong>Intérêt légitime :</strong> prévention de la fraude, lutte contre les annonces non conformes (agences), amélioration du service.</li>
+    <li><strong>Obligation légale :</strong> conservation de certaines données à des fins comptables ou en cas de réquisition judiciaire.</li>
+    <li><strong>Consentement :</strong> cookies non essentiels et communications marketing (voir notre <a href="cookies" style="color:#E84533;font-weight:600">Politique de cookies</a>).</li>
+  </ul>
+
+  <h2 id="destinataires">4. Destinataires des données</h2>
+  <p>Les données sont accessibles aux équipes de SansAgents habilitées et, le cas échéant, à nos sous-traitants techniques (hébergement, envoi d'e-mails) dans la stricte limite de leurs missions. Les coordonnées d'un annonceur ne sont communiquées à un tiers que si l'annonceur choisit explicitement de les partager dans une conversation donnée. SansAgents ne vend ni ne loue les données personnelles de ses utilisateurs à des tiers.</p>
+
+  <h2 id="duree">5. Durée de conservation</h2>
+  <p>Les données de compte sont conservées pendant toute la durée d'utilisation du service, puis archivées pendant la durée nécessaire au respect de nos obligations légales (notamment comptables) avant suppression ou anonymisation. Les annonces supprimées ou marquées vendues/louées sont conservées 12 mois à des fins statistiques avant suppression définitive.</p>
+
+  <h2 id="droits">6. Vos droits</h2>
+  <p>Conformément au RGPD, vous disposez des droits suivants sur vos données personnelles :</p>
+  <ul>
+    <li>droit d'accès et de rectification ;</li>
+    <li>droit à l'effacement (« droit à l'oubli ») ;</li>
+    <li>droit à la limitation du traitement ;</li>
+    <li>droit d'opposition ;</li>
+    <li>droit à la portabilité des données.</li>
+  </ul>
+  <p>Vous pouvez exercer ces droits directement depuis votre espace personnel ou en écrivant à <strong>dpo@sansagents.fr</strong>, en justifiant de votre identité. Nous nous engageons à répondre dans un délai d'un mois.</p>
+
+  <h2 id="securite">7. Sécurité</h2>
+  <p>SansAgents met en œuvre les mesures techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, perte ou altération (chiffrement des échanges, accès restreint, hébergement sécurisé).</p>
+
+  <h2 id="transferts">8. Transferts hors Union européenne</h2>
+  <p>Lorsque certains prestataires techniques sont situés hors de l'Union européenne, SansAgents s'assure qu'un cadre juridique approprié (clauses contractuelles types de la Commission européenne notamment) garantit un niveau de protection équivalent à celui du RGPD.</p>
+
+  <h2 id="cookies">9. Cookies</h2>
+  <p>Le détail des cookies utilisés sur la Plateforme est disponible dans notre <a href="cookies" style="color:#E84533;font-weight:600">Politique de cookies</a>.</p>
+
+  <h2 id="contact">10. Contact et réclamation</h2>
+  <p>Pour toute question relative à vos données personnelles : <strong>dpo@sansagents.fr</strong>. Vous disposez également du droit d'introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" style="color:#E84533;font-weight:600">www.cnil.fr</a>) si vous estimez que vos droits ne sont pas respectés.</p>
+</div>
+
+<div class="sa-legal-foot">
+  <a onclick="window.location.href='cgu'">CGU</a>
+  <a onclick="window.location.href='confidentialite'">Confidentialité</a>
+  <a onclick="window.location.href='cookies'">Cookies</a>
+  <a onclick="window.location.href='mentions-legales'">Mentions légales</a>
+</div>
+</body>
+</html>

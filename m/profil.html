@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mon profil — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+.m-profile-header { background: #0f1923; padding: 28px var(--pad) 20px; text-align: center; }
+.m-profile-avatar { width: 68px; height: 68px; border-radius: 50%; background: var(--red); color: white; font-size: 28px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; border: 3px solid rgba(255,255,255,0.2); }
+.m-profile-name { font-size: 18px; font-weight: 700; color: white; margin-bottom: 3px; }
+.m-profile-email { font-size: 12px; color: rgba(255,255,255,0.5); }
+.m-menu-group { background: white; border-radius: var(--radius); margin: 14px var(--pad); overflow: hidden; border: 1px solid var(--border); }
+.m-menu-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--bg); cursor: pointer; }
+.m-menu-row:last-child { border-bottom: none; }
+.m-menu-row:active { background: var(--bg); }
+.m-menu-row-left { display: flex; align-items: center; gap: 10px; }
+.m-menu-row-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-menu-row-label { font-size: 14px; font-weight: 600; }
+.m-menu-row-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.location='/m/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+  <button onclick="window.location='/profil'" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--text2)"><i class="ti ti-edit" style="font-size:14px"></i></button>
+<button class="m-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div id="notLoggedIn" style="display:none;padding:60px var(--pad);text-align:center">
+  <i class="ti ti-user-off" style="font-size:40px;color:#ddd;display:block;margin-bottom:14px"></i>
+  <h2 style="font-size:18px;font-weight:700;margin-bottom:8px">Vous n'êtes pas connecté</h2>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Connectez-vous pour accéder à votre profil.</p>
+  <button class="m-btn m-btn-primary m-btn-full" onclick="window.location='/m/connexion?redirect=/m/profil'">
+    <i class="ti ti-login"></i> Se connecter
+  </button>
+  <button class="m-btn m-btn-secondary m-btn-full" style="margin-top:10px" onclick="window.location='/m/connexion?tab=signup&redirect=/m/profil'">
+    <i class="ti ti-user-plus"></i> Créer un compte
+  </button>
+</div>
+
+<div id="loggedIn" style="display:none">
+  <div class="m-profile-header">
+    <div class="m-profile-avatar" id="profileAvatar">?</div>
+    <div class="m-profile-name" id="profileName">Chargement…</div>
+    <div class="m-profile-email" id="profileEmail"></div>
+  </div>
+
+  <div class="m-menu-group" id="mesDocsMobileGroup" style="display:none">
+    <div class="m-menu-row" onclick="openMesDocs()">
+      <div class="m-menu-row-left">
+        <div class="m-menu-row-icon" style="background:#fff5f4"><i class="ti ti-files" style="color:var(--red);font-size:16px"></i></div>
+        <div><div class="m-menu-row-label">Mes documents</div><div class="m-menu-row-sub" id="mesDocsCount">Documents sauvegardés</div></div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
+    </div>
+  </div>
+
+  <div class="m-menu-group">
+    <div class="m-menu-row" onclick="window.location='/m/mes-annonces'">
+      <div class="m-menu-row-left">
+        <div class="m-menu-row-icon" style="background:#fff0ee"><i class="ti ti-home-star" style="color:var(--red);font-size:16px"></i></div>
+        <div><div class="m-menu-row-label">Mes annonces</div><div class="m-menu-row-sub">Gérer mes biens publiés</div></div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
+    </div>
+    <div class="m-menu-row" onclick="window.location='/m/favoris'">
+      <div class="m-menu-row-left">
+        <div class="m-menu-row-icon" style="background:#fff0ee"><i class="ti ti-heart" style="color:var(--red);font-size:16px"></i></div>
+        <div><div class="m-menu-row-label">Mes favoris</div><div class="m-menu-row-sub">Biens sauvegardés</div></div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
+    </div>
+    <div class="m-menu-row" onclick="window.location='/m/messages'">
+      <div class="m-menu-row-left">
+        <div class="m-menu-row-icon" style="background:#fff0ee"><i class="ti ti-message-circle" style="color:var(--red);font-size:16px"></i></div>
+        <div><div class="m-menu-row-label">Messages</div><div class="m-menu-row-sub">Conversations avec vendeurs</div></div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
+    </div>
+  </div>
+
+  <div class="m-menu-group">
+    <div class="m-menu-row" onclick="window.location='/profil'">
+      <div class="m-menu-row-left">
+        <div class="m-menu-row-icon" style="background:#eff6ff"><i class="ti ti-user-edit" style="color:#2563eb;font-size:16px"></i></div>
+        <div><div class="m-menu-row-label">Modifier mon profil</div><div class="m-menu-row-sub">Nom, photo, téléphone</div></div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
+    </div>
+    <div class="m-menu-row" onclick="window.location='/accord'">
+      <div class="m-menu-row-left">
+        <div class="m-menu-row-icon" style="background:#f0fdf4"><i class="ti ti-file-description" style="color:#16a34a;font-size:16px"></i></div>
+        <div><div class="m-menu-row-label">Accord SansAgents</div><div class="m-menu-row-sub">Modalités & commission</div></div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
+    </div>
+  </div>
+
+  <div class="m-menu-group">
+    <div class="m-menu-row" onclick="window.location='/contact'">
+      <div class="m-menu-row-left">
+        <div class="m-menu-row-icon" style="background:#fafafa"><i class="ti ti-help-circle" style="color:var(--text2);font-size:16px"></i></div>
+        <div><div class="m-menu-row-label">Aide & Contact</div><div class="m-menu-row-sub">Une question ? On répond.</div></div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
+    </div>
+  </div>
+
+  <div style="padding:0 var(--pad) 24px">
+    <button class="m-btn m-btn-full" onclick="doLogout()" style="border:1.5px solid #fee2e2;color:#dc2626;background:white;border-radius:10px">
+      <i class="ti ti-logout"></i> Se déconnecter
+    </button>
+  </div>
+</div>
+
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.location='/m/'"><i class="ti ti-home-2"></i>Accueil</button>
+  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i>Annonces</button>
+  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>Déposer
+  </button>
+  <button class="m-tab" onclick="window.location='/m/messages'"><i class="ti ti-message-circle"></i>Messages</button>
+  <button class="m-tab active"><i class="ti ti-user"></i>Profil</button>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+async function doLogout() {
+  await SA.logout();
+  window.location = '/m/';
+}
+SA.init().then(function(){
+  var u = SA.getUser();
+  if(!u){
+    document.getElementById('notLoggedIn').style.display='';
+  } else {
+    document.getElementById('loggedIn').style.display='';
+    var name = (u.user_metadata && u.user_metadata.full_name) || u.email.split('@')[0];
+    document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('profileEmail').textContent = u.email;
+    loadMesDocsMenu();
+  }
+});
+
+function loadMesDocsMenu(){
+  var docs=[];
+  try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  if(!docs.length) return;
+  document.getElementById('mesDocsMobileGroup').style.display='block';
+  document.getElementById('mesDocsCount').textContent = docs.length + ' document' + (docs.length>1?'s':'') + ' sauvegardé' + (docs.length>1?'s':'');
+}
+
+function openMesDocs(){
+  window.location='/m/documents';
+}
+</script>
+
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/m/profil';else window.location='/m/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+</body>
+</html>
+
+
+
+
+
+

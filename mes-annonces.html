@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Mes annonces</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:100}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+.sa-nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.sa-nav-link{font-size:13.5px;color:#555;padding:8px 14px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit}
+.sa-nav-link:hover{background:#f7f7f7;color:#111}
+.sa-nav-actions{display:flex;align-items:center;gap:4px;margin-left:16px}
+.sa-nav-cta{font-size:13.5px;color:white;background:#E84533;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;border:none;font-family:inherit;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sa-nav-cta:hover{background:#c93a2a}
+.sa-nav-divider{width:1px;height:32px;background:#e5e5e5;margin:0 6px;flex-shrink:0}
+.sa-nav-icon-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:5px 9px;border-radius:8px;color:#444;font-family:inherit}
+.sa-nav-icon-btn:hover{background:#f5f5f5;color:#111}
+.sa-nav-icon-btn i{font-size:19px}
+.sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
+.sa-nav-account-wrap{position:relative}
+.sa-nav-avatar{width:19px;height:19px;border-radius:50%;background:#E84533;color:white;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.sa-nav-badge{position:absolute;top:1px;right:3px;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px;line-height:1}
+.sa-account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);min-width:220px;padding:8px;z-index:200}
+.sa-account-dropdown.show{display:block}
+.sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px;word-break:break-all}
+.sa-account-dropdown-email i{color:#E84533;flex-shrink:0}
+.sa-account-dropdown-logout{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;color:#c0392b;padding:9px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.sa-account-dropdown-logout:hover{background:#fff0ee}
+
+.sa-page-header{max-width:1240px;margin:0 auto;padding:2.75rem 40px 0.5rem}
+.sa-page-header h1{font-size:28px;font-weight:700;letter-spacing:-0.6px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.sa-page-header h1 i{color:#E84533}
+.sa-page-header p{font-size:14px;color:#888}
+.sa-stats-row{max-width:1240px;margin:0 auto;padding:1.5rem 40px 0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.sa-stats-row{grid-template-columns:repeat(2,1fr)}}
+.sa-stat-card{border-radius:16px;padding:1.3rem 1.4rem;display:flex;align-items:center;gap:14px}
+.sa-stat-card.c1{background:linear-gradient(135deg,#fff5f3,#ffe9e5)}
+.sa-stat-card.c2{background:linear-gradient(135deg,#eef9f1,#e3f5ea)}
+.sa-stat-card.c3{background:linear-gradient(135deg,#0f1923,#1a2c3d)}
+.sa-stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.sa-stat-card.c1 .sa-stat-icon{background:#E84533;color:#fff}
+.sa-stat-card.c2 .sa-stat-icon{background:#1a8c4e;color:#fff}
+.sa-stat-card.c3 .sa-stat-icon{background:rgba(255,255,255,0.15);color:#ff7a68}
+.sa-stat-value{font-size:23px;font-weight:700;letter-spacing:-0.4px;color:#111}
+.sa-stat-card.c3 .sa-stat-value{color:#fff}
+.sa-stat-label{font-size:12px;color:#888;font-weight:600}
+.sa-stat-card.c3 .sa-stat-label{color:rgba(255,255,255,0.55)}
+@media(max-width:700px){.sa-stats-row{grid-template-columns:1fr}}
+.sa-page-body{max-width:1240px;margin:0 auto;padding:1.75rem 40px 4rem}
+
+/* ── Cartes (vue liste) ── */
+.sa-mlist{display:flex;flex-direction:column;gap:18px}
+.sa-mcard{border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s;background:#fff}
+.sa-mcard-row{display:flex}
+.sa-mbuyer-alert{display:flex;align-items:center;gap:13px;background:linear-gradient(135deg,#fff5f3,#ffe9e5);padding:14px 20px;border-bottom:1px solid #ffd4cb}
+.sa-mbuyer-alert-icon{width:32px;height:32px;border-radius:9px;background:#E84533;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sa-mbuyer-alert-text{font-size:13px;color:#5c2a20;font-weight:500;line-height:1.45}
+.sa-mbuyer-alert-text strong{color:#E84533;font-weight:700}
+.sa-mcard:hover{border-color:#ddd}
+.sa-mcard.sold{opacity:.65;background:#fafafa}
+.sa-mphoto{width:56%;height:320px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center}
+.sa-mphoto i{font-size:30px;color:rgba(255,255,255,.5)}
+.sa-mbadge{position:absolute;top:10px;left:10px;color:#fff;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:6px}
+.sa-mbadge.vente{background:#E84533}
+.sa-mbadge.location{background:#1e6abf}
+.sa-mbadge.sold{background:rgba(0,0,0,0.65)}
+.sa-mbody{flex:1;padding:1.3rem 1.5rem;display:flex;flex-direction:column;min-width:0}
+.sa-mtop{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.sa-mprice{font-size:20px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-mpricem2{font-size:12.5px;color:#999;font-weight:500;margin-left:6px}
+.sa-mtitle{font-size:13.5px;color:#666;margin-top:3px}
+.sa-mmeta-row{display:flex;gap:16px;font-size:13px;color:#444;font-weight:600;margin:11px 0 9px;flex-wrap:wrap}
+.sa-mmeta-row span{display:flex;align-items:center;gap:5px}
+.sa-mmeta-row i{color:#bbb;font-size:14px}
+.sa-maddr{font-size:12.5px;color:#999;display:flex;align-items:center;gap:5px;margin-bottom:auto}
+.sa-mstatus{font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0}
+.sa-mstatus.active{background:#e9f7ef;color:#1a8c4e}
+.sa-mstatus.sold{background:#2c3e50;color:#fff}
+.sa-mactions{display:flex;gap:9px;margin-top:14px;padding-top:13px;border-top:1px solid #f2f2f2;flex-wrap:wrap}
+.sa-mbtn{background:none;border:1.5px solid #ddd;color:#444;font-size:12px;font-weight:600;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.sa-mbtn:hover{border-color:#E84533;color:#E84533}
+.sa-mbtn.primary{background:#111;border-color:#111;color:#fff}
+.sa-mbtn.primary:hover{background:#E84533;border-color:#E84533}
+.sa-mbtn.success{background:#1a8c4e;border-color:#1a8c4e;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(26,140,78,0.3);font-size:13.5px;padding:10px 18px}
+.sa-mbtn.success:hover{background:#147a40;border-color:#147a40}
+
+.sa-empty{text-align:center;padding:5rem 1rem;color:#999}
+.sa-empty i{font-size:42px;color:#f0c9c0;margin-bottom:16px;display:block}
+.sa-empty h3{font-size:17px;color:#333;margin-bottom:7px}
+.sa-empty p{font-size:13.5px;color:#999;margin-bottom:18px}
+.sa-empty button{background:#E84533;color:white;border:none;padding:11px 24px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+
+.sa-auth-gate{position:fixed;inset:0;background:#fff;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.sa-auth-gate-card{max-width:380px;text-align:center}
+.sa-auth-gate-card i{font-size:38px;color:#E84533;margin-bottom:14px;display:block}
+.sa-auth-gate-card h2{font-size:20px;font-weight:700;color:#111;margin-bottom:10px;letter-spacing:-0.3px}
+.sa-auth-gate-card p{font-size:13.5px;color:#777;line-height:1.6;margin-bottom:20px}
+.sa-auth-gate-card button{background:#E84533;color:#fff;border:none;padding:13px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+
+/* ── Modal d'édition (reprend le langage visuel du formulaire) ── */
+.sa-edit-overlay{position:fixed;inset:0;background:rgba(15,20,25,0.55);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:3vh 16px;overflow-y:auto}
+.sa-edit-overlay.show{display:flex}
+.sa-edit-modal{background:#fff;border-radius:18px;max-width:680px;width:100%;margin-bottom:3vh}
+.sa-edit-head{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;border-bottom:1px solid #f0f0f0;position:sticky;top:0;background:#fff;border-radius:18px 18px 0 0}
+.sa-edit-head h2{font-size:17px;font-weight:700;letter-spacing:-0.3px}
+.sa-edit-head button{background:#f5f5f5;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;color:#666}
+.sa-edit-body{padding:1.5rem 1.6rem}
+.sa-edit-section-title{font-size:11.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;margin:22px 0 10px;padding-bottom:7px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:6px}
+.sa-edit-section-title:first-child{margin-top:0}
+.sa-edit-section-title i{color:#E84533;font-size:13px}
+.sa-efield{margin-bottom:14px}
+.sa-efield label{display:block;font-size:12.5px;font-weight:600;color:#333;margin-bottom:5px}
+.sa-efield input,.sa-efield select,.sa-efield textarea{width:100%;padding:9px 11px;border:1px solid #ddd;border-radius:8px;font-size:13.5px;font-family:inherit;color:#111}
+.sa-efield textarea{min-height:90px;resize:vertical}
+.sa-egrid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sa-equip-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px}
+.sa-equip-grid label{display:flex;align-items:center;gap:7px;font-size:13px;color:#333;cursor:pointer;padding:4px 0}
+.sa-equip-grid input{width:auto;accent-color:#E84533}
+.sa-energy-scale{margin-top:2px}
+.sa-energy-row{display:flex;gap:4px}
+.sa-energy-letter{flex:1;text-align:center;padding:8px 0;border-radius:7px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;opacity:.4;transform:scale(.92);transition:all .15s;border:2px solid transparent}
+.sa-energy-letter:hover{opacity:.75}
+.sa-energy-letter.active{opacity:1;transform:scale(1);border-color:#111}
+.sa-ephotos{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:10px}
+.sa-ephoto-thumb{position:relative;width:78px;height:60px;border-radius:8px;overflow:hidden;border:1px solid #eee}
+.sa-ephoto-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.sa-ephoto-thumb .main-tag{position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,.6);color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:4px}
+.sa-ephoto-thumb .order-controls{position:absolute;top:0;right:0;display:flex;flex-direction:column}
+.sa-ephoto-thumb .order-controls button{width:18px;height:15px;background:rgba(0,0,0,.55);color:#fff;border:none;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sa-ephoto-thumb .order-controls button:hover{background:#E84533}
+.sa-ephoto-remove{position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;border:none;width:18px;height:18px;border-radius:4px;font-size:10px;cursor:pointer}
+.sa-eaddphoto{border:1.5px dashed #ddd;border-radius:9px;padding:9px 14px;font-size:12.5px;color:#777;cursor:pointer;background:none;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+.sa-eaddphoto:hover{border-color:#E84533;color:#E84533}
+.sa-edit-foot{display:flex;justify-content:flex-end;gap:10px;padding:1.2rem 1.6rem;border-top:1px solid #f0f0f0;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px}
+.sa-edit-foot button{font-family:inherit;font-size:13.5px;font-weight:700;padding:11px 22px;border-radius:9px;cursor:pointer}
+.sa-edit-foot .cancel{background:none;border:1.5px solid #ddd;color:#555}
+.sa-edit-foot .save{background:#E84533;border:none;color:#fff}
+.sa-edit-foot .save:hover{background:#c93a2a}
+
+/* ── Journal des visites ── */
+.sa-visit-overlay{position:fixed;inset:0;background:rgba(15,20,25,0.55);z-index:600;display:none;align-items:flex-start;justify-content:center;padding:3vh 16px;overflow-y:auto}
+.sa-visit-overlay.show{display:flex}
+.sa-visit-modal{background:#fff;border-radius:18px;max-width:520px;width:100%;margin-bottom:3vh}
+.sa-visit-head{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid #f0f0f0;position:sticky;top:0;background:#fff;border-radius:18px 18px 0 0}
+.sa-visit-head h2{font-size:15px;font-weight:700;letter-spacing:-0.3px}
+.sa-visit-head button{background:#f5f5f5;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;color:#666}
+.sa-visit-body{padding:1.2rem 1.5rem}
+.sa-visit-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;min-height:32px}
+.sa-visit-item{background:#f7f7f7;border-radius:10px;padding:10px 13px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sa-visit-info{flex:1}
+.sa-visit-who{font-size:13px;font-weight:600;color:#111}
+.sa-visit-date{font-size:11.5px;color:#999;margin-top:2px}
+.sa-visit-note{font-size:12px;color:#666;margin-top:4px;line-height:1.4}
+.sa-visit-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:15px;padding:2px;flex-shrink:0}
+.sa-visit-del:hover{color:#E84533}
+.sa-visit-form{border-top:1px solid #f0f0f0;padding-top:15px}
+.sa-visit-form h3{font-size:11.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.sa-vf-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.sa-vf-field label{font-size:11.5px;font-weight:600;color:#555;margin-bottom:4px;display:block}
+.sa-vf-field input,.sa-vf-field textarea{width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;font-family:inherit;color:#111}
+.sa-vf-full{margin-bottom:9px}
+.sa-vf-full label{font-size:11.5px;font-weight:600;color:#555;margin-bottom:4px;display:block}
+.sa-vf-full textarea{width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;font-family:inherit;resize:none;color:#111}
+.sa-visit-add-btn{background:#E84533;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;display:flex;align-items:center;justify-content:center;gap:6px}
+/* ── Statut de négociation ── */
+.sa-mstatus.offer{background:#fff8e6;color:#b87a00}
+.sa-mstatus.compromis{background:#eef3ff;color:#1e6abf}
+.sa-mstatus.clickable{cursor:pointer}
+.sa-mstatus.clickable:hover{opacity:.8}
+.sa-status-wrap{position:relative;display:inline-block}
+.sa-status-menu{position:absolute;top:calc(100% + 4px);right:0;background:#fff;border:1px solid #e8e8e8;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.1);min-width:170px;padding:5px;z-index:50;display:none}
+.sa-status-menu.show{display:block}
+.sa-status-opt{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;padding:8px 10px;border-radius:7px;cursor:pointer;color:#333}
+.sa-status-opt:hover{background:#f5f5f5}
+/* ── Compteur messages ── */
+.sa-mmsg-count{font-size:11.5px;color:#aaa;display:flex;align-items:center;gap:4px;margin-top:6px}
+
+@media(max-width:700px){
+  .sa-nav{padding:0 24px}
+  .sa-nav-icon-btn .sa-nav-icon-label{display:none}
+  .sa-page-header,.sa-page-body{padding-left:24px;padding-right:24px}
+  .sa-mcard{flex-direction:column}
+  .sa-mphoto{width:100%;height:220px}
+  .sa-egrid-2{grid-template-columns:1fr}
+}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+
+<div class="sa-auth-gate" id="authGate">
+  <div class="sa-auth-gate-card">
+    <i class="ti ti-lock"></i>
+    <h2>Connectez-vous pour voir vos annonces</h2>
+    <p>Cette page permet de gérer les annonces publiées avec votre compte (prix, photos, caractéristiques, statut).</p>
+    <button onclick="window.location.href='connexion?redirect=' + encodeURIComponent('mes-annonces')">Se connecter ou créer un compte</button>
+  </div>
+</div>
+
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='./'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="sa-nav-links">
+      <button class="sa-nav-link" onclick="window.location.href='./'">Accueil</button>
+      <button class="sa-nav-link" onclick="window.location.href='guide'">Guide</button>
+      <button class="sa-nav-link" onclick="window.location.href='annonces'">Annonces</button>
+      <button class="sa-nav-link" onclick="window.open('professionnels','_blank')">Professionnels</button>
+    </div>
+    <div class="sa-nav-actions">
+      <button class="sa-nav-cta" onclick="window.open('deposer','_blank')">
+        <i class="ti ti-plus"></i> Déposer une annonce
+      </button>
+      <div class="sa-nav-divider"></div>
+      <button class="sa-nav-icon-btn" onclick="window.location.href='recherches'">
+        <i class="ti ti-search"></i>
+        <span class="sa-nav-icon-label">Mes recherches</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'">
+        <i class="ti ti-heart"></i>
+        <span class="sa-nav-badge" data-nav-fav-badge></span>
+        <span class="sa-nav-icon-label">Favoris</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='messages'">
+        <i class="ti ti-message-2"></i>
+        <span class="sa-nav-badge" data-nav-msg-badge></span>
+        <span class="sa-nav-icon-label">Messages</span>
+      </button>
+      <div class="sa-nav-account-wrap" data-nav-account>
+        <button class="sa-nav-icon-btn">
+          <i class="ti ti-user"></i>
+          <span class="sa-nav-icon-label">Se connecter</span>
+        </button>
+        <div class="sa-account-dropdown"></div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="sa-page-header">
+  <h1><i class="ti ti-home"></i> Mes annonces</h1>
+  <p>Modifiez tout — prix, photos, description, caractéristiques — ou signalez une vente/location conclue.</p>
+</div>
+
+<div class="sa-stats-row" id="statsRow"></div>
+
+<div class="sa-page-body">
+  <div class="sa-mlist" id="mlist"></div>
+  <div class="sa-empty" id="mempty" style="display:none">
+    <i class="ti ti-home"></i>
+    <h3>Vous n'avez pas encore d'annonce</h3>
+    <p>Déposez votre premier bien pour le voir apparaître ici.</p>
+    <button onclick="window.location.href='deposer'">Déposer une annonce</button>
+  </div>
+</div>
+
+<!-- ── Modal journal des visites ── -->
+<div class="sa-visit-overlay" id="visitOverlay" onclick="if(event.target===this)closeVisitJournal()">
+  <div class="sa-visit-modal">
+    <div class="sa-visit-head">
+      <h2><i class="ti ti-calendar-event" style="color:#E84533"></i> <span id="visitModalTitle">Journal des visites</span></h2>
+      <button onclick="closeVisitJournal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sa-visit-body">
+      <div class="sa-visit-list" id="visitList"></div>
+      <div class="sa-visit-form">
+        <h3><i class="ti ti-plus"></i> Ajouter une visite</h3>
+        <div class="sa-vf-grid">
+          <div class="sa-vf-field"><label>Date</label><input type="date" id="vfDate"></div>
+          <div class="sa-vf-field"><label>Visiteur</label><input type="text" id="vfName" placeholder="Prénom Nom"></div>
+        </div>
+        <div class="sa-vf-full"><label>Note (optionnel)</label><textarea id="vfNote" rows="2" placeholder="Très intéressé, attend l'estimation de sa banque..."></textarea></div>
+        <button class="sa-visit-add-btn" onclick="addVisit()"><i class="ti ti-plus"></i> Enregistrer la visite</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal d'édition ── -->
+<div class="sa-edit-overlay" id="editOverlay" onclick="if(event.target===this)closeEdit()">
+  <div class="sa-edit-modal">
+    <div class="sa-edit-head">
+      <h2><i class="ti ti-edit" style="color:#E84533"></i> Modifier l'annonce</h2>
+      <button onclick="closeEdit()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sa-edit-body">
+
+      <div class="sa-edit-section-title"><i class="ti ti-photo"></i> Photos</div>
+      <div class="sa-ephotos" id="ePhotos"></div>
+      <input type="file" id="ePhotoInput" accept="image/*" multiple style="display:none" onchange="addPhotos(this)">
+      <button class="sa-eaddphoto" onclick="document.getElementById('ePhotoInput').click()"><i class="ti ti-plus"></i> Ajouter des photos</button>
+
+      <div class="sa-edit-section-title"><i class="ti ti-align-left"></i> Description</div>
+      <div class="sa-efield"><textarea id="eDesc"></textarea></div>
+
+      <div class="sa-edit-section-title"><i class="ti ti-currency-euro"></i> Prix</div>
+      <div class="sa-efield"><input type="number" id="ePrice"></div>
+
+      <div class="sa-edit-section-title"><i class="ti ti-ruler-2"></i> Informations principales</div>
+      <div class="sa-egrid-2">
+        <div class="sa-efield"><label>Surface (m²)</label><input type="number" id="eSurface"></div>
+        <div class="sa-efield"><label>Nombre de pièces</label><input type="number" id="ePieces"></div>
+        <div class="sa-efield"><label>Chambres</label><input type="number" id="eChambres"></div>
+        <div class="sa-efield"><label>Salles de bain</label><input type="number" id="eSdb"></div>
+        <div class="sa-efield"><label>Salles d'eau</label><input type="number" id="eSallesEau"></div>
+        <div class="sa-efield"><label>Année de construction</label><input type="number" id="eAnnee"></div>
+      </div>
+
+      <div class="sa-edit-section-title"><i class="ti ti-bolt"></i> Performance énergétique</div>
+      <div class="sa-egrid-2">
+        <div class="sa-efield">
+          <label>État</label>
+          <select id="eEtat"><option value="">—</option><option>Comme neuf</option><option>Entretenu</option><option>Partiellement rénové</option><option>Rénovation nécessaire</option><option>Destiné à être démoli</option></select>
+        </div>
+        <div class="sa-efield"><label>Facture d'énergie annuelle (€)</label><input type="number" id="eFacture"></div>
+      </div>
+      <div class="sa-egrid-2">
+        <div class="sa-efield">
+          <label>Classe énergie (DPE)</label>
+          <div class="sa-energy-scale" id="eDpeScale"><div class="sa-energy-row"></div></div>
+        </div>
+        <div class="sa-efield">
+          <label>Émissions de GES</label>
+          <div class="sa-energy-scale" id="eGesScale"><div class="sa-energy-row"></div></div>
+        </div>
+      </div>
+
+      <div class="sa-edit-section-title"><i class="ti ti-sparkles"></i> Caractéristiques</div>
+      <div class="sa-equip-grid" id="eEquip"></div>
+
+    </div>
+    <div class="sa-edit-foot">
+      <button class="cancel" onclick="closeEdit()">Annuler</button>
+      <button class="save" onclick="saveEdit()"><i class="ti ti-device-floppy"></i> Enregistrer les modifications</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* auth gate vérifiée après chargement de la session Supabase */
+
+const ENERGY_COLORS = {A:'#0a9e4f',B:'#4cb85c',C:'#a3c93a',D:'#f0c419',E:'#f0941f',F:'#e8602c',G:'#E84533'};
+const EQUIP_OPTIONS = [
+  'Cuisine équipée','Climatisation','Cheminée / Poêle à bois','Fibre optique / THD','Cave / Rangement','Ascenseur',
+  'Accessible PMR','Parking / Garage','Garage','Parking extérieur','Balcon','Terrasse','Jardin privatif','Piscine',
+  'Gardien / Digicode','Vue dégagée / Pas de vis-à-vis','Sous-sol','Verrière(s)','Poutres / structure métallique apparente',
+  'Béton brut / briques apparentes','Mezzanine aménagée','Escalier métal / industriel','Usage mixte habitation + activité pro'
+];
+
+function photoUrl(p) { return p && (p.url || p); }
+let editingId = null;
+let ePhotos = [];
+let eDpe = null, eGes = null;
+
+function renderStats() {
+  const listings = SA.getUserListings();
+  const active = listings.filter(function(l) { return l.status !== 'sold'; });
+  const sold = listings.filter(function(l) { return l.status === 'sold'; });
+  const totalValue = active.reduce(function(sum, l) { return sum + (l.price || 0); }, 0);
+  const totalVisits = listings.reduce(function(sum, l) { return sum + getVisits(l.id).length; }, 0);
+  document.getElementById('statsRow').innerHTML = `
+    <div class="sa-stat-card c1">
+      <div class="sa-stat-icon"><i class="ti ti-home"></i></div>
+      <div><div class="sa-stat-value">${active.length}</div><div class="sa-stat-label">Annonce${active.length > 1 ? 's' : ''} active${active.length > 1 ? 's' : ''}</div></div>
+    </div>
+    <div class="sa-stat-card c2">
+      <div class="sa-stat-icon"><i class="ti ti-circle-check"></i></div>
+      <div><div class="sa-stat-value">${sold.length}</div><div class="sa-stat-label">Vendue${sold.length > 1 ? 's' : ''} / louée${sold.length > 1 ? 's' : ''}</div></div>
+    </div>
+    <div class="sa-stat-card c3">
+      <div class="sa-stat-icon"><i class="ti ti-coin"></i></div>
+      <div><div class="sa-stat-value">${SA.fmtPrice(totalValue)}</div><div class="sa-stat-label">Valeur totale en ligne</div></div>
+    </div>
+    <div class="sa-stat-card" style="background:linear-gradient(135deg,#f0f4ff,#e6ecff)">
+      <div class="sa-stat-icon" style="background:#3b5bdb;color:#fff"><i class="ti ti-calendar-event"></i></div>
+      <div><div class="sa-stat-value" style="color:#1e3a8a">${totalVisits}</div><div class="sa-stat-label" style="color:#6b7fcc">Visite${totalVisits > 1 ? 's' : ''} enregistrée${totalVisits > 1 ? 's' : ''}</div></div>
+    </div>`;
+}
+
+/* ── Statut de négociation ── */
+const NEG_STATUSES = {
+  online:    { label: 'En ligne',        cls: 'active' },
+  offer:     { label: 'Offre reçue',     cls: 'offer' },
+  compromis: { label: 'Compromis signé', cls: 'compromis' }
+};
+function getNegStatus(id) { return localStorage.getItem('sa_neg_' + id) || 'online'; }
+function setNegStatus(id, status) {
+  localStorage.setItem('sa_neg_' + id, status);
+  const badge = document.querySelector('[data-neg-badge="' + id + '"]');
+  if (badge) {
+    const s = NEG_STATUSES[status] || NEG_STATUSES.online;
+    badge.textContent = s.label;
+    badge.className = 'sa-mstatus ' + s.cls + ' clickable';
+  }
+  const menu = document.querySelector('[data-neg-menu="' + id + '"]');
+  if (menu) menu.classList.remove('show');
+}
+function toggleNegMenu(id, evt) {
+  evt.stopPropagation();
+  document.querySelectorAll('.sa-status-menu.show').forEach(function(m) { if (m.dataset.negMenu !== id) m.classList.remove('show'); });
+  const menu = document.querySelector('[data-neg-menu="' + id + '"]');
+  if (menu) menu.classList.toggle('show');
+}
+document.addEventListener('click', function() {
+  document.querySelectorAll('.sa-status-menu.show').forEach(function(m) { m.classList.remove('show'); });
+});
+
+/* ── Journal des visites ── */
+function getVisits(id) { try { return JSON.parse(localStorage.getItem('sa_visits_' + id) || '[]'); } catch(e) { return []; } }
+function saveVisits(id, v) { localStorage.setItem('sa_visits_' + id, JSON.stringify(v)); }
+
+let visitModalId = null;
+function openVisitJournal(id) {
+  visitModalId = id;
+  const l = SA.getListingById(id);
+  document.getElementById('visitModalTitle').textContent = 'Visites — ' + (l ? (l.titre || l.title || l.ville || 'Annonce') : '');
+  document.getElementById('vfDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('vfName').value = '';
+  document.getElementById('vfNote').value = '';
+  renderVisitList();
+  document.getElementById('visitOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeVisitJournal() {
+  document.getElementById('visitOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+  visitModalId = null;
+}
+function renderVisitList() {
+  const visits = getVisits(visitModalId);
+  const list = document.getElementById('visitList');
+  if (!visits.length) {
+    list.innerHTML = '<div style="color:#bbb;font-size:13px;text-align:center;padding:10px 0">Aucune visite enregistrée</div>';
+    return;
+  }
+  list.innerHTML = visits.map(function(v, i) {
+    const d = v.date ? new Date(v.date + 'T00:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '';
+    return '<div class="sa-visit-item">'
+      + '<div class="sa-visit-info">'
+      + '<div class="sa-visit-who">' + SA.escapeHtml(v.name || 'Visiteur') + '</div>'
+      + '<div class="sa-visit-date">' + d + '</div>'
+      + (v.note ? '<div class="sa-visit-note">' + SA.escapeHtml(v.note) + '</div>' : '')
+      + '</div>'
+      + '<button class="sa-visit-del" onclick="deleteVisit(' + i + ')" title="Supprimer"><i class="ti ti-trash"></i></button>'
+      + '</div>';
+  }).join('');
+}
+function deleteVisit(i) {
+  const visits = getVisits(visitModalId);
+  visits.splice(i, 1);
+  saveVisits(visitModalId, visits);
+  renderVisitList();
+  updateVisitBadge(visitModalId, visits.length);
+}
+function addVisit() {
+  const name = document.getElementById('vfName').value.trim();
+  const date = document.getElementById('vfDate').value;
+  const note = document.getElementById('vfNote').value.trim();
+  if (!name || !date) { SA.toast('Renseignez au moins la date et le nom', 'ti-alert-circle'); return; }
+  const visits = getVisits(visitModalId);
+  visits.unshift({ date: date, name: name, note: note });
+  saveVisits(visitModalId, visits);
+  document.getElementById('vfName').value = '';
+  document.getElementById('vfNote').value = '';
+  renderVisitList();
+  updateVisitBadge(visitModalId, visits.length);
+  SA.toast('Visite enregistrée', 'ti-circle-check');
+}
+function updateVisitBadge(id, count) {
+  const btn = document.querySelector('[data-visit-btn="' + id + '"]');
+  if (btn) btn.innerHTML = '<i class="ti ti-calendar-event"></i> ' + (count ? count + ' visite' + (count > 1 ? 's' : '') : 'Journal des visites');
+}
+
+function render() {
+  const convos = SA.getConversations();
+  const buyerConfirmedIds = new Set(convos.filter(function(c) { return c.buyerConfirmedSale; }).map(function(c) { return c.listingId; }));
+  const listings = SA.getUserListings().sort(function(a, b) {
+    const aSold = a.status === 'sold', bSold = b.status === 'sold';
+    const aPrio = (!aSold && buyerConfirmedIds.has(a.id)) ? 0 : (aSold ? 2 : 1);
+    const bPrio = (!bSold && buyerConfirmedIds.has(b.id)) ? 0 : (bSold ? 2 : 1);
+    if (aPrio !== bPrio) return aPrio - bPrio;
+    return (b.createdAt || 0) - (a.createdAt || 0);
+  });
+  const list = document.getElementById('mlist');
+  const empty = document.getElementById('mempty');
+  if (!listings.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+
+  list.innerHTML = listings.map(function(l) {
+    const photos = Array.isArray(l.photos) ? l.photos : [];
+    const main = photos[0] ? photoUrl(photos[0]) : null;
+    const grad = SA.IMG_GRADIENTS[l.img] || SA.IMG_GRADIENTS.p0;
+    const icon = SA.TYPE_ICONS[l.type] || 'ti-home';
+    const sold = l.status === 'sold';
+    const soldLabel = l.transaction === 'vente' ? 'Vendue' : 'Louée';
+    const m2 = l.surface ? Math.round(l.price / l.surface) : null;
+    const buyerConfirmed = !sold && buyerConfirmedIds.has(l.id);
+    const msgCount = convos.filter(function(c) { return c.listingId === l.id; }).length;
+    const visitCount = getVisits(l.id).length;
+    const negStatus = sold ? null : getNegStatus(l.id);
+    const negInfo = negStatus ? (NEG_STATUSES[negStatus] || NEG_STATUSES.online) : null;
+    const statusBadge = sold
+      ? `<span class="sa-mstatus sold">${soldLabel}</span>`
+      : `<div class="sa-status-wrap">
+          <span class="sa-mstatus ${negInfo.cls} clickable" data-neg-badge="${l.id}" onclick="toggleNegMenu('${l.id}',event)">${negInfo.label} <i class="ti ti-chevron-down" style="font-size:10px"></i></span>
+          <div class="sa-status-menu" data-neg-menu="${l.id}">
+            ${Object.entries(NEG_STATUSES).map(function([k,v]) { return `<button class="sa-status-opt" onclick="setNegStatus('${l.id}','${k}')">${v.label}</button>`; }).join('')}
+          </div>
+        </div>`;
+    return `
+    <div class="sa-mcard${sold ? ' sold' : ''}">
+      ${buyerConfirmed ? `<div class="sa-mbuyer-alert"><div class="sa-mbuyer-alert-icon"><i class="ti ti-alert-triangle"></i></div><div class="sa-mbuyer-alert-text">Une personne a indiqué avoir conclu cette ${l.transaction === 'vente' ? 'vente' : 'location'} avec vous — <strong>pensez à mettre à jour le statut de votre annonce.</strong></div></div>` : ''}
+      <div class="sa-mcard-row">
+      <div class="sa-mphoto" style="${main ? "background-image:url('" + main + "');background-size:cover;background-position:center" : 'background:' + grad}">
+        ${!main ? `<i class="ti ${icon}"></i>` : ''}
+        <span class="sa-mbadge ${sold ? 'sold' : (l.transaction === 'vente' ? 'vente' : 'location')}">${sold ? soldLabel : (l.transaction === 'vente' ? 'Vente' : 'Location')}</span>
+      </div>
+      <div class="sa-mbody">
+        <div class="sa-mtop">
+          <div>
+            <span class="sa-mprice">${SA.fmtPriceTransaction(l)}</span>
+            ${m2 ? `<span class="sa-mpricem2">${SA.fmtPrice(m2)}/m²</span>` : ''}
+            <div class="sa-mtitle">${SA.escapeHtml(l.title || '')}</div>
+          </div>
+          ${statusBadge}
+        </div>
+        <div class="sa-mmeta-row">
+          <span><i class="ti ti-ruler-2"></i> ${l.surface || '—'} m²</span>
+          <span><i class="ti ti-door"></i> ${l.pieces || '—'} pièce${l.pieces > 1 ? 's' : ''}</span>
+          ${l.chambres ? `<span><i class="ti ti-bed"></i> ${l.chambres} ch.</span>` : ''}
+          ${l.dpe ? `<span><i class="ti ti-bolt"></i> DPE ${l.dpe}</span>` : ''}
+        </div>
+        <div class="sa-maddr"><i class="ti ti-map-pin"></i> ${SA.escapeHtml(l.ville || '')}${l.postal ? ' (' + l.postal + ')' : ''}</div>
+        ${msgCount ? `<div class="sa-mmsg-count"><i class="ti ti-message-2"></i> ${msgCount} conversation${msgCount > 1 ? 's' : ''}</div>` : ''}
+        <div class="sa-mactions">
+          <button class="sa-mbtn primary" onclick="openEdit('${l.id}')" ${sold ? 'disabled' : ''}><i class="ti ti-edit"></i> Modifier</button>
+          <button class="sa-mbtn" onclick="window.location.href='annonce?id=${l.id}'"><i class="ti ti-eye"></i> Voir l'annonce</button>
+          ${!sold ? `<button class="sa-mbtn" data-visit-btn="${l.id}" onclick="openVisitJournal('${l.id}')"><i class="ti ti-calendar-event"></i> ${visitCount ? visitCount + ' visite' + (visitCount > 1 ? 's' : '') : 'Journal des visites'}</button>` : ''}
+          ${!sold ? `<button class="sa-mbtn success" onclick="markSold('${l.id}','${l.transaction}')"><i class="ti ti-circle-check"></i> Marquer ${l.transaction === 'vente' ? 'vendue' : 'louée'}</button>` : ''}
+        </div>
+      </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function markSold(id, transaction) {
+  if (!confirm('Confirmer : cette annonce est ' + (transaction === 'vente' ? 'vendue' : 'louée') + ' ? Elle sera retirée des résultats de recherche.')) return;
+  await SA.updateListing(id, { status: 'sold' });
+  SA.toast('Annonce mise à jour — merci de l\'avoir signalé', 'ti-circle-check');
+  const l = SA.getListingById(id);
+  const user = SA.getUser();
+  const fd = new FormData();
+  fd.append('annonce_id', id);
+  fd.append('transaction', transaction === 'vente' ? 'Vendue' : 'Louée');
+  fd.append('bien', l ? (l.title || l.type || '') + ' — ' + (l.ville || '') : id);
+  fd.append('prix', l ? SA.fmtPrice(l.price) : '');
+  fd.append('vendeur', user ? user.email : '');
+  fd.append('date', new Date().toLocaleDateString('fr-FR'));
+  fd.append('_subject', '🏠 Annonce ' + (transaction === 'vente' ? 'vendue' : 'louée') + ' — SansAgents');
+  fd.append('_captcha', 'false');
+  fd.append('_template', 'table');
+  fetch('https://formsubmit.co/ajax/contact@sansagents.fr', { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd }).catch(function() {});
+  renderStats();
+  render();
+}
+
+/* ── Modal d'édition ── */
+function buildEnergyRow(scaleId, selectFn) {
+  document.querySelector('#' + scaleId + ' .sa-energy-row').innerHTML =
+    Object.keys(ENERGY_COLORS).map(L => `<div class="sa-energy-letter" data-l="${L}" style="background:${ENERGY_COLORS[L]}" onclick="${selectFn}('${L}',this)">${L}</div>`).join('');
+}
+function selectEDpe(letter, el) { document.querySelectorAll('#eDpeScale .sa-energy-letter').forEach(e=>e.classList.remove('active')); el.classList.add('active'); eDpe = letter; }
+function selectEGes(letter, el) { document.querySelectorAll('#eGesScale .sa-energy-letter').forEach(e=>e.classList.remove('active')); el.classList.add('active'); eGes = letter; }
+
+function renderEPhotos() {
+  document.getElementById('ePhotos').innerHTML = ePhotos.map((p, i) => `
+    <div class="sa-ephoto-thumb">
+      <img src="${photoUrl(p)}">
+      ${i === 0 ? '<span class="main-tag">Principale</span>' : ''}
+      <div class="order-controls">
+        <button onclick="moveEPhoto(${i},-1)" title="Monter"><i class="ti ti-chevron-up"></i></button>
+        <button onclick="moveEPhoto(${i},1)" title="Descendre"><i class="ti ti-chevron-down"></i></button>
+      </div>
+      <button class="sa-ephoto-remove" onclick="removeEPhoto(${i})" title="Retirer"><i class="ti ti-x"></i></button>
+    </div>`).join('');
+}
+function moveEPhoto(i, dir) {
+  const t = i + dir;
+  if (t < 0 || t >= ePhotos.length) return;
+  [ePhotos[i], ePhotos[t]] = [ePhotos[t], ePhotos[i]];
+  renderEPhotos();
+}
+function removeEPhoto(i) { ePhotos.splice(i, 1); renderEPhotos(); }
+function addPhotos(input) {
+  Array.from(input.files).forEach(file => {
+    SA.compressImageFile(file).then(dataUrl => { ePhotos.push({ url: dataUrl }); renderEPhotos(); });
+  });
+  input.value = '';
+}
+
+function openEdit(id) {
+  const l = SA.getListingById(id);
+  if (!l) return;
+  editingId = id;
+  ePhotos = Array.isArray(l.photos) ? l.photos.slice() : [];
+  renderEPhotos();
+
+  document.getElementById('eDesc').value = l.desc || '';
+  document.getElementById('ePrice').value = l.price || '';
+  document.getElementById('eSurface').value = l.surface || '';
+  document.getElementById('ePieces').value = l.pieces || '';
+  document.getElementById('eChambres').value = l.chambres || '';
+  document.getElementById('eSdb').value = l.sdb || '';
+  document.getElementById('eSallesEau').value = l.sallesEau || '';
+  document.getElementById('eAnnee').value = l.anneeConstruction || '';
+  document.getElementById('eEtat').value = l.etatGeneral || '';
+  document.getElementById('eFacture').value = l.factureEnergie || '';
+
+  buildEnergyRow('eDpeScale', 'selectEDpe');
+  buildEnergyRow('eGesScale', 'selectEGes');
+  eDpe = l.dpe || null; eGes = l.ges || null;
+  document.querySelectorAll('#eDpeScale .sa-energy-letter').forEach(e => e.classList.toggle('active', e.dataset.l === eDpe));
+  document.querySelectorAll('#eGesScale .sa-energy-letter').forEach(e => e.classList.toggle('active', e.dataset.l === eGes));
+
+  const equip = Array.isArray(l.equipements) ? l.equipements : [];
+  document.getElementById('eEquip').innerHTML = EQUIP_OPTIONS.map(opt =>
+    `<label><input type="checkbox" value="${opt}" ${equip.includes(opt) ? 'checked' : ''}> ${opt}</label>`).join('');
+
+  document.getElementById('editOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeEdit() { document.getElementById('editOverlay').classList.remove('show'); document.body.style.overflow = ''; editingId = null; }
+
+async function saveEdit() {
+  if (!editingId) return;
+  const equip = Array.from(document.querySelectorAll('#eEquip input:checked')).map(i => i.value);
+  await SA.updateListing(editingId, {
+    desc: document.getElementById('eDesc').value,
+    price: parseFloat(document.getElementById('ePrice').value) || 0,
+    surface: parseFloat(document.getElementById('eSurface').value) || 0,
+    pieces: parseInt(document.getElementById('ePieces').value, 10) || null,
+    chambres: document.getElementById('eChambres').value !== '' ? parseInt(document.getElementById('eChambres').value, 10) : null,
+    sdb: document.getElementById('eSdb').value !== '' ? parseInt(document.getElementById('eSdb').value, 10) : null,
+    sallesEau: document.getElementById('eSallesEau').value !== '' ? parseInt(document.getElementById('eSallesEau').value, 10) : null,
+    anneeConstruction: document.getElementById('eAnnee').value !== '' ? parseInt(document.getElementById('eAnnee').value, 10) : null,
+    etatGeneral: document.getElementById('eEtat').value || null,
+    factureEnergie: document.getElementById('eFacture').value !== '' ? parseFloat(document.getElementById('eFacture').value) : null,
+    dpe: eDpe, ges: eGes,
+    equipements: equip,
+    photos: ePhotos
+  });
+  SA.toast('Annonce mise à jour', 'ti-circle-check');
+  closeEdit();
+  renderStats();
+  render();
+}
+
+SA.init().then(function() {
+  if (!SA.getUser()) { document.getElementById('authGate').style.display = 'flex'; return; }
+  renderStats();
+  render();
+});
+</script>
+</body>
+</html>

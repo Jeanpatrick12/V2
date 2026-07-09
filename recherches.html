@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Mes recherches</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:100}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+.sa-nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.sa-nav-link{font-size:13.5px;color:#555;padding:8px 14px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit}
+.sa-nav-link:hover{background:#f7f7f7;color:#111}
+.sa-nav-link.active{color:#E84533;background:#fff0ee}
+.sa-nav-actions{display:flex;align-items:center;gap:4px;margin-left:16px}
+.sa-nav-cta{font-size:13.5px;color:white;background:#E84533;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;border:none;font-family:inherit;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sa-nav-cta:hover{background:#c93a2a}
+.sa-nav-divider{width:1px;height:32px;background:#e5e5e5;margin:0 6px;flex-shrink:0}
+.sa-nav-icon-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:5px 9px;border-radius:8px;color:#444;font-family:inherit}
+.sa-nav-icon-btn:hover{background:#f5f5f5;color:#111}
+.sa-nav-icon-btn i{font-size:19px}
+.sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
+.sa-nav-account-wrap{position:relative}
+.sa-nav-avatar{width:19px;height:19px;border-radius:50%;background:#E84533;color:white;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.sa-nav-badge{position:absolute;top:1px;right:3px;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px;line-height:1}
+.sa-account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);min-width:220px;padding:8px;z-index:200}
+.sa-account-dropdown.show{display:block}
+.sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px;word-break:break-all}
+.sa-account-dropdown-email i{color:#E84533;flex-shrink:0}
+.sa-account-dropdown-logout{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;color:#c0392b;padding:9px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.sa-account-dropdown-logout:hover{background:#fff0ee}
+
+.sa-page-header{max-width:900px;margin:0 auto;padding:2.75rem 40px 0.5rem}
+.sa-page-header h1{font-size:28px;font-weight:700;letter-spacing:-0.6px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.sa-page-header h1 i{color:#E84533}
+.sa-page-header p{font-size:14px;color:#888}
+
+.sa-page-body{max-width:900px;margin:0 auto;padding:1.75rem 40px 4rem}
+.sa-search-card{display:flex;align-items:center;gap:16px;border:1px solid #e8e8e8;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:14px;background:white;transition:all .15s}
+.sa-search-card:hover{border-color:#E84533;box-shadow:0 6px 22px rgba(232,69,51,0.08)}
+.sa-search-icon{width:46px;height:46px;border-radius:12px;background:#fff0ee;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sa-search-info{flex:1;min-width:0}
+.sa-search-label{font-size:14px;font-weight:600;color:#111;margin-bottom:3px}
+.sa-search-date{font-size:11.5px;color:#aaa}
+.sa-search-actions{display:flex;gap:8px;flex-shrink:0}
+.sa-search-actions button{font-family:inherit;cursor:pointer;border-radius:8px;font-size:12.5px;font-weight:600;padding:9px 16px;border:1.5px solid #E84533;background:none;color:#E84533}
+.sa-search-actions button:hover{background:#fff0ee}
+.sa-search-actions .sa-search-del{border-color:#e5e5e5;color:#999;padding:9px 11px}
+.sa-search-actions .sa-search-del:hover{background:#f7f7f7;color:#c0392b;border-color:#e5e5e5}
+
+.sa-empty{text-align:center;padding:5rem 1rem;color:#999}
+.sa-empty i{font-size:42px;color:#f0c9c0;margin-bottom:16px;display:block}
+.sa-empty h3{font-size:17px;color:#333;margin-bottom:7px}
+.sa-empty p{font-size:13.5px;color:#999;margin-bottom:18px}
+.sa-empty button{background:#E84533;color:white;border:none;padding:11px 24px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.sa-empty button:hover{background:#c93a2a}
+
+@media(max-width:980px){
+  .sa-nav{padding:0 24px}
+  .sa-nav-icon-btn .sa-nav-icon-label{display:none}
+  .sa-page-header,.sa-page-body{padding-left:24px;padding-right:24px}
+}
+@media(max-width:560px){
+  .sa-search-card{flex-wrap:wrap}
+  .sa-search-actions{width:100%}
+  .sa-search-actions button{flex:1}
+}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='./'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="sa-nav-links">
+      <button class="sa-nav-link" onclick="window.location.href='./'">Accueil</button>
+      <button class="sa-nav-link" onclick="window.location.href='guide'">Guide</button>
+      <button class="sa-nav-link" onclick="window.location.href='annonces'">Annonces</button>
+      <button class="sa-nav-link" onclick="window.open('professionnels','_blank')">Professionnels</button>
+    </div>
+    <div class="sa-nav-actions">
+      <button class="sa-nav-cta" onclick="window.open('deposer','_blank')">
+        <i class="ti ti-plus"></i> Déposer une annonce
+      </button>
+      <div class="sa-nav-divider"></div>
+      <button class="sa-nav-icon-btn" style="color:#E84533" onclick="window.location.href='recherches'">
+        <i class="ti ti-search"></i>
+        <span class="sa-nav-icon-label">Mes recherches</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'">
+        <i class="ti ti-heart"></i>
+        <span class="sa-nav-badge" data-nav-fav-badge></span>
+        <span class="sa-nav-icon-label">Favoris</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='messages'">
+        <i class="ti ti-message-2"></i>
+        <span class="sa-nav-badge" data-nav-msg-badge></span>
+        <span class="sa-nav-icon-label">Messages</span>
+      </button>
+      <div class="sa-nav-account-wrap" data-nav-account>
+        <button class="sa-nav-icon-btn">
+          <i class="ti ti-user"></i>
+          <span class="sa-nav-icon-label">Se connecter</span>
+        </button>
+        <div class="sa-account-dropdown"></div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="sa-page-header">
+  <h1><i class="ti ti-search"></i> Mes recherches</h1>
+  <p>Retrouvez vos critères enregistrés et relancez-les en un clic.</p>
+</div>
+
+<div class="sa-page-body">
+  <div id="searchList"></div>
+  <div class="sa-empty" id="searchEmpty" style="display:none">
+    <i class="ti ti-search"></i>
+    <h3>Aucune recherche enregistrée</h3>
+    <p>Depuis la page Annonces, filtrez selon vos critères puis cliquez sur « Enregistrer cette recherche ».</p>
+    <button onclick="window.location.href='annonces'">Lancer une recherche</button>
+  </div>
+</div>
+
+<script>
+function fmtDate(ts) {
+  return new Date(ts).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function buildQuery(criteria) {
+  const p = new URLSearchParams();
+  if (criteria.transaction && criteria.transaction !== 'all') p.set('transaction', criteria.transaction);
+  if (criteria.ville) p.set('ville', criteria.ville);
+  if (criteria.q) p.set('q', criteria.q);
+  if (criteria.types && criteria.types.length) p.set('types', criteria.types.join(','));
+  if (criteria.prixMin) p.set('prixMin', criteria.prixMin);
+  if (criteria.prixMax) p.set('prixMax', criteria.prixMax);
+  return p.toString();
+}
+
+function render() {
+  const list = SA.getSavedSearches();
+  const root = document.getElementById('searchList');
+  const empty = document.getElementById('searchEmpty');
+  if (!list.length) {
+    root.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  root.innerHTML = list.map(s => `
+    <div class="sa-search-card">
+      <div class="sa-search-icon"><i class="ti ti-bookmark-filled"></i></div>
+      <div class="sa-search-info">
+        <div class="sa-search-label">${SA.escapeHtml(s.label)}</div>
+        <div class="sa-search-date">Enregistrée le ${fmtDate(s.createdAt)}</div>
+      </div>
+      <div class="sa-search-actions">
+        <button onclick="runSearch('${s.id}')"><i class="ti ti-arrow-right" style="font-size:12px"></i> Voir les résultats</button>
+        <button class="sa-search-del" onclick="deleteSearch('${s.id}')"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function runSearch(id) {
+  const s = SA.getSavedSearches().find(x => x.id === id);
+  if (!s) return;
+  window.location.href = 'annonces?' + buildQuery(s.criteria);
+}
+
+function deleteSearch(id) {
+  SA.removeSavedSearch(id);
+  SA.toast('Recherche supprimée', 'ti-trash');
+  render();
+}
+
+SA.init().then(render);
+</script>
+</body>
+</html>

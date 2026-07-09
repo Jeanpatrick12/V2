@@ -1,0 +1,774 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Déposer une annonce — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+body { background: var(--bg); padding-bottom: 90px; }
+
+/* Progress */
+.dep-progress { position: fixed; top: var(--nav-h); left: 0; right: 0; height: 3px; background: var(--border); z-index: 100; }
+.dep-progress-fill { height: 100%; background: var(--red); transition: width .35s ease; }
+
+/* Step header */
+.dep-step-head { padding: 20px var(--pad) 0; }
+.dep-step-num { font-size: 11px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; }
+.dep-step-title { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -.4px; margin-bottom: 4px; }
+.dep-step-sub { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+/* Cards */
+.dep-card { background: white; border-radius: 14px; padding: 16px; margin: 14px var(--pad) 0; }
+.dep-card-title { font-size: 12px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+
+/* Toggle transaction */
+.dep-tx-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dep-tx-btn {
+  padding: 16px 10px; border-radius: 12px; border: 2px solid var(--border);
+  background: white; text-align: center; cursor: pointer; transition: all .15s; font-family: inherit;
+}
+.dep-tx-btn i { font-size: 22px; display: block; margin-bottom: 6px; color: var(--text3); }
+.dep-tx-btn .lbl { font-size: 14px; font-weight: 700; color: var(--text2); display: block; }
+.dep-tx-btn .sub { font-size: 11px; color: var(--text3); margin-top: 2px; display: block; }
+.dep-tx-btn.active { border-color: var(--red); background: #fff5f4; }
+.dep-tx-btn.active i, .dep-tx-btn.active .lbl { color: var(--red); }
+
+/* Type chips */
+.dep-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.dep-chip {
+  padding: 8px 14px; border-radius: 999px;
+  border: 1.5px solid var(--border); background: white;
+  font-size: 13px; font-weight: 600; color: var(--text2);
+  cursor: pointer; transition: all .15s; font-family: inherit;
+  display: flex; align-items: center; gap: 5px;
+}
+.dep-chip.active { border-color: var(--red); background: #fff5f4; color: var(--red); }
+
+/* Stepper */
+.dep-field { margin-bottom: 14px; }
+.dep-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.dep-label .opt { font-size: 11px; font-weight: 400; color: var(--text3); }
+.dep-stepper { display: flex; align-items: center; gap: 0; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+.dep-stepper-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: var(--text2); cursor: pointer; flex-shrink: 0; border: none; background: none; font-family: inherit; }
+.dep-stepper-btn:active { background: var(--bg); }
+.dep-stepper-val { flex: 1; text-align: center; font-size: 16px; font-weight: 700; color: var(--text); }
+.dep-stepper-null { color: var(--text3); font-size: 13px; font-weight: 400; }
+
+/* Inputs */
+.dep-input {
+  width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 12px 14px; font-size: 16px; font-family: inherit; color: var(--text);
+  background: white; outline: none;
+}
+.dep-input:focus { border-color: var(--red); }
+.dep-input::placeholder { color: var(--text3); }
+.dep-textarea {
+  width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 12px 14px; font-size: 15px; font-family: inherit; color: var(--text);
+  background: white; outline: none; resize: none; min-height: 100px; line-height: 1.5;
+}
+.dep-textarea:focus { border-color: var(--red); }
+.dep-textarea::placeholder { color: var(--text3); }
+
+/* Price input */
+.dep-price-wrap { position: relative; }
+.dep-price-wrap .dep-input { padding-right: 40px; }
+.dep-price-sym { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 15px; font-weight: 600; color: var(--text3); pointer-events: none; }
+
+/* DPE selector */
+.dep-dpe-row { display: flex; gap: 6px; }
+.dep-dpe-btn {
+  flex: 1; height: 36px; border-radius: 7px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.7);
+  transition: all .15s; position: relative; font-family: inherit;
+}
+.dep-dpe-btn.active { color: white; transform: scaleY(1.15); box-shadow: 0 3px 10px rgba(0,0,0,0.25); z-index: 1; }
+
+/* Equipment chips */
+.dep-equip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Photo upload */
+.dep-photo-zone {
+  border: 2px dashed var(--border); border-radius: 12px;
+  padding: 24px 16px; text-align: center; cursor: pointer; background: white;
+}
+.dep-photo-zone:active { background: var(--bg); }
+.dep-photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.dep-photo-thumb { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--bg); }
+.dep-photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.dep-photo-del { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.55); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+/* Bottom nav bar for the form */
+.dep-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--border); padding: 10px var(--pad) 16px; display: flex; gap: 10px; z-index: 100; }
+
+/* Error */
+.dep-error { background: #fff5f4; border: 1px solid #ffc5bd; border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--red); display: none; margin: 12px var(--pad) 0; align-items: center; gap: 8px; }
+
+/* Success */
+.dep-success { display: none; text-align: center; padding: 60px var(--pad) 40px; }
+.dep-success-icon { width: 72px; height: 72px; border-radius: 50%; background: #ecfdf5; border: 2px solid #6ee7b7; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px; color: #1a8c4e; }
+</style>
+</head>
+<body>
+
+
+<!-- NAV -->
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.location='/m/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+  <button onclick="confirmQuit()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:4px;cursor:pointer;font-family:inherit"><i class="ti ti-x" style="font-size:13px"></i> Quitter</button>
+<button class="m-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- PROGRESS BAR -->
+<div class="dep-progress"><div class="dep-progress-fill" id="progressFill" style="width:20%"></div></div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent">
+
+<!-- ══════════════════════════════════════════════
+     STEP 1 — Votre projet
+═══════════════════════════════════════════════ -->
+<div id="step1">
+  <div class="dep-step-head">
+    <div class="dep-step-num">Étape 1 / 5</div>
+    <div class="dep-step-title">Votre projet</div>
+    <div class="dep-step-sub">Quel type de transaction souhaitez-vous réaliser ?</div>
+  </div>
+
+  <div class="dep-card">
+    <div class="dep-card-title">Transaction</div>
+    <div class="dep-tx-toggle">
+      <button type="button" class="dep-tx-btn active" id="txVente" onclick="setTx('vente')">
+        <i class="ti ti-home-dollar"></i>
+        <span class="lbl">Vendre</span>
+        <span class="sub">Transfert de propriété</span>
+      </button>
+      <button type="button" class="dep-tx-btn" id="txLocation" onclick="setTx('location')">
+        <i class="ti ti-home-edit"></i>
+        <span class="lbl">Louer</span>
+        <span class="sub">Mise en location</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="dep-card">
+    <div class="dep-card-title">Type de bien</div>
+    <div class="dep-chips" id="typeChips">
+      <button type="button" class="dep-chip" onclick="setType('maison')"><i class="ti ti-home"></i> Maison</button>
+      <button type="button" class="dep-chip" onclick="setType('appartement')"><i class="ti ti-building"></i> Appartement</button>
+      <button type="button" class="dep-chip" onclick="setType('studio')"><i class="ti ti-bed"></i> Studio</button>
+      <button type="button" class="dep-chip" onclick="setType('loft')"><i class="ti ti-building-warehouse"></i> Loft / Atelier</button>
+    </div>
+  </div>
+
+  <div class="dep-card" id="meubleCard" style="display:none">
+    <div class="dep-card-title">Ameublement</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button type="button" class="dep-chip" id="meubleOui" onclick="setMeuble('meuble')"><i class="ti ti-armchair"></i> Meublé</button>
+      <button type="button" class="dep-chip" id="meubleNon" onclick="setMeuble('non-meuble')"><i class="ti ti-minus"></i> Non meublé</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     STEP 2 — Localisation
+═══════════════════════════════════════════════ -->
+<div id="step2" style="display:none">
+  <div class="dep-step-head">
+    <div class="dep-step-num">Étape 2 / 5</div>
+    <div class="dep-step-title">Localisation</div>
+    <div class="dep-step-sub">Où se situe votre bien ?</div>
+  </div>
+
+  <div class="dep-card">
+    <div class="dep-field">
+      <div class="dep-label"><i class="ti ti-map-pin" style="color:var(--red)"></i> Adresse complète</div>
+      <input class="dep-input" type="text" id="adresse" placeholder="12 rue de la Paix, 75001 Paris" autocomplete="street-address">
+      <div style="font-size:11.5px;color:var(--text3);margin-top:6px">Saisissez l'adresse, la ville et le code postal.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="dep-field" style="margin-bottom:0">
+        <div class="dep-label">Ville</div>
+        <input class="dep-input" type="text" id="ville" placeholder="Paris" autocomplete="address-level2">
+      </div>
+      <div class="dep-field" style="margin-bottom:0">
+        <div class="dep-label">Code postal</div>
+        <input class="dep-input" type="text" id="codePostal" placeholder="75001" inputmode="numeric" maxlength="5">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     STEP 3 — Caractéristiques
+═══════════════════════════════════════════════ -->
+<div id="step3" style="display:none">
+  <div class="dep-step-head">
+    <div class="dep-step-num">Étape 3 / 5</div>
+    <div class="dep-step-title">Caractéristiques</div>
+    <div class="dep-step-sub">Les informations essentielles de votre bien.</div>
+  </div>
+
+  <div class="dep-card">
+    <!-- Surface -->
+    <div class="dep-field">
+      <div class="dep-label"><i class="ti ti-ruler-2" style="color:var(--red)"></i> Surface habitable</div>
+      <div class="dep-price-wrap">
+        <input class="dep-input" type="number" id="surface" placeholder="65" min="1" inputmode="decimal">
+        <span class="dep-price-sym">m²</span>
+      </div>
+    </div>
+
+    <!-- Pièces -->
+    <div class="dep-field" id="piecesField">
+      <div class="dep-label"><i class="ti ti-door" style="color:var(--red)"></i> Nombre de pièces</div>
+      <div class="dep-stepper">
+        <button type="button" class="dep-stepper-btn" onclick="stepVal('pieces',-1)">−</button>
+        <span class="dep-stepper-val" id="piecesVal">1</span>
+        <button type="button" class="dep-stepper-btn" onclick="stepVal('pieces',1)">+</button>
+      </div>
+    </div>
+
+    <!-- Chambres -->
+    <div class="dep-field" id="chambresField">
+      <div class="dep-label"><i class="ti ti-bed" style="color:var(--red)"></i> Chambres</div>
+      <div class="dep-stepper">
+        <button type="button" class="dep-stepper-btn" onclick="stepVal('chambres',-1)">−</button>
+        <span class="dep-stepper-val" id="chambresVal"><span class="dep-stepper-null">Non précisé</span></span>
+        <button type="button" class="dep-stepper-btn" onclick="stepVal('chambres',1)">+</button>
+      </div>
+    </div>
+
+    <!-- Salles de bain -->
+    <div class="dep-field">
+      <div class="dep-label"><i class="ti ti-bath" style="color:var(--red)"></i> Salles de bain</div>
+      <div class="dep-stepper">
+        <button type="button" class="dep-stepper-btn" onclick="stepVal('sdb',-1)">−</button>
+        <span class="dep-stepper-val" id="sdbVal"><span class="dep-stepper-null">Non précisé</span></span>
+        <button type="button" class="dep-stepper-btn" onclick="stepVal('sdb',1)">+</button>
+      </div>
+    </div>
+
+    <!-- Étage -->
+    <div class="dep-field" id="etageField">
+      <div class="dep-label"><i class="ti ti-building" style="color:var(--red)"></i> Étage <span class="opt">Optionnel</span></div>
+      <div class="dep-price-wrap">
+        <input class="dep-input" type="number" id="etage" placeholder="2" min="0" inputmode="numeric">
+        <span class="dep-price-sym" style="font-size:12px">ème</span>
+      </div>
+    </div>
+
+    <!-- Année construction -->
+    <div class="dep-field" style="margin-bottom:0">
+      <div class="dep-label"><i class="ti ti-calendar" style="color:var(--red)"></i> Année de construction <span class="opt">Optionnel</span></div>
+      <input class="dep-input" type="number" id="annee" placeholder="1985" min="1800" max="2025" inputmode="numeric">
+    </div>
+  </div>
+
+  <!-- État général -->
+  <div class="dep-card">
+    <div class="dep-card-title">État général</div>
+    <div class="dep-chips" id="etatChips">
+      <button type="button" class="dep-chip" onclick="setEtat('Excellent état')">✨ Excellent état</button>
+      <button type="button" class="dep-chip" onclick="setEtat('Bon état')">👍 Bon état</button>
+      <button type="button" class="dep-chip" onclick="setEtat('À rafraîchir')">🔧 À rafraîchir</button>
+      <button type="button" class="dep-chip" onclick="setEtat('À rénover')">🏗️ À rénover</button>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="dep-card">
+    <div class="dep-field" style="margin-bottom:0">
+      <div class="dep-label"><i class="ti ti-align-left" style="color:var(--red)"></i> Description</div>
+      <textarea class="dep-textarea" id="desc" rows="5" placeholder="Décrivez votre bien : luminosité, voisinage, atouts, travaux récents…" maxlength="3000"></textarea>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px;text-align:right"><span id="descCount">0</span> / 3000</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     STEP 4 — Photos & Prix
+═══════════════════════════════════════════════ -->
+<div id="step4" style="display:none">
+  <div class="dep-step-head">
+    <div class="dep-step-num">Étape 4 / 5</div>
+    <div class="dep-step-title">Photos & prix</div>
+    <div class="dep-step-sub">Les photos attirent 3× plus de visites.</div>
+  </div>
+
+  <!-- Photos -->
+  <div class="dep-card">
+    <div class="dep-card-title">Photos <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(jusqu'à 20)</span></div>
+    <label for="photoInput">
+      <div class="dep-photo-zone" id="photoZone">
+        <i class="ti ti-camera-plus" style="font-size:28px;color:var(--text3);display:block;margin-bottom:8px"></i>
+        <div style="font-size:13px;font-weight:600;color:var(--text2)">Appuyer pour ajouter des photos</div>
+        <div style="font-size:11.5px;color:var(--text3);margin-top:4px">JPG, PNG — max 10 Mo chacune</div>
+      </div>
+    </label>
+    <input type="file" id="photoInput" multiple accept="image/*" style="display:none" onchange="addPhotos(this)">
+    <div class="dep-photo-grid" id="photoGrid"></div>
+  </div>
+
+  <!-- Prix -->
+  <div class="dep-card">
+    <div class="dep-field">
+      <div class="dep-label"><i class="ti ti-currency-euro" style="color:var(--red)"></i> <span id="prixLabel">Prix de vente</span></div>
+      <div class="dep-price-wrap">
+        <input class="dep-input" type="number" id="prix" placeholder="250000" min="1" inputmode="decimal">
+        <span class="dep-price-sym">€</span>
+      </div>
+    </div>
+    <div class="dep-field" id="chargesField" style="display:none;margin-bottom:0">
+      <div class="dep-label"><i class="ti ti-receipt" style="color:var(--red)"></i> Charges mensuelles <span class="opt">Optionnel</span></div>
+      <div class="dep-price-wrap">
+        <input class="dep-input" type="number" id="charges" placeholder="80" min="0" inputmode="decimal">
+        <span class="dep-price-sym" style="font-size:12px">€/mois</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     STEP 5 — Énergie, équipements & publication
+═══════════════════════════════════════════════ -->
+<div id="step5" style="display:none">
+  <div class="dep-step-head">
+    <div class="dep-step-num">Étape 5 / 5</div>
+    <div class="dep-step-title">Derniers détails</div>
+    <div class="dep-step-sub">Énergie, équipements et vos coordonnées.</div>
+  </div>
+
+  <!-- DPE -->
+  <div class="dep-card">
+    <div class="dep-card-title">DPE — Diagnostic de performance énergétique <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(optionnel)</span></div>
+    <div class="dep-dpe-row" id="dpeRow">
+      <button type="button" class="dep-dpe-btn" data-l="A" style="background:#009a44" onclick="setDpe('A')">A</button>
+      <button type="button" class="dep-dpe-btn" data-l="B" style="background:#51b747" onclick="setDpe('B')">B</button>
+      <button type="button" class="dep-dpe-btn" data-l="C" style="background:#9acc3d;color:rgba(0,0,0,0.6)" onclick="setDpe('C')">C</button>
+      <button type="button" class="dep-dpe-btn" data-l="D" style="background:#f6c314;color:rgba(0,0,0,0.6)" onclick="setDpe('D')">D</button>
+      <button type="button" class="dep-dpe-btn" data-l="E" style="background:#ef7c21" onclick="setDpe('E')">E</button>
+      <button type="button" class="dep-dpe-btn" data-l="F" style="background:#e94630" onclick="setDpe('F')">F</button>
+      <button type="button" class="dep-dpe-btn" data-l="G" style="background:#b00020" onclick="setDpe('G')">G</button>
+    </div>
+    <div style="font-size:11.5px;color:var(--text3);margin-top:8px;text-align:center" id="dpeLabel">Sélectionnez la lettre du DPE</div>
+  </div>
+
+  <!-- GES -->
+  <div class="dep-card">
+    <div class="dep-card-title">GES — Émissions de gaz à effet de serre <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(optionnel)</span></div>
+    <div class="dep-dpe-row" id="gesRow">
+      <button type="button" class="dep-dpe-btn" data-l="A" style="background:#dceefb;color:rgba(0,0,0,0.6)" onclick="setGes('A')">A</button>
+      <button type="button" class="dep-dpe-btn" data-l="B" style="background:#bcdcf2;color:rgba(0,0,0,0.6)" onclick="setGes('B')">B</button>
+      <button type="button" class="dep-dpe-btn" data-l="C" style="background:#8fc3e8" onclick="setGes('C')">C</button>
+      <button type="button" class="dep-dpe-btn" data-l="D" style="background:#6fa8d8" onclick="setGes('D')">D</button>
+      <button type="button" class="dep-dpe-btn" data-l="E" style="background:#5089c2" onclick="setGes('E')">E</button>
+      <button type="button" class="dep-dpe-btn" data-l="F" style="background:#33639e" onclick="setGes('F')">F</button>
+      <button type="button" class="dep-dpe-btn" data-l="G" style="background:#1c3f6e" onclick="setGes('G')">G</button>
+    </div>
+    <div style="font-size:11.5px;color:var(--text3);margin-top:8px;text-align:center" id="gesLabel">Sélectionnez la lettre du GES</div>
+  </div>
+
+  <!-- Chauffage -->
+  <div class="dep-card">
+    <div class="dep-field" style="margin-bottom:0">
+      <div class="dep-label"><i class="ti ti-flame" style="color:var(--red)"></i> Chauffage <span class="opt">Optionnel</span></div>
+      <input class="dep-input" type="text" id="chauffage" placeholder="Gaz, électrique, pompe à chaleur…">
+    </div>
+  </div>
+
+  <!-- Équipements -->
+  <div class="dep-card">
+    <div class="dep-card-title">Équipements</div>
+    <div class="dep-equip-grid" id="equipGrid">
+      <button type="button" class="dep-chip" data-eq="Parking / Garage" onclick="toggleEquip(this)"><i class="ti ti-car"></i> Parking</button>
+      <button type="button" class="dep-chip" data-eq="Balcon" onclick="toggleEquip(this)"><i class="ti ti-building-arch"></i> Balcon</button>
+      <button type="button" class="dep-chip" data-eq="Terrasse" onclick="toggleEquip(this)"><i class="ti ti-umbrella"></i> Terrasse</button>
+      <button type="button" class="dep-chip" data-eq="Jardin privatif" onclick="toggleEquip(this)"><i class="ti ti-plant"></i> Jardin</button>
+      <button type="button" class="dep-chip" data-eq="Cave / Rangement" onclick="toggleEquip(this)"><i class="ti ti-home-down"></i> Cave</button>
+      <button type="button" class="dep-chip" data-eq="Ascenseur" onclick="toggleEquip(this)"><i class="ti ti-elevator"></i> Ascenseur</button>
+      <button type="button" class="dep-chip" data-eq="Piscine" onclick="toggleEquip(this)"><i class="ti ti-swimming"></i> Piscine</button>
+      <button type="button" class="dep-chip" data-eq="Cuisine équipée" onclick="toggleEquip(this)"><i class="ti ti-tools-kitchen-2"></i> Cuisine équipée</button>
+      <button type="button" class="dep-chip" data-eq="Fibre optique / THD" onclick="toggleEquip(this)"><i class="ti ti-wifi"></i> Fibre</button>
+      <button type="button" class="dep-chip" data-eq="Gardien / Digicode" onclick="toggleEquip(this)"><i class="ti ti-shield-lock"></i> Gardien / Digicode</button>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="dep-card">
+    <div class="dep-card-title">Vos coordonnées</div>
+    <div class="dep-field">
+      <div class="dep-label"><i class="ti ti-user" style="color:var(--red)"></i> Prénom</div>
+      <input class="dep-input" type="text" id="contactPrenom" placeholder="Jean" autocomplete="given-name">
+    </div>
+    <div class="dep-field" style="margin-bottom:0">
+      <div class="dep-label"><i class="ti ti-phone" style="color:var(--red)"></i> Téléphone</div>
+      <input class="dep-input" type="tel" id="contactTel" placeholder="06 12 34 56 78" autocomplete="tel">
+    </div>
+  </div>
+
+  <!-- Info commission -->
+  <div style="margin:14px var(--pad) 0;padding:12px 14px;background:#fff5f4;border:1px solid #ffdad5;border-radius:12px;display:flex;align-items:flex-start;gap:10px">
+    <i class="ti ti-info-circle" style="color:var(--red);font-size:16px;flex-shrink:0;margin-top:1px"></i>
+    <div style="font-size:12px;color:var(--text2);line-height:1.5">
+      Publication <strong style="color:var(--text)">100% gratuite</strong>. La commission de <strong style="color:var(--text)">1%</strong> n'est due qu'en cas de vente conclue — jamais sur une location.
+    </div>
+  </div>
+</div>
+
+<!-- ERROR -->
+<div class="dep-error" id="depError"><i class="ti ti-alert-circle"></i> <span id="depErrorMsg"></span></div>
+
+</div><!-- /mainContent -->
+
+<!-- SUCCESS -->
+<div id="successScreen" style="display:none;text-align:center;padding:60px var(--pad) 40px">
+  <div class="dep-success-icon"><i class="ti ti-check"></i></div>
+  <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px">Annonce publiée !</div>
+  <div style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:32px">Votre annonce est en ligne et visible par tous les acheteurs et locataires de SansAgents.</div>
+  <button onclick="window.location='/m/annonces'" style="width:100%;background:var(--red);color:white;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px">
+    <i class="ti ti-building-estate"></i> Voir les annonces
+  </button>
+  <button onclick="window.location='/m/mes-annonces'" style="width:100%;background:white;color:var(--text);border:1.5px solid var(--border);border-radius:12px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">
+    Mes annonces
+  </button>
+</div>
+
+<!-- BOTTOM NAVIGATION BAR (form controls) -->
+<div class="dep-bottom" id="depBottom">
+  <button id="btnPrev" onclick="prevStep()" style="flex:0 0 auto;padding:12px 18px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text2);display:none;align-items:center;gap:6px;cursor:pointer;font-family:inherit">
+    <i class="ti ti-arrow-left"></i>
+  </button>
+  <button id="btnNext" onclick="nextStep()" style="flex:1;padding:14px;background:var(--red);color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-family:inherit">
+    Suivant <i class="ti ti-arrow-right"></i>
+  </button>
+</div>
+
+<!-- BOTTOM NAV (site) — hidden to prevent sa-shared.js injection -->
+<nav class="m-bottom-nav sa-bottom-nav" style="display:none"></nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+// ── State ──
+var currentStep = 1;
+var totalSteps = 5;
+var formData = {
+  transaction: 'vente',
+  type: null,
+  meuble: null,
+  pieces: 1,
+  chambres: null,
+  sdb: null,
+  equipements: []
+};
+var photos = []; // array of {base64, file}
+var selectedDpe = null;
+var selectedGes = null;
+
+// ── Progress ──
+function updateProgress() {
+  document.getElementById('progressFill').style.width = (currentStep / totalSteps * 100) + '%';
+  // Prev button
+  var btnPrev = document.getElementById('btnPrev');
+  btnPrev.style.display = currentStep > 1 ? 'flex' : 'none';
+  // Next button label
+  var btnNext = document.getElementById('btnNext');
+  if(currentStep === totalSteps) {
+    btnNext.innerHTML = '<i class="ti ti-send"></i> Publier l\'annonce';
+  } else {
+    btnNext.innerHTML = 'Suivant <i class="ti ti-arrow-right"></i>';
+  }
+}
+
+// ── Step navigation ──
+function showStep(n) {
+  for(var i = 1; i <= totalSteps; i++) {
+    var el = document.getElementById('step' + i);
+    if(el) el.style.display = i === n ? '' : 'none';
+  }
+  document.getElementById('depError').style.display = 'none';
+  window.scrollTo(0, 0);
+}
+
+function nextStep() {
+  if(!validate(currentStep)) return;
+  if(currentStep === totalSteps) { submitForm(); return; }
+  currentStep++;
+  showStep(currentStep);
+  updateProgress();
+}
+
+function prevStep() {
+  if(currentStep <= 1) return;
+  currentStep--;
+  showStep(currentStep);
+  updateProgress();
+}
+
+// ── Validation ──
+function validate(step) {
+  hideError();
+  if(step === 1) {
+    if(!formData.type) { showError('Sélectionnez un type de bien.'); return false; }
+    if(formData.transaction === 'location' && !formData.meuble) { showError('Précisez si le bien est meublé ou non.'); return false; }
+  }
+  if(step === 2) {
+    var ville = document.getElementById('ville').value.trim();
+    var adresse = document.getElementById('adresse').value.trim();
+    if(!ville && !adresse) { showError('Indiquez au moins la ville.'); return false; }
+  }
+  if(step === 3) {
+    var surface = parseFloat(document.getElementById('surface').value);
+    if(!surface || surface <= 0) { showError('Indiquez la surface du bien.'); return false; }
+    if(formData.pieces < 1) { showError('Indiquez le nombre de pièces.'); return false; }
+  }
+  if(step === 4) {
+    var prix = parseFloat(document.getElementById('prix').value);
+    if(!prix || prix <= 0) { showError('Indiquez le prix.'); return false; }
+  }
+  return true;
+}
+
+// ── Error ──
+function showError(msg) {
+  var el = document.getElementById('depError');
+  el.style.display = 'flex';
+  document.getElementById('depErrorMsg').textContent = msg;
+  el.scrollIntoView({behavior:'smooth', block:'center'});
+}
+function hideError() {
+  document.getElementById('depError').style.display = 'none';
+}
+
+// ── Step 1 controls ──
+function setTx(tx) {
+  formData.transaction = tx;
+  document.getElementById('txVente').classList.toggle('active', tx === 'vente');
+  document.getElementById('txLocation').classList.toggle('active', tx === 'location');
+  document.getElementById('meubleCard').style.display = tx === 'location' ? '' : 'none';
+  document.getElementById('prixLabel').textContent = tx === 'vente' ? 'Prix de vente' : 'Loyer mensuel';
+  document.getElementById('chargesField').style.display = tx === 'location' ? '' : 'none';
+}
+
+function setType(t) {
+  formData.type = t;
+  document.querySelectorAll('#typeChips .dep-chip').forEach(function(c) {
+    c.classList.toggle('active', c.getAttribute('onclick').indexOf("'"+t+"'") !== -1);
+  });
+  // Hide pièces/chambres for terrain/garage
+  var hidePieces = t === 'terrain' || t === 'garage';
+  document.getElementById('piecesField').style.display = hidePieces ? 'none' : '';
+  document.getElementById('chambresField').style.display = hidePieces ? 'none' : '';
+  document.getElementById('etageField').style.display = (t === 'terrain') ? 'none' : '';
+}
+
+function setMeuble(v) {
+  formData.meuble = v;
+  document.getElementById('meubleOui').classList.toggle('active', v === 'meuble');
+  document.getElementById('meubleNon').classList.toggle('active', v === 'non-meuble');
+}
+
+// ── Step 3 steppers ──
+var stepperVals = { pieces: 1, chambres: null, sdb: null };
+
+function stepVal(key, dir) {
+  var cur = stepperVals[key];
+  var next;
+  if(key === 'pieces') {
+    next = Math.max(1, (cur || 1) + dir);
+  } else {
+    if(cur === null && dir > 0) next = 1;
+    else if(cur !== null) next = Math.max(0, cur + dir);
+    else next = null;
+    if(next === 0) next = null;
+  }
+  stepperVals[key] = next;
+  formData[key] = next;
+  var el = document.getElementById(key + 'Val');
+  if(next === null) {
+    el.innerHTML = '<span class="dep-stepper-null">Non précisé</span>';
+  } else {
+    el.textContent = next;
+  }
+}
+
+// État général
+function setEtat(v) {
+  formData.etatGeneral = v;
+  document.querySelectorAll('#etatChips .dep-chip').forEach(function(c) {
+    c.classList.toggle('active', c.getAttribute('onclick').indexOf("'"+v+"'") !== -1);
+  });
+}
+
+// ── Step 5 DPE/GES ──
+function setDpe(l) {
+  selectedDpe = l;
+  document.querySelectorAll('#dpeRow .dep-dpe-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.l === l); });
+  document.getElementById('dpeLabel').textContent = 'Classe ' + l + ' sélectionnée';
+}
+function setGes(l) {
+  selectedGes = l;
+  document.querySelectorAll('#gesRow .dep-dpe-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.l === l); });
+  document.getElementById('gesLabel').textContent = 'Classe ' + l + ' sélectionnée';
+}
+
+// ── Équipements ──
+function toggleEquip(btn) {
+  btn.classList.toggle('active');
+  var eq = btn.dataset.eq;
+  var idx = formData.equipements.indexOf(eq);
+  if(btn.classList.contains('active')) { if(idx === -1) formData.equipements.push(eq); }
+  else { if(idx !== -1) formData.equipements.splice(idx, 1); }
+}
+
+// ── Photos ──
+function addPhotos(input) {
+  var files = Array.from(input.files);
+  if(photos.length + files.length > 20) {
+    showError('Maximum 20 photos autorisées.');
+    return;
+  }
+  files.forEach(function(file) {
+    if(file.size > 10 * 1024 * 1024) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      photos.push({ base64: e.target.result, file: file });
+      renderPhotos();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function removePhoto(idx) {
+  photos.splice(idx, 1);
+  renderPhotos();
+}
+
+function renderPhotos() {
+  var grid = document.getElementById('photoGrid');
+  if(!photos.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = photos.map(function(p, i) {
+    return '<div class="dep-photo-thumb">' +
+      '<img src="' + p.base64 + '">' +
+      '<button type="button" class="dep-photo-del" onclick="removePhoto(' + i + ')"><i class="ti ti-x" style="font-size:10px"></i></button>' +
+    '</div>';
+  }).join('');
+  var zone = document.getElementById('photoZone');
+  zone.style.display = photos.length >= 20 ? 'none' : '';
+}
+
+// ── Submit ──
+async function submitForm() {
+  var btn = document.getElementById('btnNext');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Publication en cours…';
+
+  try {
+    var adresse = [
+      document.getElementById('adresse').value.trim(),
+      document.getElementById('ville').value.trim(),
+      document.getElementById('codePostal').value.trim()
+    ].filter(Boolean).join(', ');
+
+    var data = {
+      transaction: formData.transaction,
+      type: formData.type,
+      meuble: formData.meuble,
+      adresse: adresse,
+      surface: parseFloat(document.getElementById('surface').value) || null,
+      pieces: formData.pieces,
+      chambres: formData.chambres,
+      sdb: formData.sdb,
+      etage: document.getElementById('etage').value !== '' ? parseInt(document.getElementById('etage').value) : null,
+      anneeConstruction: document.getElementById('annee').value ? parseInt(document.getElementById('annee').value) : null,
+      etatGeneral: formData.etatGeneral || null,
+      desc: document.getElementById('desc').value.trim(),
+      price: parseFloat(document.getElementById('prix').value) || null,
+      charges: parseFloat(document.getElementById('charges').value) || 0,
+      photos: photos.map(function(p) { return p.base64; }),
+      dpe: selectedDpe,
+      ges: selectedGes,
+      chauffage: document.getElementById('chauffage').value.trim() || null,
+      equipements: formData.equipements,
+      contactPrenom: document.getElementById('contactPrenom').value.trim(),
+      contactTel: document.getElementById('contactTel').value.trim(),
+    };
+
+    await SA.addListing(data);
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('depBottom').style.display = 'none';
+    document.getElementById('successScreen').style.display = '';
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> Publier l\'annonce';
+    showError((e && e.message) || 'Une erreur est survenue. Veuillez réessayer.');
+  }
+}
+
+// ── Quit confirmation ──
+function confirmQuit() {
+  if(confirm('Quitter le formulaire ? Votre saisie sera perdue.')) {
+    window.location = '/m/';
+  }
+}
+
+// ── Char counter ──
+document.getElementById('desc').addEventListener('input', function() {
+  document.getElementById('descCount').textContent = this.value.length;
+});
+
+// ── Init ──
+updateProgress();
+
+SA.init().then(function() {
+  var u = SA.getUser();
+  if(!u) return;
+  // Pre-fill contact with user info
+  if(u.prenom) document.getElementById('contactPrenom').value = u.prenom;
+  if(u.tel) document.getElementById('contactTel').value = u.tel;
+});
+</script>
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/m/profil';else window.location='/m/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Connexion — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+body { background: var(--bg); padding-bottom: 0; }
+.m-auth-wrap { padding: 40px var(--pad) var(--pad); }
+.m-auth-logo { text-align: center; margin-bottom: 28px; }
+.m-auth-logo .icon { width: 52px; height: 52px; background: var(--red); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+.m-auth-logo .icon i { color: white; font-size: 24px; }
+.m-auth-logo h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.m-auth-logo p { font-size: 13px; color: var(--text2); }
+.m-auth-card { background: white; border-radius: 16px; padding: 22px 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.m-auth-tabs { display: flex; background: var(--bg); border-radius: 10px; padding: 3px; margin-bottom: 20px; }
+.m-auth-tab { flex: 1; padding: 9px; border-radius: 8px; font-size: 13.5px; font-weight: 700; color: var(--text2); text-align: center; cursor: pointer; transition: all .15s; }
+.m-auth-tab.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.m-err { font-size: 12.5px; color: var(--red); margin-top: 10px; display: none; padding: 8px 12px; background: #fff0ee; border-radius: 8px; }
+.m-sep { display: flex; align-items: center; gap: 10px; margin: 16px 0; }
+.m-sep-line { flex: 1; height: 1px; background: var(--border); }
+.m-sep span { font-size: 11.5px; color: var(--text3); }
+.m-forgot { font-size: 12.5px; color: var(--red); font-weight: 600; display: block; text-align: right; margin-top: 6px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.location='/m/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+  <button onclick="window.history.back()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:4px"><i class="ti ti-arrow-left" style="font-size:14px"></i> Retour</button>
+</nav>
+
+<div class="m-auth-wrap">
+  <div class="m-auth-logo">
+    <div class="icon"><i class="ti ti-key"></i></div>
+    <h1>SansAgents</h1>
+    <p>L'immobilier sans intermédiaire</p>
+  </div>
+  <div class="m-auth-card">
+    <div class="m-auth-tabs">
+      <div class="m-auth-tab active" id="tabLogin" onclick="showTab('login')">Connexion</div>
+      <div class="m-auth-tab" id="tabSignup" onclick="showTab('signup')">Créer un compte</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginForm">
+      <div class="m-field">
+        <label class="m-label">Email</label>
+        <input class="m-input" type="email" id="loginEmail" placeholder="votre@email.fr" autocomplete="email">
+      </div>
+      <div class="m-field">
+        <label class="m-label">Mot de passe</label>
+        <input class="m-input" type="password" id="loginPwd" placeholder="••••••••" autocomplete="current-password">
+        <span class="m-forgot" onclick="showForgot()">Mot de passe oublié ?</span>
+      </div>
+      <div class="m-err" id="loginErr"></div>
+      <button class="m-btn m-btn-primary m-btn-full" style="margin-top:16px" onclick="doLogin()" id="loginBtn">
+        <i class="ti ti-login"></i> Se connecter
+      </button>
+    </div>
+
+    <!-- SIGNUP -->
+    <div id="signupForm" style="display:none">
+      <div class="m-field">
+        <label class="m-label">Prénom et nom</label>
+        <input class="m-input" type="text" id="signupName" placeholder="Jean Dupont" autocomplete="name">
+      </div>
+      <div class="m-field">
+        <label class="m-label">Email</label>
+        <input class="m-input" type="email" id="signupEmail" placeholder="votre@email.fr" autocomplete="email">
+      </div>
+      <div class="m-field">
+        <label class="m-label">Mot de passe</label>
+        <input class="m-input" type="password" id="signupPwd" placeholder="8 caractères minimum" autocomplete="new-password">
+      </div>
+      <div class="m-err" id="signupErr"></div>
+      <button class="m-btn m-btn-primary m-btn-full" style="margin-top:16px" onclick="doSignup()" id="signupBtn">
+        <i class="ti ti-user-plus"></i> Créer mon compte
+      </button>
+      <p style="font-size:11px;color:var(--text3);margin-top:12px;line-height:1.5;text-align:center">En créant un compte, vous acceptez les <a href="/cgu" style="color:var(--red);font-weight:600">CGU</a> et la <a href="/confidentialite" style="color:var(--red);font-weight:600">politique de confidentialité</a>.</p>
+    </div>
+
+    <!-- FORGOT -->
+    <div id="forgotForm" style="display:none">
+      <div style="margin-bottom:14px">
+        <div style="font-size:15px;font-weight:700;margin-bottom:5px">Mot de passe oublié</div>
+        <div style="font-size:12.5px;color:var(--text2)">Entrez votre email pour recevoir un lien de réinitialisation.</div>
+      </div>
+      <div class="m-field">
+        <label class="m-label">Email</label>
+        <input class="m-input" type="email" id="forgotEmail" placeholder="votre@email.fr">
+      </div>
+      <div class="m-err" id="forgotErr"></div>
+      <button class="m-btn m-btn-primary m-btn-full" style="margin-top:14px" onclick="doForgot()">
+        <i class="ti ti-mail"></i> Envoyer le lien
+      </button>
+      <button onclick="showTab('login')" style="width:100%;margin-top:10px;padding:10px;font-size:13px;color:var(--text2);background:none;border:none;cursor:pointer">← Retour à la connexion</button>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:20px">
+    <a href="/m/" style="font-size:12px;color:var(--text3)">← Continuer sans compte</a>
+  </div>
+</div>
+
+<!-- Prevent sa-shared.js from injecting bottom nav on this page -->
+<nav class="m-bottom-nav sa-bottom-nav" style="display:none"></nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+var redirect = new URLSearchParams(window.location.search).get('redirect') || '/m/';
+var tab = new URLSearchParams(window.location.search).get('tab');
+if(tab === 'signup') showTab('signup');
+
+function showTab(t) {
+  document.getElementById('loginForm').style.display = t==='login'?'':'none';
+  document.getElementById('signupForm').style.display = t==='signup'?'':'none';
+  document.getElementById('forgotForm').style.display = t==='forgot'?'':'none';
+  document.getElementById('tabLogin').className = 'm-auth-tab'+(t==='login'?' active':'');
+  document.getElementById('tabSignup').className = 'm-auth-tab'+(t==='signup'?' active':'');
+}
+function showForgot() { showTab('forgot'); }
+
+function showErr(id, msg) {
+  var el = document.getElementById(id);
+  el.textContent = msg; el.style.display = msg ? '' : 'none';
+}
+function setLoading(btnId, loading) {
+  document.getElementById(btnId).disabled = loading;
+  document.getElementById(btnId).innerHTML = loading ?
+    '<i class="ti ti-loader"></i> Chargement…' :
+    (btnId==='loginBtn' ? '<i class="ti ti-login"></i> Se connecter' :
+     btnId==='signupBtn' ? '<i class="ti ti-user-plus"></i> Créer mon compte' :
+     '<i class="ti ti-mail"></i> Envoyer le lien');
+}
+
+async function doLogin() {
+  showErr('loginErr','');
+  var email = document.getElementById('loginEmail').value.trim();
+  var pwd = document.getElementById('loginPwd').value;
+  if(!email||!pwd){showErr('loginErr','Remplissez tous les champs.');return;}
+  setLoading('loginBtn',true);
+  try {
+    await SA.login(email, pwd);
+    window.location = redirect;
+  } catch(e) {
+    setLoading('loginBtn',false);
+    showErr('loginErr', (e && e.message) || 'Identifiants incorrects.');
+  }
+}
+
+async function doSignup() {
+  showErr('signupErr','');
+  var name = document.getElementById('signupName').value.trim();
+  var email = document.getElementById('signupEmail').value.trim();
+  var pwd = document.getElementById('signupPwd').value;
+  if(!name||!email||!pwd){showErr('signupErr','Remplissez tous les champs.');return;}
+  if(pwd.length<8){showErr('signupErr','Le mot de passe doit faire au moins 8 caractères.');return;}
+  setLoading('signupBtn',true);
+  try {
+    await SA.signup({ email: email, password: pwd, prenom: name });
+    window.location = redirect;
+  } catch(e) {
+    setLoading('signupBtn',false);
+    showErr('signupErr', (e && e.message) || 'Erreur lors de l\'inscription.');
+  }
+}
+
+async function doForgot() {
+  showErr('forgotErr','');
+  var email = document.getElementById('forgotEmail').value.trim();
+  if(!email){showErr('forgotErr','Entrez votre email.');return;}
+  var res = await SA.forgotPassword(email);
+  if(res && res.error){showErr('forgotErr', res.error.message||'Erreur.');return;}
+  alert('Un email de réinitialisation a été envoyé à ' + email);
+  showTab('login');
+}
+
+SA.init().then(function(){
+  if(SA.getUser()) window.location = redirect;
+});
+</script>
+</body>
+</html>

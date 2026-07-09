@@ -1,0 +1,1245 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vendre sans agent — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#0c1622">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflow-x: hidden; }
+
+/* Hero */
+.vh-hero { background: linear-gradient(135deg,#0c1622 0%,#152233 70%,#1c2e44 100%); padding: 18px var(--pad) 20px; }
+.vh-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,122,104,.12); border: 1px solid rgba(255,122,104,.3); border-radius: 999px; padding: 4px 10px; font-size: 10.5px; font-weight: 700; color: #ff7a68; letter-spacing: .04em; margin-bottom: 10px; }
+.vh-hero h1 { font-size: 21px; font-weight: 700; color: white; line-height: 1.2; letter-spacing: -.3px; margin-bottom: 8px; }
+.vh-hero h1 em { color: #ff7a68; font-style: normal; }
+.vh-hero p { font-size: 12.5px; color: rgba(255,255,255,.55); line-height: 1.6; margin-bottom: 14px; }
+.vh-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+.vh-stat-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 18px 14px; position: relative; overflow: hidden; }
+.vh-sc-top { height: 3px; position: absolute; top: 0; left: 0; right: 0; }
+.vh-sc-val { font-size: 28px; font-weight: 900; line-height: 1; letter-spacing: -.5px; margin-bottom: 6px; }
+.vh-sc-lbl { font-size: 11px; color: rgba(255,255,255,.5); line-height: 1.4; }
+
+/* Step dots nav */
+.vh-dots { background: white; border-bottom: 1px solid var(--border); position: sticky; top: var(--nav-h); z-index: 50; display: flex; overflow-x: auto; scrollbar-width: none; padding: 0 var(--pad); gap: 0; }
+.vh-dots::-webkit-scrollbar { display: none; }
+.vh-dot { flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 12px 10px; cursor: pointer; border-bottom: 2px solid transparent; }
+.vh-dot.active { border-bottom-color: #ff7a68; }
+.vh-dot.done .vh-dn { background: #ecfdf5; border-color: #6ee7b7; color: #1a8c4e; }
+.vh-dot.active .vh-dn { background: var(--red); border-color: var(--red); color: white; }
+.vh-dn { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: var(--text3); flex-shrink: 0; }
+.vh-dl { font-size: 11px; font-weight: 600; color: var(--text3); white-space: nowrap; }
+.vh-dot.active .vh-dl { color: #ff7a68; }
+.vh-dot-sep { color: var(--border); font-size: 14px; flex-shrink: 0; align-self: center; }
+
+/* Step cards */
+.vh-steps { padding: 12px var(--pad) 0; display: flex; flex-direction: column; gap: 8px; }
+.vh-card { background: white; border-radius: 14px; border: 1.5px solid var(--border); overflow: hidden; scroll-margin-top: calc(var(--nav-h) + 54px); transition: border-color .2s; }
+.vh-card.active { border-color: var(--red); box-shadow: 0 2px 16px rgba(232,69,51,.09); }
+.vh-card.done { border-color: #a7f3d0; }
+.vh-card-head { display: flex; align-items: center; gap: 12px; padding: 14px; cursor: pointer; }
+.vh-card-ico { width: 38px; height: 38px; border-radius: 10px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 17px; color: var(--text3); flex-shrink: 0; transition: all .2s; }
+.vh-card.active .vh-card-ico { background: #fff5f3; color: #ff7a68; }
+.vh-card.done .vh-card-ico { background: #ecfdf5; color: #16a34a; }
+.vh-card-info { flex: 1; min-width: 0; }
+.vh-card-num { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; }
+.vh-card.active .vh-card-num { color: #ff7a68; }
+.vh-card-title { font-size: 14px; font-weight: 800; color: var(--text); margin-top: 1px; }
+.vh-chevron { color: var(--text3); font-size: 18px; flex-shrink: 0; transition: transform .2s; }
+.vh-card.active .vh-chevron { transform: rotate(180deg); color: #ff7a68; }
+.vh-body { display: none; border-top: 1px solid var(--border); }
+.vh-card.active .vh-body { display: block; }
+.vh-desc { font-size: 13px; color: var(--text2); line-height: 1.7; padding: 12px 14px 8px; }
+
+/* Checklist */
+.vh-checks { padding: 0 14px; }
+.vh-check { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid var(--bg); cursor: pointer; }
+.vh-check-box { width: 19px; height: 19px; border-radius: 5px; border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.vh-check-box.on { background: var(--red); border-color: var(--red); }
+.vh-check-box.on::after { content: '✓'; font-size: 10px; color: white; font-weight: 800; }
+.vh-check-txt { font-size: 12.5px; color: var(--text); line-height: 1.5; }
+.vh-check-txt.on { color: var(--text3); text-decoration: line-through; }
+
+/* Tips */
+.vh-tip { display: flex; align-items: flex-start; gap: 8px; margin: 10px 14px; padding: 10px 12px; border-radius: 9px; font-size: 12px; line-height: 1.55; }
+.vh-tip-blue { background: #f0f7ff; color: #1e3a8a; }
+.vh-tip-blue i { color: #3b82f6; flex-shrink: 0; margin-top: 1px; }
+.vh-tip-red { background: #fff5f4; color: #991b1b; }
+.vh-tip-red i { color: var(--red); flex-shrink: 0; margin-top: 1px; }
+.vh-tip-green { background: #f0fdf4; color: #14532d; }
+.vh-tip-green i { color: #16a34a; flex-shrink: 0; margin-top: 1px; }
+
+/* Actions */
+.vh-actions { display: flex; gap: 8px; padding: 10px 14px 16px; flex-wrap: wrap; }
+.vh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; border-radius: 9px; font-size: 12.5px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; }
+.vh-btn-red { background: var(--red); color: white; }
+.vh-btn-done { background: #ecfdf5; color: #1a8c4e; border: 1.5px solid #a7f3d0; }
+.vh-head-done { display:inline-flex;align-items:center;gap:4px;padding:5px 9px;background:#f0fdf4;border:1.5px solid #a7f3d0;color:#1a8c4e;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0; }
+.vh-head-done:active { background:#dcfce7; }
+.vh-card.done .vh-head-done { background:#dcfce7;border-color:#6ee7b7;pointer-events:none; }
+.vh-inline-link { display:inline-flex;align-items:center;gap:2px;font-size:10.5px;font-weight:600;color:#ff7a68;background:rgba(255,122,104,.08);border:1px solid rgba(255,122,104,.2);border-radius:4px;padding:2px 6px;margin-left:4px;text-decoration:none;white-space:nowrap;vertical-align:middle; }
+
+/* Docs section */
+.vh-docs { margin: 16px var(--pad) 0; }
+.vh-section-label { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+.vh-doc { display: flex; align-items: center; gap: 12px; background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 14px; margin-bottom: 8px; cursor: pointer; }
+.vh-doc:last-child { margin-bottom: 0; }
+.vh-doc:active { background: var(--bg); }
+.vh-doc-ico { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.vh-doc-info { flex: 1; }
+.vh-doc-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.vh-doc-desc { font-size: 11.5px; color: var(--text3); margin-top: 2px; }
+
+/* Helper */
+.vh-helper { margin: 16px var(--pad) 0; background: white; border-radius: 14px; border: 1.5px solid var(--border); overflow: hidden; }
+.vh-helper-head { background: linear-gradient(135deg,#0c1622,#1c2e44); padding: 14px; display: flex; align-items: center; gap: 10px; }
+.vh-helper-head i { font-size: 20px; color: var(--red); }
+.vh-helper-head h3 { font-size: 13.5px; font-weight: 800; color: white; }
+.vh-helper-head p { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 2px; }
+.vh-helper-body { padding: 14px; }
+.vh-field { margin-bottom: 11px; }
+.vh-label { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; display: block; }
+.vh-input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 11px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; }
+.vh-input:focus { border-color: var(--red); }
+.vh-select { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 11px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; background: white; appearance: none; }
+.vh-gen-out { background: var(--bg); border: 1.5px dashed var(--border); border-radius: 9px; padding: 12px; font-size: 12.5px; color: var(--text); line-height: 1.65; white-space: pre-wrap; margin-top: 10px; min-height: 60px; font-family: inherit; }
+
+/* CTA bottom */
+.vh-cta { margin: 20px var(--pad) 0; background: linear-gradient(135deg,#0c1622,#1c2e44); border-radius: 14px; padding: 20px; text-align: center; }
+.vh-cta h3 { font-size: 16px; font-weight: 800; color: white; margin-bottom: 6px; }
+.vh-cta p { font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 14px; line-height: 1.5; }
+
+/* Modal */
+.vh-overlay { display: none; position: fixed; inset: 0; z-index: 600; background: rgba(0,0,0,.55); }
+.vh-sheet { position: absolute; bottom: 0; left: 0; right: 0; background: white; border-radius: 20px 20px 0 0; max-height: 92vh; display: flex; flex-direction: column; }
+.vh-sheet-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 12px auto 0; flex-shrink: 0; }
+.vh-sheet-head { display: flex; align-items: center; gap: 10px; padding: 14px var(--pad); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.vh-sheet-title { font-size: 16px; font-weight: 800; color: var(--text); flex: 1; }
+.vh-sheet-close { background: var(--bg); border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text2); font-size: 16px; }
+.vh-sheet-body { overflow-y: auto; padding: var(--pad); padding-bottom: 32px; }
+.vh-mfield { margin-bottom: 12px; }
+.vh-mgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Doc preview */
+/* ── Document preview mobile — redesign professionnel ── */
+.vh-doc-preview{background:white;border:1.5px solid #e0e1e6;border-radius:12px;overflow:hidden;margin-top:14px;font-size:12.5px;line-height:1.75;color:#111}
+.vh-doc-preview .dh{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:14px 16px 13px}
+.vh-doc-preview .dh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.vh-doc-preview .dh-brand{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:800;color:rgba(255,255,255,.8)}
+.vh-doc-preview .dh-badge{width:18px;height:18px;background:#E84533;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white}
+.vh-doc-preview .dh-meta{font-size:9.5px;color:rgba(255,255,255,.4);text-align:right;line-height:1.5}
+.vh-doc-preview .dh-band{border-top:1px solid rgba(255,255,255,.1);padding-top:11px;display:flex;align-items:center;gap:9px}
+.vh-doc-preview .dh-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.vh-doc-preview .dh-title{font-size:14px;font-weight:800;color:white;letter-spacing:-.1px}
+.vh-doc-preview .dh-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;line-height:1.4}
+/* Body */
+.vh-doc-preview .db{padding:16px 16px 14px}
+.vh-doc-preview .dparts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.vh-doc-preview .dpart{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:9px;padding:9px 11px}
+.vh-doc-preview .dpart-lbl{font-size:8.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.vh-doc-preview .dpart-name{font-size:12.5px;font-weight:700;color:#111}
+.vh-doc-preview .dadr{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:9px;padding:10px 12px;margin-bottom:13px;display:flex;align-items:flex-start;gap:8px}
+.vh-doc-preview .dadr-ico{color:#E84533;font-size:14px;flex-shrink:0;margin-top:1px}
+.vh-doc-preview .dadr-lbl{font-size:8.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.vh-doc-preview .dadr-val{font-size:13px;font-weight:700;color:#111}
+.vh-doc-preview .ds{margin-bottom:13px}
+.vh-doc-preview .ds-title{font-size:9.5px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;padding-bottom:6px;border-bottom:1.5px solid #f0f0f2;display:flex;align-items:center;gap:5px}
+.vh-doc-preview .dkv{display:flex;margin-bottom:4px;border:1px solid #eeeff2;border-radius:7px;overflow:hidden}
+.vh-doc-preview .dkv-k{font-size:10.5px;font-weight:700;color:#666;background:#f4f5f7;padding:7px 10px;min-width:120px;flex-shrink:0;border-right:1px solid #eeeff2}
+.vh-doc-preview .dkv-v{font-size:11.5px;font-weight:600;color:#111;padding:7px 10px;flex:1}
+.vh-doc-preview .dkv-v.big{font-size:15px;font-weight:800;color:#0f172a}
+.vh-doc-preview .dlegal{font-size:11.5px;color:#444;line-height:1.85;background:#fafbfc;border:1px solid #eeeef2;border-radius:9px;padding:11px 13px}
+.vh-doc-preview .dsigs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;padding-top:14px;border-top:1.5px solid #f0f0f2}
+.vh-doc-preview .dsig-box{border:1.5px solid #e4e5ea;border-radius:9px;overflow:hidden}
+.vh-doc-preview .dsig-hd{background:#f4f5f7;padding:7px 10px;font-size:9px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e4e5ea}
+.vh-doc-preview .dsig-bd{padding:9px 10px}
+.vh-doc-preview .dsig-name{font-size:11px;font-weight:700;color:#111;margin-bottom:7px}
+.vh-doc-preview .dsig-sp{height:38px;border:1.5px dashed #d8dce6;border-radius:6px;margin-bottom:8px}
+.vh-doc-preview .dsig-f{font-size:9.5px;color:#aaa;padding-bottom:12px;border-bottom:1px solid #e0e2e8}
+.vh-doc-preview .dfooter{background:#f8f9fb;border-top:1px solid #eeeff2;padding:8px 14px;text-align:center;font-size:9.5px;color:#bbb}
+
+@media print {
+  .m-nav, .vh-dots, .vh-steps, .vh-docs, .vh-helper, .vh-cta, .m-bottom-nav, .vh-sheet-close, .no-print { display: none !important; }
+  .vh-overlay { display: block !important; position: static; background: none; }
+  .vh-sheet { position: static; border-radius: 0; max-height: none; }
+  .vh-sheet-handle { display: none; }
+  body { padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.location='/m/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+
+<button class="m-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<div class="vh-hero">
+  <div class="vh-badge"><i class="ti ti-shield-check"></i> Guide officiel · Gratuit</div>
+  <h1>Vendez sans agent,<br><em>étape par étape</em></h1>
+  <p>Tout ce qu'il vous faut pour vendre sereinement, sans commission d'agence. 9 étapes guidées, des checklists, des conseils et des documents prêts à imprimer.</p>
+  <div class="vh-stats">
+    <div class="vh-stat-card">
+      <div class="vh-sc-top" style="background:rgba(255,255,255,.25)"></div>
+      <div class="vh-sc-val" style="color:rgba(255,255,255,.92)">0 €</div>
+      <div class="vh-sc-lbl">Frais de publication</div>
+    </div>
+    <div class="vh-stat-card">
+      <div class="vh-sc-top" style="background:#E84533"></div>
+      <div class="vh-sc-val" style="color:#ff7a68">1%</div>
+      <div class="vh-sc-lbl">Commission si vente conclue</div>
+    </div>
+    <div class="vh-stat-card">
+      <div class="vh-sc-top" style="background:#ff7a68"></div>
+      <div class="vh-sc-val" style="color:#ffa08c">10k€</div>
+      <div class="vh-sc-lbl">Économisés en moyenne vs agence</div>
+    </div>
+    <div class="vh-stat-card">
+      <div class="vh-sc-top" style="background:rgba(255,255,255,.15)"></div>
+      <div class="vh-sc-val" style="color:rgba(255,255,255,.7)">6</div>
+      <div class="vh-sc-lbl">Documents officiels inclus</div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP DOTS -->
+<div class="vh-dots" id="vhDots">
+  <div class="vh-dot active" id="vd1" onclick="jumpTo(1)"><div class="vh-dn" id="vdn1">1</div><span class="vh-dl">Estimer</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd2" onclick="jumpTo(2)"><div class="vh-dn" id="vdn2">2</div><span class="vh-dl">Documents</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd3" onclick="jumpTo(3)"><div class="vh-dn" id="vdn3">3</div><span class="vh-dl">Annonce</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd4" onclick="jumpTo(4)"><div class="vh-dn" id="vdn4">4</div><span class="vh-dl">Photos</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd5" onclick="jumpTo(5)"><div class="vh-dn" id="vdn5">5</div><span class="vh-dl">Publier</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd6" onclick="jumpTo(6)"><div class="vh-dn" id="vdn6">6</div><span class="vh-dl">Visites</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd7" onclick="jumpTo(7)"><div class="vh-dn" id="vdn7">7</div><span class="vh-dl">Offre</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd8" onclick="jumpTo(8)"><div class="vh-dn" id="vdn8">8</div><span class="vh-dl">Négo</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd9" onclick="jumpTo(9)"><div class="vh-dn" id="vdn9">9</div><span class="vh-dl">Signer</span></div>
+</div>
+
+<!-- STEPS -->
+<div class="vh-steps">
+
+  <!-- 1 -->
+  <div class="vh-card active" id="vc1">
+    <div class="vh-card-head" onclick="openStep(1)">
+      <div class="vh-card-ico"><i class="ti ti-chart-line"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 1</div><div class="vh-card-title">Estimer son bien</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(1)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Le prix est la clé. Un bien surestimé stagne des mois ; un bien sous-estimé vous fait perdre de l'argent. Croisez plusieurs sources pour trouver la fourchette juste.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Consulter les ventes récentes au m² dans mon quartier (cf. outils ci-dessous)</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Comparer 3 à 5 biens similaires vendus récemment</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Ajuster selon l'état, l'étage et l'exposition</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Prévoir une marge de négociation (~3-5%)</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Définir mon prix plancher — en dessous duquel je ne descends pas</span></div>
+      </div>
+      <div style="margin:14px 0 4px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Outils d'estimation recommandés</div>
+      <div style="border:1.5px solid #e8e8eb;border-radius:12px;overflow:hidden;background:#f8f9fb">
+        <a href="https://app.dvf.etalab.gouv.fr/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">DVF Étalab <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Toutes les ventes notariées réelles en France — données gouvernementales</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+        <a href="https://www.immobilier.notaires.fr/fr/prix-immobilier" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Notaires de France <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Prix moyen au m² par ville — mis à jour chaque trimestre</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+        <a href="https://www.castorus.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111">Castorus</div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Historique des prix d'annonces dans votre ville et quartier</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+        <a href="https://www.meilleursagents.com/prix-immobilier/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111">MeilleursAgents</div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Estimation par adresse + évolution du marché local sur 5 ans</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+        <a href="https://www.pap.fr/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111">PAP Estimation</div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Estimateur entre particuliers — comparatif des annonces similaires actives</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+      </div>
+      <div style="margin:14px 0 4px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Document à remplir</div>
+      <div onclick="openDoc('prix')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:10px;cursor:pointer">
+        <div style="width:36px;height:36px;border-radius:9px;background:#f0f7ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-table" style="color:#3b82f6;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Fiche d'estimation de prix</div><div style="font-size:11.5px;color:#888;margin-top:2px">Calculez votre prix cible et votre prix plancher</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-actions"></div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="vh-card" id="vc2">
+    <div class="vh-card-head" onclick="openStep(2)">
+      <div class="vh-card-ico"><i class="ti ti-files"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 2</div><div class="vh-card-title">Préparer les documents</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(2)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Anticipez — certains documents (DDT, titre de propriété) peuvent prendre plusieurs semaines à obtenir. Cochez chaque document au fur et à mesure que vous le rassemblez.</p>
+
+      <div class="vh-tip" style="margin:0 14px 14px;background:#f0fdf4;border-color:#bbf7d0;color:#166534"><i class="ti ti-circle-check" style="color:#16a34a"></i><span><strong>Pas de panique.</strong> Vous n'avez pas besoin de tout réunir avant de publier. Les diagnostics et le titre de propriété ne sont exigibles qu'à la signature du compromis.</span></div>
+
+      <!-- Catégorie 1 -->
+      <div style="margin:0 14px 6px;background:#1e293b;border-left:4px solid #E84533;border-radius:9px;padding:9px 13px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="toggleSec('sec-vh-identite',this)"><i class="ti ti-shield-check" style="color:#ff7a68;font-size:16px;flex-shrink:0"></i><div style="flex:1"><div style="margin-bottom:6px"><span style="background:#E84533;color:white;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase">Obligatoires</span></div><div style="font-size:12px;font-weight:700;color:white">Identité et propriété</div></div><i class="ti ti-chevron-right sec-chev" style="color:rgba(255,255,255,.4);font-size:14px;flex-shrink:0;transition:transform .25s;transform:rotate(90deg)"></i></div>
+      <div id="sec-vh-identite"><div class="vh-checks" style="padding:0 14px 10px">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-id" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Pièce d'identité valide</div><div style="font-size:11px;color:#aaa;margin-top:1px">CNI ou passeport en cours de validité</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-lock" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Titre de propriété</div><div style="font-size:11px;color:#aaa;margin-top:1px">Acte authentique notarié — à demander rapidement, délai jusqu'à plusieurs semaines</div></div>
+        </div>
+      </div></div>
+
+      <!-- Catégorie 2 -->
+      <div style="margin:0 14px 6px;background:#1e293b;border-left:4px solid #E84533;border-radius:9px;padding:9px 13px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="toggleSec('sec-vh-ddt',this)"><i class="ti ti-certificate" style="color:#ff7a68;font-size:16px;flex-shrink:0"></i><div style="flex:1"><div style="margin-bottom:6px"><span style="background:#E84533;color:white;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase">Obligatoires</span></div><div style="font-size:12px;font-weight:700;color:white">Diagnostics techniques (DDT)</div></div><i class="ti ti-chevron-right sec-chev" style="color:rgba(255,255,255,.4);font-size:14px;flex-shrink:0;transition:transform .25s;transform:rotate(90deg)"></i></div>
+      <div id="sec-vh-ddt"><div style="margin:0 14px 6px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:9px;padding:9px 12px;font-size:11.5px;color:#475569;line-height:1.5"><i class="ti ti-clock" style="font-size:13px;vertical-align:middle;margin-right:4px;color:#94a3b8"></i>Ces diagnostics sont établis par un <strong style="color:#1e293b">diagnostiqueur certifié</strong>. Prévoyez 2 à 3 semaines pour les obtenir.</div>
+      <div class="vh-checks" style="padding:0 14px 10px">
+        <div class="vh-check" onclick="tc(this)" style="padding:9px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-leaf" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">DPE <span style="font-weight:400;color:#aaa;font-size:11.5px">— Diagnostic de Performance Énergétique</span></div><div style="font-size:11px;color:#888;margin-top:1px">Obligatoire · validité 10 ans</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:9px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-map-pins" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">ERP <span style="font-weight:400;color:#aaa;font-size:11.5px">— État des Risques et Pollutions</span></div><div style="font-size:11px;color:#888;margin-top:1px">À refaire à chaque vente · validité 6 mois</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:9px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-bolt" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Électricité <span style="font-weight:400;font-size:11px;color:#aaa">— si installation &gt; 15 ans</span></div><div style="font-size:11px;color:#888;margin-top:1px">Conditionnel</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:9px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-flame" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Gaz <span style="font-weight:400;font-size:11px;color:#aaa">— si installation &gt; 15 ans</span></div><div style="font-size:11px;color:#888;margin-top:1px">Conditionnel</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:9px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-droplet" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Plomb <span style="font-weight:400;color:#aaa;font-size:11.5px">(CREP)</span> <span style="font-weight:400;font-size:11px;color:#aaa">— si construction avant 1949</span></div><div style="font-size:11px;color:#888;margin-top:1px">Conditionnel</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:9px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-microscope" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Amiante <span style="font-weight:400;font-size:11px;color:#aaa">— si construction avant 1997</span></div><div style="font-size:11px;color:#888;margin-top:1px">Conditionnel</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:9px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-ripple" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Assainissement <span style="font-weight:400;font-size:11px;color:#aaa">— si fosse septique</span></div><div style="font-size:11px;color:#888;margin-top:1px">Conditionnel</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:9px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-bug" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Termites <span style="font-weight:400;font-size:11px;color:#aaa">— si zone à risque</span></div><div style="font-size:11px;color:#888;margin-top:1px">Conditionnel</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-receipt-tax" style="color:#E84533;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Dernier avis de taxe foncière</div><div style="font-size:11px;color:#aaa;margin-top:1px">Permet la répartition prorata vendeur/acheteur pour l'année en cours</div></div>
+        </div>
+      </div></div>
+
+      <!-- Catégorie 3 -->
+      <div style="margin:0 14px 6px;background:#1e293b;border-left:4px solid #d97706;border-radius:9px;padding:9px 13px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="toggleSec('sec-vh-reco',this)"><i class="ti ti-star" style="color:#fbbf24;font-size:16px;flex-shrink:0"></i><div style="flex:1"><div style="margin-bottom:6px"><span style="background:#d97706;color:white;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase">Recommandés</span></div><div style="font-size:12px;font-weight:700;color:white">Rassurer l'acheteur</div></div><i class="ti ti-chevron-right sec-chev" style="color:rgba(255,255,255,.4);font-size:14px;flex-shrink:0;transition:transform .25s;transform:rotate(90deg)"></i></div>
+      <div id="sec-vh-reco"><div class="vh-checks" style="padding:0 14px 10px">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fffbeb;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-ruler-2" style="color:#d97706;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Plans du bien</div><div style="font-size:11px;color:#aaa;margin-top:1px">Permettent à l'acheteur de visualiser la configuration et d'anticiper des travaux</div></div>
+        </div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0">
+          <div class="vh-check-box"></div>
+          <div style="width:30px;height:30px;border-radius:7px;background:#fffbeb;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-tool" style="color:#d97706;font-size:14px"></i></div>
+          <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Factures de travaux + garanties décennales</div><div style="font-size:11px;color:#aaa;margin-top:1px">Rassurent l'acheteur sur l'entretien du bien et les rénovations récentes</div></div>
+        </div>
+      </div></div>
+
+      <!-- Copropriété -->
+      <div style="margin:0 14px 14px;border-radius:12px;overflow:hidden;border:1.5px solid #334155">
+        <div style="background:#1e293b;padding:10px 13px;display:flex;align-items:flex-start;gap:9px">
+          <i class="ti ti-building" style="color:#94a3b8;font-size:15px;flex-shrink:0;margin-top:2px"></i>
+          <div><div style="font-size:12px;font-weight:800;color:white">En copropriété uniquement</div><div style="font-size:11px;color:#94a3b8;margin-top:2px;line-height:1.5">Appartement, studio ou duplex. <span style="color:#cbd5e1">Maison → ignorez cette section.</span></div></div>
+        </div>
+        <div style="background:#f8fafc">
+          <div class="vh-check" onclick="tc(this)" style="border-color:#e2e8f0;padding:10px 13px">
+            <div class="vh-check-box"></div>
+            <div style="width:28px;height:28px;border-radius:6px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-ruler" style="color:#3b82f6;font-size:13px"></i></div>
+            <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-size:13px;font-weight:700">Loi Carrez</div><div style="font-size:11px;color:#aaa;margin-top:1px">Mesurage officiel de la surface privative</div></div>
+          </div>
+          <div class="vh-check" onclick="tc(this)" style="border-color:#e2e8f0;border-bottom:none;padding:10px 13px">
+            <div class="vh-check-box"></div>
+            <div style="width:28px;height:28px;border-radius:6px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-file-text" style="color:#3b82f6;font-size:13px"></i></div>
+            <div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-size:13px;font-weight:700">Règlement de copropriété</div><div style="font-size:11px;color:#aaa;margin-top:1px">+ PV des 3 dernières AG + relevé de charges</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="vh-tip vh-tip-red" style="margin:0 14px 14px"><i class="ti ti-alert-triangle"></i><span><strong>Attention :</strong> Sans DDT complet, la vente peut être annulée ou vous exposer à des recours de l'acheteur.</span></div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="vh-card" id="vc3">
+    <div class="vh-card-head" onclick="openStep(3)">
+      <div class="vh-card-ico"><i class="ti ti-pencil"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 3</div><div class="vh-card-title">Rédiger l'annonce</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(3)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Une bonne annonce répond aux questions des acheteurs avant qu'ils n'aient à les poser. Précis, positif et honnête : évitez les superlatifs creux et misez sur des informations concrètes.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Titre accrocheur : type de bien, surface et quartier</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Description pièce par pièce avec les surfaces</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Points forts : luminosité, vue, rénovations récentes, exposition</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Environnement : transports, commerces, écoles, parcs à proximité</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Charges et copropriété si applicable</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Relecture : aucune faute d'orthographe, ton positif et professionnel</span></div>
+      </div>
+      <div class="vh-tip vh-tip-blue"><i class="ti ti-wand"></i><span><strong>Plan de rédaction personnalisé inclus dans le formulaire.</strong> À partir des informations que vous saisissez, nous générons un plan structuré et adapté à votre bien — une trame claire à compléter à votre rythme, section par section, en y ajoutant votre touche personnelle.</span></div>
+      <div class="vh-tip" style="background:#f0fdf4;color:#166534"><i class="ti ti-checklist" style="color:#16a34a;flex-shrink:0;margin-top:1px"></i><span><strong>Longueur idéale :</strong> 150 à 300 mots. Trop court = peu rassurant, trop long = rebutant. Structurez en 3 parties : description du bien, équipements et points forts, environnement / quartier.</span></div>
+      <div class="vh-actions">
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="vh-card" id="vc4">
+    <div class="vh-card-head" onclick="openStep(4)">
+      <div class="vh-card-ico"><i class="ti ti-camera"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 4</div><div class="vh-card-title">Prendre les photos</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(4)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">De bonnes photos multiplient vos contacts par 3. Un smartphone récent suffit si vous suivez ces règles.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Ranger, dépersonnaliser chaque pièce</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Photographier en pleine journée, lumière naturelle</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Mode paysage, depuis les angles des pièces</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Toutes les pièces + salle de bain + cuisine + extérieur + façade</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Vérifier la netteté, l'horizon horizontal, l'absence de flou</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Minimum 8 photos, idéalement 15-20</span></div>
+      </div>
+      <div class="vh-tip vh-tip-blue"><i class="ti ti-bulb"></i><span>Ouvrez tous les rideaux, allumez toutes les lumières. La première photo : la pièce de vie ou la façade.</span></div>
+      <div class="vh-actions">
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="vh-card" id="vc5">
+    <div class="vh-card-head" onclick="openStep(5)">
+      <div class="vh-card-ico"><i class="ti ti-rocket"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 5</div><div class="vh-card-title">Publier l'annonce</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(5)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Publiez gratuitement sur SansAgents. Votre annonce est visible immédiatement par tous les acheteurs actifs.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Créer ou se connecter à mon compte SansAgents</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Remplir le formulaire en 5 étapes</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Uploader les photos dans le bon ordre</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Vérifier l'aperçu avant de publier</span></div>
+      </div>
+      <div class="vh-tip vh-tip-green"><i class="ti ti-info-circle"></i><span>Publication 100% gratuite. Commission de 1% uniquement en cas de vente conclue — jamais sur une location.</span></div>
+      <div class="vh-actions">
+        <button class="vh-btn vh-btn-red" onclick="window.location='/deposer-gate'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="vh-card" id="vc6">
+    <div class="vh-card-head" onclick="openStep(6)">
+      <div class="vh-card-ico"><i class="ti ti-door-enter"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 6</div><div class="vh-card-title">Gérer les visites</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(6)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">La visite est un moment décisif. Faites signer un bon de visite à chaque visiteur — c'est votre protection légale essentielle.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Bien préparé : propre, rangé, bien éclairé</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Dossier de diagnostics techniques à portée</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt"><strong>Bon de visite signé par chaque visiteur</strong></span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Prêt à répondre : charges, travaux, voisinage</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Ne pas révéler son prix plancher</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Prendre note des retours pour ajuster l'annonce si nécessaire</span></div>
+      </div>
+      <div class="vh-tip vh-tip-red"><i class="ti ti-shield-check"></i><span><strong>Important :</strong> Le bon de visite prouve que l'acheteur vous a trouvé via SansAgents et protège contre toute réclamation d'agent immobilier.</span></div>
+      <div style="margin:14px 0 4px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Document à utiliser</div>
+      <div onclick="openDoc('visite')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:10px;cursor:pointer">
+        <div style="width:36px;height:36px;border-radius:9px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-door-enter" style="color:#E84533;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Bon de visite</div><div style="font-size:11.5px;color:#888;margin-top:2px">À faire signer à chaque visiteur — votre protection légale</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-actions"></div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="vh-card" id="vc7">
+    <div class="vh-card-head" onclick="openStep(7)">
+      <div class="vh-card-ico"><i class="ti ti-file-euro"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 7</div><div class="vh-card-title">Recevoir une offre</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(7)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Une offre d'achat est un engagement écrit. Lisez-la attentivement : montant, conditions suspensives, délais. Vous pouvez accepter, refuser ou contre-proposer.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Vérifier l'identité et la solvabilité de l'acheteur</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Lire les conditions suspensives (prêt…)</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Vérifier la date limite de validité</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Ne pas accepter plusieurs offres simultanément</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Répondre par écrit dans les délais</span></div>
+      </div>
+      <div class="vh-tip vh-tip-red"><i class="ti ti-alert-triangle"></i><span>Une offre au prix de l'annonce vous engage moralement. Répondez rapidement par écrit.</span></div>
+      <div style="margin:14px 0 4px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Documents disponibles</div>
+      <div style="border:1.5px solid #e8e8eb;border-radius:10px;overflow:hidden;background:#f8f9fb">
+        <div onclick="openDoc('offre')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;cursor:pointer">
+          <div style="width:32px;height:32px;border-radius:8px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-file-text" style="color:#16a34a;font-size:15px"></i></div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Modèle d'offre d'achat</div><div style="font-size:11.5px;color:#888;margin-top:1px">Formaliser une offre reçue par écrit</div></div>
+          <i class="ti ti-chevron-right" style="color:#ccc;font-size:15px;flex-shrink:0"></i>
+        </div>
+        <div onclick="openDoc('contre')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;cursor:pointer">
+          <div style="width:32px;height:32px;border-radius:8px;background:#fffbeb;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-arrows-exchange" style="color:#d97706;font-size:15px"></i></div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Contre-proposition</div><div style="font-size:11.5px;color:#888;margin-top:1px">Répondre à une offre insuffisante</div></div>
+          <i class="ti ti-chevron-right" style="color:#ccc;font-size:15px;flex-shrink:0"></i>
+        </div>
+        <div onclick="openDoc('refus')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer">
+          <div style="width:32px;height:32px;border-radius:8px;background:#fef2f2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-x" style="color:#dc2626;font-size:15px"></i></div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Refus d'offre</div><div style="font-size:11.5px;color:#888;margin-top:1px">Décliner une offre de manière formelle</div></div>
+          <i class="ti ti-chevron-right" style="color:#ccc;font-size:15px;flex-shrink:0"></i>
+        </div>
+      </div>
+      <div class="vh-actions"></div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="vh-card" id="vc8">
+    <div class="vh-card-head" onclick="openStep(8)">
+      <div class="vh-card-ico"><i class="ti ti-scale"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 8</div><div class="vh-card-title">Négocier</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(8)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">La négociation est normale. Connaître votre prix plancher à l'avance vous permet de négocier sereinement.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Prix plancher défini avant les visites</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Justifier mon prix par des comparables</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Négocier aussi les conditions (délai, mobilier)</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Rester courtois, factuel et ne pas s'emballer émotionnellement</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Formaliser tout accord par écrit</span></div>
+      </div>
+      <div class="vh-tip vh-tip-blue"><i class="ti ti-bulb"></i><span>Proposer du mobilier ou avancer la date de signature peut combler un écart de prix sans descendre sous votre plancher.</span></div>
+      <div style="margin:14px 0 4px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Document à utiliser</div>
+      <div onclick="openDoc('acceptation')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:10px;cursor:pointer">
+        <div style="width:36px;height:36px;border-radius:9px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-circle-check" style="color:#16a34a;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Lettre d'acceptation d'offre</div><div style="font-size:11.5px;color:#888;margin-top:2px">Confirmez votre accord par écrit — engage les deux parties</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-actions"></div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="vh-card" id="vc9">
+    <div class="vh-card-head" onclick="openStep(9)">
+      <div class="vh-card-ico"><i class="ti ti-certificate"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 9</div><div class="vh-card-title">Signer chez le notaire</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(9)"><i class="ti ti-trophy"></i> Conclue !</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Deux étapes : le compromis de vente, puis l'acte authentique 3 à 4 mois plus tard. C'est le transfert officiel de propriété.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Choisir un notaire</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Signer le compromis de vente</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Attendre les 10 jours de rétractation (Loi SRU)</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Levée des conditions suspensives (prêt)</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Fournir tous les documents demandés par le notaire dans les délais</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Signer l'acte authentique ✅</span></div>
+        <div class="vh-check" onclick="tc(this)"><div class="vh-check-box"></div><span class="vh-check-txt">Remettre les clés à l'acheteur 🎉</span></div>
+      </div>
+      <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Délai SRU :</strong> L'acheteur a 10 jours pour se rétracter après le compromis. Après ce délai, la vente est ferme.</span></div>
+      <div style="margin:14px 0 4px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Document à utiliser</div>
+      <div onclick="openDoc('cles')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:10px;cursor:pointer;margin-bottom:8px">
+        <div style="width:36px;height:36px;border-radius:9px;background:#fefce8;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-key" style="color:#ca8a04;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Procès-verbal de remise des clés</div><div style="font-size:11.5px;color:#888;margin-top:2px">Preuve officielle de la livraison du bien à l'acheteur</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-actions">
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.notaires.fr/fr/annuaire','_blank')"><i class="ti ti-external-link"></i> Trouver un notaire</button>
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.notaires.fr/fr/simulateurs-0','_blank')"><i class="ti ti-calculator"></i> Frais de notaire</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /steps -->
+
+<!-- DOCUMENTS -->
+<div class="vh-docs" style="margin-top:20px">
+  <div class="vh-section-label">7 documents officiels gratuits</div>
+  <div class="vh-doc" onclick="openDoc('prix')">
+    <div class="vh-doc-ico" style="background:#f0f7ff"><i class="ti ti-table" style="color:#3b82f6"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Fiche d'estimation</div><div class="vh-doc-desc">Résumé des prix au m² consultés</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('visite')">
+    <div class="vh-doc-ico" style="background:#fff5f4"><i class="ti ti-door-enter" style="color:var(--red)"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Bon de visite</div><div class="vh-doc-desc">À faire signer à chaque visiteur</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('offre')">
+    <div class="vh-doc-ico" style="background:#eff6ff"><i class="ti ti-file-euro" style="color:#3b82f6"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Offre d'achat</div><div class="vh-doc-desc">Modèle à remettre à l'acheteur</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('acceptation')">
+    <div class="vh-doc-ico" style="background:#f0fdf4"><i class="ti ti-circle-check" style="color:#16a34a"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Lettre d'acceptation</div><div class="vh-doc-desc">Confirmer un accord sur le prix</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('contre')">
+    <div class="vh-doc-ico" style="background:#fff7ed"><i class="ti ti-arrows-exchange" style="color:#ea580c"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Contre-proposition</div><div class="vh-doc-desc">Répondre à une offre trop basse</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('refus')">
+    <div class="vh-doc-ico" style="background:#fef2f2"><i class="ti ti-x" style="color:#dc2626"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Refus d'offre</div><div class="vh-doc-desc">Décliner une offre par écrit</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('cles')">
+    <div class="vh-doc-ico" style="background:#f0f9ff"><i class="ti ti-key" style="color:#0284c7"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Remise des clés</div><div class="vh-doc-desc">Attestation au moment de la vente</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="vh-cta">
+  <h3>Prêt à vendre ?</h3>
+  <p>Déposez votre annonce gratuitement et touchez des milliers d'acheteurs.</p>
+  <button onclick="window.location='/deposer-gate'" style="background:var(--red);color:white;border:none;border-radius:10px;padding:13px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px"><i class="ti ti-rocket"></i> Déposer mon annonce</button>
+</div>
+
+<!-- DOC ACTION BAR -->
+<div id="docActBar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:700;background:#1e293b;border-top:1.5px solid #334155;padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))">
+  <div style="display:flex;gap:8px">
+    <button onclick="saveCurrentDoc()" style="flex:1;padding:12px;background:#E84533;color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-device-floppy"></i> Sauvegarder</button>
+    <button onclick="printCurrentDoc()" style="width:46px;padding:12px;background:rgba(255,255,255,.1);color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-download"></i></button>
+    <button id="docActShare" onclick="shareCurrentDoc()" style="width:46px;padding:12px;background:rgba(255,255,255,.1);color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-share"></i></button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.location='/m/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
+    <span>Déposer</span>
+  </button>
+  <button class="m-tab" onclick="window.location='/m/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="window.location='/m/connexion'"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+</nav>
+
+<!-- MODAL BON DE VISITE -->
+<div class="vh-overlay" id="mVisite" onclick="closeDoc('mVisite')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-door-enter" style="color:var(--red)"></i></div>
+      <div class="vh-sheet-title">Bon de visite</div>
+      <button class="vh-sheet-close no-print" onclick="closeDoc('mVisite')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du bien</label><input class="vh-input" id="bvAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('visite')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Vendeur</label><input class="vh-input" id="bvVendeur" placeholder="Jean Dupont" oninput="buildDoc('visite')"></div>
+        <div class="vh-field"><label class="vh-label">Visiteur</label><input class="vh-input" id="bvVisiteur" placeholder="Marie Martin" oninput="buildDoc('visite')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Date visite</label><input class="vh-input" type="date" id="bvDate" oninput="buildDoc('visite')"></div>
+        <div class="vh-field"><label class="vh-label">Prix affiché (€)</label><input class="vh-input" type="number" id="bvPrix" placeholder="250000" oninput="buildDoc('visite')"></div>
+      </div>
+      <div class="vh-doc-preview" id="docVisite"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL OFFRE D'ACHAT -->
+<div class="vh-overlay" id="mOffre" onclick="closeDoc('mOffre')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-file-euro" style="color:#3b82f6"></i></div>
+      <div class="vh-sheet-title">Offre d'achat</div>
+      <button class="vh-sheet-close no-print" onclick="closeDoc('mOffre')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du bien</label><input class="vh-input" id="oaAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('offre')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Acheteur</label><input class="vh-input" id="oaAcheteur" placeholder="Marie Martin" oninput="buildDoc('offre')"></div>
+        <div class="vh-field"><label class="vh-label">Vendeur</label><input class="vh-input" id="oaVendeur" placeholder="Jean Dupont" oninput="buildDoc('offre')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Montant (€)</label><input class="vh-input" type="number" id="oaMontant" placeholder="245000" oninput="buildDoc('offre')"></div>
+        <div class="vh-field"><label class="vh-label">Validité</label><input class="vh-input" type="date" id="oaValidite" oninput="buildDoc('offre')"></div>
+      </div>
+      <div class="vh-field"><label class="vh-label">Date de l'offre</label><input class="vh-input" type="date" id="oaDate" oninput="buildDoc('offre')"></div>
+      <div class="vh-doc-preview" id="docOffre"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ACCEPTATION -->
+<div class="vh-overlay" id="mAcceptation" onclick="closeDoc('mAcceptation')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-circle-check" style="color:#16a34a"></i></div>
+      <div class="vh-sheet-title">Lettre d'acceptation</div>
+      <button class="vh-sheet-close no-print" onclick="closeDoc('mAcceptation')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du bien</label><input class="vh-input" id="laAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('acceptation')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Vendeur</label><input class="vh-input" id="laVendeur" placeholder="Jean Dupont" oninput="buildDoc('acceptation')"></div>
+        <div class="vh-field"><label class="vh-label">Acheteur</label><input class="vh-input" id="laAcheteur" placeholder="Marie Martin" oninput="buildDoc('acceptation')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Prix accepté (€)</label><input class="vh-input" type="number" id="laPrix" placeholder="245000" oninput="buildDoc('acceptation')"></div>
+        <div class="vh-field"><label class="vh-label">Date</label><input class="vh-input" type="date" id="laDate" oninput="buildDoc('acceptation')"></div>
+      </div>
+      <div class="vh-doc-preview" id="docAcceptation"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONTRE-PROPOSITION -->
+<div class="vh-overlay" id="mContre" onclick="closeDoc('mContre')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#fff7ed;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-arrows-exchange" style="color:#ea580c"></i></div>
+      <div class="vh-sheet-title">Contre-proposition</div>
+      <button class="vh-sheet-close" onclick="closeDoc('mContre')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du bien</label><input class="vh-input" id="cpAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('contre')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Vendeur</label><input class="vh-input" id="cpVendeur" placeholder="Jean Dupont" oninput="buildDoc('contre')"></div>
+        <div class="vh-field"><label class="vh-label">Acheteur</label><input class="vh-input" id="cpAcheteur" placeholder="Marie Martin" oninput="buildDoc('contre')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Offre initiale (€)</label><input class="vh-input" type="number" id="cpPrixInitial" placeholder="230000" oninput="buildDoc('contre')"></div>
+        <div class="vh-field"><label class="vh-label">Contre-prop. (€)</label><input class="vh-input" type="number" id="cpPrixContre" placeholder="245000" oninput="buildDoc('contre')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Date</label><input class="vh-input" type="date" id="cpDate" oninput="buildDoc('contre')"></div>
+        <div class="vh-field"><label class="vh-label">Valable jusqu'au</label><input class="vh-input" type="date" id="cpLimite" oninput="buildDoc('contre')"></div>
+      </div>
+      <div class="vh-doc-preview" id="docContre"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REFUS D'OFFRE -->
+<div class="vh-overlay" id="mRefus" onclick="closeDoc('mRefus')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#fef2f2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-x" style="color:#dc2626"></i></div>
+      <div class="vh-sheet-title">Refus d'offre</div>
+      <button class="vh-sheet-close" onclick="closeDoc('mRefus')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du bien</label><input class="vh-input" id="roAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('refus')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Vendeur</label><input class="vh-input" id="roVendeur" placeholder="Jean Dupont" oninput="buildDoc('refus')"></div>
+        <div class="vh-field"><label class="vh-label">Acheteur</label><input class="vh-input" id="roAcheteur" placeholder="Marie Martin" oninput="buildDoc('refus')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Offre refusée (€)</label><input class="vh-input" type="number" id="roPrix" placeholder="220000" oninput="buildDoc('refus')"></div>
+        <div class="vh-field"><label class="vh-label">Date</label><input class="vh-input" type="date" id="roDate" oninput="buildDoc('refus')"></div>
+      </div>
+      <div class="vh-doc-preview" id="docRefus"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REMISE DES CLÉS -->
+<div class="vh-overlay" id="mCles" onclick="closeDoc('mCles')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#f0f9ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-key" style="color:#0284c7"></i></div>
+      <div class="vh-sheet-title">Remise des clés</div>
+      <button class="vh-sheet-close" onclick="closeDoc('mCles')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du bien</label><input class="vh-input" id="rkAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('cles')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Vendeur</label><input class="vh-input" id="rkVendeur" placeholder="Jean Dupont" oninput="buildDoc('cles')"></div>
+        <div class="vh-field"><label class="vh-label">Acquéreur</label><input class="vh-input" id="rkAcheteur" placeholder="Marie Martin" oninput="buildDoc('cles')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Prix de vente (€)</label><input class="vh-input" type="number" id="rkPrix" placeholder="245000" oninput="buildDoc('cles')"></div>
+        <div class="vh-field"><label class="vh-label">Nb de clés</label><input class="vh-input" type="number" id="rkCles" placeholder="3" oninput="buildDoc('cles')"></div>
+      </div>
+      <div class="vh-field"><label class="vh-label">Date de remise</label><input class="vh-input" type="date" id="rkDate" oninput="buildDoc('cles')"></div>
+      <div class="vh-doc-preview" id="docCles"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FICHE D'ESTIMATION -->
+<div class="vh-overlay" id="mPrix" onclick="closeDoc('mPrix')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#f0f7ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-table" style="color:#3b82f6"></i></div>
+      <div class="vh-sheet-title">Fiche d'estimation</div>
+      <button class="vh-sheet-close" onclick="closeDoc('mPrix')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div style="background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:10px;padding:11px 13px;margin-bottom:14px;font-size:12.5px;color:#555;line-height:1.6">
+        <i class="ti ti-info-circle" style="color:#E84533;margin-right:5px"></i>
+        Renseignez la surface et le type de bien, saisissez les prix au m² relevés sur chaque site, ajustez vos marges. La fiche calcule votre prix cible et votre prix plancher.
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Surface (m²)</label><input class="vh-input" type="number" id="epSurface" placeholder="75" oninput="buildDoc('prix')"></div>
+        <div class="vh-field"><label class="vh-label">Type de bien</label>
+          <select class="vh-input" id="epType" onchange="buildDoc('prix')">
+            <option>Appartement</option><option>Maison</option><option>Studio</option><option>Duplex</option><option>Terrain</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin:14px 0 10px;display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:14px;font-weight:800;color:#E84533">Sources consultées</div>
+        <button onclick="addMPrixRow()" style="display:inline-flex;align-items:center;gap:4px;padding:6px 11px;background:white;border:1.5px solid #E84533;color:#E84533;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><i class="ti ti-plus"></i> Ajouter</button>
+      </div>
+      <div id="epRows">
+        <div class="ep-row" style="margin-bottom:10px">
+          <div class="vh-mgrid" style="gap:8px">
+            <div class="vh-field"><label class="vh-label">Source</label>
+              <select class="vh-input ep-src" onchange="buildDoc('prix')"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
+            </div>
+            <div class="vh-field"><label class="vh-label">Prix/m² (€)</label><input class="vh-input ep-pm2" type="number" placeholder="3 500" oninput="buildDoc('prix')"></div>
+          </div>
+          <div class="vh-field"><label class="vh-label">Notes</label><input class="vh-input ep-note" type="text" placeholder="Rue X, même étage…" oninput="buildDoc('prix')"></div>
+        </div>
+        <div class="ep-row" style="margin-bottom:10px">
+          <div class="vh-mgrid" style="gap:8px">
+            <div class="vh-field"><label class="vh-label">Source</label>
+              <select class="vh-input ep-src" onchange="buildDoc('prix')"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
+            </div>
+            <div class="vh-field"><label class="vh-label">Prix/m² (€)</label><input class="vh-input ep-pm2" type="number" placeholder="" oninput="buildDoc('prix')"></div>
+          </div>
+          <div class="vh-field"><label class="vh-label">Notes</label><input class="vh-input ep-note" type="text" placeholder="" oninput="buildDoc('prix')"></div>
+        </div>
+        <div class="ep-row" style="margin-bottom:10px">
+          <div class="vh-mgrid" style="gap:8px">
+            <div class="vh-field"><label class="vh-label">Source</label>
+              <select class="vh-input ep-src" onchange="buildDoc('prix')"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
+            </div>
+            <div class="vh-field"><label class="vh-label">Prix/m² (€)</label><input class="vh-input ep-pm2" type="number" placeholder="" oninput="buildDoc('prix')"></div>
+          </div>
+          <div class="vh-field"><label class="vh-label">Notes</label><input class="vh-input ep-note" type="text" placeholder="" oninput="buildDoc('prix')"></div>
+        </div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Marge négociation (%)</label><input class="vh-input" type="number" id="epMarge" placeholder="4" oninput="buildDoc('prix')"></div>
+        <div class="vh-field"><label class="vh-label">Réduction max (%)</label><input class="vh-input" type="number" id="epReduc" placeholder="7" oninput="buildDoc('prix')"></div>
+      </div>
+      <div class="vh-doc-preview" id="docPrix" style="margin-top:14px"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+var done = JSON.parse(localStorage.getItem('sa_vendre_done')||'[]');
+var openSteps = new Set([1]);
+
+function renderAllSteps(){
+  for(var i=1;i<=9;i++){
+    var isDone=done.indexOf(i)!==-1, isOpen=openSteps.has(i);
+    document.getElementById('vc'+i).className='vh-card'+(isOpen?' active':isDone?' done':'');
+    document.getElementById('vd'+i).className='vh-dot'+(isOpen?' active':isDone?' done':'');
+    document.getElementById('vdn'+i).textContent=isDone&&!isOpen?'✓':i;
+  }
+}
+
+function openStep(n){
+  if(openSteps.has(n)){
+    openSteps.delete(n);
+  } else {
+    openSteps.add(n);
+    setTimeout(function(){document.getElementById('vc'+n).scrollIntoView({behavior:'smooth',block:'start'});},60);
+  }
+  renderAllSteps();
+}
+
+function jumpTo(n){
+  if(!openSteps.has(n)) openSteps.add(n);
+  renderAllSteps();
+  setTimeout(function(){document.getElementById('vc'+n).scrollIntoView({behavior:'smooth',block:'start'});},60);
+  document.getElementById('vd'+n).scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function markDone(n){
+  if(done.indexOf(n)===-1)done.push(n);
+  localStorage.setItem('sa_vendre_done',JSON.stringify(done));
+  openSteps.delete(n);
+  if(n<9){openSteps.add(n+1);setTimeout(function(){document.getElementById('vc'+(n+1)).scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  renderAllSteps();
+}
+
+function toggleSec(id, btn) {
+  var sec = document.getElementById(id);
+  var chev = btn.querySelector('.sec-chev');
+  var open = sec.style.display !== 'none';
+  sec.style.display = open ? 'none' : '';
+  if (chev) chev.style.transform = open ? 'rotate(0deg)' : 'rotate(90deg)';
+}
+
+function tc(el){
+  el.querySelector('.vh-check-box').classList.toggle('on');
+  el.querySelector('.vh-check-txt').classList.toggle('on');
+}
+
+done.forEach(function(n){if(!openSteps.has(n)){var c=document.getElementById('vc'+n);if(c)c.className='vh-card done';}});
+
+// Docs
+var _docModalMap={visite:'mVisite',offre:'mOffre',acceptation:'mAcceptation',contre:'mContre',refus:'mRefus',cles:'mCles',prix:'mPrix'};
+var _currentDocType=null;
+var _DOC_TITLES_FR={visite:'Bon de visite',offre:"Offre d'achat",acceptation:"Lettre d'acceptation",contre:'Contre-proposition',refus:"Lettre de refus d'offre",cles:'Remise des clés',prix:"Fiche d'estimation"};
+
+function openDoc(type){
+  document.getElementById(_docModalMap[type]).style.display='block';
+  document.body.style.overflow='hidden';
+  _currentDocType=type;
+  var bar=document.getElementById('docActBar');
+  if(bar){bar.style.display='block';document.getElementById('docActShare').style.display=navigator.share?'':'none';}
+  var today=new Date().toISOString().slice(0,10);
+  var d3=new Date(Date.now()+3*864e5).toISOString().slice(0,10);
+  if(type==='visite')document.getElementById('bvDate').value=today;
+  if(type==='offre'){document.getElementById('oaDate').value=today;document.getElementById('oaValidite').value=d3;}
+  if(type==='acceptation')document.getElementById('laDate').value=today;
+  if(type==='contre'){document.getElementById('cpDate').value=today;document.getElementById('cpLimite').value=d3;}
+  if(type==='refus')document.getElementById('roDate').value=today;
+  if(type==='cles')document.getElementById('rkDate').value=today;
+  buildDoc(type);
+}
+function closeDoc(id){
+  document.getElementById(id).style.display='none';
+  document.body.style.overflow='';
+  _currentDocType=null;
+  var bar=document.getElementById('docActBar');
+  if(bar) bar.style.display='none';
+}
+function saveCurrentDoc(){
+  if(!_currentDocType) return;
+  var el=document.getElementById(_docModalMap[_currentDocType]);
+  var preview=el?el.querySelector('.vh-doc-preview'):null;
+  if(!preview) return;
+  SA.saveDoc({type:_currentDocType,title:_DOC_TITLES_FR[_currentDocType]||_currentDocType,html:preview.outerHTML,date:new Date().toLocaleDateString('fr-FR')}).then(function(){
+    var t=document.createElement('div');
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#0f172a;color:#4ade80;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;white-space:nowrap;border:1px solid rgba(74,222,128,.3)';
+    t.innerHTML='<i class="ti ti-check" style="margin-right:6px"></i>Document sauvegardé !';
+    document.body.appendChild(t);
+    setTimeout(function(){t.remove();},2200);
+  });
+}
+function printCurrentDoc(){
+  if(!_currentDocType) return;
+  var el=document.getElementById(_docModalMap[_currentDocType]);
+  var preview=el?el.querySelector('.vh-doc-preview'):null;
+  var previewHtml=preview?preview.outerHTML:'';
+  var blob=new Blob(['<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"><style>body{background:#f0f2f5;padding:20px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin:0}.dw{max-width:720px;margin:0 auto}.db-btns{display:flex;gap:10px;margin-bottom:16px}button{padding:10px 20px;background:#E84533;color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}.vh-doc-preview{background:white;border:1.5px solid #e0e1e6;border-radius:12px;overflow:hidden;font-size:12.5px;line-height:1.75;color:#111}.vh-doc-preview .dh{background:linear-gradient(135deg,#0f172a,#1e293b);padding:14px 16px 13px}.vh-doc-preview .dh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.vh-doc-preview .dh-brand{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:800;color:rgba(255,255,255,.8)}.vh-doc-preview .dh-badge{width:18px;height:18px;background:#E84533;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white}.vh-doc-preview .dh-meta{font-size:9.5px;color:rgba(255,255,255,.4);text-align:right;line-height:1.5}.vh-doc-preview .dh-band{border-top:1px solid rgba(255,255,255,.1);padding-top:11px;display:flex;align-items:center;gap:9px}.vh-doc-preview .dh-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}.vh-doc-preview .dh-title{font-size:14px;font-weight:800;color:white}.vh-doc-preview .dh-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}.vh-doc-preview .db{padding:16px 16px 14px}.vh-doc-preview .dparts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.vh-doc-preview .dpart{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:9px;padding:9px 11px}.vh-doc-preview .dpart-lbl{font-size:8.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}.vh-doc-preview .dpart-name{font-size:12.5px;font-weight:700;color:#111}.vh-doc-preview .dadr{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:9px;padding:10px 12px;margin-bottom:13px;display:flex;align-items:flex-start;gap:8px}.vh-doc-preview .dadr-ico{color:#E84533;font-size:14px;flex-shrink:0;margin-top:1px}.vh-doc-preview .dadr-lbl{font-size:8.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}.vh-doc-preview .dadr-val{font-size:13px;font-weight:700;color:#111}.vh-doc-preview .ds{margin-bottom:13px}.vh-doc-preview .ds-title{font-size:9.5px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;padding-bottom:6px;border-bottom:1.5px solid #f0f0f2;display:flex;align-items:center;gap:5px}.vh-doc-preview .dkv{display:flex;margin-bottom:4px;border:1px solid #eeeff2;border-radius:7px;overflow:hidden}.vh-doc-preview .dkv-k{font-size:10.5px;font-weight:700;color:#666;background:#f4f5f7;padding:7px 10px;min-width:120px;flex-shrink:0;border-right:1px solid #eeeff2}.vh-doc-preview .dkv-v{font-size:11.5px;font-weight:600;color:#111;padding:7px 10px;flex:1}.vh-doc-preview .dkv-v.big{font-size:15px;font-weight:800;color:#0f172a}.vh-doc-preview .dlegal{font-size:11.5px;color:#444;line-height:1.85;background:#fafbfc;border:1px solid #eeeef2;border-radius:9px;padding:11px 13px}.vh-doc-preview .dsigs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;padding-top:14px;border-top:1.5px solid #f0f0f2}.vh-doc-preview .dsig-box{border:1.5px solid #e4e5ea;border-radius:9px;overflow:hidden}.vh-doc-preview .dsig-hd{background:#f4f5f7;padding:7px 10px;font-size:9px;font-weight:800;color:#777;text-transform:uppercase;border-bottom:1px solid #e4e5ea}.vh-doc-preview .dsig-bd{padding:9px 10px}.vh-doc-preview .dsig-name{font-size:11px;font-weight:700;color:#111;margin-bottom:7px}.vh-doc-preview .dsig-sp{height:38px;border:1.5px dashed #d8dce6;border-radius:6px;margin-bottom:8px}.vh-doc-preview .dsig-f{font-size:9.5px;color:#aaa;padding-bottom:12px;border-bottom:1px solid #e0e2e8}.vh-doc-preview .dfooter{background:#f8f9fb;border-top:1px solid #eeeff2;padding:8px 14px;text-align:center;font-size:9.5px;color:#bbb}@media print{.db-btns{display:none!important}@page{size:A4 portrait;margin:8mm}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}</style></head><body><div class="dw"><div class="db-btns"><button onclick="window.print()">Imprimer / PDF</button><button onclick="window.close()" style="background:#f5f5f5;color:#555;border:1.5px solid #e5e5e5">Fermer</button></div>'+previewHtml+'</div></body></html>'],{type:'text/html'});
+  window.open(URL.createObjectURL(blob),'_blank');
+}
+function shareCurrentDoc(){
+  if(!_currentDocType||!navigator.share) return;
+  navigator.share({title:_DOC_TITLES_FR[_currentDocType]||_currentDocType,text:'Document SansAgents'}).catch(function(){});
+}
+// Auto-open doc modal if URL has ?openDoc=type
+(function(){var p=new URLSearchParams(window.location.search).get('openDoc');if(p)setTimeout(function(){openDoc(p);},600);})();
+
+function nm(v){return v?parseInt(v).toLocaleString('fr-FR'):'__________';}
+function fd(s){if(!s)return '__________';var x=new Date(s);return isNaN(x)?s:x.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
+function td(){return new Date().toLocaleDateString('fr-FR');}
+function refid(p){return p+'-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'-'+Math.floor(Math.random()*9000+1000);}
+
+function mDocHead(title,ref,ico,color,sub){
+  return '<div class="dh">'+
+    '<div class="dh-top"><div class="dh-brand"><div class="dh-badge">SA</div>SansAgents.fr</div>'+
+    '<div class="dh-meta">Réf. '+ref+'<br>'+td()+'</div></div>'+
+    '<div class="dh-band"><div class="dh-ico" style="background:rgba(255,255,255,.1);color:'+color+'"><i class="ti '+ico+'"></i></div>'+
+    '<div><div class="dh-title">'+title+'</div><div class="dh-sub">'+sub+'</div></div></div></div>'+
+    '<div class="db">';
+}
+function mDocEnd(){return '</div>';}
+function mDocFoot(){return '<div class="dfooter">SansAgents.fr · '+td()+' · contact@sansagents.fr</div>';}
+function mDocParts(labels,names){
+  var h='<div class="dparts">';
+  for(var i=0;i<labels.length;i++) h+='<div class="dpart"><div class="dpart-lbl">'+labels[i]+'</div><div class="dpart-name">'+names[i]+'</div></div>';
+  return h+'</div>';
+}
+function mDocAdr(adr){return '<div class="dadr"><i class="ti ti-map-pin dadr-ico"></i><div><div class="dadr-lbl">Bien immobilier</div><div class="dadr-val">'+adr+'</div></div></div>';}
+function mDocKV(rows){
+  var h='';
+  rows.forEach(function(r){h+='<div class="dkv"><div class="dkv-k">'+r[0]+'</div><div class="dkv-v'+(r[2]?' big':'')+'">'+r[1]+'</div></div>';});
+  return h;
+}
+function mDocSec(title,ico,content){return '<div class="ds"><div class="ds-title"><i class="ti '+ico+'"></i>'+title+'</div>'+content+'</div>';}
+function mDocLegal(text){return '<div class="dlegal">'+text+'</div>';}
+function mDocSigs(sigs){
+  var h='<div class="dsigs">';
+  sigs.forEach(function(s){
+    h+='<div class="dsig-box"><div class="dsig-hd">'+s.l+'</div><div class="dsig-bd">'+
+      '<div class="dsig-name">'+s.n+'</div><div class="dsig-sp"></div>'+
+      '<div class="dsig-f">Date :</div></div></div>';
+  });
+  return h+'</div>';
+}
+
+function addMPrixRow(){
+  var tpl='<div class="ep-row" style="margin-bottom:10px">'+
+    '<div class="vh-mgrid" style="gap:8px">'+
+    '<div class="vh-field"><label class="vh-label">Source</label>'+
+    '<select class="vh-input ep-src" onchange="buildDoc(\'prix\')"><option value="">— Choisir —</option>'+
+    '<option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option>'+
+    '<option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select></div>'+
+    '<div class="vh-field"><label class="vh-label">Prix/m² (€)</label><input class="vh-input ep-pm2" type="number" placeholder="" oninput="buildDoc(\'prix\')"></div>'+
+    '</div><div class="vh-field"><label class="vh-label">Notes</label><input class="vh-input ep-note" type="text" placeholder="" oninput="buildDoc(\'prix\')"></div></div>';
+  document.getElementById('epRows').insertAdjacentHTML('beforeend',tpl);
+}
+
+function buildDoc(type){
+  if(type==='visite'){
+    var adr=document.getElementById('bvAdresse').value||'__________',vdr=document.getElementById('bvVendeur').value||'__________',vis=document.getElementById('bvVisiteur').value||'__________',dt=fd(document.getElementById('bvDate').value),px=nm(document.getElementById('bvPrix').value);
+    document.getElementById('docVisite').innerHTML=
+      mDocHead('Bon de visite',refid('BV'),'ti-door-enter','#ff7a68','Protection contre toute réclamation d\'agence')+
+      mDocAdr(adr)+mDocParts(['Vendeur','Visiteur'],[vdr,vis])+
+      mDocSec('Détails de la visite','ti-calendar-event',mDocKV([['Date de visite',dt],['Prix affiché',px+' €',true]]))+
+      mDocSec('Déclaration','ti-file-text',mDocLegal('Je soussigné(e) <strong>'+vis+'</strong> déclare avoir visité ce bien le <strong>'+dt+'</strong>, présenté par <strong>'+vdr+'</strong>, et l\'avoir découvert <strong>exclusivement via SansAgents.fr</strong>. Aucune commission d\'agence ne pourra être réclamée par un tiers dans le cadre d\'une éventuelle transaction.'))+
+      mDocSigs([{l:'Signature du visiteur',n:vis},{l:'Signature du vendeur',n:vdr}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='offre'){
+    var adr=document.getElementById('oaAdresse').value||'__________',ach=document.getElementById('oaAcheteur').value||'__________',vdr=document.getElementById('oaVendeur').value||'__________',mt=nm(document.getElementById('oaMontant').value),val=fd(document.getElementById('oaValidite').value),dt=fd(document.getElementById('oaDate').value);
+    document.getElementById('docOffre').innerHTML=
+      mDocHead('Offre d\'achat',refid('OA'),'ti-file-euro','#3b82f6','Proposition d\'acquisition entre particuliers')+
+      mDocAdr(adr)+mDocParts(['Acquéreur','Vendeur'],[ach,vdr])+
+      mDocSec('Conditions','ti-currency-euro',mDocKV([['Montant proposé',mt+' €',true],['Frais de notaire','À la charge de l\'acquéreur (~7,5%)'],['Validité','Jusqu\'au '+val]]))+
+      mDocSec('Conditions suspensives','ti-shield-check',mDocLegal('Offre conditionnée à l\'obtention d\'un prêt immobilier aux conditions du marché. Ne constitue un engagement ferme qu\'après signature d\'un compromis de vente devant notaire.'))+
+      mDocSigs([{l:'Signature de l\'acquéreur',n:ach},{l:'Réponse du vendeur',n:'☐ Acceptée   ☐ Refusée   ☐ Contre-prop.'}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='acceptation'){
+    var adr=document.getElementById('laAdresse').value||'__________',vdr=document.getElementById('laVendeur').value||'__________',ach=document.getElementById('laAcheteur').value||'__________',px=nm(document.getElementById('laPrix').value),dt=fd(document.getElementById('laDate').value);
+    document.getElementById('docAcceptation').innerHTML=
+      mDocHead('Lettre d\'acceptation d\'offre',refid('LA'),'ti-circle-check','#16a34a','Accord de principe du vendeur')+
+      mDocAdr(adr)+mDocParts(['Vendeur','Acquéreur'],[vdr,ach])+
+      mDocSec('Offre acceptée','ti-check',mDocKV([['Montant accepté',px+' €',true],['Date d\'acceptation',dt]]))+
+      mDocSec('Déclaration','ti-file-text',mDocLegal('Je soussigné(e) <strong>'+vdr+'</strong> déclare accepter l\'offre de <strong>'+ach+'</strong> pour <strong>'+px+' €</strong> nets vendeur, en date du <strong>'+dt+'</strong>. Cette acceptation est donnée sous réserve de la signature d\'un compromis chez le notaire et de la levée de toutes les conditions suspensives.'))+
+      mDocSigs([{l:'Signature du vendeur',n:vdr},{l:'Accusé de réception',n:ach}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='contre'){
+    var adr=document.getElementById('cpAdresse').value||'__________',vdr=document.getElementById('cpVendeur').value||'__________',ach=document.getElementById('cpAcheteur').value||'__________',pxi=nm(document.getElementById('cpPrixInitial').value),pxc=nm(document.getElementById('cpPrixContre').value),dt=fd(document.getElementById('cpDate').value),lim=fd(document.getElementById('cpLimite').value);
+    document.getElementById('docContre').innerHTML=
+      mDocHead('Contre-proposition de vente',refid('CP'),'ti-arrows-exchange','#d97706','Réponse à une offre jugée insuffisante')+
+      mDocAdr(adr)+mDocParts(['Vendeur','Acquéreur'],[vdr,ach])+
+      mDocSec('Négociation','ti-scale',mDocKV([['Offre initiale reçue',pxi+' €'],['Ma contre-proposition',pxc+' €',true],['Validité','Jusqu\'au '+lim]]))+
+      mDocSec('Motivation','ti-message',mDocLegal('Je soussigné(e) <strong>'+vdr+'</strong> accuse réception de l\'offre de <strong>'+ach+'</strong> en date du <strong>'+dt+'</strong>. Compte tenu des prix du marché local, je formule la contre-proposition ci-dessus, valable jusqu\'à la date indiquée. Passé ce délai, elle sera considérée comme caduque.'))+
+      mDocSigs([{l:'Signature du vendeur',n:vdr},{l:'Réponse de l\'acquéreur',n:'☐ Acceptée   ☐ Refusée'}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='refus'){
+    var adr=document.getElementById('roAdresse').value||'__________',vdr=document.getElementById('roVendeur').value||'__________',ach=document.getElementById('roAcheteur').value||'__________',px=nm(document.getElementById('roPrix').value),dt=fd(document.getElementById('roDate').value);
+    document.getElementById('docRefus').innerHTML=
+      mDocHead('Lettre de refus d\'offre',refid('RO'),'ti-x','#dc2626','Décision formelle de ne pas donner suite')+
+      mDocAdr(adr)+mDocParts(['Vendeur','Acquéreur'],[vdr,ach])+
+      mDocSec('Offre refusée','ti-ban',mDocKV([['Montant de l\'offre',px+' €'],['Date de l\'offre',dt],['Décision','Offre non retenue']]))+
+      mDocSec('Lettre de refus','ti-file-text',mDocLegal('Je soussigné(e) <strong>'+vdr+'</strong> accuse réception de l\'offre de <strong>'+ach+'</strong> portant sur <strong>'+px+' €</strong>, en date du <strong>'+dt+'</strong>.<br><br>Après réflexion, je suis contraint(e) de décliner cette offre, celle-ci ne correspondant pas aux conditions auxquelles j\'envisage de céder ce bien. Je reste disponible pour toute nouvelle proposition.'))+
+      mDocSigs([{l:'Signature du vendeur',n:vdr},{l:'Accusé de réception',n:ach}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='cles'){
+    var adr=document.getElementById('rkAdresse').value||'__________',vdr=document.getElementById('rkVendeur').value||'__________',ach=document.getElementById('rkAcheteur').value||'__________',px=nm(document.getElementById('rkPrix').value),nb=document.getElementById('rkCles').value||'__',dt=fd(document.getElementById('rkDate').value);
+    document.getElementById('docCles').innerHTML=
+      mDocHead('Procès-verbal de remise des clés',refid('PV'),'ti-key','#ca8a04','À signer le jour du transfert de propriété')+
+      mDocAdr(adr)+mDocParts(['Vendeur','Acquéreur'],[vdr,ach])+
+      mDocSec('Détails','ti-receipt',mDocKV([['Prix de vente définitif',px+' €',true],['Date de remise',dt],['Nombre de clés',nb+' clé'+(parseInt(nb)>1?'s':'')]]))+
+      mDocSec('Attestation','ti-file-check',mDocLegal('Je soussigné(e) <strong>'+vdr+'</strong> atteste avoir remis le <strong>'+dt+'</strong> à <strong>'+ach+'</strong> la totalité des <strong>'+nb+' clé(s)</strong> du bien ci-dessus, suite à la signature de l\'acte authentique de vente et au paiement intégral du prix convenu. L\'acquéreur déclare prendre possession du bien en parfaite connaissance de son état.'))+
+      '<div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:9px;padding:10px 12px;margin-bottom:14px;font-size:11.5px;color:#166534;display:flex;align-items:flex-start;gap:7px"><i class="ti ti-circle-check" style="font-size:15px;flex-shrink:0;margin-top:1px"></i><span><strong>Transfert effectif.</strong> À partir de ce document, l\'acquéreur est propriétaire et assume toutes les charges.</span></div>'+
+      mDocSigs([{l:'Signature du vendeur',n:vdr},{l:'Signature de l\'acquéreur',n:ach}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='prix'){
+    var surface=parseFloat(document.getElementById('epSurface').value)||0;
+    var btype=document.getElementById('epType').value;
+    var marge=parseFloat(document.getElementById('epMarge').value)||0;
+    var reduc=parseFloat(document.getElementById('epReduc').value)||0;
+    var rows=document.querySelectorAll('#mPrix .ep-row');
+    var entries=[];
+    rows.forEach(function(r){
+      var src=r.querySelector('.ep-src').value;
+      var pm2=parseFloat(r.querySelector('.ep-pm2').value)||0;
+      var note=r.querySelector('.ep-note').value;
+      if(src&&pm2) entries.push({src:src,pm2:pm2,note:note});
+    });
+    var avg=entries.length?entries.reduce(function(a,b){return a+b.pm2;},0)/entries.length:0;
+    var prixCible=surface&&avg?Math.round(avg*surface*(1+marge/100)/1000)*1000:0;
+    var prixPlancher=prixCible?Math.round(prixCible*(1-reduc/100)/1000)*1000:0;
+    var fmtE=function(n){return n?n.toLocaleString('fr-FR')+' €':'—';};
+    var fmtM=function(n){return n?n.toLocaleString('fr-FR')+' €/m²':'—';};
+    var rowsHtml=entries.map(function(e){
+      return '<div class="df"><strong>'+e.src+'</strong> — '+fmtM(e.pm2)+(surface?' ('+fmtE(Math.round(e.pm2*surface))+')':'')+(e.note?' — '+e.note:'')+'</div>';
+    }).join('')||'<div style="color:#bbb;font-size:12px">Renseignez au moins une source</div>';
+    var html=mDocHead('Fiche d\'estimation',refid('EP'),'ti-chart-bar','#E84533','Analyse comparative de marché')
+      +'<div class="ds"><div class="ds-title">Bien'+(btype?' — '+btype:'')+(surface?' — '+surface+' m²':'')+'</div>'+rowsHtml+'</div>';
+    if(avg){
+      html+='<div class="ds"><div class="ds-title">Synthèse</div>'
+        +'<div class="df"><strong>Moyenne au m²</strong> : '+fmtM(Math.round(avg))+'</div>';
+      if(prixCible) html+='<div class="df" style="color:#E84533"><strong>Prix cible (+'+marge+'% marge)</strong> : '+fmtE(prixCible)+'</div>';
+      if(prixPlancher) html+='<div class="df" style="color:#16a34a"><strong>Prix plancher (−'+reduc+'% max)</strong> : '+fmtE(prixPlancher)+'</div>';
+      html+='</div>';
+    }
+    html+=mDocEnd()+mDocFoot();
+    document.getElementById('docPrix').innerHTML=html;
+  }
+}
+
+// Description generator
+function generateDesc(){
+  var type=document.getElementById('hType').value;
+  var s=document.getElementById('hSurface').value||'___';
+  var p=document.getElementById('hPieces').value;
+  var ch=document.getElementById('hChambres').value;
+  var sdb=document.getElementById('hSdb').value;
+  var v=document.getElementById('hVille').value||'secteur recherché';
+  var dpe=document.getElementById('hDpe').value;
+  var chauf=document.getElementById('hChauffage').value;
+  var etat=document.getElementById('hEtat').value;
+  var a=document.getElementById('hAtouts').value;
+  var e=document.getElementById('hEtage').value;
+  var tc=type.charAt(0).toUpperCase()+type.slice(1);
+  var ps=p?p+' pièce'+(parseInt(p)>1?'s':''):'';
+  var arr=a?a.split(',').map(function(x){return x.trim();}).filter(Boolean):[];
+  var accord=(type==='appartement'||type==='studio'||type==='duplex')?'':type==='maison'?'e':'';
+  var L=[];
+  L.push(tc+(ps?' — '+ps:'')+(s?' — '+s+' m²':'')+(v?' — '+v:''));L.push('');
+  L.push(tc+(ps?' '+ps:'')+' de '+s+' m²'+(v?' situé'+accord+' à '+v:'')+', '+(etat||'en bon état')+'.');L.push('');
+  if(e){L.push('📍 '+e+'.');L.push('');}
+  if(ch||sdb){var det=[];if(ch)det.push(ch+' chambre'+(parseInt(ch)>1?'s':''));if(sdb)det.push(sdb+' salle'+(parseInt(sdb)>1?'s':'')+' de bain');L.push('Composition : '+det.join(', ')+'.');L.push('');}
+  if(dpe&&dpe!=='NC'){L.push('⚡ DPE : '+dpe+(dpe==='A'||dpe==='B'?' — excellent bilan énergétique':dpe==='C'||dpe==='D'?' — bilan correct':' — travaux possibles')+'.');L.push('');}
+  if(chauf&&chauf!=='nc'){L.push('🔥 Chauffage : '+chauf+'.');L.push('');}
+  if(arr.length){L.push('✅ Points forts :');arr.forEach(function(x){L.push('   • '+x.charAt(0).toUpperCase()+x.slice(1));});L.push('');}
+  L.push('Vendu directement par le propriétaire via SansAgents.fr — sans commission d\'agence. Commission 1% uniquement en cas de vente conclue.');
+  L.push('');L.push('Visites sur rendez-vous via SansAgents.fr.');
+  document.getElementById('helperText').textContent=L.join('\n');
+  document.getElementById('helperResult').style.display='';
+}
+function copyDesc(){
+  navigator.clipboard.writeText(document.getElementById('helperText').textContent).then(function(){
+    var b=event.target.closest('button');b.innerHTML='<i class="ti ti-check"></i> Copié !';
+    setTimeout(function(){b.innerHTML='<i class="ti ti-copy"></i> Copier le texte';},2000);
+  });
+}
+
+SA.init().then(function(){
+  var u=SA.getUser();
+  if(u)document.getElementById('botProfileLabel').textContent=u.prenom||'Profil';
+});
+</script>
+
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/m/profil';else window.location='/m/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,459 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Professionnels — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+.m-pro-header { background: linear-gradient(135deg,#0f1923,#1a2c3d); padding: 28px var(--pad) 24px; }
+.m-pro-header h1 { font-size: 22px; font-weight: 800; color: white; margin-bottom: 8px; letter-spacing: -0.3px; line-height: 1.3; }
+.m-pro-header p { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 18px; line-height: 1.6; }
+.m-pro-search { display: flex; background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; overflow: hidden; }
+.m-pro-search input { flex: 1; background: transparent; border: none; padding: 10px 14px; font-size: 14px; color: white; outline: none; font-family: inherit; }
+.m-pro-search input::placeholder { color: rgba(255,255,255,0.4); }
+.m-pro-search button { background: var(--red); border: none; padding: 0 14px; color: white; font-size: 16px; cursor: pointer; }
+
+.m-pro-card {
+  margin: 0 var(--pad) 12px;
+  border: 1px solid var(--border); border-radius: 16px; background: white;
+  cursor: pointer; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.m-pro-card:active { background: #fafafa; }
+.m-pro-card-head { display: flex; align-items: center; gap: 12px; padding: 14px 14px 10px; }
+.m-pro-avatar { width: 48px; height: 48px; border-radius: 12px; color: white; font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-pro-head-info { flex: 1; min-width: 0; }
+.m-pro-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-pro-job { font-size: 12px; color: var(--red); font-weight: 600; margin-top: 1px; }
+.m-pro-head-right { text-align: right; flex-shrink: 0; }
+.m-pro-stars { display: flex; align-items: center; gap: 3px; font-size: 12px; color: #f59e0b; justify-content: flex-end; }
+.m-pro-stars span { color: var(--text2); font-size: 11px; }
+.m-pro-badge { display: inline-flex; align-items: center; gap: 3px; background: #ecfdf5; color: #065f46; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 5px; margin-top: 3px; }
+.m-pro-desc { font-size: 12px; color: var(--text2); line-height: 1.5; padding: 0 14px 10px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.m-pro-meta { display: flex; align-items: center; gap: 10px; padding: 0 14px 12px; flex-wrap: wrap; }
+.m-pro-meta span { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 3px; }
+.m-pro-actions { display: flex; gap: 8px; padding: 0 12px 12px; }
+.m-pro-fav { width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid var(--border); background: white; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--text3); cursor: pointer; flex-shrink: 0; }
+.m-pro-fav.active { color: var(--red); border-color: #ffd0cb; background: #fff5f4; }
+.m-pro-contact { flex: 1; background: var(--red); color: white; border: none; border-radius: 10px; padding: 9px 12px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+
+.m-empty { text-align: center; padding: 48px var(--pad); }
+.m-empty i { font-size: 40px; color: #ddd; display: block; margin-bottom: 12px; }
+.m-empty h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.m-empty p { font-size: 13px; color: var(--text2); }
+
+.m-commission-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.m-commission-item:last-child { border-bottom: none; }
+.m-commission-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(232,69,51,0.15); border: 1px solid rgba(232,69,51,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-commission-icon i { color: #ff7a68; font-size: 18px; }
+.m-commission-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 3px; }
+.m-commission-desc { font-size: 11.5px; color: rgba(255,255,255,0.5); line-height: 1.45; }
+</style>
+</head>
+<body>
+
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.location='/m/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+  <button class="m-hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/m/profil';else window.location='/m/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+
+<!-- HEADER -->
+<div class="m-pro-header">
+  <h1>Trouvez le <span style="color:#ff7a68">professionnel</span><br>qu'il vous faut</h1>
+  <p>Comparez les professionnels près de chez vous grâce aux avis vérifiés.</p>
+  <div class="m-pro-search">
+    <input type="text" id="searchInput" placeholder="Rechercher un professionnel…" oninput="applyFilters()">
+    <button onclick="applyFilters()"><i class="ti ti-search"></i></button>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="m-filter-bar">
+  <button class="m-filter-pill" id="pillCat" onclick="openPanel('panelCat')">
+    <i class="ti ti-briefcase"></i> <span id="pillCatLabel">Métier</span> <i class="ti ti-chevron-down" style="font-size:11px"></i>
+  </button>
+  <button class="m-filter-pill" id="pillVille" onclick="openPanel('panelVille')">
+    <i class="ti ti-map-pin"></i> <span id="pillVilleLabel">Ville</span> <i class="ti ti-chevron-down" style="font-size:11px"></i>
+  </button>
+  <button class="m-filter-pill" id="pillNote" onclick="openPanel('panelNote')">
+    <i class="ti ti-star"></i> <span id="pillNoteLabel">Note</span> <i class="ti ti-chevron-down" style="font-size:11px"></i>
+  </button>
+</div>
+
+<!-- BANNIÈRE PROMO CODE AVANT LA LISTE -->
+<div style="margin:12px var(--pad);background:linear-gradient(135deg,#0f1923,#1a2c3d);border-radius:14px;padding:16px">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="width:44px;height:44px;border-radius:12px;background:rgba(232,69,51,0.2);border:1px solid rgba(232,69,51,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <i class="ti ti-discount-2" style="color:#ff7a68;font-size:22px"></i>
+    </div>
+    <div>
+      <div style="font-size:15px;font-weight:800;color:white;margin-bottom:2px">-5% sur votre devis</div>
+      <div style="font-size:11.5px;color:rgba(255,255,255,0.6);line-height:1.4">Mentionnez le code <strong style="color:#ff9a8c">SANSAGENTS5</strong> pour bénéficier d'une réduction exclusive.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS BAR -->
+<div style="padding:8px var(--pad);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:white">
+  <span style="font-size:13px;color:var(--text2)"><strong id="proCount">0</strong> professionnel<span id="proPlural"></span></span>
+  <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px">
+    <span style="display:inline-flex;align-items:center;gap:3px;background:#ecfdf5;color:#065f46;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px"><i class="ti ti-check" style="font-size:10px"></i> Vérifié</span>
+    = SIRET contrôlé
+  </span>
+</div>
+
+<div id="proList" style="padding-top:12px;padding-bottom:16px"></div>
+
+<!-- ─── COMMISSION ──────────────────────────────────────── -->
+<div style="background:white;padding:44px var(--pad);border-top:1px solid var(--border)">
+  <div style="display:inline-flex;align-items:center;gap:6px;background:#fff0ee;border:1px solid #ffc5bd;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:var(--red);margin-bottom:16px">
+    <i class="ti ti-receipt"></i> Commission professionnelle
+  </div>
+  <h2 style="font-size:19px;font-weight:800;color:var(--text);line-height:1.25;margin-bottom:6px">Comment fonctionne<br>la commission ?</h2>
+  <p style="font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:24px">Un modèle transparent, simple et sans surprise — la commission n'est jamais payée par le particulier.</p>
+
+  <!-- Étapes numérotées -->
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div style="display:flex;gap:14px;padding-bottom:20px;position:relative">
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--red);color:white;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center">1</div>
+        <div style="width:2px;flex:1;background:var(--border);margin-top:6px"></div>
+      </div>
+      <div style="padding-top:4px">
+        <div style="font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:4px">Le particulier mentionne le code</div>
+        <div style="font-size:12.5px;color:var(--text2);line-height:1.55">Il trouve votre fiche sur SansAgents et mentionne le code <strong style="color:var(--red)">SANSAGENTS5</strong> en demandant son devis.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:14px;padding-bottom:20px;position:relative">
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--red);color:white;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center">2</div>
+        <div style="width:2px;flex:1;background:var(--border);margin-top:6px"></div>
+      </div>
+      <div style="padding-top:4px">
+        <div style="font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:4px">Vous appliquez -5% sur le devis</div>
+        <div style="font-size:12.5px;color:var(--text2);line-height:1.55">Le professionnel applique <strong>5% de réduction</strong> sur le montant du devis grâce à ce code.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:14px;padding-bottom:20px;position:relative">
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--red);color:white;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center">3</div>
+        <div style="width:2px;flex:1;background:var(--border);margin-top:6px"></div>
+      </div>
+      <div style="padding-top:4px">
+        <div style="font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:4px">Si le devis est signé, SansAgents facture 8%</div>
+        <div style="font-size:12.5px;color:var(--text2);line-height:1.55">SansAgents facture au professionnel une commission de <strong>8%</strong> calculée sur le montant après réduction. <strong>Le particulier ne paie jamais cette commission</strong> — elle est entièrement à la charge du professionnel.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:14px">
+      <div style="flex-shrink:0">
+        <div style="width:32px;height:32px;border-radius:50%;background:#f0f0f0;color:#666;font-size:16px;display:flex;align-items:center;justify-content:center"><i class="ti ti-calculator"></i></div>
+      </div>
+      <div style="padding-top:4px">
+        <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:4px">Exemple concret</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6">Devis initial de <strong>2 000 €</strong> → le particulier paie <strong>1 900 €</strong> (-5%) → SansAgents facture au professionnel 8% de 1 900 €, soit <strong style="color:var(--red)">152 € de commission</strong>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Condition -->
+  <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-start">
+    <i class="ti ti-circle-check" style="color:#1a8c4e;font-size:18px;flex-shrink:0;margin-top:1px"></i>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">Condition d'inscription</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">Tout professionnel référencé sur SansAgents accepte ce principe de commission sur les devis signés via la plateforme. En cas de refus, son profil est retiré de l'annuaire.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── REJOINDRE ──────────────────────────────────────── -->
+<div id="rejoindre" style="background:#0f1923;padding:44px var(--pad);margin-top:0">
+  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(232,69,51,0.18);border:1px solid rgba(232,69,51,0.35);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:#f87364;margin-bottom:12px">
+    <i class="ti ti-briefcase"></i> Espace professionnels
+  </div>
+  <h2 style="font-size:19px;font-weight:800;color:white;line-height:1.25;margin-bottom:8px">Rejoignez le réseau<br>SansAgents</h2>
+  <p style="font-size:12.5px;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:20px">Soyez visible par des milliers de particuliers qui cherchent un notaire, un diagnostiqueur ou un artisan de confiance.</p>
+  <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+      <div><div style="font-size:13px;font-weight:700;color:white;margin-bottom:2px">Créez votre profil</div><div style="font-size:11.5px;color:rgba(255,255,255,0.5)">Renseignez votre activité, zone géographique et coordonnées en quelques minutes.</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+      <div><div style="font-size:13px;font-weight:700;color:white;margin-bottom:2px">Vérification SIRET</div><div style="font-size:11.5px;color:rgba(255,255,255,0.5)">Notre équipe contrôle votre numéro SIRET et vos qualifications professionnelles.</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+      <div><div style="font-size:13px;font-weight:700;color:white;margin-bottom:2px">Badge « Vérifié »</div><div style="font-size:11.5px;color:rgba(255,255,255,0.5)">Votre profil est publié avec le badge de confiance SansAgents.</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+      <div><div style="font-size:13px;font-weight:700;color:white;margin-bottom:2px">Recevez des contacts</div><div style="font-size:11.5px;color:rgba(255,255,255,0.5)">Les particuliers vous contactent directement depuis votre fiche — sans intermédiaire.</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">5</div>
+      <div><div style="font-size:13px;font-weight:700;color:white;margin-bottom:2px">Développez votre activité</div><div style="font-size:11.5px;color:rgba(255,255,255,0.5)">Collectez des avis vérifiés, montez en visibilité et fidélisez votre clientèle.</div></div>
+    </div>
+  </div>
+  <button class="m-btn m-btn-primary m-btn-full" onclick="window.location='/inscription-pro'" style="font-size:14px;padding:13px">
+    <i class="ti ti-user-plus"></i> Rejoindre le réseau gratuitement
+  </button>
+  <p style="text-align:center;font-size:11px;color:rgba(255,255,255,0.35);margin-top:10px">Inscription gratuite · Pas d'engagement</p>
+</div>
+
+<div style="height:20px"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.location='/m/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
+    <span>Déposer</span>
+  </button>
+  <button class="m-tab" onclick="window.location='/m/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="handleAuthClick()"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+</nav>
+
+<!-- PANELS -->
+<div class="m-panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
+
+<div class="m-panel" id="panelCat">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Métier / Catégorie</div>
+  <div class="m-panel-opt" onclick="setFilter('cat','');closeAllPanels()">Tous les métiers <span id="cAll"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','Notaire');closeAllPanels()">Notaire <span id="cNot"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','Diagnostiqueur');closeAllPanels()">Diagnostiqueur <span id="cDiag"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','Courtier');closeAllPanels()">Courtier <span id="cCourt"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','Architecte');closeAllPanels()">Architecte <span id="cArch"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','Avocat');closeAllPanels()">Avocat <span id="cAvo"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','Électricien');closeAllPanels()">Électricien <span id="cElec"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','Carreleur');closeAllPanels()">Carreleur <span id="cCarr"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','Plaquiste');closeAllPanels()">Plaquiste <span id="cPlaq"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','Géomètre');closeAllPanels()">Géomètre <span id="cGeo"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('cat','corps d\'état');closeAllPanels()">Tous corps d'état <span id="cTce"></span></div>
+</div>
+
+<div class="m-panel" id="panelVille">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Ville</div>
+  <input class="m-input" type="text" id="villeSearch" placeholder="Paris, Lyon…" style="margin-bottom:12px" oninput="filterVilles(this.value)">
+  <div id="villeList"></div>
+  <button class="m-btn m-btn-primary m-btn-full" style="margin-top:10px" onclick="closeAllPanels()">Confirmer</button>
+</div>
+
+<div class="m-panel" id="panelNote">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Note minimale</div>
+  <div class="m-panel-opt" onclick="setFilter('note',0);closeAllPanels()">Toutes les notes <span id="n0"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('note',4);closeAllPanels()">4 étoiles et + <span id="n4"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('note',5);closeAllPanels()">5 étoiles uniquement <span id="n5"></span></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+var filters = { cat: '', ville: '', note: 0 };
+var allPros = [];
+var COLORS = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2','#dc2626'];
+
+function getJob(p) {
+  return p.metier || p.profession || p.job || p.category || p.categorie || p.type || p.specialite || 'Professionnel';
+}
+
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('sideMenu').classList.toggle('open');
+  document.getElementById('menuOverlay').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('menuOverlay').classList.remove('open');
+}
+function handleAuthClick() {
+  var u = SA.getUser();
+  if(u) window.location='/m/profil'; else window.location='/connexion?redirect=/m/professionnels';
+}
+
+function openPanel(id) {
+  closeAllPanels();
+  document.getElementById(id).classList.add('show');
+  document.getElementById('panelOverlay').classList.add('show');
+  updateChecks();
+  if(id === 'panelVille') filterVilles(document.getElementById('villeSearch').value || '');
+}
+function closeAllPanels() {
+  ['panelCat','panelVille','panelNote'].forEach(function(id){
+    document.getElementById(id).classList.remove('show');
+  });
+  document.getElementById('panelOverlay').classList.remove('show');
+}
+function updateChecks() {
+  var catIds = {'' :'cAll','Notaire':'cNot','Diagnostiqueur':'cDiag','Courtier':'cCourt','Architecte':'cArch','Avocat':'cAvo','Électricien':'cElec','Carreleur':'cCarr','Plaquiste':'cPlaq','Géomètre':'cGeo',"corps d'état":'cTce'};
+  Object.values(catIds).forEach(function(id){ var e=document.getElementById(id); if(e) e.innerHTML=''; });
+  var cid = catIds[filters.cat];
+  if(cid) document.getElementById(cid).innerHTML = '<i class="ti ti-check m-panel-opt-check"></i>';
+  var noteIds = {0:'n0',4:'n4',5:'n5'};
+  Object.values(noteIds).forEach(function(id){ var e=document.getElementById(id); if(e) e.innerHTML=''; });
+  var nid = noteIds[filters.note];
+  if(nid) document.getElementById(nid).innerHTML = '<i class="ti ti-check m-panel-opt-check"></i>';
+}
+
+function setFilter(k, v) { filters[k]=v; updatePills(); applyFilters(); }
+function updatePills() {
+  document.getElementById('pillCatLabel').textContent = filters.cat || 'Métier';
+  document.getElementById('pillCat').className = 'm-filter-pill' + (filters.cat ? ' active' : '');
+  document.getElementById('pillVilleLabel').textContent = filters.ville || 'Ville';
+  document.getElementById('pillVille').className = 'm-filter-pill' + (filters.ville ? ' active' : '');
+  document.getElementById('pillNoteLabel').textContent = filters.note ? filters.note + '★+' : 'Note';
+  document.getElementById('pillNote').className = 'm-filter-pill' + (filters.note ? ' active' : '');
+}
+
+function applyFilters() {
+  var q = (document.getElementById('searchInput').value || '').toLowerCase();
+  var res = allPros.filter(function(p){
+    var job = getJob(p).toLowerCase();
+    var name = (p.name || p.nom || '').toLowerCase();
+    if(filters.cat && job.toLowerCase().indexOf(filters.cat.toLowerCase()) === -1) return false;
+    if(filters.ville && (p.ville || '').toLowerCase().indexOf(filters.ville.toLowerCase()) === -1) return false;
+    if(filters.note && (p.rating || 0) < filters.note) return false;
+    if(q && name.indexOf(q) === -1 && job.indexOf(q) === -1) return false;
+    return true;
+  });
+  var cnt = res.length;
+  document.getElementById('proCount').textContent = cnt;
+  document.getElementById('proPlural').textContent = cnt > 1 ? 's' : '';
+  renderPros(res);
+}
+
+function renderPros(pros) {
+  var el = document.getElementById('proList');
+  if(!pros.length){
+    el.innerHTML = '<div class="m-empty"><i class="ti ti-user-off"></i><h3>Aucun professionnel</h3><p>Modifiez vos critères.</p></div>';
+    return;
+  }
+  el.innerHTML = pros.map(function(p, i){
+    var color = COLORS[i % COLORS.length];
+    var init = (p.name || p.nom || 'P').charAt(0).toUpperCase();
+    var job = getJob(p);
+    var rating = p.rating ? (Math.round(p.rating * 10) / 10) : 5;
+    var starsHtml = '<i class="ti ti-star-filled"></i>'.repeat(Math.round(rating)) + '<i class="ti ti-star" style="color:#ddd"></i>'.repeat(5 - Math.round(rating));
+    var desc = p.description || p.desc || 'Professionnel certifié, disponible pour vous accompagner dans votre projet immobilier.';
+    var ville = p.ville || p.city || '';
+    return '<div class="m-pro-card" onclick="seePro(\'' + p.id + '\')">' +
+      '<div class="m-pro-card-head">' +
+        '<div class="m-pro-avatar" style="background:' + color + '">' + init + '</div>' +
+        '<div class="m-pro-head-info">' +
+          '<div class="m-pro-name">' + (p.name || p.nom || 'Professionnel') + '</div>' +
+          '<div class="m-pro-job">' + job + '</div>' +
+        '</div>' +
+        '<div class="m-pro-head-right">' +
+          '<div class="m-pro-stars">' + starsHtml + ' <span>' + rating.toFixed(1) + '</span></div>' +
+          (p.verified ? '<span class="m-pro-badge"><i class="ti ti-check" style="font-size:9px"></i> Vérifié</span>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="m-pro-desc">' + desc + '</div>' +
+      '<div class="m-pro-meta">' +
+        (ville ? '<span><i class="ti ti-map-pin"></i> ' + ville + '</span>' : '') +
+        (p.transactions ? '<span><i class="ti ti-briefcase"></i> ' + p.transactions + ' missions</span>' : '') +
+      '</div>' +
+      '<div class="m-pro-actions">' +
+        '<button class="m-pro-fav" onclick="event.stopPropagation();toggleFav(this,\'' + p.id + '\')"><i class="ti ti-heart"></i></button>' +
+        '<button class="m-pro-contact" onclick="event.stopPropagation();contactPro(\'' + p.id + '\')">Contacter</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function toggleFav(btn, id) {
+  btn.classList.toggle('active');
+  var icon = btn.querySelector('i');
+  icon.className = btn.classList.contains('active') ? 'ti ti-heart-filled' : 'ti ti-heart';
+}
+function contactPro(id) {
+  var u = SA.getUser();
+  if(!u) { window.location = '/connexion?redirect=/m/professionnels'; return; }
+  window.location = '/m/messages?pro=' + id;
+}
+function seePro(id) {
+  window.location = '/m/professionnel?id=' + encodeURIComponent(id);
+}
+
+function filterVilles(q) {
+  var villes = allPros.map(function(p){ return p.ville; }).filter(Boolean)
+    .filter(function(v, i, arr){ return arr.indexOf(v) === i; });
+  var filtered = q ? villes.filter(function(v){ return v.toLowerCase().indexOf(q.toLowerCase()) !== -1; }) : villes;
+  document.getElementById('villeList').innerHTML = filtered.slice(0, 8).map(function(v){
+    return '<div class="m-panel-opt' + (filters.ville === v ? ' active' : '') + '" onclick="setFilter(\'ville\',\'' + v + '\');closeAllPanels()">' + v +
+      (filters.ville === v ? '<i class="ti ti-check m-panel-opt-check"></i>' : '') +
+    '</div>';
+  }).join('');
+}
+
+SA.init().then(function(){
+  var u = SA.getUser();
+  document.getElementById('menuAuthLabel').textContent = u ? (u.email ? u.email.split('@')[0] : 'Mon profil') : 'Se connecter';
+  document.getElementById('menuLogout').style.display = u ? '' : 'none';
+  document.getElementById('botProfileLabel').textContent = u ? 'Profil' : 'Connexion';
+
+  if(SA.getAllPros) {
+    allPros = SA.getAllPros();
+  }
+  if(!allPros || !allPros.length) {
+    allPros = [
+      {id:'p1',name:'Maître Lefebvre',metier:'Notaire',rating:4.9,verified:true,ville:'Lyon',transactions:142,description:'Notaire expérimenté, spécialisé dans les transactions immobilières entre particuliers.'},
+      {id:'p2',name:'Jean Martin',metier:'Diagnostiqueur DPE',rating:5.0,verified:true,ville:'Lyon',transactions:89,description:'Diagnostics immobiliers certifiés : DPE, amiante, plomb, électricité et plus.'},
+      {id:'p3',name:'Sophie Blanc',metier:'Courtière',rating:4.8,verified:true,ville:'Bordeaux',transactions:67,description:'Courtière en crédit immobilier, je négocie pour vous les meilleures conditions de financement.'},
+      {id:'p4',name:'Thomas Rey',metier:'Notaire',rating:5.0,verified:false,ville:'Nantes',transactions:201,description:'Notaire généraliste avec 15 ans d\'expérience, disponible 6j/7.'},
+      {id:'p5',name:'Claire Morin',metier:'Architecte',rating:4.6,verified:true,ville:'Marseille',transactions:34,description:'Architecte DPLG, accompagnement pour vos projets de rénovation et extension.'},
+      {id:'p6',name:'Karim Benali',metier:'Électricien',rating:4.8,verified:true,ville:'Bordeaux',transactions:0,description:'Électricien certifié RGE, installations et mises aux normes pour particuliers.'},
+      {id:'p7',name:'Thomas Petit',metier:'Carreleur',rating:4.7,verified:true,ville:'Lille',transactions:0,description:'Carreleur professionnel, 10 ans d\'expérience, spécialiste des grands formats.'},
+      {id:'p8',name:'Marc Durand',metier:'Diagnostiqueur DPE',rating:5.0,verified:true,ville:'Nice',transactions:112,description:'Diagnostics certifiés avec remise du rapport sous 48h.'},
+    ];
+  }
+  applyFilters();
+  filterVilles('');
+});
+</script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Déposer une annonce — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#0c1622">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+body { background: #0c1622; min-height: 100vh; display: flex; flex-direction: column; }
+.sa-bottom-nav, .sa-has-bottom-nav { display: none !important; padding-bottom: 0 !important; }
+
+.gate-nav { display: flex; align-items: center; justify-content: space-between; padding: 14px var(--pad); flex-shrink: 0; }
+.gate-logo { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.gate-logo-icon { width: 30px; height: 30px; background: #E84533; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.gate-logo-icon i { color: white; font-size: 14px; }
+.gate-logo-brand { font-size: 16px; font-weight: 700; color: white; }
+.gate-logo-brand span { color: #E84533; }
+.gate-cancel { background: rgba(255,255,255,.08); border: none; border-radius: 8px; padding: 7px 12px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,.5); display: flex; align-items: center; gap: 5px; cursor: pointer; font-family: inherit; }
+
+.gate-body { flex: 1; display: flex; flex-direction: column; padding: 6px var(--pad) 24px; }
+
+.gate-eyebrow { font-size: 11px; font-weight: 700; color: #ff7a68; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+.gate-title { font-size: 22px; font-weight: 800; color: white; line-height: 1.2; letter-spacing: -.4px; margin-bottom: 4px; }
+.gate-sub { font-size: 12.5px; color: rgba(255,255,255,.4); line-height: 1.5; margin-bottom: 16px; }
+
+.gate-card { background: rgba(255,255,255,.04); border: 1.5px solid rgba(255,255,255,.09); border-radius: 16px; padding: 14px; margin-bottom: 14px; }
+.gate-tips { display: flex; flex-direction: column; gap: 10px; }
+.gate-tip { display: flex; align-items: flex-start; gap: 10px; }
+.gate-tip-num { width: 22px; height: 22px; border-radius: 50%; background: rgba(232,69,51,.2); border: 1.5px solid rgba(232,69,51,.4); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #ff7a68; flex-shrink: 0; margin-top: 2px; }
+.gate-tip-text { font-size: 12px; color: rgba(255,255,255,.55); line-height: 1.5; flex: 1; }
+.gate-tip-text strong { color: white; }
+
+.gate-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.gate-btn-primary { background: #E84533; color: white; }
+.gate-btn-primary:active { background: #c93a2a; }
+.gate-btn-ghost { background: rgba(255,255,255,.06); color: rgba(255,255,255,.45); border: 1px solid rgba(255,255,255,.08); font-size: 12.5px; font-weight: 600; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<nav class="gate-nav">
+  <div class="gate-logo" onclick="window.location='/m/'">
+    <div class="gate-logo-icon"><i class="ti ti-key"></i></div>
+    <div class="gate-logo-brand">Sans<span>Agents</span></div>
+  </div>
+  <button class="gate-cancel" onclick="window.history.back()"><i class="ti ti-x" style="font-size:13px"></i> Annuler</button>
+</nav>
+
+<div class="gate-body">
+  <div class="gate-eyebrow">Vous êtes prêt</div>
+  <div class="gate-title">Avant de commencer<br>le formulaire</div>
+  <div class="gate-sub">Ayez ces éléments sous la main pour aller plus vite.</div>
+
+  <div class="gate-card">
+    <div class="gate-tips">
+      <div class="gate-tip">
+        <div class="gate-tip-num">1</div>
+        <div class="gate-tip-text"><strong>Photos du bien</strong> — au moins 5 photos de bonne qualité, bien éclairées. La première impression compte.</div>
+      </div>
+      <div class="gate-tip">
+        <div class="gate-tip-num">2</div>
+        <div class="gate-tip-text"><strong>Informations clés</strong> — surface, pièces, étage, année de construction, type de chauffage.</div>
+      </div>
+      <div class="gate-tip">
+        <div class="gate-tip-num">3</div>
+        <div class="gate-tip-text"><strong>Prix de vente</strong> — estimez votre bien au prix du marché. Consultez notre <a href="/m/vendre" style="color:#ff7a68;text-decoration:none">guide gratuit</a> en cas de doute.</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="gate-btn gate-btn-primary" onclick="window.location='/m/deposer-form'">
+    <i class="ti ti-rocket"></i> Commencer le formulaire
+  </button>
+  <button class="gate-btn gate-btn-ghost" onclick="window.location='/m/vendre'">
+    <i class="ti ti-book-2"></i> Consulter le guide d'abord
+  </button>
+</div>
+
+</body>
+</html>

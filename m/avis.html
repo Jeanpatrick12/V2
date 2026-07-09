@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laisser un avis — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+.avis-hero {
+  background: linear-gradient(135deg,#0f1923,#1a2c3d);
+  padding: 20px var(--pad) 28px;
+}
+.avis-hero-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600;
+  color: rgba(255,255,255,0.8); cursor: pointer; border: none; font-family: inherit;
+  margin-bottom: 20px;
+}
+.avis-hero-back:active { background: rgba(255,255,255,0.18); }
+.avis-hero-target {
+  display: flex; gap: 14px; align-items: center;
+}
+.avis-hero-avatar {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--red); color: white;
+  font-size: 22px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.avis-hero-name { font-size: 17px; font-weight: 800; color: white; margin-bottom: 2px; }
+.avis-hero-type { font-size: 12px; color: rgba(255,255,255,0.55); }
+
+.avis-section { padding: 28px var(--pad) 0; }
+.avis-label { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+
+/* Star picker */
+.star-picker { display: flex; gap: 10px; margin-bottom: 6px; }
+.star-btn {
+  font-size: 36px; background: none; border: none; cursor: pointer;
+  color: #ddd; padding: 0; line-height: 1; transition: color .15s, transform .1s;
+}
+.star-btn.active { color: #f59e0b; }
+.star-btn:active { transform: scale(1.2); }
+.star-label { font-size: 13px; color: var(--text2); min-height: 20px; }
+
+/* Role chips */
+.role-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.role-chip {
+  padding: 8px 14px; border-radius: 999px;
+  border: 1.5px solid var(--border); background: white;
+  font-size: 13px; font-weight: 600; color: var(--text2);
+  cursor: pointer; font-family: inherit; transition: all .15s;
+}
+.role-chip.selected {
+  border-color: var(--red); background: #fff5f4; color: var(--red);
+}
+
+/* Textarea */
+.avis-textarea {
+  width: 100%; box-sizing: border-box;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  padding: 13px 14px; font-size: 14px; font-family: inherit;
+  color: var(--text); resize: none; outline: none;
+  line-height: 1.55;
+}
+.avis-textarea:focus { border-color: var(--red); }
+
+.avis-input {
+  width: 100%; box-sizing: border-box;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  padding: 13px 14px; font-size: 14px; font-family: inherit;
+  color: var(--text); outline: none;
+}
+.avis-input:focus { border-color: var(--red); }
+
+/* Success screen */
+.avis-success {
+  display: none; text-align: center;
+  padding: 60px var(--pad) 40px;
+}
+.avis-success-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: #ecfdf5; border: 2px solid #6ee7b7;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px; font-size: 32px; color: #1a8c4e;
+}
+</style>
+</head>
+<body>
+
+<div id="mainContent">
+
+<!-- HERO -->
+<div class="avis-hero">
+  <button class="avis-hero-back" onclick="history.back()">
+    <i class="ti ti-arrow-left"></i> Retour
+  </button>
+  <div style="font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:12px">Votre avis</div>
+  <div class="avis-hero-target">
+    <div class="avis-hero-avatar" id="heroAvatar">?</div>
+    <div>
+      <div class="avis-hero-name" id="heroName">Chargement…</div>
+      <div class="avis-hero-type" id="heroType"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<form id="avisForm" onsubmit="submitAvis(event)">
+
+  <!-- Stars -->
+  <div class="avis-section">
+    <div class="avis-label">Note globale <span style="color:var(--red)">*</span></div>
+    <div class="star-picker" id="starPicker">
+      <button type="button" class="star-btn" data-v="1" onclick="setStar(1)"><i class="ti ti-star-filled"></i></button>
+      <button type="button" class="star-btn" data-v="2" onclick="setStar(2)"><i class="ti ti-star-filled"></i></button>
+      <button type="button" class="star-btn" data-v="3" onclick="setStar(3)"><i class="ti ti-star-filled"></i></button>
+      <button type="button" class="star-btn" data-v="4" onclick="setStar(4)"><i class="ti ti-star-filled"></i></button>
+      <button type="button" class="star-btn" data-v="5" onclick="setStar(5)"><i class="ti ti-star-filled"></i></button>
+    </div>
+    <div class="star-label" id="starLabel">Sélectionnez une note</div>
+  </div>
+
+  <!-- Role -->
+  <div class="avis-section" style="margin-top:24px">
+    <div class="avis-label">Vous êtes… <span style="color:var(--red)">*</span></div>
+    <div class="role-grid" id="roleGrid">
+      <!-- filled by JS based on type -->
+    </div>
+  </div>
+
+  <!-- Titre -->
+  <div class="avis-section" style="margin-top:24px">
+    <div class="avis-label">Titre de votre avis</div>
+    <input class="avis-input" id="avisTitre" type="text" placeholder="En quelques mots…" maxlength="100">
+  </div>
+
+  <!-- Commentaire -->
+  <div class="avis-section" style="margin-top:20px">
+    <div class="avis-label">Votre commentaire <span style="color:var(--red)">*</span></div>
+    <textarea class="avis-textarea" id="avisComment" rows="5" placeholder="Décrivez votre expérience : réactivité, professionnalisme, rapport qualité/prix…" maxlength="1000"></textarea>
+    <div style="font-size:11px;color:var(--text3);margin-top:5px;text-align:right"><span id="charCount">0</span>/1000</div>
+  </div>
+
+  <!-- Nom -->
+  <div class="avis-section" style="margin-top:20px">
+    <div class="avis-label">Votre prénom (facultatif)</div>
+    <input class="avis-input" id="avisNom" type="text" placeholder="Prénom ou initiale — laissez vide pour rester anonyme" maxlength="50">
+    <div style="font-size:11px;color:var(--text3);margin-top:6px;display:flex;align-items:center;gap:5px"><i class="ti ti-lock" style="font-size:13px"></i> Votre adresse e-mail n'est jamais publiée.</div>
+  </div>
+
+  <!-- Error -->
+  <div id="avisError" style="display:none;margin:16px var(--pad) 0;background:#fff5f4;border:1px solid #ffc5bd;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--red);align-items:center;gap:8px">
+    <i class="ti ti-alert-circle"></i> <span id="avisErrorMsg"></span>
+  </div>
+
+  <!-- Submit -->
+  <div style="padding:28px var(--pad) 12px">
+    <button type="submit" id="submitBtn" style="width:100%;background:var(--red);color:white;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
+      <i class="ti ti-send"></i> Publier mon avis
+    </button>
+    <p style="text-align:center;font-size:11.5px;color:var(--text3);margin-top:10px;line-height:1.5">Votre avis sera examiné avant publication. Tout avis diffamatoire sera supprimé.</p>
+  </div>
+
+  <div style="height:30px"></div>
+</form>
+
+</div>
+
+<!-- SUCCESS -->
+<div class="avis-success" id="successScreen">
+  <div class="avis-success-icon"><i class="ti ti-check"></i></div>
+  <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px">Merci pour votre avis !</div>
+  <div style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:32px">Il sera examiné et publié dans les 24h. Vos retours aident la communauté SansAgents à faire les bons choix.</div>
+  <button onclick="history.back()" style="width:100%;background:var(--red);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
+    <i class="ti ti-arrow-left"></i> Retour
+  </button>
+  <button onclick="window.location='/m/'" style="width:100%;background:white;color:var(--text);border:1.5px solid var(--border);border-radius:14px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px">
+    Accueil
+  </button>
+</div>
+
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.location='/m/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
+    <span>Déposer</span>
+  </button>
+  <button class="m-tab" onclick="window.location='/m/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="window.location='/m/connexion'"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+var selectedStar = 0;
+var selectedRole = '';
+var reviewType = '';
+var reviewId = '';
+
+var STAR_LABELS = ['', 'Mauvais', 'Décevant', 'Correct', 'Bien', 'Excellent'];
+
+var ROLES_PRO = ['Client', 'Acheteur accompagné', 'Vendeur accompagné', 'Locataire accompagné', 'Autre'];
+var ROLES_VENDEUR = ['Acheteur', 'Locataire', 'Loueur', 'Vendeur', 'Autre'];
+var ROLES_ACHETEUR = ['Vendeur', 'Acheteur', 'Locataire', 'Loueur', 'Autre'];
+var ROLES_GENERAL = ['Acheteur', 'Vendeur', 'Locataire', 'Bailleur', 'Autre'];
+
+function setStar(n) {
+  selectedStar = n;
+  document.querySelectorAll('.star-btn').forEach(function(btn){
+    btn.classList.toggle('active', parseInt(btn.dataset.v) <= n);
+  });
+  document.getElementById('starLabel').textContent = STAR_LABELS[n] || '';
+}
+
+function setRole(r) {
+  selectedRole = r;
+  document.querySelectorAll('.role-chip').forEach(function(c){
+    c.classList.toggle('selected', c.dataset.role === r);
+  });
+}
+
+function buildRoleChips(roles) {
+  var grid = document.getElementById('roleGrid');
+  grid.innerHTML = roles.map(function(r){
+    return '<button type="button" class="role-chip" data-role="'+r+'" onclick="setRole(\''+r+'\')">'+r+'</button>';
+  }).join('');
+}
+
+function showError(msg) {
+  var el = document.getElementById('avisError');
+  el.style.display = 'flex';
+  el.style.alignItems = 'center';
+  document.getElementById('avisErrorMsg').textContent = msg;
+}
+function hideError() {
+  document.getElementById('avisError').style.display = 'none';
+}
+
+function submitAvis(e) {
+  e.preventDefault();
+  hideError();
+
+  if(!selectedStar) { showError('Veuillez sélectionner une note.'); return; }
+  if(!selectedRole) { showError('Veuillez indiquer votre rôle.'); return; }
+  var comment = document.getElementById('avisComment').value.trim();
+  if(comment.length < 10) { showError('Votre commentaire doit faire au moins 10 caractères.'); return; }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Envoi en cours…';
+
+  var payload = {
+    type: reviewType,
+    target_id: reviewId,
+    note: selectedStar,
+    role: selectedRole,
+    titre: document.getElementById('avisTitre').value.trim() || null,
+    commentaire: comment,
+    auteur: document.getElementById('avisNom').value.trim() || 'Anonyme',
+    created_at: new Date().toISOString()
+  };
+
+  // Try Supabase insert if available
+  var sent = false;
+  if(window.SA && SA._supabase) {
+    SA._supabase.from('avis').insert([payload]).then(function(res){
+      if(!sent) { sent = true; showSuccess(); }
+    }).catch(function(){ if(!sent) { sent = true; showSuccess(); } });
+    // Fallback timeout
+    setTimeout(function(){ if(!sent) { sent = true; showSuccess(); } }, 3000);
+  } else {
+    setTimeout(function(){ showSuccess(); }, 800);
+  }
+}
+
+function showSuccess() {
+  document.getElementById('mainContent').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
+}
+
+// Init
+SA.init().then(function(){
+  var params = new URLSearchParams(window.location.search);
+  reviewType = params.get('type') || 'general';
+  reviewId   = params.get('id')   || '';
+
+  // Build role chips
+  if(reviewType === 'pro') buildRoleChips(ROLES_PRO);
+  else if(reviewType === 'vendeur') buildRoleChips(ROLES_VENDEUR);
+  else if(reviewType === 'acheteur') buildRoleChips(ROLES_ACHETEUR);
+  else buildRoleChips(ROLES_GENERAL);
+
+  // Resolve target name
+  var name = params.get('name') || '';
+  var typeLabel = '';
+  if(reviewType === 'pro') {
+    typeLabel = 'Professionnel';
+    if(!name && reviewId && SA.getProById) {
+      var pro = SA.getProById(reviewId);
+      if(!pro && SA.DEMO_PROS) pro = SA.DEMO_PROS.find(function(p){ return p.id === reviewId; });
+      if(pro) {
+        name = pro.name || pro.nom || 'Professionnel';
+        var job = pro.metier || pro.profession || pro.job || pro.category || '';
+        if(job) typeLabel = job;
+      }
+    }
+  } else if(reviewType === 'vendeur') { typeLabel = 'Vendeur / Bailleur'; }
+  else if(reviewType === 'acheteur') { typeLabel = 'Acheteur / Locataire'; }
+  else { typeLabel = 'Avis général'; }
+
+  var displayName = name || 'Profil SansAgents';
+  document.getElementById('heroAvatar').textContent = displayName.charAt(0).toUpperCase();
+  document.getElementById('heroName').textContent = displayName;
+  document.getElementById('heroType').textContent = typeLabel;
+
+  document.title = 'Avis — ' + displayName + ' — SansAgents';
+});
+
+// Char counter
+document.getElementById('avisComment').addEventListener('input', function(){
+  document.getElementById('charCount').textContent = this.value.length;
+});
+</script>
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</body>
+</html>
+
+

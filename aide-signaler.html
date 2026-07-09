@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Signaler une agence</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;background:#fff;line-height:1.65}
+.sa-legal-top{border-bottom:1px solid #efefef;padding:18px 40px;display:flex;align-items:center;gap:12px}
+.sa-legal-top .sa-logo{background:#E84533;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.sa-legal-top .sa-logo i{color:white;font-size:16px}
+.sa-legal-top .sa-brand{font-size:17px;font-weight:700;color:#111;cursor:pointer}
+.sa-legal-top .sa-brand span{color:#E84533}
+.sa-legal-back{margin-left:auto;font-size:13px;color:#666;text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer}
+.sa-legal-back:hover{color:#E84533}
+.sa-legal-wrap{max-width:680px;margin:0 auto;padding:3rem 24px 5rem}
+.sa-legal-wrap h1{font-size:30px;font-weight:700;letter-spacing:-0.5px;margin-bottom:8px;color:#111;display:flex;align-items:center;gap:12px}
+.sa-legal-wrap h1 i{color:#E84533}
+.sa-legal-sub{font-size:14.5px;color:#888;margin-bottom:2rem;max-width:560px}
+.sa-legal-wrap h2{font-size:16.5px;font-weight:700;color:#111;margin:1.8rem 0 0.7rem}
+.sa-legal-wrap p{font-size:14px;color:#444;margin-bottom:0.9rem}
+.sa-legal-wrap ul{font-size:14px;color:#444;margin:0 0 0.9rem 1.3rem}
+.sa-legal-wrap li{margin-bottom:0.4rem}
+.sa-report-form{border:1px solid #eee;border-radius:14px;padding:1.6rem;margin-top:1.5rem;background:#fafafa}
+.sa-report-form .field-group{margin-bottom:14px}
+.sa-report-form label{display:block;font-size:12.5px;font-weight:600;color:#333;margin-bottom:5px}
+.sa-report-form input,.sa-report-form textarea{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:13.5px;font-family:inherit}
+.sa-report-form textarea{min-height:90px;resize:vertical}
+.sa-report-form button{background:#E84533;color:#fff;border:none;padding:11px 22px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.sa-report-form button:hover{background:#c93a2a}
+.sa-legal-foot{border-top:1px solid #efefef;padding:2rem 24px;text-align:center}
+.sa-legal-foot a{color:#888;font-size:12.5px;text-decoration:none;margin:0 10px;cursor:pointer}
+.sa-legal-foot a:hover{color:#E84533}
+@media(max-width:600px){.sa-legal-top{padding:16px 20px}}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+<div class="sa-legal-top">
+  <div class="sa-logo" onclick="window.location.href='./'"><i class="ti ti-key"></i></div>
+  <div class="sa-brand" onclick="window.location.href='./'">Sans<span>Agents</span></div>
+  <a class="sa-legal-back" onclick="window.location.href='./'"><i class="ti ti-arrow-left"></i> Retour à l'accueil</a>
+</div>
+
+<div class="sa-legal-wrap">
+  <h1><i class="ti ti-flag"></i> Signaler une agence</h1>
+  <p class="sa-legal-sub">SansAgents est réservé aux particuliers. Si vous pensez qu'une annonce a été publiée par une agence ou un professionnel de l'immobilier, merci de nous le signaler — c'est ce qui permet de garder la plateforme 100 % entre particuliers.</p>
+
+  <h2>Comment repérer une agence déguisée ?</h2>
+  <ul>
+    <li>Le texte de l'annonce contient un nom d'agence, un logo ou une signature commerciale.</li>
+    <li>Le même numéro de téléphone revient sur plusieurs annonces de biens très différents.</li>
+    <li>La personne contactée se présente comme « mandataire » ou « conseiller » plutôt que comme propriétaire.</li>
+    <li>Le ton de la description ressemble à une fiche d'agence plutôt qu'à un témoignage de propriétaire.</li>
+  </ul>
+
+  <h2>Que se passe-t-il après votre signalement ?</h2>
+  <p>Notre équipe vérifie chaque signalement sous 48h. Si l'annonce est confirmée comme provenant d'un professionnel, elle est supprimée immédiatement et le compte concerné est suspendu, conformément à nos <a href="cgu" style="color:#E84533;font-weight:600">CGU</a>.</p>
+
+  <div class="sa-report-form">
+    <div class="field-group">
+      <label>Lien ou titre de l'annonce concernée</label>
+      <input type="text" id="repLink" placeholder="Ex : https://sansagents.fr/... ou « Appartement 3 pièces — Lyon 7e »">
+    </div>
+    <div class="field-group">
+      <label>Pourquoi pensez-vous qu'il s'agit d'une agence ?</label>
+      <textarea id="repReason" placeholder="Décrivez ce qui vous a alerté…"></textarea>
+    </div>
+    <div class="field-group">
+      <label>Votre e-mail (pour vous tenir informé, facultatif)</label>
+      <input type="email" id="repEmail" placeholder="vous@exemple.fr">
+    </div>
+    <button onclick="sendReport()"><i class="ti ti-send"></i> Envoyer le signalement</button>
+  </div>
+</div>
+
+<div class="sa-legal-foot">
+  <a onclick="window.location.href='cgu'">CGU</a>
+  <a onclick="window.location.href='aide-documents'">Documents obligatoires</a>
+</div>
+
+<script>
+function sendReport(){
+  const link = document.getElementById('repLink').value.trim();
+  const reason = document.getElementById('repReason').value.trim();
+  if (!link || !reason) { SA.toast('Merci de préciser l\'annonce et la raison du signalement', 'ti-alert-circle'); return; }
+  SA.toast('Signalement envoyé — merci de contribuer à la qualité de SansAgents', 'ti-circle-check');
+  document.getElementById('repLink').value = '';
+  document.getElementById('repReason').value = '';
+  document.getElementById('repEmail').value = '';
+}
+</script>
+</body>
+</html>

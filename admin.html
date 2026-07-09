@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Administration</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;background:#fafafa}
+.sa-admin-top{background:#0d1117;padding:16px 32px;display:flex;align-items:center;gap:10px}
+.sa-admin-top i{color:#ff7a68;font-size:18px}
+.sa-admin-top span{color:#fff;font-weight:700;font-size:15px}
+.sa-admin-top small{color:rgba(255,255,255,0.5);font-size:11.5px;margin-left:8px}
+.sa-admin-wrap{max-width:980px;margin:0 auto;padding:2.2rem 24px 4rem}
+.sa-admin-wrap h1{font-size:22px;font-weight:700;margin-bottom:6px}
+.sa-admin-sub{font-size:13px;color:#888;margin-bottom:1.8rem}
+.sa-admin-callout{background:#fff8f7;border:1px solid #ffd9d2;border-radius:12px;padding:12px 16px;font-size:12.5px;color:#a8392b;margin-bottom:1.6rem;display:flex;gap:8px;align-items:flex-start}
+.sa-admin-callout i{margin-top:1px;flex-shrink:0}
+.sa-admin-table{width:100%;background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;border-collapse:collapse}
+.sa-admin-table th{text-align:left;background:#fafafa;padding:11px 16px;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid #eee}
+.sa-admin-table td{padding:12px 16px;border-bottom:1px solid #f3f3f3;font-size:13.5px;vertical-align:middle}
+.sa-admin-table tr:last-child td{border-bottom:none}
+.sa-admin-name{font-weight:700;color:#111}
+.sa-admin-job{font-size:11.5px;color:#888}
+.sa-admin-siret{font-family:monospace;font-size:12.5px;color:#444}
+.sa-admin-siret.missing{color:#c0392b;font-style:italic;font-family:inherit}
+.sa-admin-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase}
+.sa-admin-badge.yes{background:#e9f7ef;color:#1a8c4e}
+.sa-admin-badge.no{background:#f1f1f1;color:#888}
+.sa-admin-toggle{border:1.5px solid #ddd;background:#fff;color:#444;font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;font-family:inherit}
+.sa-admin-toggle.on{background:#1a8c4e;border-color:#1a8c4e;color:#fff}
+.sa-admin-toggle:hover{border-color:#E84533}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+<div class="sa-admin-top">
+  <i class="ti ti-shield-lock"></i>
+  <span>SansAgents — Administration</span>
+  <small>Accès réservé à l'équipe SansAgents</small>
+</div>
+
+<div class="sa-admin-wrap">
+  <h1>Vérification des professionnels</h1>
+  <p class="sa-admin-sub">Activez le badge « Vérifié » uniquement après avoir contrôlé le SIRET sur <a href="https://annuaire-entreprises.data.gouv.fr" target="_blank" style="color:#E84533;font-weight:600">annuaire-entreprises.data.gouv.fr</a>.</p>
+
+  <div class="sa-admin-callout"><i class="ti ti-info-circle"></i>Le badge « Vérifié » indique aux particuliers que l'équipe SansAgents a contrôlé manuellement l'existence et l'activité de l'entreprise. Ne l'activez jamais sans avoir vérifié le SIRET au préalable.</div>
+
+  <table class="sa-admin-table" id="proTable">
+    <thead><tr><th>Professionnel</th><th>SIRET</th><th>Statut</th><th></th></tr></thead>
+    <tbody id="proTbody"></tbody>
+  </table>
+</div>
+
+<script>
+function render() {
+  const pros = SA.getAllPros().sort((a, b) => a.name.localeCompare(b.name));
+  document.getElementById('proTbody').innerHTML = pros.map(p => `
+    <tr>
+      <td><div class="sa-admin-name">${SA.escapeHtml(p.name)}</div><div class="sa-admin-job">${SA.escapeHtml(p.job)} · ${SA.escapeHtml(p.city)}</div></td>
+      <td>${p.siret ? `<span class="sa-admin-siret">${SA.escapeHtml(p.siret)}</span>` : `<span class="sa-admin-siret missing">Non renseigné</span>`}</td>
+      <td><span class="sa-admin-badge ${p.verified ? 'yes' : 'no'}">${p.verified ? 'Vérifié' : 'Non vérifié'}</span></td>
+      <td><button class="sa-admin-toggle${p.verified ? ' on' : ''}" onclick="toggleVerified('${p.id}', ${!p.verified})">${p.verified ? 'Retirer' : 'Vérifier'}</button></td>
+    </tr>`).join('');
+}
+async function toggleVerified(id, verified) {
+  if (verified) {
+    if (!confirm('Confirmez-vous avoir vérifié le SIRET de ce professionnel sur le registre officiel ?')) return;
+  }
+  await SA.setProVerified(id, verified);
+  render();
+}
+SA.init().then(render);
+</script>
+</body>
+</html>

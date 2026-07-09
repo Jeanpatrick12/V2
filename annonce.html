@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>if(window.innerWidth<=768&&!localStorage.sa_force_desktop)location.replace('/m/annonce'+location.search);</script>
+<title>SansAgents — Détail de l'annonce</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+
+/* ── NAV (identique aux autres pages) ── */
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:200}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+.sa-nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.sa-nav-link{font-size:13.5px;color:#555;padding:8px 14px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit}
+.sa-nav-link:hover{background:#f7f7f7;color:#111}
+.sa-nav-link.active{color:#E84533;background:#fff0ee}
+.sa-nav-actions{display:flex;align-items:center;gap:4px;margin-left:16px}
+.sa-nav-cta{font-size:13.5px;color:white;background:#E84533;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;border:none;font-family:inherit;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sa-nav-cta:hover{background:#c93a2a}
+.sa-nav-divider{width:1px;height:32px;background:#e5e5e5;margin:0 6px;flex-shrink:0}
+.sa-nav-icon-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:5px 9px;border-radius:8px;color:#444;font-family:inherit}
+.sa-nav-icon-btn:hover{background:#f5f5f5;color:#111}
+.sa-nav-icon-btn i{font-size:19px}
+.sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
+.sa-nav-account-wrap{position:relative}
+.sa-nav-avatar{width:19px;height:19px;border-radius:50%;background:#E84533;color:white;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.sa-nav-badge{position:absolute;top:1px;right:3px;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px;line-height:1}
+.sa-account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);min-width:220px;padding:8px;z-index:200}
+.sa-account-dropdown.show{display:block}
+.sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px;word-break:break-all}
+.sa-account-dropdown-email i{color:#E84533;flex-shrink:0}
+.sa-account-dropdown-logout{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;color:#c0392b;padding:9px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.sa-account-dropdown-logout:hover{background:#fff0ee}
+
+/* ── PAGE ── */
+.sa-detail-wrap{max-width:1180px;margin:0 auto;padding:1.5rem 40px 4rem}
+.sa-back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#888;cursor:pointer;margin-bottom:1.1rem;font-weight:500}
+.sa-back-link:hover{color:#E84533}
+
+.sa-detail-grid{display:grid;grid-template-columns:1fr 340px;gap:36px;align-items:start}
+
+/* ── GALERIE ── */
+.sa-gallery-hero{position:relative;height:440px;border-radius:18px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#eee}
+.sa-gallery-hero img{width:100%;height:100%;object-fit:cover}
+.sa-gallery-hero .no-photo-icon{font-size:54px;color:rgba(255,255,255,0.45)}
+.sa-gallery-badge{position:absolute;top:14px;left:14px;color:white;font-size:11.5px;font-weight:700;padding:5px 13px;border-radius:7px;z-index:2}
+.sa-gallery-badge.vente{background:#E84533}.sa-gallery-badge.location{background:#1e6abf}
+.sa-gallery-chiprow{position:absolute;bottom:14px;left:14px;display:flex;gap:6px;z-index:2}
+.sa-gallery-chip{font-size:11px;font-weight:700;color:#fff;padding:4px 10px;border-radius:6px}
+.sa-gallery-chip.new{background:#1a8c4e}
+.sa-gallery-fav{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.92);border:none;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:#ccc;z-index:2}
+.sa-gallery-fav.active{color:#E84533}
+.sa-gallery-allphotos{position:absolute;bottom:14px;right:14px;background:rgba(17,17,17,0.55);backdrop-filter:blur(2px);color:#fff;font-size:12px;font-weight:700;padding:7px 14px;border-radius:9px;display:flex;align-items:center;gap:7px;z-index:2;cursor:pointer;border:1.5px solid rgba(255,255,255,0.55);font-family:inherit}
+.sa-gallery-allphotos:hover{background:rgba(232,69,51,0.85);border-color:#E84533}
+.sa-gallery-nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#333;z-index:2;font-size:15px}
+.sa-gallery-nav-btn:hover{background:white}
+.sa-gallery-nav-btn.prev{left:12px}.sa-gallery-nav-btn.next{right:12px}
+.sa-thumb-row{display:flex;gap:8px;margin-top:9px;overflow-x:auto;padding-bottom:2px}
+.sa-thumb{width:84px;height:60px;border-radius:9px;flex-shrink:0;object-fit:cover;cursor:pointer;border:2px solid transparent;opacity:.7}
+.sa-thumb:hover{opacity:1}
+.sa-thumb.active{border-color:#E84533;opacity:1}
+
+/* ── LIGHTBOX / MODALES ── */
+.sa-modal-overlay{position:fixed;inset:0;background:rgba(20,14,12,0.78);z-index:900;display:none;align-items:center;justify-content:center;padding:24px}
+.sa-modal-overlay.show{display:flex}
+.sa-modal-box{background:white;border-radius:20px;max-width:760px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
+.sa-modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #f0f0f0;flex-shrink:0}
+.sa-modal-head h3{font-size:15.5px;font-weight:700;color:#111;display:flex;align-items:center;gap:8px}
+.sa-modal-head h3 i{color:#E84533}
+.sa-modal-close{background:#f5f5f5;border:none;color:#666;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0}
+.sa-modal-close:hover{background:#fff0ee;color:#E84533}
+.sa-modal-body{padding:20px 22px 24px;overflow-y:auto}
+
+.sa-lightbox-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sa-lightbox-grid img{width:100%;height:200px;object-fit:cover;border-radius:12px;cursor:pointer}
+@media(max-width:700px){.sa-lightbox-grid{grid-template-columns:1fr 1fr}.sa-lightbox-grid img{height:150px}}
+
+.sa-fmodal-group{margin-bottom:1.4rem}
+.sa-fmodal-group:last-child{margin-bottom:0}
+.sa-fmodal-group-title{font-size:11.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.sa-fmodal-group-title i{color:#E84533;font-size:13px}
+.sa-fmodal-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 24px}
+@media(max-width:560px){.sa-fmodal-grid{grid-template-columns:1fr}}
+
+/* ── EN-TÊTE ── */
+.sa-detail-head{margin-top:1.6rem;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.sa-detail-pricerow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sa-detail-price{font-size:27px;font-weight:700;letter-spacing:-0.5px;color:#111}
+.sa-detail-pricem2{font-size:13.5px;color:#999;font-weight:500;background:#f5f5f5;padding:3px 10px;border-radius:7px}
+.sa-detail-title{font-size:15px;color:#555;margin-top:3px}
+.sa-detail-negociable{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#888;background:#f5f5f5;padding:3px 9px;border-radius:6px;margin-top:6px}
+
+.sa-stats-bar{display:flex;gap:22px;flex-wrap:wrap;margin-top:1.4rem;padding:1rem 0;border-top:1px solid #efefef;border-bottom:1px solid #efefef}
+.sa-stat{display:flex;flex-direction:column;gap:2px}
+.sa-stat .v{font-size:15px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px}
+.sa-stat .v i{color:#E84533;font-size:16px}
+.sa-stat .l{font-size:11.5px;color:#999}
+
+.sa-section{margin-top:1.9rem}
+.sa-section-title{font-size:15px;font-weight:700;color:#111;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.sa-section-title i{color:#E84533}
+.sa-detail-desc{font-size:13.5px;color:#444;line-height:1.75;white-space:pre-line}
+
+/* ── Caractéristiques (façon liste à puces, organisée) ── */
+.sa-fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px 26px}
+.sa-fact-row{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13.5px;color:#333;border-bottom:1px solid #f5f5f5}
+.sa-fact-row i{color:#E84533;font-size:15px;width:17px;flex-shrink:0;text-align:center}
+@media(max-width:560px){.sa-fact-grid{grid-template-columns:1fr}}
+.sa-feat-more{font-size:12.5px;font-weight:700;color:#E84533;background:none;border:1.5px solid #E84533;padding:8px 18px;border-radius:10px;cursor:pointer;margin-top:14px;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+.sa-feat-more:hover{background:#fff0ee}
+
+/* ── CTA Plan du bien ── */
+.sa-plan-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#faf8f7;border:1px solid #efe9e6;border-radius:14px;padding:1rem 1.2rem;margin-top:1.9rem;flex-wrap:wrap}
+.sa-plans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.sa-plan-thumb{border:1px solid #ececec;border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:#f7f7f7;transition:border-color .15s}
+.sa-plan-thumb:hover{border-color:#E84533}
+.sa-plan-thumb img{width:100%;height:100%;object-fit:contain}
+.sa-plan-cta-text{display:flex;align-items:center;gap:11px;font-size:13px;color:#555;flex:1;min-width:200px}
+.sa-plan-cta-text i{font-size:24px;color:#E84533;flex-shrink:0}
+.sa-plan-cta-text strong{color:#111;display:block;font-size:13.5px;margin-bottom:1px}
+.sa-plan-cta button{background:#111;color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.sa-plan-cta button:hover{background:#E84533}
+
+/* ── DPE / GES (visuel propre, distinct) ── */
+.sa-energy-cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.sa-energy-title{font-size:12px;font-weight:700;color:#666;margin-bottom:12px}
+.sa-energy-bar{display:flex;align-items:center;gap:5px;height:36px;margin-bottom:8px}
+.sa-energy-bar .seg{flex:1;height:9px;border-radius:5px}
+.sa-energy-bar .seg.current{flex:0 0 34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14.5px;box-shadow:0 3px 8px rgba(0,0,0,0.2)}
+.sa-energy-extra{font-size:12px;color:#888;line-height:1.6;margin-top:10px;display:flex;align-items:center;gap:7px}
+.sa-energy-verdict{display:flex;align-items:flex-start;gap:8px;margin-top:2px}
+.sa-energy-tag{flex-shrink:0;color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;white-space:nowrap}
+.sa-energy-detail{font-size:12px;color:#777;line-height:1.5}
+@media(max-width:700px){.sa-energy-cols{grid-template-columns:1fr}}
+
+/* ── Détails du prix (identité SansAgents) ── */
+.sa-price-reminder{font-size:12.5px;color:#888;line-height:1.6;margin-bottom:1rem;display:flex;gap:8px;align-items:flex-start}
+.sa-price-reminder i{color:#E84533;font-size:15px;flex-shrink:0;margin-top:1px}
+.sa-price-reminder strong{color:#555}
+.sa-price-breakdown{background:#fffaf9;border:1px solid #f3e3e0;border-left:4px solid #E84533;border-radius:14px;padding:1.1rem 1.3rem}
+.sa-price-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13.5px;color:#444;border-bottom:1px solid #f3e7e4}
+.sa-price-row:last-child{border-bottom:none}
+.sa-price-row .lbl{display:flex;align-items:center;gap:6px}
+.sa-price-row .lbl i{color:#d9a89e;font-size:14px}
+.sa-price-row.total{font-weight:700;color:#111;font-size:14.5px;padding-top:11px}
+.sa-price-note{font-size:11px;color:#aaa;margin-top:10px;line-height:1.5}
+
+.sa-offer-box{margin-top:1rem;border:1.5px dashed #e2c9c4;border-radius:14px;padding:1.1rem 1.3rem;background:#fff}
+.sa-offer-tag{display:inline-flex;align-items:center;gap:6px;background:#E84533;color:#fff;font-size:11px;font-weight:800;letter-spacing:.03em;padding:5px 11px;border-radius:7px;margin-bottom:10px}
+.sa-offer-input-row{display:flex;align-items:center;gap:10px}
+.sa-offer-input-row input{flex:1;border:1.5px solid #e5e5e5;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;outline:none;color:#111;font-weight:600}
+.sa-offer-input-row input:focus{border-color:#E84533}
+.sa-offer-input-row .unit{font-size:13px;color:#999;font-weight:600}
+.sa-offer-result{margin-top:12px;display:none}
+.sa-offer-result.show{display:block}
+.sa-offer-diff{font-size:12.5px;font-weight:700;margin-top:8px;display:flex;align-items:center;gap:6px}
+.sa-offer-diff.down{color:#1a8c4e}
+.sa-offer-diff.up{color:#E84533}
+
+/* ── Prix dans le secteur (identité SansAgents, différent du dégradé feu tricolore) ── */
+.sa-region-bar-wrap{margin-top:6px}
+.sa-region-bar{height:10px;border-radius:6px;background:linear-gradient(90deg,#fde7e0,#f1a48f,#E84533);position:relative;margin:38px 0 10px}
+.sa-region-marker{position:absolute;top:-38px;transform:translateX(-50%);text-align:center;display:flex;flex-direction:column;align-items:center}
+.sa-region-marker .tag{background:#111;color:#fff;font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:8px;white-space:nowrap;margin-bottom:5px}
+.sa-region-marker .dot{width:10px;height:10px;border-radius:50%;background:#111;border:2px solid #fff;box-shadow:0 0 0 2px #111}
+.sa-region-minmax{display:flex;justify-content:space-between;font-size:11.5px;color:#999}
+.sa-region-minmax strong{color:#333}
+
+/* ── Comparer avec le marché ── */
+.sa-market-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sa-market-card{border:1px solid #ececec;border-radius:14px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:6px}
+.sa-market-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sa-market-name{font-size:13.5px;font-weight:700;color:#111;display:flex;align-items:center;gap:7px}
+.sa-market-official{font-size:9.5px;font-weight:800;color:#1a6fb0;background:#e9f2fb;padding:2px 7px;border-radius:5px;letter-spacing:.02em}
+.sa-market-desc{font-size:12px;color:#888;line-height:1.5;flex:1}
+.sa-market-link{align-self:flex-start;font-size:12px;font-weight:700;color:#E84533;display:flex;align-items:center;gap:5px;text-decoration:none;margin-top:2px}
+.sa-market-link:hover{text-decoration:underline}
+@media(max-width:700px){.sa-market-grid{grid-template-columns:1fr}}
+
+/* ── Localisation ── */
+.sa-loc-card{display:flex;align-items:center;gap:14px;border:1px solid #e8e8e8;border-radius:14px;padding:1rem 1.2rem;flex-wrap:wrap}
+.sa-loc-card-icon{width:42px;height:42px;border-radius:10px;background:#fff0ee;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.sa-loc-card-text{font-size:13.5px;color:#444;line-height:1.5;flex:1}
+.sa-loc-card-text strong{color:#111;font-size:14.5px}
+.sa-quartier-visual{margin-top:14px;border-radius:16px;overflow:hidden;position:relative;height:190px;border:1px solid #efe6e3;cursor:pointer;transition:filter .15s}
+.sa-quartier-visual:hover{filter:brightness(0.97)}
+.sa-quartier-svg{position:absolute;inset:0;width:100%;height:100%}
+.sa-quartier-pinwrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-66%);display:flex;flex-direction:column;align-items:center}
+.sa-quartier-pulse{position:absolute;top:14px;left:50%;width:14px;height:14px;border-radius:50%;background:rgba(232,69,51,0.35);transform:translateX(-50%);animation:saPulse 2.2s ease-out infinite}
+@keyframes saPulse{0%{transform:translateX(-50%) scale(0.6);opacity:.9}100%{transform:translateX(-50%) scale(3.2);opacity:0}}
+.sa-quartier-pin{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:1}
+.sa-quartier-pin i{font-size:30px;color:#E84533;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.2))}
+.sa-quartier-pin span{font-size:12.5px;font-weight:700;color:#333;background:white;padding:5px 12px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.sa-maps-btn{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:#111;color:#fff;border:none;padding:9px 16px;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;font-family:inherit;box-shadow:0 4px 10px rgba(0,0,0,0.18)}
+.sa-maps-btn:hover{background:#E84533}
+.sa-similar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sa-mini-card{border:1px solid #e8e8e8;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .15s;background:white}
+.sa-mini-card:hover{border-color:#E84533;box-shadow:0 8px 24px rgba(232,69,51,0.1);transform:translateY(-2px)}
+.sa-mini-photo{height:140px;position:relative;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center}
+.sa-mini-photo i{font-size:28px;color:rgba(255,255,255,0.42)}
+.sa-mini-badge{position:absolute;top:8px;left:8px;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:5px}
+.sa-mini-badge.vente{background:#E84533}.sa-mini-badge.location{background:#1e6abf}
+.sa-mini-body{padding:11px 13px}
+.sa-mini-price{font-size:15px;font-weight:700;color:#111;display:flex;align-items:baseline;gap:6px}
+.sa-mini-pricem2{font-size:11px;font-weight:500;color:#999}
+.sa-mini-meta{font-size:11.5px;color:#888;margin-top:4px}
+.sa-mini-addr{font-size:11px;color:#aaa;margin-top:3px;display:flex;align-items:center;gap:4px}
+
+/* ── COLONNE CONTACT (sticky) ── */
+.sa-contact-card{border:1px solid #e8e8e8;border-radius:18px;padding:1.4rem;position:sticky;top:88px}
+.sa-contact-top{display:flex;align-items:center;gap:11px;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid #efefef}
+.sa-contact-avatar{width:44px;height:44px;border-radius:50%;background:#E84533;color:white;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-contact-name{font-size:14px;font-weight:700;color:#111}
+.sa-contact-sub{font-size:12px;color:#999;margin-top:1px}
+.sa-contact-form textarea{width:100%;border:1px solid #e0e0e0;border-radius:11px;padding:11px 13px;font-size:13px;font-family:inherit;outline:none;resize:none;height:84px;line-height:1.5}
+.sa-contact-form textarea:focus{border-color:#E84533}
+.sa-contact-send{width:100%;margin-top:10px;background:#E84533;color:white;border:none;padding:11px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px}
+.sa-contact-send:hover{background:#c93a2a}
+.sa-dossier-btn{width:100%;margin-bottom:10px;background:#fff0ee;color:#c93a2a;border:1.5px solid #f5c1ba;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .15s,color .15s,border-color .15s}
+.sa-dossier-btn:hover{background:#E84533;color:#fff;border-color:#E84533}
+.sa-contact-privacy{font-size:11px;color:#777;line-height:1.55;margin-top:10px;display:flex;gap:6px}
+.sa-contact-privacy i{color:#999;flex-shrink:0;margin-top:1px}
+.sa-contact-coords{margin-top:14px;padding-top:14px;border-top:1px solid #efefef}
+.sa-contact-coords-title{font-size:11.5px;font-weight:700;color:#1a8c4e;text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.sa-contact-coords-row{font-size:13px;color:#333;display:flex;align-items:center;gap:8px;padding:5px 0}
+.sa-contact-coords-row i{color:#E84533;width:15px}
+.sa-contact-coords-row a{color:#333;text-decoration:none}
+.sa-contact-coords-row a:hover{color:#E84533}
+.sa-contact-login{text-align:center;padding:0.5rem 0}
+.sa-contact-login p{font-size:12.5px;color:#888;line-height:1.6;margin-bottom:12px}
+.sa-contact-login button{width:100%;background:#E84533;color:white;border:none;padding:11px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.sa-fav-row{width:100%;margin-top:10px;background:none;border:1.5px solid #e5e5e5;color:#666;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px}
+.sa-fav-row.active{border-color:#E84533;color:#E84533;background:#fff0ee}
+.sa-fav-row:hover{border-color:#E84533;color:#E84533}
+.sa-trust-row{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#999;margin-top:14px;padding-top:14px;border-top:1px solid #efefef}
+.sa-trust-row i{color:#1a8c4e;font-size:15px}
+
+.sa-not-found{text-align:center;padding:5rem 1rem;color:#999}
+.sa-not-found i{font-size:42px;color:#f0c9c0;margin-bottom:16px;display:block}
+.sa-not-found h3{font-size:17px;color:#333;margin-bottom:7px}
+.sa-not-found button{margin-top:14px;background:#E84533;color:white;border:none;padding:11px 24px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+
+@media(max-width:980px){
+  .sa-nav{padding:0 24px}
+  .sa-nav-icon-btn .sa-nav-icon-label{display:none}
+  .sa-detail-wrap{padding:1.25rem 24px 3rem}
+  .sa-detail-grid{grid-template-columns:1fr}
+  .sa-contact-card{position:static}
+  .sa-gallery-hero{height:300px}
+  .sa-similar-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){ .sa-similar-grid{grid-template-columns:1fr} }
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='./'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="sa-nav-links">
+      <button class="sa-nav-link" onclick="window.location.href='./'">Accueil</button>
+      <button class="sa-nav-link" onclick="window.location.href='guide'">Guide</button>
+      <button class="sa-nav-link active" onclick="window.location.href='annonces'">Annonces</button>
+      <button class="sa-nav-link" onclick="window.open('professionnels','_blank')">Professionnels</button>
+    </div>
+    <div class="sa-nav-actions">
+      <button class="sa-nav-cta" onclick="window.open('deposer','_blank')">
+        <i class="ti ti-plus"></i> Déposer une annonce
+      </button>
+      <div class="sa-nav-divider"></div>
+      <button class="sa-nav-icon-btn" onclick="window.location.href='recherches'">
+        <i class="ti ti-search"></i>
+        <span class="sa-nav-icon-label">Mes recherches</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'">
+        <i class="ti ti-heart"></i>
+        <span class="sa-nav-badge" data-nav-fav-badge></span>
+        <span class="sa-nav-icon-label">Favoris</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='messages'">
+        <i class="ti ti-message-2"></i>
+        <span class="sa-nav-badge" data-nav-msg-badge></span>
+        <span class="sa-nav-icon-label">Messages</span>
+      </button>
+      <div class="sa-nav-account-wrap" data-nav-account>
+        <button class="sa-nav-icon-btn">
+          <i class="ti ti-user"></i>
+          <span class="sa-nav-icon-label">Se connecter</span>
+        </button>
+        <div class="sa-account-dropdown"></div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="sa-detail-wrap" id="pageRoot"></div>
+
+<!-- ── MODALE : toutes les photos ── -->
+<div class="sa-modal-overlay" id="lightboxOverlay" onclick="if(event.target===this)closeLightbox()">
+  <div class="sa-modal-box">
+    <div class="sa-modal-head">
+      <h3 id="lightboxTitle"><i class="ti ti-photo"></i> Photos</h3>
+      <button class="sa-modal-close" onclick="closeLightbox()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sa-modal-body"><div class="sa-lightbox-grid" id="lightboxGrid"></div></div>
+  </div>
+</div>
+
+<!-- ── MODALE : toutes les caractéristiques ── -->
+<div class="sa-modal-overlay" id="featModalOverlay" onclick="if(event.target===this)closeFeatModal()">
+  <div class="sa-modal-box">
+    <div class="sa-modal-head">
+      <h3><i class="ti ti-list-details"></i> Toutes les caractéristiques</h3>
+      <button class="sa-modal-close" onclick="closeFeatModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sa-modal-body" id="featModalBody"></div>
+  </div>
+</div>
+
+<script>
+let listingId = new URLSearchParams(window.location.search).get('id');
+let galleryIndex = 0;
+
+function dpeColor(letter) {
+  return { A:'#0a9e4f', B:'#4cb85c', C:'#a3c93a', D:'#f0c419', E:'#f0941f', F:'#e8602c', G:'#E84533' }[letter] || '#999';
+}
+function gesColor(letter) {
+  return { A:'#dceefb', B:'#bcdcf2', C:'#8fc3e8', D:'#6fa8d8', E:'#5089c2', F:'#33639e', G:'#1c3f6e' }[letter] || '#999';
+}
+const DPE_LETTERS = ['A','B','C','D','E','F','G'];
+
+function fmtBool(v) { return v === true ? 'Oui' : (v === false ? 'Non' : null); }
+function fmtDispo(d) {
+  if (!d) return null;
+  if (d.type === 'date' && d.date) return 'À partir du ' + d.date;
+  return 'Immédiate';
+}
+function fmtNiveaux(l) {
+  if (l.duplex && (l.duplex.etageBas !== null || l.duplex.etageHaut !== null)) {
+    const bas = l.duplex.etageBas !== null && l.duplex.etageBas !== undefined ? l.duplex.etageBas : '?';
+    const haut = l.duplex.etageHaut !== null && l.duplex.etageHaut !== undefined ? l.duplex.etageHaut : '?';
+    return 'Duplex / triplex — du ' + bas + 'e au ' + haut + 'e étage';
+  }
+  return l.niveauxMaison || null;
+}
+function ordinal(n){ return n === 1 ? '1er' : (n + 'ème'); }
+function photoUrl(p){ return (p && p.url) ? p.url : p; }
+
+function energyBar(letter, colorFn){
+  return `<div class="sa-energy-bar">${DPE_LETTERS.map(L => {
+    if (L === letter) return `<div class="seg current" style="background:${colorFn(L)}">${L}</div>`;
+    return `<div class="seg" style="background:${colorFn(L)}"></div>`;
+  }).join('')}</div>`;
+}
+const ENERGY_VERDICTS = {
+  A:['Excellent','#0a9e4f'], B:['Très bon','#4cb85c'], C:['Bon','#a3c93a'],
+  D:['Moyen','#f0c419'], E:['Peu performant','#f0941f'], F:['Mauvais','#e8602c'], G:['Très mauvais','#E84533']
+};
+function dpeExplain(letter) {
+  const detail = {
+    A:'Logement très économe, charges de chauffage minimales.',
+    B:'Bonne performance énergétique, consommation maîtrisée.',
+    C:'Performance correcte, dans la moyenne haute.',
+    D:"Consommation standard ; des travaux d'isolation pourraient réduire les charges.",
+    E:'Consommation élevée ; des travaux sont recommandés.',
+    F:'Logement énergivore (passoire thermique) ; travaux fortement conseillés.',
+    G:'Passoire thermique ; rénovation énergétique nécessaire.'
+  }[letter];
+  return detail ? { verdict: ENERGY_VERDICTS[letter][0], color: ENERGY_VERDICTS[letter][1], detail } : null;
+}
+function gesExplain(letter) {
+  const detail = {
+    A:'Très faibles émissions de gaz à effet de serre.',
+    B:'Faibles émissions, impact climatique limité.',
+    C:'Émissions modérées, dans la moyenne haute.',
+    D:'Émissions standards pour le parc actuel.',
+    E:'Émissions élevées par rapport à la moyenne.',
+    F:'Fortes émissions de gaz à effet de serre.',
+    G:'Émissions très élevées, fort impact climatique.'
+  }[letter];
+  return detail ? { verdict: ENERGY_VERDICTS[letter][0], color: ENERGY_VERDICTS[letter][1], detail } : null;
+}
+function energyVerdictHTML(info) {
+  if (!info) return '';
+  return `<div class="sa-energy-verdict"><span class="sa-energy-tag" style="background:${info.color}">${info.verdict}</span><span class="sa-energy-detail">${info.detail}</span></div>`;
+}
+
+/* ───────── Caractéristiques : génération de phrases naturelles ───────── */
+function buildGeneralFacts(l){
+  const f = [];
+  const add = (icon, text, cat) => { if (text) f.push({icon, text, cat}); };
+  if (l.etage !== null && l.etage !== undefined && l.etage !== '') {
+    add('ti-building', l.nbEtagesImmeuble ? `${ordinal(l.etage)} étage sur ${l.nbEtagesImmeuble}` : `${ordinal(l.etage)} étage`, 'Pièces & surfaces');
+  } else if (l.nbEtagesImmeuble) {
+    add('ti-building', `Immeuble de ${l.nbEtagesImmeuble} étages`, 'Pièces & surfaces');
+  }
+  add('ti-bed', l.chambres ? `${l.chambres} chambre${l.chambres > 1 ? 's' : ''}` : null, 'Pièces & surfaces');
+  add('ti-stars', l.etatGeneral || null, 'Confort & énergie');
+  add('ti-receipt', l.factureEnergie ? `~${Math.round(l.factureEnergie)} €/an d'énergie` : null, 'Confort & énergie');
+  add('ti-bath', l.sdb ? `${l.sdb} salle${l.sdb > 1 ? 's' : ''} de bain` : null, 'Pièces & surfaces');
+  add('ti-bath-filled', l.sallesEau ? `${l.sallesEau} salle${l.sallesEau > 1 ? 's' : ''} d'eau` : null, 'Pièces & surfaces');
+  add('ti-toilet', l.wc ? `${l.wc} WC séparé${l.wc > 1 ? 's' : ''}` : null, 'Pièces & surfaces');
+  add('ti-trees', l.terrain ? `${l.terrain} m² de terrain` : null, 'Pièces & surfaces');
+  add('ti-arrow-autofit-height', l.hauteurPlafond ? `${l.hauteurPlafond} m sous plafond` : null, 'Pièces & surfaces');
+  add('ti-flame', l.chauffage ? `Chauffage : ${l.chauffage}` : null, 'Confort & énergie');
+  add('ti-droplet', l.eauChaude ? `Eau chaude : ${l.eauChaude}` : null, 'Confort & énergie');
+  add('ti-compass', l.exposition ? `Exposition ${l.exposition}` : null, 'Caractère & architecture');
+  add('ti-stack-2', l.moulures ? `Revêtement du sol : ${l.moulures}` : null, 'Caractère & architecture');
+  add('ti-building-arch', l.styleArchi || null, 'Caractère & architecture');
+  add('ti-stairs', fmtNiveaux(l), 'Caractère & architecture');
+  add('ti-stairs-down', l.sousSol || null, 'Caractère & architecture');
+  add('ti-building-factory-2', l.origineBatiment || null, 'Caractère & architecture');
+  add('ti-layout', l.planLoft || null, 'Caractère & architecture');
+  return f;
+}
+const EQUIP_ICONS = {
+  'Cuisine équipée':'ti-tools-kitchen-2', 'Climatisation':'ti-air-conditioning', 'Cheminée / Poêle à bois':'ti-flame',
+  'Fibre optique / THD':'ti-router', 'Cave / Rangement':'ti-box', 'Ascenseur':'ti-elevator', 'Accessible PMR':'ti-wheelchair',
+  'Parking / Garage':'ti-parking', 'Balcon':'ti-door', 'Terrasse':'ti-sun', 'Vue dégagée / Pas de vis-à-vis':'ti-eye',
+  'Gardien / Digicode':'ti-shield-lock', 'Jardin privatif':'ti-leaf', 'Piscine':'ti-pool', 'Sous-sol':'ti-stairs-down',
+  'Garage':'ti-car', 'Parking extérieur':'ti-parking',
+  'Verrière(s)':'ti-window', 'Poutres / structure métallique apparente':'ti-building-factory', 'Béton brut / briques apparentes':'ti-cube',
+  'Mezzanine aménagée':'ti-stairs-up', 'Escalier métal / industriel':'ti-stairs', 'Usage mixte habitation + activité pro':'ti-briefcase'
+};
+function buildEquipFacts(l){
+  return (Array.isArray(l.equipements) ? l.equipements : []).map(e => ({ icon: EQUIP_ICONS[e] || 'ti-circle-check', text: e }));
+}
+function factRowHTML(fact){
+  return `<div class="sa-fact-row"><i class="ti ${fact.icon}"></i> ${SA.escapeHtml(fact.text)}</div>`;
+}
+
+function render() {
+  const root = document.getElementById('pageRoot');
+  const l = listingId ? SA.getListingById(listingId) : null;
+  if (!l) {
+    root.innerHTML = `
+      <div class="sa-not-found">
+        <i class="ti ti-home-x"></i>
+        <h3>Cette annonce n'existe pas ou plus.</h3>
+        <button onclick="window.location.href='annonces'">Retour aux annonces</button>
+      </div>`;
+    return;
+  }
+  document.title = 'SansAgents — ' + l.title;
+
+  const photos = Array.isArray(l.photos) ? l.photos : [];
+  const grad = (SA.IMG_GRADIENTS[l.img] || SA.IMG_GRADIENTS.p0);
+  const icon = SA.TYPE_ICONS[l.type] || 'ti-home';
+  const fav = SA.isFavorite(l.id);
+  const m2 = l.surface ? Math.round(l.price / l.surface) : null;
+  const isNew = l.createdAt && (Date.now() - l.createdAt) < 7 * 86400000;
+  const exactAddress = l.adresse || l.adresseComplete || l.rue || null;
+
+  const generalFacts = buildGeneralFacts(l);
+  const equipFacts = buildEquipFacts(l);
+  const allFacts = generalFacts.concat(equipFacts);
+  const previewFacts = allFacts.slice(0, 8);
+  const hasMoreFacts = allFacts.length > 8;
+
+  root.innerHTML = `
+    <div class="sa-back-link" onclick="window.location.href='annonces'"><i class="ti ti-arrow-left"></i> Retour aux annonces</div>
+
+    <div class="sa-detail-grid">
+      <div>
+        <!-- Galerie -->
+        <div class="sa-gallery-hero" id="galleryHero" style="${photos.length ? '' : 'background:' + grad}">
+          <span class="sa-gallery-badge ${l.transaction === 'vente' ? 'vente' : 'location'}">${l.transaction === 'vente' ? 'Vente' : 'Location'}</span>
+          <button class="sa-gallery-fav${fav ? ' active' : ''}" id="galFavBtn" onclick="toggleFav()"><i class="ti ti-heart${fav ? '-filled' : ''}"></i></button>
+          ${photos.length ? `<img id="galleryImg" src="${photoUrl(photos[0])}">` : `<i class="ti ${icon} no-photo-icon"></i>`}
+          ${photos.length > 1 ? `
+            <button class="sa-gallery-nav-btn prev" onclick="galleryStep(-1)"><i class="ti ti-chevron-left"></i></button>
+            <button class="sa-gallery-nav-btn next" onclick="galleryStep(1)"><i class="ti ti-chevron-right"></i></button>
+          ` : ''}
+          <div class="sa-gallery-chiprow">
+            ${isNew ? '<span class="sa-gallery-chip new">Nouveau</span>' : ''}
+            ${l.dpe ? `<span class="sa-gallery-chip" style="background:${dpeColor(l.dpe)}">DPE ${l.dpe}</span>` : ''}
+          </div>
+          ${photos.length ? `<button class="sa-gallery-allphotos" onclick="openLightbox()"><i class="ti ti-stack-2"></i> ${photos.length} photo${photos.length > 1 ? 's' : ''}</button>` : ''}
+        </div>
+        ${photos.length > 1 ? `
+          <div class="sa-thumb-row" id="thumbRow">
+            ${photos.map((p, i) => `<img class="sa-thumb${i === 0 ? ' active' : ''}" data-i="${i}" src="${photoUrl(p)}" onclick="setGallery(${i})">`).join('')}
+          </div>` : ''}
+        ${!photos.length ? `<p style="font-size:11.5px;color:#bbb;margin-top:8px"><i class="ti ti-info-circle"></i> Annonce de démonstration — aucune photo n'a été déposée par l'annonceur.</p>` : ''}
+
+        <!-- En-tête -->
+        <div class="sa-detail-head">
+          <div>
+            <div class="sa-detail-pricerow">
+              <span class="sa-detail-price">${SA.fmtPriceTransaction(l)}</span>
+              ${m2 ? `<span class="sa-detail-pricem2">${SA.fmtPrice(m2)}/m²</span>` : ''}
+            </div>
+            <div class="sa-detail-title">${SA.escapeHtml(l.title)}</div>
+            ${l.negociable === true ? `<div class="sa-detail-negociable"><i class="ti ti-tag"></i> Prix négociable</div>` : ''}
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="sa-stats-bar">
+          <div class="sa-stat"><div class="v"><i class="ti ti-door"></i> ${l.pieces || '—'}</div><div class="l">Pièces</div></div>
+          <div class="sa-stat"><div class="v"><i class="ti ti-bed"></i> ${l.chambres || '—'}</div><div class="l">Chambres</div></div>
+          <div class="sa-stat"><div class="v"><i class="ti ti-ruler-2"></i> ${l.surface} m²</div><div class="l">Surface</div></div>
+          ${l.etage !== null && l.etage !== undefined && l.etage !== '' ? `<div class="sa-stat"><div class="v"><i class="ti ti-building"></i> ${l.etage}</div><div class="l">Étage</div></div>` : ''}
+          ${l.anneeConstruction ? `<div class="sa-stat"><div class="v"><i class="ti ti-calendar"></i> ${l.anneeConstruction}</div><div class="l">Construction</div></div>` : ''}
+          ${l.meuble ? `<div class="sa-stat"><div class="v"><i class="ti ti-armchair"></i> ${l.meuble === 'meuble' ? 'Meublé' : 'Non meublé'}</div><div class="l">Location</div></div>` : ''}
+          ${l.transaction === 'location' && l.charges ? `<div class="sa-stat"><div class="v"><i class="ti ti-receipt"></i> ${SA.fmtPrice(l.charges)}</div><div class="l">Charges / mois</div></div>` : ''}
+        </div>
+
+        <!-- Description -->
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-align-left"></i> Description</div>
+          <div class="sa-detail-desc">${SA.escapeHtml(l.desc || "Aucune description fournie pour cette annonce.")}</div>
+        </div>
+
+        <!-- Plans du bien -->
+        ${Array.isArray(l.plans) && l.plans.length ? `
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-layout-2"></i> Plans du bien</div>
+          <div class="sa-plans-grid">${l.plans.map(p => `<div class="sa-plan-thumb" onclick="window.open('${(p.url||p).replace(/'/g,"\\'")}','_blank')"><img src="${p.url || p}" alt="Plan du bien"></div>`).join('')}</div>
+        </div>` : `
+        <!-- Demander le plan -->
+        <div class="sa-plan-cta">
+          <div class="sa-plan-cta-text">
+            <i class="ti ti-layout-2"></i>
+            <span><strong>Besoin de mieux vous projeter ?</strong>Demandez le plan du bien directement à l'annonceur.</span>
+          </div>
+          <button onclick="requestPlan()"><i class="ti ti-send"></i> Demander le plan</button>
+        </div>`}
+
+        <!-- Caractéristiques -->
+        ${allFacts.length ? `
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-list-details"></i> Caractéristiques</div>
+          <div class="sa-fact-grid">${previewFacts.map(factRowHTML).join('')}</div>
+          ${hasMoreFacts ? `<button class="sa-feat-more" onclick="openFeatModal()"><i class="ti ti-plus"></i> Voir les ${allFacts.length} caractéristiques</button>` : ''}
+        </div>` : ''}
+
+        <!-- Performance énergétique -->
+        ${l.dpe ? `
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-bolt"></i> Performance énergétique</div>
+          <div class="sa-energy-cols">
+            <div>
+              <div class="sa-energy-title">Diagnostic de performance énergétique (DPE)</div>
+              ${energyBar(l.dpe, dpeColor)}
+              ${energyVerdictHTML(dpeExplain(l.dpe))}
+            </div>
+            ${/^[A-G]$/i.test(l.ges || '') ? `
+            <div>
+              <div class="sa-energy-title">Indice d'émission de gaz à effet de serre (GES)</div>
+              ${energyBar(l.ges.toUpperCase(), gesColor)}
+              ${energyVerdictHTML(gesExplain(l.ges.toUpperCase()))}
+            </div>` : ''}
+          </div>
+          ${l.chauffage ? `<div class="sa-energy-extra"><i class="ti ti-flame" style="color:#E84533"></i> Type de chauffage : ${SA.escapeHtml(l.chauffage)}</div>` : ''}
+        </div>` : ''}
+
+        <!-- Charges, fiscalité & conditions -->
+        ${(() => {
+          function row(icon, label, value) {
+            if (value === null || value === undefined || value === '') return '';
+            return `<div class="sa-fact-row"><i class="ti ${icon}"></i> ${SA.escapeHtml(label)} : ${SA.escapeHtml(String(value))}</div>`;
+          }
+          const charges2 = [
+            row('ti-building-community', 'Charges de copropriété', l.chargesCopro ? SA.fmtPrice(l.chargesCopro) + ' / mois' : null),
+            row('ti-receipt-2', 'Taxe foncière', l.taxeFonciere ? SA.fmtPrice(l.taxeFonciere) + ' / an' : null),
+            row('ti-calculator', 'Charges', l.modeCharges === 'reel' ? 'Au réel (régularisation annuelle)' : (l.modeCharges === 'forfait' ? 'Au forfait' : null)),
+            row('ti-calendar-event', 'Disponibilité', fmtDispo(l.disponibilite)),
+            row('ti-paw', 'Animaux acceptés', fmtBool(l.animauxAcceptes)),
+            row('ti-shield-check', 'Garant exigé', fmtBool(l.garantExige))
+          ].join('');
+          if (!charges2) return '';
+          return `
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-receipt"></i> Charges, fiscalité &amp; conditions</div>
+          <div class="sa-fact-grid">${charges2}</div>
+          ${l.zoneTendue === 'oui' ? `<div style="display:flex;gap:7px;align-items:flex-start;font-size:11.5px;color:#a8392b;background:rgba(232,69,51,0.07);border:1px solid rgba(232,69,51,0.18);border-radius:9px;padding:9px 11px;margin-top:14px;line-height:1.5"><i class="ti ti-info-circle" style="flex-shrink:0;margin-top:1px"></i> Logement situé en zone tendue : le loyer est soumis à l'encadrement des loyers en vigueur dans la commune.</div>` : ''}
+        </div>`;
+        })()}
+
+        <!-- Détails du prix -->
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-receipt"></i> Détails du prix</div>
+          <div class="sa-price-reminder">
+            <i class="ti ti-info-circle"></i>
+            <span>${l.transaction === 'vente'
+              ? `Sur SansAgents, <strong>seul le vendeur règle 1 % de commission</strong>, calculée sur le prix de vente final — l'acheteur ne paie aucun frais d'agence. Si le bien se vend en dessous du prix affiché, la commission baisse avec lui : c'est toujours 1 % du montant réellement conclu, négocié ou non.`
+              : `Sur SansAgents, la mise en relation est <strong>entièrement gratuite</strong>, pour le locataire comme pour le propriétaire.`}</span>
+          </div>
+          <div class="sa-price-breakdown" id="priceBreakdown"></div>
+          ${l.transaction === 'vente' ? `
+          <div class="sa-offer-box">
+            <div class="sa-offer-tag"><i class="ti ti-pencil" style="font-size:12px"></i> SIMULER UNE OFFRE</div>
+            <div class="sa-offer-input-row">
+              <input type="number" min="0" id="offerInput" placeholder="Entrez un montant…" oninput="updateOfferSim()">
+              <span class="unit">€</span>
+            </div>
+            <div class="sa-offer-result" id="offerResult"></div>
+          </div>` : ''}
+        </div>
+
+        <!-- Prix dans le secteur -->
+        <div class="sa-section" id="regionSection"></div>
+
+        <!-- Comparer avec le marché -->
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-external-link"></i> Comparer avec le marché</div>
+          <div class="sa-market-grid">
+            <div class="sa-market-card">
+              <div class="sa-market-card-head"><span class="sa-market-name"><i class="ti ti-building-bank" style="color:#E84533"></i> DVF Étalab</span><span class="sa-market-official">OFFICIEL</span></div>
+              <div class="sa-market-desc">Consultez toutes les transactions immobilières réellement enregistrées en France — la base de données publique de l'État.</div>
+              <a class="sa-market-link" href="https://app.dvf.etalab.gouv.fr/" target="_blank" rel="noopener">Ouvrir <i class="ti ti-arrow-up-right"></i></a>
+            </div>
+            <div class="sa-market-card">
+              <div class="sa-market-card-head"><span class="sa-market-name"><i class="ti ti-gavel" style="color:#E84533"></i> Notaires de France</span><span class="sa-market-official">OFFICIEL</span></div>
+              <div class="sa-market-desc">Prix moyen au m² par ville et type de bien, calculé à partir des actes de vente et mis à jour chaque trimestre.</div>
+              <a class="sa-market-link" href="https://www.immobilier.notaires.fr/fr/prix-immobilier" target="_blank" rel="noopener">Ouvrir <i class="ti ti-arrow-up-right"></i></a>
+            </div>
+            <div class="sa-market-card">
+              <div class="sa-market-name"><i class="ti ti-chart-line" style="color:#E84533"></i> Castorus</div>
+              <div class="sa-market-desc">Suivez l'historique des prix des annonces en ligne dans une ville, un quartier ou un type de bien donné.</div>
+              <a class="sa-market-link" href="https://www.castorus.com/" target="_blank" rel="noopener">Ouvrir <i class="ti ti-arrow-up-right"></i></a>
+            </div>
+            <div class="sa-market-card">
+              <div class="sa-market-name"><i class="ti ti-home-search" style="color:#E84533"></i> MeilleursAgents</div>
+              <div class="sa-market-desc">Estimation automatique à partir d'une adresse, avec l'évolution du marché local sur les 5 dernières années.</div>
+              <a class="sa-market-link" href="https://www.meilleursagents.com/prix-immobilier/" target="_blank" rel="noopener">Ouvrir <i class="ti ti-arrow-up-right"></i></a>
+            </div>
+            <div class="sa-market-card" style="grid-column:1/-1">
+              <div class="sa-market-name"><i class="ti ti-users" style="color:#E84533"></i> PAP Estimation</div>
+              <div class="sa-market-desc">Un estimateur pensé pour les particuliers, basé sur la comparaison avec des annonces similaires actuellement en ligne.</div>
+              <a class="sa-market-link" href="https://www.pap.fr/" target="_blank" rel="noopener">Ouvrir <i class="ti ti-arrow-up-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Localisation -->
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-map-pin"></i> Localisation</div>
+          <div class="sa-loc-card">
+            <div class="sa-loc-card-icon"><i class="ti ti-map-pin"></i></div>
+            <div class="sa-loc-card-text">
+              ${exactAddress ? `<strong>${SA.escapeHtml(exactAddress)}</strong><br>${SA.escapeHtml(l.ville)}${l.postal ? ' (' + l.postal + ')' : ''}` : `<strong>${SA.escapeHtml(l.ville)}</strong>${l.postal ? ' (' + l.postal + ')' : ''}`}
+            </div>
+          </div>
+          <div class="sa-quartier-visual" onclick="openInMaps()" title="Ouvrir dans Google Maps">
+            <svg class="sa-quartier-svg" viewBox="0 0 600 190" preserveAspectRatio="xMidYMid slice">
+              <rect width="600" height="190" fill="#f3efe9"/>
+              <path d="M-20 40 Q150 10, 300 50 T 640 30" stroke="#e3dcd2" stroke-width="14" fill="none"/>
+              <path d="M-20 150 Q180 190, 320 140 T 640 165" stroke="#e3dcd2" stroke-width="20" fill="none"/>
+              <path d="M120 -10 Q140 90, 90 200" stroke="#e3dcd2" stroke-width="12" fill="none"/>
+              <path d="M470 -10 Q450 100, 500 200" stroke="#e3dcd2" stroke-width="12" fill="none"/>
+              <rect x="60" y="70" width="46" height="36" rx="4" fill="#e9e2d8"/>
+              <rect x="150" y="95" width="60" height="42" rx="4" fill="#ece5da"/>
+              <rect x="380" y="60" width="50" height="38" rx="4" fill="#e9e2d8"/>
+              <rect x="460" y="100" width="44" height="34" rx="4" fill="#ece5da"/>
+              <circle cx="500" cy="50" r="26" fill="#e3ecdf"/>
+              <circle cx="80" cy="150" r="20" fill="#e3ecdf"/>
+            </svg>
+            <div class="sa-quartier-pinwrap">
+              <div class="sa-quartier-pulse"></div>
+              <div class="sa-quartier-pin"><i class="ti ti-map-pin-filled"></i><span>${SA.escapeHtml(l.ville)}</span></div>
+            </div>
+            <button class="sa-maps-btn" onclick="event.stopPropagation();openInMaps()"><i class="ti ti-external-link"></i> Ouvrir dans Google Maps</button>
+          </div>
+        </div>
+
+        <!-- Annonces similaires -->
+        <div class="sa-section" id="similarSection"></div>
+      </div>
+
+      <!-- Colonne contact -->
+      <div id="contactCol"></div>
+    </div>`;
+
+  renderContact(l);
+  renderSimilar(l);
+  renderRegion(l);
+  renderPriceBreakdown(l);
+  window.__currentListing = l;
+  window.__allFacts = allFacts;
+  window.__generalFactsCount = generalFacts.length;
+}
+
+/* ───────── modale caractéristiques ───────── */
+function openFeatModal(){
+  const l = window.__currentListing;
+  const general = buildGeneralFacts(l);
+  const equip = buildEquipFacts(l);
+  const catIcons = { 'Pièces & surfaces':'ti-ruler-2', 'Confort & énergie':'ti-bolt', 'Caractère & architecture':'ti-building-arch' };
+  const catOrder = ['Pièces & surfaces','Confort & énergie','Caractère & architecture'];
+  let html = '';
+  catOrder.forEach(cat => {
+    const items = general.filter(f => f.cat === cat);
+    if (items.length) html += `<div class="sa-fmodal-group"><div class="sa-fmodal-group-title"><i class="ti ${catIcons[cat]}"></i> ${cat}</div><div class="sa-fmodal-grid">${items.map(factRowHTML).join('')}</div></div>`;
+  });
+  if (equip.length) html += `<div class="sa-fmodal-group"><div class="sa-fmodal-group-title"><i class="ti ti-sparkles"></i> Équipements</div><div class="sa-fmodal-grid">${equip.map(factRowHTML).join('')}</div></div>`;
+  document.getElementById('featModalBody').innerHTML = html;
+  document.getElementById('featModalOverlay').classList.add('show');
+}
+function closeFeatModal(){ document.getElementById('featModalOverlay').classList.remove('show'); }
+
+/* ───────── plan du bien ───────── */
+function requestPlan(){
+  const user = SA.getUser();
+  const input = document.getElementById('msgInput');
+  if (user && input) {
+    input.value = "Bonjour, serait-il possible d'obtenir le plan du logement ? Merci d'avance.";
+    input.focus();
+  }
+  const card = document.querySelector('.sa-contact-card');
+  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function openInMaps(){
+  const l = window.__currentListing;
+  if (!l) return;
+  const q = l.adresse || [l.ville, l.postal].filter(Boolean).join(' ');
+  window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q), '_blank');
+}
+
+/* ───────── galerie ───────── */
+function galleryStep(dir) {
+  const l = SA.getListingById(listingId);
+  const photos = l.photos || [];
+  if (!photos.length) return;
+  galleryIndex = (galleryIndex + dir + photos.length) % photos.length;
+  setGallery(galleryIndex);
+}
+function setGallery(i) {
+  const l = SA.getListingById(listingId);
+  const photos = l.photos || [];
+  if (!photos.length) return;
+  galleryIndex = i;
+  document.getElementById('galleryImg').src = photoUrl(photos[i]);
+  document.querySelectorAll('.sa-thumb').forEach((t, idx) => t.classList.toggle('active', idx === i));
+}
+function openLightbox(){
+  const l = SA.getListingById(listingId);
+  const photos = l.photos || [];
+  document.getElementById('lightboxTitle').innerHTML = `<i class="ti ti-photo"></i> ${photos.length} photo${photos.length > 1 ? 's' : ''}`;
+  document.getElementById('lightboxGrid').innerHTML = photos.map((p, i) => `<img src="${photoUrl(p)}" onclick="setGallery(${i});closeLightbox()">`).join('');
+  document.getElementById('lightboxOverlay').classList.add('show');
+}
+function closeLightbox(){ document.getElementById('lightboxOverlay').classList.remove('show'); }
+
+async function toggleFav() {
+  const nowFav = await SA.toggleFavorite(listingId);
+  const btn = document.getElementById('galFavBtn');
+  btn.classList.toggle('active', nowFav);
+  btn.querySelector('i').className = 'ti ti-heart' + (nowFav ? '-filled' : '');
+  SA.toast(nowFav ? 'Ajouté à vos favoris' : 'Retiré de vos favoris', nowFav ? 'ti-heart-filled' : 'ti-heart');
+  const favRow = document.getElementById('favRowBtn');
+  if (favRow) {
+    favRow.classList.toggle('active', nowFav);
+    favRow.innerHTML = '<i class="ti ti-heart' + (nowFav ? '-filled' : '') + '"></i> ' + (nowFav ? 'Dans vos favoris' : 'Ajouter aux favoris');
+  }
+}
+
+/* ───────── détails du prix + simulateur d'offre ───────── */
+function renderPriceBreakdown(l){
+  const box = document.getElementById('priceBreakdown');
+  if (l.transaction === 'vente') {
+    const notaire = Math.round(l.price * 0.075);
+    const total = l.price + notaire + (l.chargesCopro || 0);
+    box.innerHTML = `
+      <div class="sa-price-row"><span class="lbl"><i class="ti ti-home"></i> Prix du bien</span><span>${SA.fmtPrice(l.price)}</span></div>
+      <div class="sa-price-row"><span class="lbl"><i class="ti ti-file-text"></i> Frais de notaire estimés (~7,5 %)</span><span>${SA.fmtPrice(notaire)}</span></div>
+      <div class="sa-price-row sa-commission-row"><span class="lbl"><i class="ti ti-receipt-2"></i> Commission SansAgents (1 %, à la charge du vendeur)</span><span>${SA.fmtPrice(Math.round(l.price * 0.01))}</span></div>
+      ${l.chargesCopro ? `<div class="sa-price-row"><span class="lbl"><i class="ti ti-building-community"></i> Charges de copropriété</span><span>${SA.fmtPrice(l.chargesCopro)} / an</span></div>` : ''}
+      <div class="sa-price-row total"><span class="lbl">Montant total estimé du projet</span><span>${SA.fmtPrice(total)}</span></div>
+      <div class="sa-price-note">Estimation indicative des frais de notaire pour un bien existant, donnée à titre informatif et non contractuel.</div>`;
+  } else {
+    const total = l.price + (l.charges || 0);
+    box.innerHTML = `
+      <div class="sa-price-row"><span class="lbl"><i class="ti ti-home"></i> Loyer mensuel hors charges</span><span>${SA.fmtPrice(l.price)}</span></div>
+      ${l.charges ? `<div class="sa-price-row"><span class="lbl"><i class="ti ti-receipt"></i> Charges</span><span>${SA.fmtPrice(l.charges)} / mois</span></div>` : ''}
+      <div class="sa-price-row total"><span class="lbl">Total mensuel estimé</span><span>${SA.fmtPrice(total)}</span></div>`;
+  }
+}
+function updateOfferSim(){
+  const l = window.__currentListing;
+  const val = parseFloat(document.getElementById('offerInput').value);
+  const result = document.getElementById('offerResult');
+  if (!val || val <= 0) { result.classList.remove('show'); result.innerHTML = ''; return; }
+  const notaire = Math.round(val * 0.075);
+  const total = val + notaire + (l.chargesCopro || 0);
+  const diff = l.price - val;
+  const diffPct = l.price ? Math.abs(diff / l.price * 100).toFixed(1) : 0;
+  let diffHTML = '';
+  if (diff > 0) diffHTML = `<div class="sa-offer-diff down"><i class="ti ti-arrow-down"></i> ${SA.fmtPrice(diff)} de moins que le prix demandé (-${diffPct} %)</div>`;
+  else if (diff < 0) diffHTML = `<div class="sa-offer-diff up"><i class="ti ti-arrow-up"></i> ${SA.fmtPrice(-diff)} de plus que le prix demandé (+${diffPct} %)</div>`;
+  result.innerHTML = `
+    <div class="sa-price-row"><span class="lbl"><i class="ti ti-file-text"></i> Frais de notaire estimés</span><span>${SA.fmtPrice(notaire)}</span></div>
+    <div class="sa-price-row sa-commission-row"><span class="lbl"><i class="ti ti-receipt-2"></i> Commission vendeur (1 %) sur cette offre</span><span>${SA.fmtPrice(Math.round(val * 0.01))}</span></div>
+    <div class="sa-price-row total"><span class="lbl">Montant total avec votre offre</span><span>${SA.fmtPrice(total)}</span></div>
+    ${diffHTML}`;
+  result.classList.add('show');
+}
+
+/* ───────── contact ───────── */
+function renderContact(l) {
+  const col = document.getElementById('contactCol');
+  const user = SA.getUser();
+  const contactName = (l.contactPrenom || l.contactNom) ? (l.contactPrenom + ' ' + (l.contactNom || '')).trim() : "L'annonceur";
+  const hasRealCoords = !!(l.contactTel || l.contactEmail);
+  const convo = SA.getConversationByListing(l.id);
+  const unlocked = !!(convo && convo.contactShared);
+
+  let body = '';
+  if (!user) {
+    body = `
+      <div class="sa-contact-login">
+        <p>Connectez-vous pour envoyer un message à l'annonceur et accéder à ses coordonnées une fois le contact établi.</p>
+        <button onclick="window.location.href='connexion?redirect=' + encodeURIComponent('annonce?id=${l.id}')">Se connecter</button>
+      </div>`;
+  } else {
+    body = `
+      <div class="sa-contact-form">
+        <button class="sa-dossier-btn" onclick="requestDossier('${l.id}')"><i class="ti ti-folder-open"></i> Demander le dossier complet</button>
+        <textarea id="msgInput" placeholder="Bonjour, votre bien m'intéresse, serait-il possible d'organiser une visite ?"></textarea>
+        <button class="sa-contact-send" onclick="sendContactMessage('${l.id}')"><i class="ti ti-send"></i> Envoyer un message</button>
+      </div>
+      <div class="sa-contact-privacy"><i class="ti ti-shield-lock"></i> Vos coordonnées restent privées. C'est l'annonceur qui décide, personne par personne, de partager les siennes.</div>
+      <div class="sa-contact-privacy" style="margin-top:6px"><i class="ti ti-flag"></i><span>Cette annonce semble venir d'une agence ? <a href="aide-signaler" target="_blank" style="color:#E84533;font-weight:600;text-decoration:none">Signalez-la</a>.</span></div>
+      ${unlocked ? `
+        <div class="sa-contact-coords">
+          <div class="sa-contact-coords-title"><i class="ti ti-lock-open"></i> Coordonnées partagées</div>
+          ${l.contactTel ? `<div class="sa-contact-coords-row"><i class="ti ti-phone"></i> ${SA.escapeHtml(l.contactTel)}</div>` : ''}
+          ${l.contactEmail ? `<div class="sa-contact-coords-row"><i class="ti ti-mail"></i> <a href="mailto:${SA.escapeHtml(l.contactEmail)}">${SA.escapeHtml(l.contactEmail)}</a></div>` : ''}
+          ${!hasRealCoords ? `<div class="sa-contact-coords-row" style="color:#aaa"><i class="ti ti-info-circle"></i> Annonce de démonstration — aucune coordonnée réelle.</div>` : ''}
+        </div>` : `
+        <div class="sa-contact-coords" style="border-top:none;padding-top:0">
+          <div style="font-size:12px;color:#888;display:flex;align-items:center;gap:7px;background:#f7f7f7;border-radius:9px;padding:9px 11px">${convo ? `<i class="ti ti-lock" style="flex-shrink:0;color:#bbb"></i><span>En attente que <strong>${SA.escapeHtml(contactName)}</strong> partage ses coordonnées avec vous.</span>` : `<i class="ti ti-lock" style="flex-shrink:0;color:#bbb"></i><span>Coordonnées masquées — l'annonceur choisit de les partager après contact.</span>`}</div>
+        </div>`}
+      <button class="sa-fav-row${SA.isFavorite(l.id) ? ' active' : ''}" id="favRowBtn" onclick="toggleFav()"><i class="ti ti-heart${SA.isFavorite(l.id) ? '-filled' : ''}"></i> ${SA.isFavorite(l.id) ? 'Dans vos favoris' : 'Ajouter aux favoris'}</button>`;
+  }
+
+  col.innerHTML = `
+    <div class="sa-contact-card">
+      <div class="sa-contact-top">
+        <div class="sa-contact-avatar">${SA.escapeHtml(contactName.charAt(0).toUpperCase())}</div>
+        <div>
+          <div class="sa-contact-name">${SA.escapeHtml(contactName)}</div>
+          <div class="sa-contact-sub">Particulier · sans agence</div>
+        </div>
+      </div>
+      ${body}
+      <div class="sa-trust-row"><i class="ti ti-shield-check"></i> Échange direct et gratuit avec le propriétaire, sans intermédiaire.</div>
+    </div>`;
+}
+
+function requestDossier(id) {
+  const input = document.getElementById('msgInput');
+  input.value = 'Bonjour,\n\nVotre bien m\'intéresse vivement. Pourriez-vous me transmettre le dossier complet (diagnostics, documents de copropriété et tout autre justificatif utile) ?\n\nJe reste disponible pour convenir d\'une visite selon vos disponibilités.\n\nCordialement.';
+  input.focus();
+  input.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function sendContactMessage(id) {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text) { SA.toast('Écrivez un message avant de l\'envoyer', 'ti-alert-circle'); return; }
+  const result = await SA.sendMessage(id, text);
+  if (result && result.blocked) { SA.toast(result.reason, 'ti-shield-lock'); return; }
+  SA.toast('Message envoyé à l\'annonceur', 'ti-circle-check');
+  input.value = '';
+  renderContact(SA.getListingById(id));
+}
+
+/* ───────── annonces similaires ───────── */
+function renderSimilar(l) {
+  const section = document.getElementById('similarSection');
+  const similar = SA.getAllListings().filter(x => x.status !== 'sold')
+    .filter(x => x.id !== l.id && (x.type === l.type || x.ville === l.ville) && x.transaction === l.transaction)
+    .slice(0, 3);
+  if (!similar.length) { section.innerHTML = ''; return; }
+  section.innerHTML = `
+    <div class="sa-section-title"><i class="ti ti-apps"></i> Annonces similaires</div>
+    <div class="sa-similar-grid">${similar.map(s => miniCardHTML(s)).join('')}</div>`;
+}
+function miniCardHTML(l){
+  const photos = Array.isArray(l.photos) ? l.photos : [];
+  const grad = (SA.IMG_GRADIENTS[l.img] || SA.IMG_GRADIENTS.p0);
+  const icon = SA.TYPE_ICONS[l.type] || 'ti-home';
+  const main = photos[0] ? photoUrl(photos[0]) : null;
+  return `
+  <div class="sa-mini-card" onclick="window.location.href='annonce?id=${l.id}'">
+    <div class="sa-mini-photo" style="${main ? "background-image:url('" + main + "')" : 'background:' + grad}">
+      ${!main ? `<i class="ti ${icon}"></i>` : ''}
+      <span class="sa-mini-badge ${l.transaction === 'vente' ? 'vente' : 'location'}">${l.transaction === 'vente' ? 'Vente' : 'Location'}</span>
+    </div>
+    <div class="sa-mini-body">
+      <div class="sa-mini-price">${SA.fmtPriceTransaction(l)} ${l.surface ? `<span class="sa-mini-pricem2">${SA.fmtPrice(Math.round(l.price / l.surface))}/m²</span>` : ''}</div>
+      <div class="sa-mini-meta">${l.surface} m² · ${l.pieces || '—'} pièce${l.pieces > 1 ? 's' : ''}${l.chambres ? ' · ' + l.chambres + ' ch.' : ''}</div>
+      <div class="sa-mini-addr"><i class="ti ti-map-pin"></i> ${SA.escapeHtml(l.ville || '')}${l.postal ? ' (' + l.postal + ')' : ''}</div>
+    </div>
+  </div>`;
+}
+
+/* ───────── prix dans le secteur ───────── */
+function renderRegion(l) {
+  const section = document.getElementById('regionSection');
+  if (!l.surface || !l.price) { section.innerHTML = ''; return; }
+  const comparables = SA.getAllListings().filter(x => x.status !== 'sold' &&
+    x.id !== l.id && x.ville === l.ville && x.transaction === l.transaction && x.surface
+  );
+  if (comparables.length < 2) { section.innerHTML = ''; return; }
+  const prices = comparables.map(x => x.price / x.surface);
+  const min = Math.min(...prices), max = Math.max(...prices);
+  const thisM2 = l.price / l.surface;
+  const span = max - min || 1;
+  let pct = ((thisM2 - min) / span) * 100;
+  pct = Math.max(4, Math.min(96, pct));
+  section.innerHTML = `
+    <div class="sa-section-title"><i class="ti ti-chart-bar"></i> Prix dans le secteur</div>
+    <div class="sa-region-bar-wrap">
+      <div class="sa-region-bar">
+        <div class="sa-region-marker" style="left:${pct}%">
+          <span class="tag">Ce bien · ${SA.fmtPrice(Math.round(thisM2))}/m²</span>
+          <div class="dot"></div>
+        </div>
+      </div>
+      <div class="sa-region-minmax">
+        <span>Plus bas du secteur<br><strong>${SA.fmtPrice(Math.round(min))}/m²</strong></span>
+        <span style="text-align:right">Plus élevé du secteur<br><strong>${SA.fmtPrice(Math.round(max))}/m²</strong></span>
+      </div>
+    </div>
+    <div class="sa-price-note" style="margin-top:14px">Comparaison calculée à partir des ${comparables.length} autres annonces de ${SA.escapeHtml(l.ville)} actuellement publiées sur SansAgents pour le même type de transaction. Elle ne préjuge en rien de la valeur réelle du bien.</div>`;
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeFeatModal(); } });
+SA.init().then(function() {
+  if (!listingId) {
+    const slug = window.location.pathname.split('/').filter(Boolean).pop() || '';
+    const prefix = slug.split('-').pop();
+    if (prefix && prefix.length >= 2) {
+      const match = SA.getAllListings().find(function(l) { return l.id && l.id.startsWith(prefix); });
+      if (match) listingId = match.id;
+    }
+  }
+  render();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déposer une annonce — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0c1622">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0c1622;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.sa-bottom-nav{display:none!important}
+body.sa-has-bottom-nav{padding-bottom:0!important}
+@media(max-width:768px){body{justify-content:flex-start;padding:90px 20px 32px}}
+
+.gate-wrap{width:100%;max-width:480px}
+
+/* Nav bar */
+.gate-nav{display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;padding:16px 28px;z-index:10;background:#0c1622}
+.gate-logo{display:flex;align-items:center;gap:9px;cursor:pointer;text-decoration:none}
+.gate-logo-icon{width:32px;height:32px;background:#E84533;border-radius:9px;display:flex;align-items:center;justify-content:center}
+.gate-logo-icon i{color:white;font-size:15px}
+.gate-logo-brand{font-size:17px;font-weight:700;color:white}
+.gate-logo-brand span{color:#E84533}
+.gate-back{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit;transition:all .2s}
+.gate-back:hover{background:rgba(255,255,255,.12);color:rgba(255,255,255,.75)}
+
+/* Progress dots */
+.gate-dots{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:28px}
+.gate-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15)}
+.gate-dot.active{width:22px;border-radius:4px;background:#E84533}
+
+/* Check circle */
+.gate-check{width:64px;height:64px;border-radius:50%;border:2px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);display:flex;align-items:center;justify-content:center;margin:0 auto 22px}
+.gate-check i{font-size:26px;color:#34d399}
+
+/* Heading */
+.gate-title{font-size:26px;font-weight:800;color:white;text-align:center;letter-spacing:-.4px;line-height:1.2;margin-bottom:6px}
+.gate-sub{font-size:14px;color:rgba(255,255,255,.4);text-align:center;line-height:1.55;margin-bottom:28px}
+
+/* Tips */
+.gate-tips{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.gate-tip{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;display:flex;align-items:flex-start;gap:13px}
+.gate-tip-ico{width:36px;height:36px;border-radius:10px;background:rgba(232,69,51,.15);border:1px solid rgba(232,69,51,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gate-tip-ico i{color:#ff7a68;font-size:16px}
+.gate-tip-ico.slate{background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.2)}
+.gate-tip-ico.slate i{color:#94a3b8}
+.gate-tip-ico.green{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.2)}
+.gate-tip-ico.green i{color:#34d399}
+.gate-tip-body strong{display:block;font-size:13.5px;font-weight:700;color:white;margin-bottom:3px}
+.gate-tip-body span{font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.5}
+
+/* Buttons */
+.gate-btn-primary{width:100%;padding:15px;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:9px;background:#E84533;color:white;transition:background .2s;margin-bottom:10px}
+.gate-btn-primary:hover{background:#d03a29}
+.gate-btn-ghost{width:100%;padding:11px;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;background:transparent;color:rgba(255,255,255,.35);transition:color .2s}
+.gate-btn-ghost:hover{color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body>
+
+<nav class="gate-nav">
+  <a class="gate-logo" href="./">
+    <div class="gate-logo-icon"><i class="ti ti-key"></i></div>
+    <div class="gate-logo-brand">Sans<span>Agents</span></div>
+  </a>
+  <button class="gate-back" onclick="window.history.back()"><i class="ti ti-arrow-left" style="font-size:13px"></i> Retour au guide</button>
+</nav>
+
+<div class="gate-wrap">
+  <h1 class="gate-title">Vous êtes prêt<br>à commencer</h1>
+  <p class="gate-sub">Avant de démarrer, quelques informations utiles<br>pour que tout se passe bien.</p>
+
+  <div class="gate-tips">
+    <div class="gate-tip">
+      <div class="gate-tip-ico"><i class="ti ti-clock"></i></div>
+      <div class="gate-tip-body">
+        <strong>8 à 12 minutes</strong>
+        <span>pour compléter le formulaire en entier. Ayez vos photos, votre prix estimé et l'adresse exacte sous la main avant de commencer.</span>
+      </div>
+    </div>
+    <div class="gate-tip">
+      <div class="gate-tip-ico slate"><i class="ti ti-layout-columns"></i></div>
+      <div class="gate-tip-body">
+        <strong>Astuce 2 fenêtres</strong>
+        <span>ouvrez le guide vendeur dans un onglet et le formulaire dans un autre — vous pourrez consulter les checklists et générer vos documents en même temps.</span>
+      </div>
+    </div>
+    <div class="gate-tip">
+      <div class="gate-tip-ico green"><i class="ti ti-device-floppy"></i></div>
+      <div class="gate-tip-body">
+        <strong>Votre saisie est sauvegardée automatiquement</strong>
+        <span>à chaque étape. Vous pouvez quitter et revenir à tout moment sans perdre vos données.</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="gate-btn-primary" onclick="window.location.href='deposer?skip=1'">
+    <i class="ti ti-rocket"></i> Commencer le formulaire
+  </button>
+  <button class="gate-btn-ghost" onclick="window.location.href=(window.innerWidth<=768?'/m/vendre':'guide')">
+    <i class="ti ti-arrow-left" style="font-size:12px"></i> Retour au guide
+  </button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+</body>
+</html>

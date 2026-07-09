@@ -1,0 +1,732 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Annonce — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+.m-gallery {
+  position: relative; width: 100%; height: 260px;
+  background: linear-gradient(135deg,#e8e8e8,#d0d0d0); overflow: hidden;
+}
+.m-gallery-bg { width: 100%; height: 100%; background-size: cover; background-position: center; transition: background-image .2s; }
+.m-gallery-count { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.55); color: white; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 6px; backdrop-filter: blur(4px); }
+.m-gallery-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.m-gallery-prev { left: 8px; }
+.m-gallery-next { right: 8px; }
+.m-gallery-actions { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: flex-start; }
+.m-back { background: rgba(255,255,255,0.92); border: none; border-radius: 8px; padding: 6px 11px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; cursor: pointer; backdrop-filter: blur(4px); font-family: inherit; color: var(--text); }
+.m-fav-top { background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #aaa; cursor: pointer; backdrop-filter: blur(4px); }
+.m-fav-top.active { color: var(--red); }
+
+/* Sticky bottom contact bar */
+.m-contact-bar { position: fixed; bottom: var(--bot-h); left: 0; right: 0; background: white; border-top: 1px solid var(--border); padding: 10px var(--pad); display: flex; gap: 8px; z-index: 200; box-shadow: 0 -2px 10px rgba(0,0,0,0.07); }
+
+.m-detail-price { font-size: 26px; font-weight: 800; color: #111; letter-spacing: -0.5px; }
+.m-detail-price-m2 { font-size: 13px; color: #888; font-weight: 500; margin-left: 6px; }
+.m-detail-title { font-size: 16px; font-weight: 700; color: var(--text); margin: 6px 0 4px; line-height: 1.3; }
+.m-detail-loc { font-size: 13px; color: var(--text2); display: flex; align-items: center; gap: 5px; margin-bottom: 12px; }
+
+.m-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin: 0 0 16px; }
+.m-spec { background: white; padding: 11px 13px; }
+.m-spec-label { font-size: 10px; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 3px; }
+.m-spec-val { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 4px; }
+.m-spec-val i { font-size: 14px; color: var(--red); }
+
+.m-dpe-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 800; color: white; }
+.dpe-a { background: #009a44; }
+.dpe-b { background: #51b747; }
+.dpe-c { background: #9acc3d; }
+.dpe-d { background: #f6c314; color: #333; }
+.dpe-e { background: #ef7c21; }
+.dpe-f { background: #e94630; }
+.dpe-g { background: #b00020; }
+
+.m-equip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.m-equip-item { display: flex; align-items: center; gap: 5px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 11px; font-size: 12px; font-weight: 500; color: var(--text2); }
+.m-equip-item i { font-size: 13px; color: var(--red); }
+
+.m-section-block { padding: 28px var(--pad); }
+.m-section-block h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+.m-section-divider { height: 0; border-top: 1px solid var(--border); margin: 0; }
+
+.m-seller-card { border: 1.5px solid var(--border); border-radius: 12px; padding: 14px; margin: 28px var(--pad); }
+.m-seller-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.m-seller-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--red); color: white; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-seller-name { font-size: 14px; font-weight: 700; }
+.m-seller-badge { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
+.m-contact-msg { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; resize: none; min-height: 80px; box-sizing: border-box; }
+.m-contact-msg:focus { border-color: var(--red); }
+
+.m-similar-card { flex-shrink: 0; width: 56vw; max-width: 200px; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; background: white; cursor: pointer; }
+.m-similar-img { height: 110px; background: #e8e8e8; background-size: cover; background-position: center; }
+.m-similar-body { padding: 8px 10px 10px; }
+.m-similar-price { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 2px; }
+.m-similar-title { font-size: 11.5px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+.m-similar-meta { font-size: 10.5px; color: var(--text3); display: flex; gap: 6px; }
+
+.m-alerte-section { background: #fff8f7; border: 1px solid #ffdad5; border-radius: 12px; padding: 14px; margin: 28px var(--pad); }
+.m-alerte-title { font-size: 12.5px; font-weight: 700; color: var(--red); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.m-alerte-body { font-size: 12px; color: var(--text2); line-height: 1.55; }
+
+.m-energy-bar { display: flex; gap: 3px; margin: 10px 0 6px; }
+.m-energy-seg { flex: 1; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: rgba(255,255,255,0.7); }
+.m-energy-seg.current { height: 34px; border-radius: 6px; font-size: 12px; color: white; border: 2px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.25); margin-top: -4px; }
+.m-energy-verdict { display: flex; align-items: flex-start; gap: 8px; margin-top: 8px; }
+.m-energy-tag { font-size: 11px; font-weight: 700; color: white; padding: 3px 9px; border-radius: 6px; flex-shrink: 0; }
+.m-energy-detail { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.m-market-card { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.m-market-card-left { flex: 1; min-width: 0; }
+.m-market-card-name { font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 5px; margin-bottom: 3px; }
+.m-market-card-desc { font-size: 11.5px; color: var(--text2); line-height: 1.45; }
+.m-market-link { font-size: 12px; font-weight: 700; color: var(--red); text-decoration: none; display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+</style>
+</head>
+<body style="padding-bottom:calc(var(--bot-h) + 62px)">
+
+<!-- TOP NAV -->
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.location='/m/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+  <button onclick="window.history.back()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:4px;font-family:inherit;cursor:pointer"><i class="ti ti-arrow-left" style="font-size:14px"></i> Retour</button>
+<button class="m-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- GALLERY -->
+<div class="m-gallery" id="gallery" style="padding-top:0">
+  <div class="m-gallery-bg" id="galleryBg"></div>
+  <div class="m-gallery-actions">
+    <div></div>
+    <button class="m-fav-top" id="favBtn" onclick="toggleFav()"><i class="ti ti-heart"></i></button>
+  </div>
+  <span class="m-gallery-count" id="galleryCount" style="display:none"></span>
+  <button class="m-gallery-btn m-gallery-prev" id="galleryPrev" onclick="stepGallery(-1)" style="display:none"><i class="ti ti-chevron-left"></i></button>
+  <button class="m-gallery-btn m-gallery-next" id="galleryNext" onclick="stepGallery(1)" style="display:none"><i class="ti ti-chevron-right"></i></button>
+</div>
+
+<div id="pageContent" style="padding-top:16px;padding-bottom:8px">
+  <div style="padding:60px var(--pad);text-align:center;color:var(--text3)">
+    <i class="ti ti-loader" style="font-size:30px;display:block;margin-bottom:10px"></i>
+    <p style="font-size:13px">Chargement de l'annonce…</p>
+  </div>
+</div>
+
+<!-- STICKY CONTACT BAR -->
+<div class="m-contact-bar">
+  <button class="m-btn m-btn-secondary" style="flex:0 0 auto;padding:10px 14px" onclick="toggleFav()" id="favBarBtn"><i class="ti ti-heart"></i></button>
+  <button class="m-btn m-btn-primary" style="flex:1" onclick="scrollToContact()"><i class="ti ti-send"></i> Contacter le vendeur</button>
+</div>
+
+<!-- FACTS MODAL -->
+<div id="factsModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.45)" onclick="closeFacts()">
+  <div style="position:absolute;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;max-height:88vh;display:flex;flex-direction:column" onclick="event.stopPropagation()">
+    <div style="padding:14px var(--pad) 12px;border-bottom:1px solid var(--border);flex-shrink:0">
+      <div style="width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 12px"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:16px;font-weight:800;color:var(--text)">Caractéristiques</div>
+        <button onclick="closeFacts()" style="background:var(--bg);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text2)"><i class="ti ti-x"></i></button>
+      </div>
+    </div>
+    <div id="factsModalBody" style="overflow-y:auto;padding:0 var(--pad) 40px"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.location='/m/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab active" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
+    <span>Déposer</span>
+  </button>
+  <button class="m-tab" onclick="window.location='/m/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="handleAuthClick()"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+var listingId = new URLSearchParams(window.location.search).get('id');
+var photos = [];
+var photoIdx = 0;
+var currentListing = null;
+var _simListingPrice = 0;
+var _factsModalHtml = '';
+
+function handleAuthClick() {
+  var u = SA.getUser();
+  if(u) window.location='/m/profil'; else window.location='/connexion?redirect='+encodeURIComponent(window.location.href);
+}
+function scrollToContact() {
+  var el = document.getElementById('contactForm');
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function stepGallery(dir) {
+  if(!photos.length) return;
+  photoIdx = (photoIdx + dir + photos.length) % photos.length;
+  document.getElementById('galleryBg').style.backgroundImage = 'url("' + photos[photoIdx].replace(/"/g,'%22') + '")';
+  document.getElementById('galleryCount').textContent = (photoIdx+1) + ' / ' + photos.length;
+}
+
+function toggleFav() {
+  var btn = document.getElementById('favBtn');
+  var barBtn = document.getElementById('favBarBtn');
+  SA.toggleFavorite && SA.toggleFavorite(listingId).then(function(nowFav) {
+    btn.classList.toggle('active', nowFav);
+    btn.innerHTML = '<i class="ti ti-heart' + (nowFav ? '-filled' : '') + '"></i>';
+    barBtn.classList.toggle('active', nowFav);
+    barBtn.innerHTML = '<i class="ti ti-heart' + (nowFav ? '-filled' : '') + '"></i>';
+  });
+}
+
+function fmt(n) { return n ? n.toLocaleString('fr-FR') + ' €' : ''; }
+
+var DPE_LETTERS = ['A','B','C','D','E','F','G'];
+function dpeColor(l) { return {A:'#0a9e4f',B:'#4cb85c',C:'#a3c93a',D:'#f0c419',E:'#f0941f',F:'#e8602c',G:'#E84533'}[l]||'#999'; }
+function gesColor(l) { return {A:'#dceefb',B:'#bcdcf2',C:'#8fc3e8',D:'#6fa8d8',E:'#5089c2',F:'#33639e',G:'#1c3f6e'}[l]||'#999'; }
+var ENERGY_VERDICTS = {A:['Excellent','#0a9e4f'],B:['Très bon','#4cb85c'],C:['Bon','#a3c93a'],D:['Moyen','#f0c419'],E:['Peu performant','#f0941f'],F:['Mauvais','#e8602c'],G:['Très mauvais','#E84533']};
+var DPE_DETAILS = {A:'Logement très économe, charges de chauffage minimales.',B:'Bonne performance énergétique, consommation maîtrisée.',C:'Performance correcte, dans la moyenne haute.',D:"Consommation standard ; des travaux d'isolation pourraient réduire les charges.",E:'Consommation élevée ; des travaux sont recommandés.',F:'Logement énergivore (passoire thermique) ; travaux fortement conseillés.',G:'Passoire thermique ; rénovation énergétique nécessaire.'};
+var GES_DETAILS = {A:'Très faibles émissions de gaz à effet de serre.',B:'Faibles émissions, impact climatique limité.',C:'Émissions modérées, dans la moyenne haute.',D:'Émissions standards pour le parc actuel.',E:'Émissions élevées par rapport à la moyenne.',F:'Fortes émissions de gaz à effet de serre.',G:'Émissions très élevées, fort impact climatique.'};
+function energyBar(letter, colorFn) {
+  return '<div class="m-energy-bar">' + DPE_LETTERS.map(function(L) {
+    var isCur = L === letter.toUpperCase();
+    return '<div class="m-energy-seg' + (isCur ? ' current' : '') + '" style="background:' + colorFn(L) + '">' + L + '</div>';
+  }).join('') + '</div>';
+}
+function energyVerdict(letter, details) {
+  var v = ENERGY_VERDICTS[letter]; var d = details[letter];
+  if(!v||!d) return '';
+  return '<div class="m-energy-verdict"><span class="m-energy-tag" style="background:' + v[1] + '">' + v[0] + '</span><span class="m-energy-detail">' + d + '</span></div>';
+}
+
+var EQUIP_ICONS = {
+  'Cuisine équipée':'ti-tools-kitchen-2','Climatisation':'ti-air-conditioning','Cheminée / Poêle à bois':'ti-flame',
+  'Fibre optique / THD':'ti-router','Cave / Rangement':'ti-box','Ascenseur':'ti-elevator','Accessible PMR':'ti-wheelchair',
+  'Parking / Garage':'ti-parking','Balcon':'ti-door','Terrasse':'ti-sun','Vue dégagée / Pas de vis-à-vis':'ti-eye',
+  'Gardien / Digicode':'ti-shield-lock','Jardin privatif':'ti-leaf','Piscine':'ti-pool','Garage':'ti-car',
+  'Parking extérieur':'ti-parking'
+};
+
+function dpeBadge(val) {
+  if(!val) return '';
+  var cls = 'dpe-' + val.toLowerCase();
+  return '<span class="m-dpe-badge ' + cls + '">' + val.toUpperCase() + '</span>';
+}
+
+function render(l) {
+  currentListing = l;
+  if (!l) {
+    document.getElementById('pageContent').innerHTML =
+      '<div style="padding:48px var(--pad);text-align:center">' +
+        '<i class="ti ti-building-off" style="font-size:40px;color:#ddd;display:block;margin-bottom:12px"></i>' +
+        '<h3 style="margin-bottom:6px">Annonce introuvable</h3>' +
+        '<p style="color:var(--text2)">Cette annonce n\'existe plus ou a été supprimée.</p><br>' +
+        '<button class="m-btn m-btn-primary" onclick="window.location=\'/m/annonces\'">Voir les annonces</button>' +
+      '</div>';
+    return;
+  }
+
+  // Gallery setup
+  photos = (l.photos || []).map(function(p){ return (p && typeof p === 'object' && p.url) ? p.url : String(p); });
+  var bg = document.getElementById('galleryBg');
+  if(photos.length) {
+    bg.style.backgroundImage = 'url("' + photos[0].replace(/"/g,'%22') + '")';
+    if(photos.length > 1) {
+      document.getElementById('galleryCount').textContent = '1 / ' + photos.length;
+      document.getElementById('galleryCount').style.display = '';
+      document.getElementById('galleryPrev').style.display = '';
+      document.getElementById('galleryNext').style.display = '';
+    }
+  } else {
+    var grad = l.transaction === 'location' ? 'linear-gradient(135deg,#4a7c6b,#6aaa90)' : 'linear-gradient(135deg,#4f6d9e,#7890b8)';
+    bg.style.background = grad;
+  }
+
+  // Prices
+  var isLoc = l.transaction === 'location';
+  _simListingPrice = (!isLoc && l.price) ? l.price : 0;
+  var priceStr = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (isLoc ? '/mois' : '') : 'Prix sur demande';
+  var priceM2 = (l.price && l.surface && !isLoc) ? '· ' + Math.round(l.price / l.surface).toLocaleString('fr-FR') + ' €/m²' : '';
+
+  // Badges
+  var txBadge = '<span class="m-badge ' + (isLoc ? 'm-badge-blue' : 'm-badge-red') + '">' + (isLoc ? 'Location' : 'Vente') + '</span>';
+  var typeBadge = l.type ? '<span class="m-badge" style="background:var(--bg);color:var(--text2)">' + l.type.charAt(0).toUpperCase()+l.type.slice(1) + '</span>' : '';
+  var meubleBadge = l.meuble ? '<span class="m-badge m-badge-green">Meublé</span>' : '';
+
+  // Specs
+  var specs = [];
+  if(l.surface) specs.push({icon:'ti-ruler-2', label:'Surface',val:l.surface+' m²'});
+  if(l.pieces) specs.push({icon:'ti-door', label:'Pièces',val:l.pieces+' pièce'+(l.pieces>1?'s':'')});
+  if(l.chambres) specs.push({icon:'ti-bed', label:'Chambres',val:l.chambres});
+  if(l.sdb) specs.push({icon:'ti-droplet', label:'Salle de bains',val:l.sdb});
+  if(l.etage != null) specs.push({icon:'ti-stairs', label:'Étage',val:l.etage===0?'Rez-de-chaussée':'Étage '+l.etage});
+  if(l.nb_etages) specs.push({icon:'ti-building', label:'Étages immeuble',val:l.nb_etages});
+  if(l.annee_construction||l.annee) specs.push({icon:'ti-calendar', label:'Construction',val:l.annee_construction||l.annee});
+  if(l.surface_terrain) specs.push({icon:'ti-trees', label:'Terrain',val:l.surface_terrain+' m²'});
+  if(l.charges) specs.push({icon:'ti-receipt', label:'Charges',val:l.charges.toLocaleString('fr-FR')+'€/mois'});
+  if(l.taxe_fonciere) specs.push({icon:'ti-file-euro', label:'Taxe foncière',val:l.taxe_fonciere.toLocaleString('fr-FR')+'€/an'});
+  if(l.depot_garantie||l.depot) specs.push({icon:'ti-lock', label:'Dépôt de garantie',val:fmt(l.depot_garantie||l.depot)});
+  if(l.honoraires) specs.push({icon:'ti-percent', label:'Honoraires',val:l.honoraires});
+  if(l.chauffage) specs.push({icon:'ti-flame', label:'Chauffage',val:l.chauffage});
+  if(l.exposition) specs.push({icon:'ti-sun', label:'Exposition',val:l.exposition});
+  if(l.copropriete != null) specs.push({icon:'ti-building-community', label:'Copropriété',val:l.copropriete?'Oui':'Non'});
+  if(l.nb_lots) specs.push({icon:'ti-home-2', label:'Lots copro',val:l.nb_lots});
+  if(l.syndic) specs.push({icon:'ti-user-shield', label:'Syndic',val:l.syndic});
+
+  // Équipements
+  var equipList = [];
+  var equipFields = [
+    {key:'parking', icon:'ti-car', label:'Parking'},
+    {key:'garage', icon:'ti-car-garage', label:'Garage'},
+    {key:'balcon', icon:'ti-building-arch', label:'Balcon'},
+    {key:'terrasse', icon:'ti-umbrella', label:'Terrasse'},
+    {key:'jardin', icon:'ti-plant', label:'Jardin'},
+    {key:'cave', icon:'ti-home-down', label:'Cave'},
+    {key:'ascenseur', icon:'ti-elevator', label:'Ascenseur'},
+    {key:'gardien', icon:'ti-shield', label:'Gardien'},
+    {key:'interphone', icon:'ti-phone', label:'Interphone'},
+    {key:'digicode', icon:'ti-keypad', label:'Digicode'},
+    {key:'piscine', icon:'ti-swimming', label:'Piscine'},
+    {key:'alarme', icon:'ti-alarm', label:'Alarme'},
+    {key:'cuisine_equipee', icon:'ti-tools-kitchen-2', label:'Cuisine équipée'},
+    {key:'double_vitrage', icon:'ti-windmill', label:'Double vitrage'},
+    {key:'fibre', icon:'ti-wifi', label:'Fibre optique'},
+    {key:'parquet', icon:'ti-checkup-list', label:'Parquet'},
+  ];
+  equipFields.forEach(function(f) {
+    if(l[f.key]) equipList.push('<span class="m-equip-item"><i class="ti ' + f.icon + '"></i>' + f.label + '</span>');
+  });
+  if(l.equipements && typeof l.equipements === 'string') {
+    l.equipements.split(',').forEach(function(e) {
+      var t = e.trim();
+      if(t) equipList.push('<span class="m-equip-item"><i class="ti ti-check"></i>' + t + '</span>');
+    });
+  }
+
+  var sellerInit = (l.seller_name||l.owner_name||l.contact_name||'V').charAt(0).toUpperCase();
+  var sellerName = l.seller_name||l.owner_name||l.contact_name||'Particulier';
+  var safeId = String(l.id).replace(/'/g,'');
+
+  // ── Construire liste de caractéristiques (par catégorie) ──
+  var factCats = [
+    { name: 'Pièces & surfaces', icon: 'ti-ruler-2', items: [] },
+    { name: 'Bâtiment', icon: 'ti-building', items: [] },
+    { name: 'Confort & énergie', icon: 'ti-bolt', items: [] },
+    { name: 'Équipements', icon: 'ti-tool', items: [] },
+  ];
+  function addF(cat, icon, text) { if(text != null && text !== '') factCats[cat].items.push({icon:icon, text:String(text)}); }
+  // Pièces & surfaces
+  if(l.surface) addF(0,'ti-ruler-2',l.surface+' m² de surface');
+  if(l.pieces) addF(0,'ti-door',l.pieces+' pièce'+(l.pieces>1?'s':''));
+  if(l.chambres) addF(0,'ti-bed',l.chambres+' chambre'+(l.chambres>1?'s':''));
+  if(l.sdb) addF(0,'ti-bath',l.sdb+' salle'+(l.sdb>1?'s':'')+' de bain');
+  if(l.sallesEau) addF(0,'ti-bath-filled',l.sallesEau+' salle'+(l.sallesEau>1?'s':'')+" d'eau");
+  if(l.wc) addF(0,'ti-toilet',l.wc+' WC séparé'+(l.wc>1?'s':''));
+  var terr=l.terrain||l.surface_terrain; if(terr) addF(0,'ti-trees',terr+' m² de terrain');
+  if(l.hauteurPlafond) addF(0,'ti-arrow-autofit-height',l.hauteurPlafond+' m sous plafond');
+  // Bâtiment
+  if(l.etage!=null&&l.etage!==''){
+    var etStr=l.etage===0?'Rez-de-chaussée':'Étage '+l.etage;
+    var nbEt=l.nbEtagesImmeuble||l.nb_etages; if(nbEt) etStr+=' / '+nbEt;
+    addF(1,'ti-building',etStr);
+  } else if(l.nbEtagesImmeuble||l.nb_etages){
+    addF(1,'ti-building','Immeuble de '+(l.nbEtagesImmeuble||l.nb_etages)+' étages');
+  }
+  var annee=l.anneeConstruction||l.annee_construction||l.annee; if(annee) addF(1,'ti-calendar','Construit en '+annee);
+  if(l.etatGeneral) addF(1,'ti-stars',l.etatGeneral);
+  if(l.exposition) addF(1,'ti-compass','Exposition '+l.exposition);
+  if(l.styleArchi) addF(1,'ti-building-arch',l.styleArchi);
+  if(l.niveauxMaison) addF(1,'ti-stairs',l.niveauxMaison);
+  if(l.copropriete!=null) addF(1,'ti-building-community','Copropriété : '+(l.copropriete?'Oui':'Non'));
+  if(l.nb_lots||l.nbLots) addF(1,'ti-home-2',(l.nb_lots||l.nbLots)+' lots en copropriété');
+  if(l.syndic) addF(1,'ti-user-shield','Syndic : '+l.syndic);
+  // Confort & énergie
+  if(l.factureEnergie) addF(2,'ti-receipt','~'+Math.round(l.factureEnergie)+' €/an d\'énergie');
+  if(l.chauffage) addF(2,'ti-flame','Chauffage : '+l.chauffage);
+  if(l.eauChaude) addF(2,'ti-droplet','Eau chaude : '+l.eauChaude);
+  if(isLoc&&l.meuble) addF(2,'ti-armchair',l.meuble==='meuble'?'Meublé':'Non meublé');
+  if(l.negociable===true) addF(2,'ti-tag','Prix négociable');
+  // Équipements
+  var eqList=Array.isArray(l.equipements)?l.equipements:(typeof l.equipements==='string'?l.equipements.split(',').map(function(e){return e.trim();}).filter(Boolean):[]);
+  eqList.forEach(function(e){addF(3,EQUIP_ICONS[e]||'ti-circle-check',e);});
+  [{k:'parking',i:'ti-car',lb:'Parking'},{k:'garage',i:'ti-car-garage',lb:'Garage'},{k:'balcon',i:'ti-building-arch',lb:'Balcon'},{k:'terrasse',i:'ti-umbrella',lb:'Terrasse'},{k:'jardin',i:'ti-plant',lb:'Jardin'},{k:'cave',i:'ti-home-down',lb:'Cave'},{k:'ascenseur',i:'ti-elevator',lb:'Ascenseur'},{k:'piscine',i:'ti-swimming',lb:'Piscine'},{k:'cuisine_equipee',i:'ti-tools-kitchen-2',lb:'Cuisine équipée'},{k:'fibre',i:'ti-wifi',lb:'Fibre optique'},{k:'double_vitrage',i:'ti-windmill',lb:'Double vitrage'},{k:'parquet',i:'ti-checkup-list',lb:'Parquet'}].forEach(function(f){if(l[f.k]===true)addF(3,f.i,f.lb);});
+
+  var facts = factCats.reduce(function(a,c){return a.concat(c.items);}, []);
+
+  function factRowHTML(f) {
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bg)">' +
+      '<i class="ti '+f.icon+'" style="color:var(--red);font-size:15px;flex-shrink:0;width:18px;text-align:center"></i>' +
+      '<span style="font-size:13px;color:var(--text)">'+f.text+'</span></div>';
+  }
+
+  // Build modal content (categorized)
+  _factsModalHtml = factCats.filter(function(c){return c.items.length;}).map(function(cat){
+    return '<div style="margin:20px 0">' +
+      '<div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px;margin-bottom:2px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:5px">' +
+        '<i class="ti '+cat.icon+'" style="color:var(--red)"></i> '+cat.name+'</div>' +
+      cat.items.map(factRowHTML).join('') +
+    '</div>';
+  }).join('');
+
+  var previewFacts = facts.slice(0, 6);
+
+  document.getElementById('pageContent').innerHTML =
+    // ── Titre + prix ──
+    '<div style="padding:0 var(--pad) 14px">' +
+      '<div style="display:flex;align-items:baseline;gap:0;flex-wrap:wrap">' +
+        '<span class="m-detail-price">' + priceStr + '</span>' +
+        (priceM2 ? '<span class="m-detail-price-m2">' + priceM2 + '</span>' : '') +
+      '</div>' +
+      '<div class="m-detail-title">' + (l.titre || l.title || ((l.type?l.type.charAt(0).toUpperCase()+l.type.slice(1):'Bien') + (l.ville?' — '+l.ville:''))) + '</div>' +
+      '<div class="m-detail-loc"><i class="ti ti-map-pin" style="color:var(--red)"></i>' +
+        ((l.adresse||l.adresseComplete||l.rue) ? (l.adresse||l.adresseComplete||l.rue) + (l.code_postal?' ('+l.code_postal+')':'') : (l.code_postal ? l.code_postal : (l.ville||''))) +
+      '</div>' +
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">' + txBadge + typeBadge + meubleBadge + '</div>' +
+    '</div>' +
+
+    // ── Stats bar ──
+    (function(){
+      var items = [];
+      if(l.pieces) items.push({icon:'ti-door',val:l.pieces,lbl:'Pièces'});
+      if(l.chambres) items.push({icon:'ti-bed',val:l.chambres,lbl:'Chambres'});
+      if(l.surface) items.push({icon:'ti-ruler-2',val:l.surface+' m²',lbl:'Surface'});
+      var yr = l.anneeConstruction||l.annee_construction||l.annee;
+      if(yr) items.push({icon:'ti-calendar',val:yr,lbl:'Construction'});
+      if(!items.length) return '<div class="m-section-divider"></div>';
+      return '<div style="display:grid;grid-template-columns:repeat('+items.length+',1fr);gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:14px">' +
+        items.map(function(it){
+          return '<div style="background:white;padding:11px 6px;text-align:center">' +
+            '<div style="font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;justify-content:center;gap:3px"><i class="ti '+it.icon+'" style="color:var(--red);font-size:13px"></i> '+it.val+'</div>' +
+            '<div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.03em">'+it.lbl+'</div>' +
+          '</div>';
+        }).join('') +
+      '</div><div class="m-section-divider"></div>';
+    })() +
+
+    // ── Description ──
+    ((l.desc||l.description) ? '<div class="m-section-block"><h3><i class="ti ti-align-left" style="color:var(--red);margin-right:6px"></i>Description</h3><p style="font-size:13px;color:var(--text2);line-height:1.65">' + (l.desc||l.description).replace(/\n/g,'<br>') + '</p></div><div class="m-section-divider"></div>' : '') +
+
+    // ── Caractéristiques ──
+    '<div class="m-section-block">' +
+      '<h3><i class="ti ti-list-details" style="color:var(--red);margin-right:6px"></i>Caractéristiques</h3>' +
+      (facts.length ?
+        '<div id="factsPreview">' + previewFacts.map(factRowHTML).join('') + '</div>' +
+        (facts.length > 6 ?
+          '<button onclick="openFacts()" style="margin-top:10px;width:100%;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:10px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-list-details"></i> Voir les ' + facts.length + ' caractéristiques</button>'
+          : '') :
+        '<p style="font-size:13px;color:var(--text3)">Aucune caractéristique renseignée.</p>') +
+    '</div>' +
+
+    // ── DPE / GES ──
+    ((l.dpe||l.ges) ? '<div class="m-section-divider"></div><div class="m-section-block"><h3><i class="ti ti-bolt" style="color:var(--red);margin-right:6px"></i>Performance énergétique</h3>' +
+      (l.dpe ? '<div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Diagnostic de performance énergétique (DPE)</div>' + energyBar(l.dpe, dpeColor) + energyVerdict(l.dpe.toUpperCase(), DPE_DETAILS) + '</div>' : '') +
+      (l.ges && /^[A-Ga-g]$/.test(l.ges) ? '<div><div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Indice d\'émission de gaz à effet de serre (GES)</div>' + energyBar(l.ges, gesColor) + energyVerdict(l.ges.toUpperCase(), GES_DETAILS) + '</div>' : '') +
+    '</div>' : '') +
+
+    // ── Charges, fiscalité & conditions ──
+    (function() {
+      var rows = [];
+      function row(icon, label, val) { if(val===null||val===undefined||val==='') return; rows.push(factRowHTML({icon:icon, text:label+' : '+val})); }
+      row('ti-building-community','Charges de copropriété', l.chargesCopro ? fmt(l.chargesCopro)+'/mois' : null);
+      row('ti-receipt-2','Taxe foncière', l.taxeFonciere ? fmt(l.taxeFonciere)+'/an' : null);
+      row('ti-calendar-event','Disponibilité', l.disponibilite ? (l.disponibilite.type==='date'&&l.disponibilite.date ? 'Dès le '+l.disponibilite.date : 'Immédiate') : null);
+      row('ti-paw','Animaux acceptés', l.animauxAcceptes===true?'Oui':l.animauxAcceptes===false?'Non':null);
+      row('ti-shield-check','Garant exigé', l.garantExige===true?'Oui':l.garantExige===false?'Non':null);
+      row('ti-calculator','Mode de charges', l.modeCharges==='reel'?'Au réel':l.modeCharges==='forfait'?'Au forfait':null);
+      if(l.zoneTendue === 'oui') rows.push('<div style="display:flex;gap:7px;align-items:flex-start;font-size:12px;color:#a8392b;background:rgba(232,69,51,0.07);border:1px solid rgba(232,69,51,0.18);border-radius:9px;padding:9px 11px;margin-top:6px;line-height:1.5"><i class="ti ti-info-circle" style="flex-shrink:0;margin-top:1px;color:var(--red)"></i> Zone tendue : loyer soumis à encadrement.</div>');
+      if(!rows.length) return '';
+      return '<div class="m-section-divider"></div><div class="m-section-block"><h3><i class="ti ti-receipt" style="color:var(--red);margin-right:6px"></i>Charges &amp; conditions</h3>' + rows.join('') + '</div>';
+    })() +
+
+    // ── Détails du prix ──
+    '<div class="m-section-divider"></div>' +
+    '<div class="m-section-block">' +
+      '<h3><i class="ti ti-receipt" style="color:var(--red);margin-right:6px"></i>Détails du prix</h3>' +
+      '<div style="display:flex;gap:7px;align-items:flex-start;background:#fff8f7;border:1px solid #ffdad5;border-left:4px solid var(--red);border-radius:10px;padding:12px 13px;font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:12px">' +
+        '<i class="ti ti-info-circle" style="color:var(--red);flex-shrink:0;margin-top:1px"></i>' +
+        '<span>' + (isLoc ? 'Sur SansAgents, la mise en relation est <strong>entièrement gratuite</strong>, pour le locataire comme pour le propriétaire.' : 'Sur SansAgents, <strong>seul le vendeur règle 1&nbsp;% de commission</strong>, calculée sur le prix de vente final — l\'acheteur ne paie aucun frais d\'agence.') + '</span>' +
+      '</div>' +
+      (isLoc && l.charges ? factRowHTML({icon:'ti-receipt', text:'Charges mensuelles : ' + fmt(l.charges)}) : '') +
+      (!isLoc && l.price ? (function(){
+        var commission = Math.round(l.price * 0.01);
+        var notaire = Math.round(l.price * 0.075);
+        var total = l.price + notaire;
+        function prRow(label, val, bold) {
+          return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bg);font-size:13px' + (bold ? ';font-weight:700;color:var(--text)' : ';color:var(--text2)') + '">' +
+            '<span>' + label + '</span><span>' + val + '</span></div>';
+        }
+        return '<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px">' +
+          '<div style="background:var(--bg);padding:10px 14px;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em">Estimation du projet</div>' +
+          '<div style="padding:0 14px">' +
+            prRow('Prix affiché', fmt(l.price), false) +
+            prRow('Commission SansAgents (1 %)', fmt(commission), false) +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--bg);font-size:13px;color:var(--text2)">' +
+              '<span>Frais de notaire<br><span style="font-size:11px;color:var(--text3)">Estimation ~7,5 % (achat ancien)</span></span>' +
+              '<span style="font-weight:600">~' + notaire.toLocaleString('fr-FR') + ' €</span>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-size:14px;font-weight:800;color:var(--text)">' +
+              '<span>Total estimé acquéreur</span><span style="color:var(--red)">~' + total.toLocaleString('fr-FR') + ' €</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      })() : '') +
+      (!isLoc ? '<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px">' +
+        '<div style="background:var(--red);padding:11px 14px;font-size:12px;font-weight:800;color:white;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px"><i class="ti ti-pencil" style="font-size:13px"></i> Simuler une offre</div>' +
+        '<div style="padding:14px">' +
+          '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+            '<input type="number" min="0" id="offerInput" placeholder="Entrez un montant…" oninput="updateOfferSim()" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;outline:none">' +
+            '<span style="font-size:15px;color:var(--text2);font-weight:600">€</span>' +
+          '</div>' +
+          '<div id="offerResult"></div>' +
+        '</div>' +
+      '</div>' : '') +
+    '</div>' +
+
+    // ── Comparer avec le marché ──
+    '<div class="m-section-divider"></div>' +
+    '<div style="padding:28px var(--pad) 12px"><h3 style="font-size:14px;font-weight:700;color:var(--text)"><i class="ti ti-external-link" style="color:var(--red);margin-right:6px"></i>Comparer avec le marché</h3></div>' +
+    '<div class="m-carousel" style="padding-bottom:28px">' +
+      (function(){
+        var markets = [
+          {icon:'ti-building-bank',name:'DVF Étalab',off:true,desc:"Transactions immobilières enregistrées en France — base publique de l'État.",href:'https://app.dvf.etalab.gouv.fr/'},
+          {icon:'ti-gavel',name:'Notaires de France',off:true,desc:'Prix moyen au m² par ville, mis à jour chaque trimestre.',href:'https://www.immobilier.notaires.fr/fr/prix-immobilier'},
+          {icon:'ti-chart-line',name:'Castorus',off:false,desc:'Historique des prix des annonces en ligne dans une ville ou un quartier.',href:'https://www.castorus.com/'},
+          {icon:'ti-home-search',name:'MeilleursAgents',off:false,desc:"Estimation automatique à partir d'une adresse avec l'évolution du marché sur 5 ans.",href:'https://www.meilleursagents.com/prix-immobilier/'},
+          {icon:'ti-users',name:'PAP Estimation',off:false,desc:'Estimateur pensé pour les particuliers, basé sur des annonces similaires.',href:'https://www.pap.fr/'}
+        ];
+        return markets.map(function(m){
+          return '<div class="m-carousel-item" style="flex-shrink:0;width:62vw;max-width:230px;border:1px solid var(--border);border-radius:12px;padding:12px 14px;background:white;display:flex;flex-direction:column;justify-content:space-between">' +
+            '<div>' +
+              '<div style="font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:5px;margin-bottom:4px;flex-wrap:wrap"><i class="ti '+m.icon+'" style="color:var(--red)"></i> '+m.name+(m.off?' <span style="font-size:9px;background:#e8f5e9;color:#2e7d32;font-weight:700;padding:2px 5px;border-radius:4px">OFFICIEL</span>':'')+'</div>' +
+              '<div style="font-size:11.5px;color:var(--text2);line-height:1.45;margin-bottom:10px">'+m.desc+'</div>' +
+            '</div>' +
+            '<a href="'+m.href+'" target="_blank" rel="noopener" style="font-size:12px;font-weight:700;color:var(--red);text-decoration:none;display:flex;align-items:center;gap:3px">Ouvrir <i class="ti ti-arrow-up-right"></i></a>' +
+          '</div>';
+        }).join('') + '<div style="flex-shrink:0;width:var(--pad)"></div>';
+      })() +
+    '</div>' +
+
+    // ── Localisation ──
+    '<div class="m-section-divider"></div>' +
+    '<div class="m-section-block">' +
+      '<h3><i class="ti ti-map-pin" style="color:var(--red);margin-right:6px"></i>Localisation</h3>' +
+      '<div style="border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;align-items:center;gap:12px">' +
+        '<div style="width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-map-pin" style="color:white;font-size:18px"></i></div>' +
+        '<div>' +
+          (l.adresse||l.adresseComplete||l.rue ? '<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px">' + (l.adresse||l.adresseComplete||l.rue) + '</div>' : '') +
+          (!(l.adresse||l.adresseComplete||l.rue) ? '<div style="font-size:13px;color:var(--text2)">' + (l.ville||'') + (l.code_postal ? ' (' + l.code_postal + ')' : '') + '</div>' : (l.code_postal ? '<div style="font-size:12px;color:var(--text3)">' + l.code_postal + '</div>' : '')) +
+        '</div>' +
+      '</div>' +
+      '<button onclick="window.open(\'https://maps.google.com/?q=\'+encodeURIComponent(\'' + (l.adresse||l.ville||'') + '\'),\'_blank\')" style="width:100%;margin-top:12px;padding:18px 16px;background:var(--bg);border:1px solid var(--border);border-radius:12px;font-size:15px;font-weight:700;color:var(--text2);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-family:inherit"><i class="ti ti-map-2" style="color:var(--red)"></i> Voir sur Google Maps</button>' +
+    '</div>' +
+
+    // ── Alerte sécurité ──
+    '<div class="m-section-divider"></div>' +
+    '<div class="m-alerte-section">' +
+      '<div class="m-alerte-title"><i class="ti ti-shield-exclamation"></i> Précautions entre particuliers</div>' +
+      '<div class="m-alerte-body">Ne versez jamais d\'argent avant une visite physique. Exigez une pièce d\'identité et vérifiez que le vendeur est bien propriétaire du bien.</div>' +
+    '</div>' +
+
+    // ── Contact vendeur ──
+    '<div class="m-section-divider"></div>' +
+    '<div id="contactForm" class="m-seller-card">' +
+      '<h3 style="font-size:14px;font-weight:700;margin-bottom:12px"><i class="ti ti-message-circle" style="color:var(--red);margin-right:6px"></i>Contacter le vendeur</h3>' +
+      '<div class="m-seller-top">' +
+        '<div class="m-seller-avatar">' + sellerInit + '</div>' +
+        '<div>' +
+          '<div class="m-seller-name">' + sellerName + '</div>' +
+          '<div class="m-seller-badge"><i class="ti ti-users-group" style="font-size:11px"></i> Particulier — réponse sous 24h</div>' +
+        '</div>' +
+      '</div>' +
+      '<textarea class="m-contact-msg" id="contactMsg" placeholder="Bonjour, je suis intéressé(e) par votre annonce. Seriez-vous disponible pour une visite ?"></textarea>' +
+      '<button class="m-btn m-btn-primary m-btn-full" style="margin-top:10px" onclick="sendMsg()"><i class="ti ti-send"></i> Envoyer le message</button>' +
+      '<button class="m-btn m-btn-secondary m-btn-full" style="margin-top:8px" onclick="callSeller()"><i class="ti ti-phone"></i> Voir le numéro de téléphone</button>' +
+    '</div>' +
+
+    // ── Avis vendeur ──
+    '<div style="background:white;padding:28px var(--pad);border-top:1px solid var(--border)">' +
+      '<div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">Vous avez visité ce bien ?</div>' +
+      '<div style="font-size:12.5px;color:var(--text2);margin-bottom:14px">Partagez votre expérience avec le vendeur ou bailleur.</div>' +
+      '<div style="display:flex;gap:8px">' +
+        '<button onclick="window.location=\'/m/avis?type=vendeur&id=' + safeId + '\'" style="flex:1;background:var(--red);color:white;border:none;border-radius:12px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-star"></i> Avis vendeur</button>' +
+        '<button onclick="window.location=\'/m/avis?type=acheteur&id=' + safeId + '\'" style="flex:1;background:white;color:var(--text);border:1.5px solid var(--border);border-radius:12px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-star"></i> Avis acheteur</button>' +
+      '</div>' +
+    '</div>' +
+
+    // ── Annonces similaires ──
+    '<div class="m-section-divider"></div>' +
+    '<div style="padding:28px var(--pad) 12px">' +
+      '<h3 style="font-size:14px;font-weight:700;">Annonces similaires</h3>' +
+    '</div>' +
+    '<div class="m-carousel" style="padding:0 var(--pad)" id="similarCarousel"></div>' +
+    '<div style="height:24px"></div>';
+
+  // Annonces similaires
+  renderSimilar(l);
+}
+
+function renderSimilar(l) {
+  var el = document.getElementById('similarCarousel');
+  if(!el) return;
+  var all = SA.getAllListings();
+  var similar = all.filter(function(x){
+    return x.status !== 'sold' && x.id !== l.id &&
+      (x.type === l.type || x.ville === l.ville) &&
+      x.transaction === l.transaction;
+  }).slice(0, 5);
+  if(!similar.length) { el.parentElement.style.display='none'; return; }
+  var GRAD = {vente:'linear-gradient(135deg,#4f6d9e,#7890b8)',location:'linear-gradient(135deg,#4a7c6b,#6aaa90)'};
+  el.innerHTML = similar.map(function(x) {
+    var xph = x.photos && x.photos[0];
+    var xphUrl = xph ? ((typeof xph === 'object' && xph.url) ? xph.url : String(xph)) : null;
+    var imgStyle = xphUrl
+      ? 'background-image:url("' + xphUrl.replace(/"/g,'%22') + '");background-size:cover;background-position:center'
+      : 'background:' + (GRAD[x.transaction] || '#e8e8e8');
+    var xprice = x.price ? x.price.toLocaleString('fr-FR') + ' €' + (x.transaction==='location'?'/mois':'') : '';
+    return '<div class="m-similar-card m-carousel-item" onclick="SA.openListing(\'' + x.id + '\')">' +
+      '<div class="m-similar-img" style="' + imgStyle + '"></div>' +
+      '<div class="m-similar-body">' +
+        '<div class="m-similar-price">' + xprice + '</div>' +
+        '<div class="m-similar-title">' + (x.titre || ((x.type||'Bien') + ' — ' + (x.ville||''))) + '</div>' +
+        '<div class="m-similar-meta">' +
+          (x.surface ? '<span>' + x.surface + ' m²</span>' : '') +
+          (x.pieces ? '<span>' + x.pieces + ' p.</span>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('') + '<div style="width:1px;flex-shrink:0;margin-right:6px"></div>';
+}
+
+function sendMsg() {
+  var msg = document.getElementById('contactMsg').value.trim();
+  if(!msg) { alert('Écrivez un message avant d\'envoyer.'); return; }
+  var u = SA.getUser();
+  if(!u) { window.location = '/connexion?redirect=' + encodeURIComponent(window.location.href); return; }
+  SA.revealContact && SA.revealContact(listingId, msg);
+  document.getElementById('contactMsg').value = '';
+  alert('Message envoyé ! Le vendeur vous répondra prochainement.');
+}
+function callSeller() {
+  var u = SA.getUser();
+  if(!u) { window.location = '/connexion?redirect=' + encodeURIComponent(window.location.href); return; }
+  SA.revealContact && SA.revealContact(listingId);
+}
+
+function openFacts() {
+  var modal = document.getElementById('factsModal');
+  var body = document.getElementById('factsModalBody');
+  if(!modal || !body) return;
+  body.innerHTML = _factsModalHtml || '<p style="color:var(--text3);font-size:13px">Aucune caractéristique.</p>';
+  modal.style.display = '';
+  document.body.style.overflow = 'hidden';
+}
+function closeFacts() {
+  var modal = document.getElementById('factsModal');
+  if(modal) modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function updateOfferSim() {
+  var input = document.getElementById('offerInput');
+  var result = document.getElementById('offerResult');
+  if(!input || !result) return;
+  var amount = parseFloat(input.value);
+  if(!amount || amount <= 0) { result.innerHTML = ''; return; }
+  var commission = Math.round(amount * 0.01);
+  var notaire = Math.round(amount * 0.075);
+  var total = amount + notaire;
+  var savings = _simListingPrice > 0 ? (_simListingPrice - amount) : 0;
+  var savingsPct = _simListingPrice > 0 ? Math.round(savings / _simListingPrice * 100) : 0;
+  result.innerHTML =
+    '<div style="font-size:13px;margin-top:4px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);color:var(--text2)">' +
+        '<span>Prix du bien</span><span style="font-weight:600;color:var(--text)">' + amount.toLocaleString('fr-FR') + ' €</span>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);color:var(--text2)">' +
+        '<span>Frais de notaire estimés (~7,5%)</span><span style="font-weight:600;color:var(--text)">~' + notaire.toLocaleString('fr-FR') + ' €</span>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);color:var(--text3);font-size:12px">' +
+        '<span>Commission SansAgents (1%, à la charge du vendeur)</span><span style="font-weight:600">' + commission.toLocaleString('fr-FR') + ' €</span>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:14px;font-weight:800;color:var(--text)">' +
+        '<span>Montant total</span><span style="color:var(--red)">' + total.toLocaleString('fr-FR') + ' €</span>' +
+      '</div>' +
+      (savings > 0 ? '<div style="padding:10px 12px;background:#e8f5e9;border-radius:8px;font-size:12.5px;color:#2e7d32;font-weight:600;display:flex;align-items:center;gap:6px">' +
+        '<i class="ti ti-trending-down"></i> ' + savings.toLocaleString('fr-FR') + ' € de moins que le prix demandé (-' + savingsPct + '%)' +
+      '</div>' : '') +
+    '</div>';
+}
+
+// Always reset body overflow on page show (fixes iOS back-cache scroll lock)
+window.addEventListener('pageshow', function(){ document.body.style.overflow = ''; });
+
+// Touch swipe for photo gallery
+(function(){
+  var g = document.getElementById('gallery'), _sx = 0;
+  g.addEventListener('touchstart', function(e){ _sx = e.touches[0].clientX; }, {passive:true});
+  g.addEventListener('touchend', function(e){ var dx = e.changedTouches[0].clientX - _sx; if(Math.abs(dx) > 40) stepGallery(dx < 0 ? 1 : -1); }, {passive:true});
+})();
+
+SA.init().then(function(){
+  var u = SA.getUser();
+  document.getElementById('botProfileLabel').textContent = u ? 'Profil' : 'Connexion';
+  if(!listingId) { render(null); return; }
+  var l = SA.getListingById ? SA.getListingById(listingId) : null;
+  if(!l) {
+    var all = SA.getAllListings();
+    l = all.find(function(x){ return x.id && x.id === listingId; }) || null;
+    if(!l) l = all.find(function(x){ return x.id && x.id.startsWith(listingId); }) || null;
+  }
+  render(l);
+  // Sync fav
+  if(u && SA.isFavorite && SA.isFavorite(listingId)) {
+    document.getElementById('favBtn').classList.add('active');
+    document.getElementById('favBtn').innerHTML = '<i class="ti ti-heart-filled"></i>';
+    document.getElementById('favBarBtn').classList.add('active');
+    document.getElementById('favBarBtn').innerHTML = '<i class="ti ti-heart-filled"></i>';
+  }
+});
+</script>
+
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/m/profil';else window.location='/m/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+</body>
+</html>
+
+
+
+
+

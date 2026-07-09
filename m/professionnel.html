@@ -1,0 +1,337 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Professionnel — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+.m-pro-detail-hero {
+  background: linear-gradient(135deg,#0f1923,#1a2c3d);
+  padding: 20px var(--pad) 24px;
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.m-pro-detail-avatar {
+  width: 64px; height: 64px; border-radius: 16px;
+  color: white; font-size: 26px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.m-pro-detail-name { font-size: 19px; font-weight: 800; color: white; margin-bottom: 3px; }
+.m-pro-detail-job { font-size: 13px; color: #ff7a68; font-weight: 700; margin-bottom: 8px; }
+.m-pro-detail-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #ecfdf5; color: #065f46;
+  font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+}
+
+.m-pro-section {
+  background: white; padding: 20px var(--pad);
+  border-bottom: 1px solid var(--border);
+}
+.m-pro-section-title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.m-pro-section-title i { color: var(--red); font-size: 16px; }
+
+.m-pro-stat-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  margin-bottom: 0;
+}
+.m-pro-stat {
+  background: var(--bg); border-radius: 10px; padding: 12px 10px; text-align: center;
+}
+.m-pro-stat-val { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+.m-pro-stat-lbl { font-size: 10.5px; color: var(--text3); }
+
+.m-pro-stars-big { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
+.m-pro-stars-big i { font-size: 18px; color: #f59e0b; }
+.m-pro-stars-big span { font-size: 14px; font-weight: 700; color: var(--text); }
+
+.m-pro-info-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--bg);
+  font-size: 13px; color: var(--text);
+}
+.m-pro-info-row:last-child { border-bottom: none; }
+.m-pro-info-row i { color: var(--red); font-size: 17px; width: 20px; flex-shrink: 0; }
+.m-pro-info-row span { color: var(--text2); font-size: 12px; }
+
+.m-contact-bar {
+  position: fixed; bottom: var(--bot-h); left: 0; right: 0;
+  background: white; border-top: 1px solid var(--border);
+  padding: 10px var(--pad); display: flex; gap: 10px;
+  z-index: 100;
+}
+.m-contact-bar-btn {
+  flex: 1; padding: 12px; border-radius: 12px; border: none;
+  font-size: 14px; font-weight: 700; font-family: inherit;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.m-contact-bar-btn.primary { background: var(--red); color: white; }
+.m-contact-bar-btn.secondary { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); }
+</style>
+</head>
+<body>
+
+<nav class="m-nav">
+  <button class="m-nav-back" onclick="history.back()" style="background:none;border:none;padding:8px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--text)">
+    <i class="ti ti-arrow-left" style="font-size:18px"></i> Retour
+  </button>
+  <button id="favBtn" onclick="toggleFav()" style="background:none;border:none;padding:8px;cursor:pointer;font-size:22px;color:#ccc">
+    <i class="ti ti-heart" id="favIcon"></i>
+  </button>
+<button class="m-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div id="pageContent">
+  <div style="padding:60px var(--pad);text-align:center">
+    <div style="font-size:32px;color:#ddd;margin-bottom:12px"><i class="ti ti-loader"></i></div>
+    <div style="font-size:13px;color:var(--text3)">Chargement…</div>
+  </div>
+</div>
+
+<!-- Barre de contact fixe -->
+<div class="m-contact-bar" id="contactBar" style="display:none">
+  <button class="m-contact-bar-btn secondary" onclick="callPro()">
+    <i class="ti ti-phone"></i> Appeler
+  </button>
+  <button class="m-contact-bar-btn primary" onclick="messagePro()">
+    <i class="ti ti-message-circle"></i> Envoyer un message
+  </button>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.location='/m/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
+    <span>Déposer</span>
+  </button>
+  <button class="m-tab" onclick="window.location='/m/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="handleAuthClick()"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+var COLORS = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2'];
+var currentPro = null;
+
+function handleAuthClick() {
+  var u = SA.getUser();
+  if(u) window.location='/m/profil'; else window.location='/connexion?redirect=/m/professionnels';
+}
+
+function getJob(p) {
+  return p.metier || p.profession || p.job || p.category || p.categorie || p.type || p.specialite || 'Professionnel';
+}
+
+function toggleFav() {
+  var btn = document.getElementById('favBtn');
+  var icon = document.getElementById('favIcon');
+  var isActive = btn.classList.toggle('active');
+  icon.className = isActive ? 'ti ti-heart-filled' : 'ti ti-heart';
+  btn.style.color = isActive ? 'var(--red)' : '#ccc';
+}
+
+function callPro() {
+  if(!currentPro) return;
+  var phone = currentPro.phone || currentPro.telephone || currentPro.tel;
+  if(phone) { window.location = 'tel:' + phone; return; }
+  alert('Numéro non disponible — contactez ce professionnel par message.');
+}
+
+function messagePro() {
+  var u = SA.getUser();
+  if(!u) { window.location = '/connexion?redirect=/m/professionnels'; return; }
+  if(currentPro) window.location = '/m/messages?pro=' + currentPro.id;
+}
+
+function renderPro(p) {
+  currentPro = p;
+  var color = p.color || COLORS[Math.abs(p.id.split('').reduce(function(a,c){return a+c.charCodeAt(0);},0)) % COLORS.length] || COLORS[0];
+  var init = (p.name || p.nom || 'P').charAt(0).toUpperCase();
+  var job = getJob(p);
+  var city = p.ville || p.city || '';
+  var rating = p.rating ? (Math.round(p.rating * 10) / 10) : 5;
+  var reviewsCount = p.reviews || p.avis || null;
+  var stars = Math.round(rating);
+  var starsHtml = '';
+  for(var i=0;i<5;i++) starsHtml += '<i class="ti ti-star'+(i<stars?'-filled':'')+'"></i>';
+  var longDesc = p.longDesc || p.description || p.desc || 'Professionnel certifié, disponible pour vous accompagner dans votre projet immobilier.';
+  var services = Array.isArray(p.services) ? p.services : [];
+  var phone = p.phone || p.telephone || p.tel || '';
+  var email = p.email || '';
+  var zone = p.zone || p.rayon || '';
+
+  document.title = (p.name || 'Professionnel') + ' — SansAgents';
+  document.getElementById('contactBar').style.display = '';
+
+  var html = '';
+
+  // ── Hero dark ───────────────────────────────────────────
+  html += '<div style="background:linear-gradient(135deg,#0f1923,#1a2c3d);padding:20px var(--pad) 24px">' +
+    '<div style="display:flex;gap:16px;align-items:center;margin-bottom:14px">' +
+      '<div style="width:64px;height:64px;border-radius:16px;background:'+color+';color:white;font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+init+'</div>' +
+      '<div>' +
+        '<div style="font-size:19px;font-weight:800;color:white;line-height:1.2;margin-bottom:3px">'+(p.name||'Professionnel')+'</div>' +
+        '<div style="font-size:13px;color:#ff7a68;font-weight:700;margin-bottom:6px">'+job+'</div>' +
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+          (p.verified ? '<span style="display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;color:#065f46;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px"><i class="ti ti-check" style="font-size:10px"></i> VÉRIFIÉ</span>' : '') +
+          (city ? '<span style="font-size:11px;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:3px"><i class="ti ti-map-pin"></i>'+city+'</span>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    // Rating bar
+    '<div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px">' +
+      '<div style="display:flex;align-items:center;gap:4px;color:#f59e0b">' + starsHtml + '</div>' +
+      '<div style="font-size:15px;font-weight:800;color:white">'+rating.toFixed(1)+'</div>' +
+      (reviewsCount ? '<div style="font-size:12px;color:rgba(255,255,255,0.5)">('+reviewsCount+' avis)</div>' : '') +
+    '</div>' +
+  '</div>';
+
+  // ── Carte contact ───────────────────────────────────────
+  html += '<div style="background:white;padding:20px var(--pad);border-bottom:1px solid var(--border)">' +
+    // Code promo
+    '<div style="display:flex;align-items:center;gap:10px;background:#fff5f4;border:1px solid #ffc5bd;border-radius:10px;padding:10px 14px;margin-bottom:16px">' +
+      '<i class="ti ti-discount-2" style="color:var(--red);font-size:20px;flex-shrink:0"></i>' +
+      '<div><div style="font-size:11px;color:var(--text3)">-5% avec le code</div>' +
+      '<div style="font-size:15px;font-weight:800;color:var(--red);letter-spacing:0.5px">SANSAGENTS5</div></div>' +
+    '</div>' +
+    // Phone
+    (phone ? '<a href="tel:'+phone+'" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bg);text-decoration:none">' +
+      '<i class="ti ti-phone" style="color:var(--red);font-size:18px;width:20px"></i>' +
+      '<span style="font-size:14px;font-weight:600;color:var(--text)">'+phone+'</span>' +
+    '</a>' : '') +
+    // Email
+    (email ? '<a href="mailto:'+email+'" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bg);text-decoration:none">' +
+      '<i class="ti ti-mail" style="color:var(--red);font-size:18px;width:20px"></i>' +
+      '<span style="font-size:13px;color:var(--text)">'+email+'</span>' +
+    '</a>' : '') +
+    // CTA
+    '<button onclick="messagePro()" style="width:100%;background:var(--red);color:white;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px">' +
+      '<i class="ti ti-send"></i> Demander un devis' +
+    '</button>' +
+    '<div style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px;line-height:1.5">Les coordonnées des professionnels sont publiques — l\'annuaire est conçu pour être contacté directement.</div>' +
+  '</div>';
+
+  // ── À propos ────────────────────────────────────────────
+  html += '<div style="background:white;padding:22px var(--pad);border-bottom:1px solid var(--border)">' +
+    '<div style="font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:12px"><i class="ti ti-align-left" style="color:var(--red)"></i> À propos</div>' +
+    '<div style="font-size:13.5px;color:var(--text2);line-height:1.7">'+longDesc+'</div>' +
+  '</div>';
+
+  // ── Services proposés ───────────────────────────────────
+  if(services.length) {
+    html += '<div style="background:white;padding:22px var(--pad);border-bottom:1px solid var(--border)">' +
+      '<div style="font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:14px"><i class="ti ti-list-check" style="color:var(--red)"></i> Services proposés</div>' +
+      services.map(function(s){
+        return '<div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--bg)">' +
+          '<i class="ti ti-circle-check" style="color:#1a8c4e;font-size:16px;flex-shrink:0;margin-top:1px"></i>' +
+          '<span style="font-size:13.5px;color:var(--text)">'+s+'</span>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+  }
+
+  // ── Zone d'intervention ─────────────────────────────────
+  if(zone) {
+    html += '<div style="background:white;padding:22px var(--pad);border-bottom:1px solid var(--border)">' +
+      '<div style="font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:14px"><i class="ti ti-map-pin" style="color:var(--red)"></i> Zone d\'intervention</div>' +
+      '<div style="background:var(--bg);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">' +
+        '<div style="width:36px;height:36px;border-radius:10px;background:white;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-map-pin" style="color:var(--red);font-size:18px"></i></div>' +
+        '<span style="font-size:14px;font-weight:600;color:var(--text)">'+zone+'</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // ── Laisser un avis ─────────────────────────────────────
+  html += '<div style="background:white;padding:20px var(--pad);border-top:1px solid var(--border)">' +
+    '<div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px">Vous avez travaillé avec ce professionnel ?</div>' +
+    '<div style="font-size:12.5px;color:var(--text2);margin-bottom:14px">Partagez votre expérience pour aider la communauté SansAgents.</div>' +
+    '<button onclick="window.location=\'/m/avis?type=pro&id=' + p.id + '\'" style="width:100%;background:var(--red);color:white;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">' +
+      '<i class="ti ti-star"></i> Laisser un avis' +
+    '</button>' +
+  '</div>';
+
+  // ── Signalement ─────────────────────────────────────────
+  html += '<div style="background:white;padding:16px var(--pad);border-bottom:1px solid var(--border)">' +
+    '<button onclick="alert(\'Merci. Notre équipe examinera ce signalement.\')" style="background:none;border:none;font-size:12px;color:var(--text3);cursor:pointer;padding:0;font-family:inherit;display:flex;align-items:center;gap:6px">' +
+      '<i class="ti ti-flag" style="font-size:14px"></i> Profil suspect ou agence déguisée ? Signalez-le' +
+    '</button>' +
+  '</div>';
+
+  html += '<div style="height:90px"></div>';
+  document.getElementById('pageContent').innerHTML = html;
+}
+
+function renderNotFound() {
+  document.getElementById('pageContent').innerHTML = '<div style="padding:60px var(--pad);text-align:center">' +
+    '<div style="font-size:40px;color:#ddd;margin-bottom:12px"><i class="ti ti-user-off"></i></div>' +
+    '<div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px">Professionnel introuvable</div>' +
+    '<div style="font-size:13px;color:var(--text2);margin-bottom:20px">Ce professionnel n\'existe pas ou a été retiré.</div>' +
+    '<button onclick="window.location=\'/m/professionnels\'" style="background:var(--red);color:white;border:none;border-radius:10px;padding:12px 20px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">Voir tous les professionnels</button>' +
+  '</div>';
+}
+
+SA.init().then(function(){
+  var u = SA.getUser();
+  document.getElementById('botProfileLabel').textContent = u ? 'Profil' : 'Connexion';
+
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get('id');
+  if(!id) { renderNotFound(); return; }
+
+  var pro = null;
+  if(SA.getProById) pro = SA.getProById(id);
+  // Fallback to DEMO_PROS exported by SA
+  if(!pro && SA.DEMO_PROS) pro = SA.DEMO_PROS.find(function(p){ return p.id === id; });
+
+  if(pro) renderPro(pro);
+  else renderNotFound();
+});
+</script>
+
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/m/profil';else window.location='/m/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+</body>
+</html>
+
+
+
+
+
+

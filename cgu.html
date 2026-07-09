@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Conditions Générales d'Utilisation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;background:#fff;line-height:1.65}
+.sa-legal-top{border-bottom:1px solid #efefef;padding:18px 40px;display:flex;align-items:center;gap:12px}
+.sa-legal-top .sa-logo{background:#E84533;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.sa-legal-top .sa-logo i{color:white;font-size:16px}
+.sa-legal-top .sa-brand{font-size:17px;font-weight:700;color:#111;cursor:pointer}
+.sa-legal-top .sa-brand span{color:#E84533}
+.sa-legal-back{margin-left:auto;font-size:13px;color:#666;text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer}
+.sa-legal-back:hover{color:#E84533}
+.sa-legal-wrap{max-width:760px;margin:0 auto;padding:3rem 24px 5rem}
+.sa-legal-wrap h1{font-size:30px;font-weight:700;letter-spacing:-0.5px;margin-bottom:8px;color:#111}
+.sa-legal-updated{font-size:12.5px;color:#999;margin-bottom:2.5rem}
+.sa-legal-wrap h2{font-size:18px;font-weight:700;color:#111;margin:2.2rem 0 0.8rem;letter-spacing:-0.2px}
+.sa-legal-wrap h3{font-size:14.5px;font-weight:700;color:#333;margin:1.3rem 0 0.5rem}
+.sa-legal-wrap p{font-size:14px;color:#444;margin-bottom:0.9rem}
+.sa-legal-wrap ul{font-size:14px;color:#444;margin:0 0 0.9rem 1.3rem}
+.sa-legal-wrap li{margin-bottom:0.4rem}
+.sa-legal-wrap strong{color:#222}
+.sa-legal-callout{background:#fff8f7;border:1px solid #ffd9d2;border-radius:12px;padding:14px 18px;margin:1.2rem 0;font-size:13.5px;color:#a8392b}
+.sa-legal-callout i{color:#E84533;margin-right:6px}
+.sa-legal-toc{background:#fafafa;border:1px solid #eee;border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:2rem}
+.sa-legal-toc h4{font-size:11.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.sa-legal-toc a{display:block;font-size:13.5px;color:#444;text-decoration:none;padding:4px 0}
+.sa-legal-toc a:hover{color:#E84533}
+.sa-legal-foot{border-top:1px solid #efefef;padding:2rem 24px;text-align:center}
+.sa-legal-foot a{color:#888;font-size:12.5px;text-decoration:none;margin:0 10px}
+.sa-legal-foot a:hover{color:#E84533}
+@media(max-width:600px){.sa-legal-top{padding:16px 20px}}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+<div class="sa-legal-top">
+  <div class="sa-logo" onclick="window.location.href='./'"><i class="ti ti-key"></i></div>
+  <div class="sa-brand" onclick="window.location.href='./'">Sans<span>Agents</span></div>
+  <a class="sa-legal-back" onclick="window.location.href='./'"><i class="ti ti-arrow-left"></i> Retour à l'accueil</a>
+</div>
+
+<div class="sa-legal-wrap">
+  <h1>Conditions Générales d'Utilisation</h1>
+  <div class="sa-legal-updated">Dernière mise à jour : juin 2026</div>
+
+  <div class="sa-legal-toc">
+    <h4>Sommaire</h4>
+    <a href="#objet">1. Objet</a>
+    <a href="#definitions">2. Définitions</a>
+    <a href="#acces">3. Accès au service et création de compte</a>
+    <a href="#annonces">4. Règles de publication des annonces</a>
+    <a href="#commission-vente">5. Commission SansAgents sur les ventes</a>
+    <a href="#annuaire">6. Annuaire des professionnels et commission sur devis</a>
+    <a href="#messagerie">7. Messagerie et partage des coordonnées</a>
+    <a href="#responsabilite-utilisateur">8. Responsabilités de l'utilisateur</a>
+    <a href="#responsabilite-sansagents">9. Responsabilité de SansAgents</a>
+    <a href="#propriete">10. Propriété intellectuelle</a>
+    <a href="#suspension">11. Suspension et résiliation</a>
+    <a href="#droit">12. Droit applicable et litiges</a>
+    <a href="#contact">13. Contact</a>
+  </div>
+
+  <h2 id="objet">1. Objet</h2>
+  <p>Les présentes Conditions Générales d'Utilisation (« CGU ») régissent l'accès et l'utilisation de la plateforme SansAgents (« la Plateforme »), service de mise en relation directe entre particuliers pour la vente et la location de biens immobiliers, ainsi que l'annuaire de professionnels associé. Toute utilisation de la Plateforme implique l'acceptation pleine et entière des présentes CGU.</p>
+
+  <h2 id="definitions">2. Définitions</h2>
+  <ul>
+    <li><strong>Annonceur :</strong> particulier publiant une annonce immobilière sur la Plateforme pour son propre compte.</li>
+    <li><strong>Particulier :</strong> personne physique agissant à des fins n'entrant pas dans le cadre d'une activité professionnelle d'agent immobilier, de mandataire ou de marchand de biens.</li>
+    <li><strong>Professionnel :</strong> personne physique ou morale inscrite à l'annuaire de la Plateforme pour proposer des services liés à une transaction immobilière (notaire, diagnostiqueur, artisan, etc.).</li>
+    <li><strong>Plateforme :</strong> le site et les services édités par SansAgents.</li>
+  </ul>
+
+  <h2 id="acces">3. Accès au service et création de compte</h2>
+  <p>La consultation des annonces et de l'annuaire est libre et ne nécessite pas de compte. La publication d'une annonce, l'envoi de messages et la mise en favoris nécessitent la création d'un compte. L'utilisateur s'engage à fournir des informations exactes et à les maintenir à jour. Un compte est strictement personnel et ne peut être cédé à un tiers.</p>
+
+  <h2 id="annonces">4. Règles de publication des annonces</h2>
+  <p>La Plateforme est réservée exclusivement aux <strong>particuliers non professionnels de l'immobilier</strong>. Sont strictement interdits, que ce soit pour publier une annonce, créer un compte, consulter les coordonnées d'un annonceur ou utiliser la messagerie :</p>
+  <ul>
+    <li>les agences immobilières, mandataires ou réseaux de mandataires ;</li>
+    <li>les marchands de biens dans le cadre de leur activité commerciale ;</li>
+    <li>toute personne agissant pour le compte d'un tiers professionnel, y compris pour simplement repérer des biens ou démarcher des vendeurs en vue d'un mandat.</li>
+  </ul>
+  <p>La consultation des annonces publiques (sans création de compte) reste libre, comme pour tout site internet ; en revanche, la création d'un compte vaut déclaration sur l'honneur de la qualité de particulier non professionnel, au sens de l'article 1.</p>
+  <div class="sa-legal-callout"><i class="ti ti-alert-triangle"></i>Toute annonce, tout compte ou toute prise de contact identifiée comme provenant d'un professionnel de l'immobilier sera supprimé sans préavis. SansAgents se réserve le droit de signaler les manquements constatés aux autorités compétentes et de poursuivre les contrevenants conformément à l'article 9 de la loi n° 70-9 du 2 janvier 1970 (loi Hoguet) relative aux professions immobilières, ainsi qu'au titre de la clause pénale décrite ci-dessous.</div>
+  <h3>4.1 Clause pénale applicable aux professionnels contrevenants</h3>
+  <p>Indépendamment de la suppression immédiate de son compte, tout professionnel de l'immobilier ayant créé un compte ou pris contact avec un ou plusieurs annonceurs en violation du présent article doit, dès le premier manquement constaté et par bien concerné, une indemnité forfaitaire égale à <strong>3 % du prix affiché de l'annonce concernée, avec un minimum de 3 000 €</strong>. En cas de nouveau manquement constaté après une première sanction, ce montant est <strong>doublé à chaque récidive</strong>, sans limitation de plafond.</p>
+  <p>Cette indemnité est due au titre d'une clause pénale au sens de l'article 1231-5 du Code civil. Elle n'est pas subordonnée à la preuve d'un préjudice réel ni à la conclusion effective d'une vente : la seule constatation d'une violation de l'article 4 — création de compte, prise de contact ou démarchage d'un annonceur par un professionnel — suffit à la rendre exigible. Elle est due sans préjudice de toute action en justice et de tout dommage et intérêt complémentaire que SansAgents serait fondée à réclamer si le préjudice réel s'avérait supérieur, notamment lorsque le professionnel a obtenu un mandat de vente auprès d'un annonceur rencontré sur la Plateforme. Le montant de cette indemnité a pour objet exprès de rendre le contournement des présentes CGU structurellement plus coûteux que leur respect, y compris lorsque le professionnel anticipe une commission de vente significative.</p>
+  <p>L'annonceur garantit l'exactitude des informations publiées (caractéristiques du bien, diagnostics, prix) et reste seul responsable du contenu de son annonce, des photographies publiées et des échanges avec les personnes intéressées.</p>
+
+  <h2 id="commission-vente">5. Commission SansAgents sur les ventes</h2>
+  <p><strong>SansAgents ne perçoit aucune commission, sous quelque forme que ce soit, sur les locations.</strong> La publication d'une annonce de location est et restera intégralement gratuite, sans condition de durée, de montant de loyer ou de profil de locataire. Aucune disposition des présentes CGU ne saurait être interprétée comme créant une obligation de paiement à la charge d'un bailleur.</p>
+  <p>Seule la <strong>vente</strong> d'un bien donne lieu à une commission, due exclusivement par le <strong>vendeur</strong>, d'un montant de <strong>1 % TTC du prix de vente</strong>, à la conclusion effective de la transaction (signature de l'acte authentique de vente) avec une personne mise en relation via la Plateforme. L'acheteur ne supporte, en toute circonstance, aucun frais d'intermédiation lié à SansAgents.</p>
+
+  <h3>5.1 Base de calcul</h3>
+  <p>La commission est calculée sur le <strong>montant final effectivement conclu</strong> entre les parties, qu'il résulte ou non d'une négociation par rapport au prix initialement affiché sur l'annonce. Une baisse de prix en cours de négociation entraîne mécaniquement une baisse proportionnelle de la commission due.</p>
+
+  <h3>5.2 Déclaration de la vente</h3>
+  <p>Le vendeur s'engage à signaler la conclusion de sa vente depuis son espace « Mes annonces » dans un délai de 15 jours suivant la signature, et à régler la commission due dans un délai de 30 jours suivant cette signature.</p>
+
+  <h3>5.3 Survie de l'obligation après suppression de l'annonce</h3>
+  <p>La suppression, la désactivation ou la non-déclaration d'une annonce <strong>ne dispense pas du paiement de la commission</strong> dès lors qu'une vente est conclue avec une personne ayant été mise en relation avec le vendeur via la Plateforme (messagerie, demande de coordonnées ou tout autre moyen de contact fourni par SansAgents), y compris lorsque cette vente est finalisée après le retrait de l'annonce. Cette obligation s'applique pendant une durée de <strong>12 mois</strong> suivant la dernière mise en relation constatée entre les parties via la Plateforme.</p>
+
+  <h3>5.4 Clause pénale en cas de dissimulation</h3>
+  <p>Si SansAgents établit, par tout moyen (témoignage de l'acquéreur, publication ultérieure du bien sur un autre support, acte notarié, etc.), qu'une vente a été dissimulée ou faussement déclarée comme non conclue afin d'éviter le paiement de la commission, le vendeur sera redevable, en plus de la commission de 1 % normalement due, d'une <strong>indemnité forfaitaire complémentaire égale à deux fois le montant de cette commission</strong>, à titre de clause pénale au sens de l'article 1231-5 du Code civil, sans préjudice de tout dommage et intérêt supplémentaire que SansAgents serait fondée à réclamer en cas de préjudice plus important.</p>
+
+  <h3>5.5 Moyens de vérification</h3>
+  <p>Pour s'assurer du respect des présentes dispositions, SansAgents peut, lorsqu'une annonce est supprimée ou désactivée sans avoir été déclarée comme vendue alors qu'elle a fait l'objet d'échanges significatifs via la messagerie, solliciter une confirmation auprès du vendeur et/ou des personnes ayant échangé avec lui au sujet du bien.</p>
+
+  <h2 id="annuaire">6. Annuaire des professionnels et commission sur devis</h2>
+  <p>Les professionnels référencés dans l'annuaire bénéficient d'une visibilité auprès des utilisateurs de la Plateforme. En contrepartie, lorsqu'un client apporté par SansAgents signe un devis avec un professionnel référencé, ce dernier accorde une réduction de <strong>5 % au client</strong> (code SANSAGENTS5, sans démarche de sa part) et reverse à SansAgents une commission dont le taux est précisé lors de l'inscription, calculée sur le montant du devis signé.</p>
+  <p>L'inscription à l'annuaire est gratuite et sans engagement de durée. Le professionnel garantit l'exactitude des informations renseignées (identité, SIRET, zone d'intervention, avis) et reste seul responsable de la qualité des prestations fournies à ses clients.</p>
+
+  <h2 id="messagerie">7. Messagerie et partage des coordonnées</h2>
+  <p>La messagerie intégrée permet d'échanger sans publier ses coordonnées personnelles. Chaque annonceur décide, conversation par conversation, de partager ou non son numéro de téléphone et son adresse e-mail avec la personne avec laquelle il échange. Ce partage est une décision individuelle qui n'engage l'annonceur qu'envers la personne concernée par cette conversation.</p>
+
+  <h2 id="responsabilite-utilisateur">8. Responsabilités de l'utilisateur</h2>
+  <p>L'utilisateur est seul responsable des informations qu'il publie et des engagements qu'il prend avec les autres utilisateurs. Il lui appartient de faire réaliser, à ses frais, l'ensemble des diagnostics et documents obligatoires préalables à une vente ou une location (voir notre page d'aide « Documents obligatoires »). SansAgents n'intervient à aucun moment dans la négociation, la rédaction d'actes ou la transaction elle-même.</p>
+
+  <h2 id="responsabilite-sansagents">9. Responsabilité de SansAgents</h2>
+  <p>SansAgents agit exclusivement comme plateforme technique de mise en relation entre particuliers, et entre particuliers et professionnels. SansAgents n'est partie à aucune transaction immobilière ni à aucun contrat de prestation de services conclu entre utilisateurs et ne saurait être tenue responsable des manquements, litiges ou préjudices résultant de ces relations. SansAgents s'efforce d'assurer l'exactitude des informations affichées mais ne garantit pas l'exhaustivité ni l'absence d'erreur dans les annonces publiées par des tiers.</p>
+
+  <h2 id="propriete">10. Propriété intellectuelle</h2>
+  <p>La marque SansAgents, son logo, sa charte graphique et l'ensemble des éléments techniques de la Plateforme sont la propriété exclusive de SansAgents. Toute reproduction non autorisée est interdite. Les utilisateurs conservent les droits sur les contenus (textes, photographies) qu'ils publient et garantissent disposer des droits nécessaires à leur publication.</p>
+
+  <h2 id="suspension">11. Suspension et résiliation</h2>
+  <p>SansAgents se réserve le droit de suspendre ou de supprimer, sans préavis, tout compte ou contenu contrevenant aux présentes CGU, notamment en cas de publication par un professionnel de l'immobilier, de contenu frauduleux, mensonger ou portant atteinte aux droits de tiers. L'utilisateur peut à tout moment demander la suppression de son compte depuis son espace personnel ou en contactant SansAgents.</p>
+
+  <h2 id="droit">12. Droit applicable et litiges</h2>
+  <p>Les présentes CGU sont soumises au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire. À défaut d'accord, les tribunaux français compétents seront seuls saisis.</p>
+
+  <h2 id="contact">13. Contact</h2>
+  <p>Pour toute question relative aux présentes CGU : <strong>contact@sansagents.fr</strong></p>
+</div>
+
+<div class="sa-legal-foot">
+  <a onclick="window.location.href='cgu'">CGU</a>
+  <a onclick="window.location.href='confidentialite'">Confidentialité</a>
+  <a onclick="window.location.href='cookies'">Cookies</a>
+  <a onclick="window.location.href='mentions-legales'">Mentions légales</a>
+</div>
+</body>
+</html>

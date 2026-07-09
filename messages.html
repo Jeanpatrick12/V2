@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Messages</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:100}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+.sa-nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.sa-nav-link{font-size:13.5px;color:#555;padding:8px 14px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit}
+.sa-nav-link:hover{background:#f7f7f7;color:#111}
+.sa-nav-link.active{color:#E84533;background:#fff0ee}
+.sa-nav-actions{display:flex;align-items:center;gap:4px;margin-left:16px}
+.sa-nav-cta{font-size:13.5px;color:white;background:#E84533;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;border:none;font-family:inherit;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sa-nav-cta:hover{background:#c93a2a}
+.sa-nav-divider{width:1px;height:32px;background:#e5e5e5;margin:0 6px;flex-shrink:0}
+.sa-nav-icon-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:5px 9px;border-radius:8px;color:#444;font-family:inherit}
+.sa-nav-icon-btn:hover{background:#f5f5f5;color:#111}
+.sa-nav-icon-btn i{font-size:19px}
+.sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
+.sa-nav-account-wrap{position:relative}
+.sa-nav-avatar{width:19px;height:19px;border-radius:50%;background:#E84533;color:white;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.sa-nav-badge{position:absolute;top:1px;right:3px;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px;line-height:1}
+.sa-account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);min-width:220px;padding:8px;z-index:200}
+.sa-account-dropdown.show{display:block}
+.sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px;word-break:break-all}
+.sa-account-dropdown-email i{color:#E84533;flex-shrink:0}
+.sa-account-dropdown-logout{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;color:#c0392b;padding:9px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.sa-account-dropdown-logout:hover{background:#fff0ee}
+
+.sa-page-header{max-width:1100px;margin:0 auto;padding:2.75rem 40px 0.5rem}
+.sa-page-header h1{font-size:28px;font-weight:700;letter-spacing:-0.6px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.sa-page-header h1 i{color:#E84533}
+.sa-page-header p{font-size:14px;color:#888}
+.sa-page-body{max-width:1100px;margin:0 auto;padding:1.75rem 40px 4rem}
+
+.sa-empty{text-align:center;padding:5rem 1rem;color:#999}
+.sa-empty i{font-size:42px;color:#f0c9c0;margin-bottom:16px;display:block}
+.sa-empty h3{font-size:17px;color:#333;margin-bottom:7px}
+.sa-empty p{font-size:13.5px;color:#999;max-width:380px;margin:0 auto 18px;line-height:1.6}
+.sa-empty button{background:#E84533;color:white;border:none;padding:11px 24px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.sa-empty button:hover{background:#c93a2a}
+
+.sa-locked{background:#fff7f6;border:1px solid #ffd6d0;border-radius:18px;padding:3rem 2rem;text-align:center}
+.sa-locked i{font-size:36px;color:#E84533;margin-bottom:14px;display:block}
+.sa-locked h3{font-size:17px;color:#111;margin-bottom:8px}
+.sa-locked p{font-size:13.5px;color:#888;max-width:380px;margin:0 auto 20px;line-height:1.6}
+.sa-locked button{background:#E84533;color:white;border:none;padding:11px 26px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.sa-locked button:hover{background:#c93a2a}
+
+/* ── Messagerie ── */
+.sa-msg-layout{display:grid;grid-template-columns:300px 1fr;gap:20px;border:1px solid #efefef;border-radius:18px;overflow:hidden;height:600px}
+.sa-msg-list{border-right:1px solid #efefef;overflow-y:auto;background:#fafafa}
+.sa-msg-item{display:flex;gap:11px;align-items:flex-start;padding:13px 16px;cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background .12s;position:relative}
+.sa-msg-item-delete{background:none;border:none;color:#999;cursor:pointer;padding:4px;flex-shrink:0;align-self:center;border-radius:6px}
+.sa-msg-item-delete:hover{color:#c0392b;background:#fff0ee}
+.sa-msg-item-delete i{font-size:14px;display:block}
+.sa-msg-item:hover{background:#fff0ee}
+.sa-msg-item.active{background:#fff0ee}
+.sa-msg-item.confirmed{background:#f3fbf6;border-left:3px solid #1a8c4e;padding-left:13px}
+.sa-msg-item.confirmed:hover,.sa-msg-item.confirmed.active{background:#e9f7ef}
+.sa-msg-item-avatar{width:38px;height:38px;border-radius:50%;background:#E84533;color:white;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-msg-item-info{min-width:0;flex:1}
+.sa-msg-item-name{font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.sa-msg-item-name .dot{width:8px;height:8px;border-radius:50%;background:#E84533;flex-shrink:0}
+.sa-msg-item-listing{font-size:11.5px;color:#E84533;font-weight:600;margin:2px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sa-msg-item-badge{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;color:#fff;padding:1px 5px;border-radius:4px;margin-right:5px;vertical-align:middle}
+.sa-msg-item-badge.vente{background:#E84533}
+.sa-msg-item-badge.location{background:#1e6abf}
+.sa-msg-item-snippet{font-size:12px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sa-msg-item-time{font-size:10.5px;color:#bbb;flex-shrink:0}
+.sa-msg-thread{display:flex;flex-direction:column;min-width:0;min-height:0}
+.sa-msg-thread-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#bbb;gap:10px}
+.sa-msg-thread-empty i{font-size:36px;color:#f0c9c0}
+.sa-msg-thread-empty p{font-size:13px;color:#aaa}
+
+.sa-confirm-pill{background:#34a853;border:none;color:#fff;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;white-space:nowrap;flex-shrink:0}
+.sa-confirm-pill:hover{background:#2c8c46}
+.sa-confirm-pill.done{background:#E84533;color:#fff;border:none;cursor:default}
+
+.sa-msg-thread-header{padding:14px 20px;border-bottom:1px solid #efefef;display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.sa-msg-thread-header-toprow{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.sa-msg-thread-header-top{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.sa-msg-thread-header-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.sa-share-toggle{flex-shrink:0;background:#fff;border:1.5px solid #e5e5e5;color:#666;font-size:11.5px;font-weight:600;padding:8px 13px;border-radius:8px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.sa-share-toggle:hover{border-color:#E84533;color:#E84533}
+.sa-share-toggle.active{background:#e9f7ef;border-color:#bfe6cf;color:#1a8c4e}
+.sa-share-toggle.active:hover{border-color:#1a8c4e;color:#1a8c4e}
+.sa-icon-btn-labeled{flex-shrink:0;background:#f5f5f5;border:1.5px solid #e5e5e5;color:#888;font-size:11.5px;font-weight:600;padding:8px 13px;border-radius:8px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.sa-icon-btn-labeled:hover{border-color:#E84533;color:#E84533}
+.sa-msg-thread-header-name{font-size:14px;font-weight:700;color:#111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.sa-msg-thread-header-listing{font-size:12px;color:#E84533;font-weight:600;cursor:pointer}
+.sa-msg-thread-header-listing:hover{text-decoration:underline}
+.sa-msg-thread-body{flex:1;min-height:0;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.sa-msg-bubble{max-width:72%;padding:10px 14px;border-radius:14px;font-size:13.5px;line-height:1.5}
+.sa-msg-bubble.me{align-self:flex-end;background:#E84533;color:white;border-bottom-right-radius:4px}
+.sa-msg-bubble.other{align-self:flex-start;background:#f2f2f2;color:#111;border-bottom-left-radius:4px}
+.sa-msg-bubble-time{font-size:10px;opacity:.7;margin-top:4px;display:block}
+.sa-msg-system{align-self:center;background:#eef9f1;color:#1a8c4e;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:999px;display:flex;align-items:center;gap:6px;margin:4px 0}
+.sa-msg-thread-input{display:flex;gap:10px;padding:14px 16px;border-top:1px solid #efefef;flex-shrink:0}
+.sa-msg-thread-input textarea{flex:1;resize:none;border:1px solid #e0e0e0;border-radius:10px;padding:10px 13px;font-size:13.5px;font-family:inherit;outline:none;height:42px;line-height:1.4}
+.sa-msg-thread-input textarea:focus{border-color:#E84533}
+.sa-msg-thread-input button{background:#E84533;color:white;border:none;border-radius:10px;padding:0 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sa-msg-thread-input button:hover{background:#c93a2a}
+
+@media(max-width:760px){
+  .sa-msg-layout{grid-template-columns:1fr;height:auto}
+  .sa-msg-list{border-right:none;border-bottom:1px solid #efefef;max-height:240px}
+  .sa-msg-thread{height:480px}
+}
+
+@media(max-width:980px){
+  .sa-nav{padding:0 24px}
+  .sa-nav-icon-btn .sa-nav-icon-label{display:none}
+  .sa-page-header,.sa-page-body{padding-left:24px;padding-right:24px}
+}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='./'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="sa-nav-links">
+      <button class="sa-nav-link" onclick="window.location.href='./'">Accueil</button>
+      <button class="sa-nav-link" onclick="window.location.href='guide'">Guide</button>
+      <button class="sa-nav-link" onclick="window.location.href='annonces'">Annonces</button>
+      <button class="sa-nav-link" onclick="window.open('professionnels','_blank')">Professionnels</button>
+    </div>
+    <div class="sa-nav-actions">
+      <button class="sa-nav-cta" onclick="window.open('deposer','_blank')">
+        <i class="ti ti-plus"></i> Déposer une annonce
+      </button>
+      <div class="sa-nav-divider"></div>
+      <button class="sa-nav-icon-btn" onclick="window.location.href='recherches'">
+        <i class="ti ti-search"></i>
+        <span class="sa-nav-icon-label">Mes recherches</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'">
+        <i class="ti ti-heart"></i>
+        <span class="sa-nav-badge" data-nav-fav-badge></span>
+        <span class="sa-nav-icon-label">Favoris</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="color:#E84533;position:relative" onclick="window.location.href='messages'">
+        <i class="ti ti-message-2"></i>
+        <span class="sa-nav-badge" data-nav-msg-badge></span>
+        <span class="sa-nav-icon-label">Messages</span>
+      </button>
+      <div class="sa-nav-account-wrap" data-nav-account>
+        <button class="sa-nav-icon-btn">
+          <i class="ti ti-user"></i>
+          <span class="sa-nav-icon-label">Se connecter</span>
+        </button>
+        <div class="sa-account-dropdown"></div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="sa-page-header">
+  <h1><i class="ti ti-message-2"></i> Messages</h1>
+  <p>Vos échanges avec les acheteurs, locataires et propriétaires.</p>
+</div>
+
+<div class="sa-page-body" id="pageBody"></div>
+
+<script>
+let activeConvoId = null;
+
+function fmtTime(ts) {
+  const d = new Date(ts);
+  const now = new Date();
+  const sameDay = d.toDateString() === now.toDateString();
+  if (sameDay) return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+}
+
+function isUnread(c) {
+  return (c.messages || []).some(m => m.from === 'other' && m.createdAt > (c.lastReadAt || 0));
+}
+
+function render() {
+  const body = document.getElementById('pageBody');
+  const user = SA.getUser();
+  if (!user) {
+    body.innerHTML = `
+      <div class="sa-locked">
+        <i class="ti ti-lock"></i>
+        <h3>Connectez-vous pour voir vos messages</h3>
+        <p>Les échanges liés à vos annonces (questions, demandes de visite, propositions) apparaissent ici une fois connecté.</p>
+        <button onclick="window.location.href='connexion?redirect=messages'">Se connecter</button>
+      </div>`;
+    return;
+  }
+  const conversations = SA.getConversations();
+  if (!conversations.length) {
+    body.innerHTML = `
+      <div class="sa-empty" style="border:1px solid #efefef;border-radius:18px">
+        <i class="ti ti-message-2"></i>
+        <h3>Aucun message pour le moment</h3>
+        <p>Cliquez sur « Contacter l'annonceur » depuis la fiche d'un bien pour démarrer une conversation — elle apparaîtra ici.</p>
+        <button onclick="window.location.href='annonces'">Voir les annonces</button>
+      </div>`;
+    return;
+  }
+  body.innerHTML = `
+    <div class="sa-msg-layout">
+      <div class="sa-msg-list" id="msgList"></div>
+      <div class="sa-msg-thread" id="msgThread"></div>
+    </div>`;
+  renderList(conversations);
+  if (!activeConvoId || !conversations.find(c => c.id === activeConvoId)) {
+    activeConvoId = conversations[0].id;
+  }
+  renderThread(activeConvoId);
+}
+
+function renderList(conversations) {
+  const list = document.getElementById('msgList');
+  const sorted = conversations.slice().sort((a, b) => (b.lastMessageAt || b.createdAt) - (a.lastMessageAt || a.createdAt));
+  list.innerHTML = sorted.map(c => {
+    const last = c.messages[c.messages.length - 1];
+    const unread = isUnread(c);
+    const listing = SA.getListingById(c.listingId);
+    const transaction = listing ? listing.transaction : null;
+    return `
+      <div class="sa-msg-item${c.id === activeConvoId ? ' active' : ''}${c.buyerConfirmedSale ? ' confirmed' : ''}" onclick="openConvo('${c.id}')">
+        <div class="sa-msg-item-avatar">${SA.escapeHtml((c.contactName || '?').charAt(0).toUpperCase())}</div>
+        <div class="sa-msg-item-info">
+          <div class="sa-msg-item-name">
+            <span>${SA.escapeHtml(c.contactName)}${unread ? ' <span class="dot"></span>' : ''}</span>
+            <span class="sa-msg-item-time">${fmtTime(last.createdAt)}</span>
+          </div>
+          <div class="sa-msg-item-listing">${transaction ? `<span class="sa-msg-item-badge ${transaction}">${transaction === 'vente' ? 'Vente' : 'Location'}</span>` : ''}${SA.escapeHtml(c.listingTitle)}</div>
+          <div class="sa-msg-item-snippet">${SA.escapeHtml(last.text)}</div>
+        </div>
+        <button class="sa-msg-item-delete" onclick="event.stopPropagation();deleteThread('${c.id}')" title="Supprimer la conversation"><i class="ti ti-trash"></i></button>
+      </div>`;
+  }).join('');
+}
+
+async function openConvo(id) {
+  activeConvoId = id;
+  await SA.markConversationRead(id);
+  renderList(SA.getConversations());
+  renderThread(id);
+}
+
+function renderThread(id) {
+  const thread = document.getElementById('msgThread');
+  const c = SA.getConversation(id);
+  if (!c) {
+    thread.innerHTML = `<div class="sa-msg-thread-empty"><i class="ti ti-message-2"></i><p>Sélectionnez une conversation</p></div>`;
+    return;
+  }
+  thread.innerHTML = `
+    <div class="sa-msg-thread-header">
+      <div class="sa-msg-thread-header-toprow">
+        <div class="sa-msg-thread-header-top">
+          <span class="sa-msg-thread-header-name">${SA.escapeHtml(c.contactName)}</span>
+        </div>
+        <div class="sa-msg-thread-header-actions">
+          ${c.buyerConfirmedSale
+            ? '<span class="sa-confirm-pill done"><i class="ti ti-circle-check"></i> Conclu(e) avec vous</span>'
+            : `<button class="sa-confirm-pill" onclick="confirmBuyerSale('${c.id}')"><i class="ti ti-home-check"></i> Vente/location conclue ?</button>`}
+          <button class="sa-share-toggle${c.contactShared ? ' active' : ''}" onclick="toggleShare('${c.id}')">
+            <i class="ti ${c.contactShared ? 'ti-lock-open' : 'ti-lock'}"></i> ${c.contactShared ? 'Coordonnées partagées' : 'Partager mes coordonnées'}
+          </button>
+          <button class="sa-icon-btn-labeled" onclick="window.open('aide-signaler?listing=${encodeURIComponent(c.listingId)}', '_blank')" title="Signaler cette personne (agence, démarchage…)">
+            <i class="ti ti-flag"></i> Signaler
+          </button>
+        </div>
+      </div>
+      <span class="sa-msg-thread-header-listing" onclick="window.location.href='annonce?id=${encodeURIComponent(c.listingId)}'"><i class="ti ti-home" style="font-size:11px"></i> ${SA.escapeHtml(c.listingTitle)}</span>
+    </div>
+    <div class="sa-msg-thread-body" id="threadBody">
+      ${c.messages.map(m => m.from === 'system' ? `
+        <div class="sa-msg-system"><i class="ti ti-lock-open"></i> ${SA.escapeHtml(m.text)}</div>` : `
+        <div class="sa-msg-bubble ${m.from === 'me' ? 'me' : 'other'}">
+          ${SA.escapeHtml(m.text)}
+          <span class="sa-msg-bubble-time">${fmtTime(m.createdAt)}</span>
+        </div>`).join('')}
+    </div>
+    <div class="sa-msg-thread-input">
+      <textarea id="threadInput" placeholder="Écrivez votre message…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendThreadMessage();}"></textarea>
+      <button onclick="sendThreadMessage()"><i class="ti ti-send"></i> Envoyer</button>
+    </div>`;
+  const tb = document.getElementById('threadBody');
+  tb.scrollTop = tb.scrollHeight;
+}
+
+async function toggleShare(convoId) {
+  const c = SA.getConversation(convoId);
+  if (!c) return;
+  await SA.setContactShared(convoId, !c.contactShared);
+  renderThread(convoId);
+}
+
+async function confirmBuyerSale(convoId) {
+  if (!confirm("Confirmer : vous avez conclu une vente ou une location avec cette personne, suite à une mise en relation sur SansAgents ?")) return;
+  await SA.setBuyerConfirmedSale(convoId, true);
+  SA.toast('Merci pour votre confirmation', 'ti-circle-check');
+  renderThread(convoId);
+}
+
+async function deleteThread(convoId) {
+  if (!confirm('Supprimer définitivement cette conversation ?')) return;
+  await SA.deleteConversation(convoId);
+  if (activeConvoId === convoId) activeConvoId = null;
+  render();
+}
+
+async function sendThreadMessage() {
+  const input = document.getElementById('threadInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const c = SA.getConversation(activeConvoId);
+  if (!c) return;
+  const result = await SA.sendMessage(c.listingId, text);
+  if (result && result.blocked) { SA.toast(result.reason, 'ti-shield-lock'); return; }
+  input.value = '';
+  render();
+}
+
+SA.init().then(function(){
+  render();
+  setTimeout(function(){
+    var dropdown=document.querySelector('.sa-account-dropdown');
+    if(!dropdown||!SA.getUser())return;
+    var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+    var badge=docs.length?'<span style="background:#E84533;color:white;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">'+docs.length+'</span>':'';
+    var existing=Array.from(dropdown.querySelectorAll('button')).find(function(b){return b.innerHTML.indexOf('ti-files')!==-1;});
+    if(existing){existing.innerHTML='<i class="ti ti-files"></i> Mes documents'+badge;}
+    else{
+      var btn=document.createElement('button');
+      btn.setAttribute('data-docs-btn','1');
+      btn.className='sa-account-dropdown-logout';btn.style.cssText='color:#333;text-align:left';
+      btn.innerHTML='<i class="ti ti-files"></i> Mes documents'+badge;
+      btn.onclick=function(){window.location='/documents';};
+      var btns=dropdown.querySelectorAll('button');
+      if(btns.length)dropdown.insertBefore(btn,btns[btns.length-1]);
+      else dropdown.appendChild(btn);
+    }
+  },200);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>if(window.innerWidth<=768&&!localStorage.sa_force_desktop)location.replace('/m/connexion'+location.search);</script>
+<title>SansAgents — Connexion</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fafafa;min-height:100vh}
+
+.sa-top{max-width:1240px;margin:0 auto;padding:24px 40px}
+.sa-top-brand{display:flex;align-items:center;gap:10px;cursor:pointer;width:fit-content}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+
+.sa-auth-wrap{display:flex;align-items:center;justify-content:center;padding:1rem 24px 4rem}
+.sa-auth-card{background:white;border:1px solid #e8e8e8;border-radius:20px;box-shadow:0 12px 40px rgba(0,0,0,0.06);width:100%;max-width:420px;padding:2rem 2rem 1.75rem}
+.sa-auth-tabs{display:flex;background:#f5f5f5;border-radius:11px;padding:4px;margin-bottom:1.5rem}
+.sa-auth-tab{flex:1;text-align:center;font-size:13.5px;font-weight:600;color:#888;padding:9px 0;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit}
+.sa-auth-tab.active{background:white;color:#111;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.sa-auth-title{font-size:19px;font-weight:700;letter-spacing:-0.3px;margin-bottom:4px}
+.sa-auth-sub{font-size:13px;color:#888;margin-bottom:1.4rem;line-height:1.5}
+
+.field-group{margin-bottom:14px}
+.field-label{font-size:12.5px;font-weight:500;color:#333;margin-bottom:6px;display:block}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input[type=text],input[type=email],input[type=password]{
+  width:100%;padding:11px 13px;border:1px solid #e0e0e0;border-radius:9px;font-size:14px;
+  font-family:inherit;color:#111;outline:none;transition:border-color .15s
+}
+input:focus{border-color:#E84533}
+.sa-auth-forgot{display:block;text-align:right;font-size:12px;color:#E84533;font-weight:500;cursor:pointer;margin:-4px 0 16px;background:none;border:none;font-family:inherit;width:100%}
+.sa-cgu-row{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;color:#888;line-height:1.55;margin-bottom:16px}
+.sa-cgu-row input{margin-top:3px;accent-color:#E84533}
+.sa-submit-btn{width:100%;background:#E84533;color:white;border:none;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px}
+.sa-submit-btn:hover{background:#c93a2a}
+.sa-submit-btn:disabled{opacity:.45;cursor:not-allowed}
+.sa-auth-note{display:flex;gap:8px;align-items:flex-start;background:#f7f7f7;border-radius:10px;padding:10px 12px;margin-top:1.4rem;font-size:11.5px;color:#888;line-height:1.55}
+.sa-auth-note i{color:#E84533;flex-shrink:0;margin-top:1px}
+.sa-form{display:none}
+.sa-form.active{display:block}
+.sa-error{font-size:12px;color:#c0392b;margin:-6px 0 12px;display:none}
+.sa-error.show{display:block}
+
+@media(max-width:480px){ .sa-top{padding:20px 20px} }
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+
+<div class="sa-top">
+  <div class="sa-top-brand" onclick="window.location.href='./'">
+    <div class="sa-logo"><i class="ti ti-key"></i></div>
+    <div class="sa-brand">Sans<span>Agents</span></div>
+  </div>
+</div>
+
+<div class="sa-auth-wrap">
+  <div class="sa-auth-card">
+    <div class="sa-auth-tabs">
+      <button class="sa-auth-tab active" id="tabLogin" onclick="switchTab('login')">Se connecter</button>
+      <button class="sa-auth-tab" id="tabSignup" onclick="switchTab('signup')">Créer un compte</button>
+    </div>
+
+    <!-- ── LOGIN ── -->
+    <form class="sa-form active" id="formLogin" onsubmit="event.preventDefault();doLogin()">
+      <div class="sa-auth-title">Content de vous revoir</div>
+      <div class="sa-auth-sub">Connectez-vous pour accéder à vos favoris, recherches et messages.</div>
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input type="email" id="loginEmail" placeholder="jean.dupont@email.com" required>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Mot de passe</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" required>
+      </div>
+      <button type="button" class="sa-auth-forgot" onclick="forgotPassword()">Mot de passe oublié ?</button>
+      <button class="sa-submit-btn" type="submit"><i class="ti ti-login-2"></i> Se connecter</button>
+    </form>
+
+    <!-- ── SIGNUP ── -->
+    <form class="sa-form" id="formSignup" onsubmit="event.preventDefault();doSignup()">
+      <div class="sa-auth-title">Créer votre compte</div>
+      <div class="sa-auth-sub">Gratuit, sans engagement — pour déposer une annonce ou suivre vos favoris.</div>
+      <div class="grid-2">
+        <div class="field-group"><label class="field-label">Prénom</label><input type="text" id="suPrenom" placeholder="Jean" required></div>
+        <div class="field-group"><label class="field-label">Nom</label><input type="text" id="suNom" placeholder="Dupont" required></div>
+      </div>
+      <div class="field-group"><label class="field-label">Email</label><input type="email" id="suEmail" placeholder="jean.dupont@email.com" required></div>
+      <div class="field-group">
+        <label class="field-label">Photo de profil <span style="color:#aaa;font-weight:400">(facultatif)</span></label>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div id="suPhotoPreview" style="width:48px;height:48px;border-radius:50%;background:#f5f5f5;border:1.5px solid #e0e0e0;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+            <i class="ti ti-user" style="font-size:20px;color:#ccc" id="suPhotoIcon"></i>
+            <img id="suPhotoImg" style="width:100%;height:100%;object-fit:cover;display:none" alt="">
+          </div>
+          <label for="suPhoto" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#555;border:1.5px solid #ddd;border-radius:9px;padding:8px 14px;background:#fff">
+            <i class="ti ti-upload" style="font-size:14px;color:#E84533"></i> Choisir une photo
+          </label>
+          <input type="file" id="suPhoto" accept="image/*" onchange="previewSuPhoto(this)" style="display:none">
+        </div>
+      </div>
+      <div class="field-group"><label class="field-label">Mot de passe</label><input type="password" id="suPassword" placeholder="8 caractères minimum" required></div>
+      <div class="field-group"><label class="field-label">Confirmer le mot de passe</label><input type="password" id="suPassword2" placeholder="••••••••" required></div>
+      <div class="sa-error" id="suError">Les mots de passe ne correspondent pas.</div>
+      <div class="sa-cgu-row">
+        <input type="checkbox" id="suCgu" required>
+        <label for="suCgu">J'accepte les <a href="#" style="color:#E84533">Conditions Générales d'Utilisation</a> de SansAgents.</label>
+      </div>
+      <button class="sa-submit-btn" type="submit"><i class="ti ti-user-plus"></i> Créer mon compte</button>
+    </form>
+
+    <div class="sa-auth-note">
+      <i class="ti ti-shield-lock"></i>
+      <span>Vos données sont stockées de manière sécurisée. Les mots de passe sont chiffrés et ne sont jamais accessibles en clair.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const redirect = params.get('redirect') || './';
+
+function switchTab(tab) {
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
+  document.getElementById('formLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('formSignup').classList.toggle('active', tab === 'signup');
+}
+
+function afterAuth(prenom) {
+  SA.toast('Bienvenue, ' + prenom + ' !', 'ti-circle-check');
+  setTimeout(() => { window.location.href = redirect; }, 700);
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) return;
+  const btn = document.querySelector('#formLogin .sa-submit-btn');
+  btn.disabled = true;
+  try {
+    await SA.init();
+    const user = await SA.login(email, password);
+    afterAuth(user.prenom);
+  } catch(e) {
+    SA.toast('Email ou mot de passe incorrect.', 'ti-alert-circle');
+    btn.disabled = false;
+  }
+}
+
+let suPhotoData = null;
+function previewSuPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  SA.compressImageFile(file).then(dataUrl => {
+    suPhotoData = dataUrl;
+    document.getElementById('suPhotoIcon').style.display = 'none';
+    const img = document.getElementById('suPhotoImg');
+    img.src = dataUrl;
+    img.style.display = 'block';
+  });
+}
+
+async function doSignup() {
+  const prenom = document.getElementById('suPrenom').value.trim();
+  const nom = document.getElementById('suNom').value.trim();
+  const email = document.getElementById('suEmail').value.trim();
+  const pw = document.getElementById('suPassword').value;
+  const pw2 = document.getElementById('suPassword2').value;
+  const err = document.getElementById('suError');
+  if (pw !== pw2) { err.classList.add('show'); return; }
+  err.classList.remove('show');
+  const btn = document.querySelector('#formSignup .sa-submit-btn');
+  btn.disabled = true;
+  try {
+    await SA.init();
+    const user = await SA.signup({ prenom, nom, email, password: pw, photo: suPhotoData });
+    afterAuth(user.prenom);
+  } catch(e) {
+    SA.toast(e.message || 'Erreur lors de la création du compte.', 'ti-alert-circle');
+    btn.disabled = false;
+  }
+}
+
+async function forgotPassword() {
+  const email = document.getElementById('loginEmail').value.trim();
+  if (email) { await SA.init(); await SA.forgotPassword(email); }
+  SA.toast('Si ce compte existe, un lien de réinitialisation a été envoyé.', 'ti-mail');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SansAgents — Inscrire mon activité</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #E84533;
+      --red-dark: #c93a2a;
+      --red-light: #fff5f4;
+      --red-border: rgba(232,69,51,0.3);
+      --bg: #ffffff;
+      --bg-secondary: #f7f7f7;
+      --border: #e5e5e5;
+      --border-light: #efefef;
+      --text: #111111;
+      --text-secondary: #555555;
+      --text-tertiary: #999999;
+      --radius-sm: 6px;
+      --radius-md: 11px;
+      --radius-lg: 15px;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+    .hidden { display: none !important; }
+    .page-wrap { max-width: 720px; margin: 0 auto; padding: 34.5px 21.5px 60px; }
+
+    .sa-header { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; cursor: pointer; width: fit-content; }
+    .sa-logo { background: var(--red); border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sa-logo i { color: white; font-size: 18px; }
+    .sa-brand { font-size: 19px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+    .sa-brand span { color: var(--red); }
+
+    .progress-bar { display: flex; gap: 0; margin-bottom: 34.5px; }
+    .prog-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; position: relative; }
+    .prog-step::before { content: ''; position: absolute; top: 14px; left: 50%; width: 100%; height: 2px; background: var(--border); z-index: 0; }
+    .prog-step:last-child::before { display: none; }
+    .prog-dot { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-tertiary); z-index: 1; position: relative; transition: all 0.2s; cursor: pointer; }
+    .prog-dot.active { border-color: var(--red); background: var(--red); color: white; }
+    .prog-dot.done { border-color: var(--red); background: var(--red); color: white; }
+    .prog-label { font-size: 9.5px; color: var(--text-tertiary); text-align: center; line-height: 1.3; letter-spacing: 0.02em; }
+    .prog-label.active { color: var(--red); font-weight: 600; }
+
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+    .step-title { font-size: 21.5px; font-weight: 600; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
+    .step-sub { font-size: 15px; color: var(--text-secondary); margin-bottom: 26px; line-height: 1.5; }
+
+    .field-group { margin-bottom: 17px; }
+    .field-label { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+    .req { color: var(--red); }
+    .field-hint { font-size: 12px; color: var(--text-tertiary); margin-bottom: 6px; line-height: 1.5; }
+
+    input[type=text], input[type=number], input[type=email], input[type=tel], textarea, select {
+      width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: var(--radius-md);
+      font-size: 15px; font-family: var(--font); color: var(--text); background: var(--bg); outline: none;
+      transition: border-color 0.15s; -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--red); }
+    textarea { min-height: 90px; resize: vertical; }
+    select { cursor: pointer; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    .char-count { font-size: 11.5px; color: var(--text-tertiary); text-align: right; margin-top: 4px; }
+
+    .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 21.5px; }
+    .type-card { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 17px 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: all 0.15s; background: var(--bg); }
+    .type-card:hover { border-color: var(--red); background: var(--red-light); }
+    .type-card.selected { border-color: var(--red); background: var(--red-light); }
+    .type-card i { font-size: 26px; color: var(--text-tertiary); }
+    .type-card.selected i { color: var(--red); }
+    .type-card span { font-size: 14px; font-weight: 500; color: var(--text); }
+
+    .tip-box { background: var(--bg-secondary); border-left: 3px solid var(--red); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 11px 15px; margin-bottom: 21.5px; font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+    .tip-box strong { color: var(--text); font-weight: 500; }
+    .sa-logo-upload{width:88px;height:88px;border-radius:18px;border:1.5px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;position:relative;overflow:hidden;background:var(--bg-secondary)}
+    .sa-logo-upload:hover{border-color:var(--red)}
+    .sa-logo-upload i{font-size:21px;color:var(--text-tertiary)}
+    .sa-logo-upload span{font-size:9.5px;color:var(--text-tertiary);text-align:center;padding:0 6px;line-height:1.3}
+    .sa-logo-upload img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+    .sa-logo-remove{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;border:none;width:19px;height:19px;border-radius:50%;font-size:10px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:1}
+    .sa-logo-upload.has-image .sa-logo-remove{display:flex}
+    .sa-logo-upload.has-image i,.sa-logo-upload.has-image span{display:none}
+
+    /* Services dynamiques */
+    .service-add-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .service-add-row input { flex: 1; }
+    .service-add-row button { background: var(--red); color: white; border: none; border-radius: var(--radius-md); padding: 0 16px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); flex-shrink: 0; }
+    .service-add-row button:hover { background: var(--red-dark); }
+    .service-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .service-tag { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text); background: var(--bg-secondary); border: 1px solid var(--border-light); padding: 7px 8px 7px 13px; border-radius: 999px; }
+    .service-tag button { background: none; border: none; color: var(--text-tertiary); cursor: pointer; display: flex; align-items: center; padding: 2px; }
+    .service-tag button:hover { color: var(--red); }
+    .service-empty { font-size: 12.5px; color: var(--text-tertiary); padding: 6px 0; }
+
+    .recap-card { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 21.5px; margin-bottom: 17px; }
+    .recap-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; gap: 12px; }
+    .recap-row:last-child { border-bottom: none; }
+    .recap-key { color: var(--text-secondary); flex-shrink: 0; }
+    .recap-val { color: var(--text); font-weight: 500; text-align: right; }
+
+    .fee-banner { background: var(--red-light); border: 1px solid var(--red-border); border-radius: var(--radius-md); padding: 14px 16px; display: flex; align-items: flex-start; gap: 11px; margin-bottom: 17px; }
+    .fee-banner > i { font-size: 21.5px; color: var(--red); flex-shrink: 0; margin-top: 1px; }
+    .fee-banner p { font-size: 13.5px; color: var(--text); line-height: 1.6; }
+    .fee-banner strong { color: var(--red); }
+
+    .cgu-row { display: flex; align-items: flex-start; gap: 9.5px; font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 17px; }
+    .cgu-row input { margin-top: 3px; width: auto; accent-color: var(--red); }
+    .cgu-row a { color: var(--red); }
+
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 26px; padding-top: 21.5px; border-top: 1px solid var(--border-light); }
+    .btn-prev { background: none; border: 1px solid var(--border); color: var(--text); padding: 11px 21.5px; border-radius: var(--radius-md); font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: var(--font); transition: background 0.15s; }
+    .btn-prev:hover { background: var(--bg-secondary); }
+    .btn-next { background: var(--red); border: none; color: white; padding: 12px 26px; border-radius: var(--radius-md); font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 7px; font-weight: 500; font-family: var(--font); transition: background 0.15s; }
+    .btn-next:hover { background: var(--red-dark); }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .success-screen { text-align: center; padding: 40px 21.5px; display: none; }
+    .success-icon { width: 68px; height: 68px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 21.5px; }
+    .success-icon i { font-size: 32.5px; color: white; }
+    .success-title { font-size: 23.5px; font-weight: 600; color: var(--text); margin-bottom: 8px; letter-spacing: -0.3px; }
+    .success-sub { font-size: 15px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 26px; }
+    .success-actions { display: flex; gap: 10px; margin-top: 22px; }
+    .success-actions .btn-prev, .success-actions .btn-next { flex: 1; justify-content: center; }
+
+    @media(max-width:560px){ .type-grid,.grid-2{grid-template-columns:1fr} .prog-label{display:none} }
+  </style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="sa-header" onclick="window.location.href='./'">
+    <div class="sa-logo"><i class="ti ti-key"></i></div>
+    <div class="sa-brand">Sans<span>Agents</span></div>
+  </div>
+
+  <div class="progress-bar" id="progressBar">
+    <div class="prog-step"><div class="prog-dot active" id="dot1" onclick="goToStep(1)">1</div><div class="prog-label active" id="lbl1">Activité</div></div>
+    <div class="prog-step"><div class="prog-dot" id="dot2" onclick="goToStep(2)">2</div><div class="prog-label" id="lbl2">Entreprise</div></div>
+    <div class="prog-step"><div class="prog-dot" id="dot3" onclick="goToStep(3)">3</div><div class="prog-label" id="lbl3">Présentation</div></div>
+    <div class="prog-step"><div class="prog-dot" id="dot4" onclick="goToStep(4)">4</div><div class="prog-label" id="lbl4">Contact</div></div>
+    <div class="prog-step"><div class="prog-dot" id="dot5" onclick="goToStep(5)">5</div><div class="prog-label" id="lbl5">Récap</div></div>
+  </div>
+
+  <div id="mainForm">
+
+    <!-- STEP 1 — Catégorie & métier -->
+    <div class="step-panel active" id="step1">
+      <p class="step-title">Quelle est votre activité ?</p>
+      <p class="step-sub">Choisissez la catégorie qui correspond le mieux à votre métier.</p>
+      <div class="type-grid">
+        <div class="type-card selected" id="catImmo" onclick="selectCat('immobilier')"><i class="ti ti-building-bank"></i><span>Immobilier</span></div>
+        <div class="type-card" id="catTravaux" onclick="selectCat('travaux')"><i class="ti ti-tools"></i><span>Travaux & rénovation</span></div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Métier <span class="req">*</span></div>
+        <select id="jobSelect" onchange="checkStep1()"></select>
+      </div>
+      <div class="field-group hidden" id="jobAutreGroup">
+        <div class="field-label">Précisez votre métier <span class="req">*</span></div>
+        <input type="text" id="jobAutre" placeholder="Ex : Architecte d'intérieur" oninput="checkStep1()">
+      </div>
+      <div class="tip-box"><strong>Rappel SansAgents :</strong> l'inscription est gratuite. SansAgents se rémunère uniquement lorsqu'un particulier trouvé sur la plateforme signe un devis avec vous (voir le détail à l'étape 4).</div>
+      <div class="nav-row"><div></div><button class="btn-next" id="btnNext1" onclick="goNext(1)" disabled>Continuer <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+
+    <!-- STEP 2 — Entreprise -->
+    <div class="step-panel" id="step2">
+      <p class="step-title">Votre activité</p>
+      <p class="step-sub">Ces informations apparaîtront sur votre fiche dans l'annuaire.</p>
+      <div class="field-group">
+        <div class="field-label">Nom affiché <span class="req">*</span></div>
+        <div class="field-hint">Votre nom, ou celui de votre entreprise / cabinet.</div>
+        <input type="text" id="proName" placeholder="Ex : Karim Benali, ou Cabinet Roussel & Associés" oninput="checkStep2()">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Logo ou photo <span style="font-weight:400;color:var(--text-tertiary)">(facultatif)</span></div>
+        <div class="field-hint">Affiché sur votre fiche et dans l'annuaire — une présence visuelle inspire davantage confiance.</div>
+        <div class="sa-logo-upload" id="logoUploadZone" onclick="document.getElementById('logoFileInput').click()">
+          <i class="ti ti-camera-plus"></i>
+          <span>Ajouter un logo</span>
+        </div>
+        <input type="file" id="logoFileInput" accept="image/*" style="display:none" onchange="handleLogoUpload(this)">
+      </div>
+      <div class="grid-2">
+        <div class="field-group"><div class="field-label">Ville <span class="req">*</span></div><input type="text" id="proCity" placeholder="Ex : Lyon" oninput="checkStep2()"></div>
+        <div class="field-group"><div class="field-label">SIRET <span class="req">*</span></div><div class="field-hint">Obligatoire — permet aux particuliers de vérifier votre entreprise et limite les risques d'arnaque. Affiché sur votre fiche.</div><input type="text" id="proSiret" placeholder="14 chiffres" oninput="checkStep2()"></div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Zone d'intervention <span class="req">*</span></div>
+        <div class="field-hint">Villes ou département(s) où vous intervenez.</div>
+        <input type="text" id="proZone" placeholder="Ex : Lyon et métropole (Villeurbanne, Bron, Caluire)" oninput="checkStep2()">
+      </div>
+      <div class="nav-row">
+        <button class="btn-prev" onclick="goBack(2)"><i class="ti ti-arrow-left"></i> Retour</button>
+        <button class="btn-next" id="btnNext2" onclick="goNext(2)" disabled>Continuer <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- STEP 3 — Présentation -->
+    <div class="step-panel" id="step3">
+      <p class="step-title">Présentez votre activité</p>
+      <p class="step-sub">Une présentation claire donne confiance aux particuliers.</p>
+      <div class="field-group">
+        <div class="field-label">Description courte <span class="req">*</span></div>
+        <div class="field-hint">Une phrase affichée dans la liste de l'annuaire (140 caractères max).</div>
+        <input type="text" id="proDesc" maxlength="140" placeholder="Ex : Mise aux normes, rénovation électrique complète, devis gratuit sous 24h." oninput="checkStep3()">
+        <div class="char-count"><span id="descCount">0</span>/140</div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Description complète <span class="req">*</span></div>
+        <div class="field-hint">Affichée sur votre fiche détaillée : expérience, spécialités, ce qui vous distingue.</div>
+        <textarea id="proLongDesc" placeholder="Décrivez votre parcours, vos spécialités, votre façon de travailler…" oninput="checkStep3()"></textarea>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Services proposés <span class="req">*</span></div>
+        <div class="field-hint">Ajoutez les prestations que vous proposez (au moins une).</div>
+        <div class="service-add-row">
+          <input type="text" id="serviceInput" placeholder="Ex : Mise aux normes NF C 15-100" onkeydown="if(event.key==='Enter'){event.preventDefault();addService();}">
+          <button type="button" onclick="addService()"><i class="ti ti-plus"></i> Ajouter</button>
+        </div>
+        <div class="service-tags" id="serviceTags"></div>
+        <div class="service-empty" id="serviceEmpty">Aucun service ajouté pour le moment.</div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-prev" onclick="goBack(3)"><i class="ti ti-arrow-left"></i> Retour</button>
+        <button class="btn-next" id="btnNext3" onclick="goNext(3)" disabled>Continuer <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- STEP 4 — Contact -->
+    <div class="step-panel" id="step4">
+      <p class="step-title">Vos coordonnées</p>
+      <p class="step-sub">Elles seront visibles publiquement : à la différence des annonces entre particuliers, l'annuaire est conçu pour être contacté directement.</p>
+      <div class="grid-2">
+        <div class="field-group"><div class="field-label">Téléphone <span class="req">*</span></div><input type="tel" id="proPhone" placeholder="06 12 34 56 78" oninput="checkStep4()"></div>
+        <div class="field-group"><div class="field-label">Email <span class="req">*</span></div><input type="email" id="proEmail" placeholder="contact@votre-activite.fr" oninput="checkStep4()"></div>
+      </div>
+      <div class="fee-banner">
+        <i class="ti ti-info-circle"></i>
+        <p>Le particulier mentionne le code <strong>SANSAGENTS5</strong> en demandant son devis → vous lui appliquez <strong>5% de réduction</strong> → s'il signe ce devis réduit, SansAgents vous facture <strong>8%</strong> du montant réduit. Le particulier ne paie jamais cette commission.</p>
+      </div>
+      <div class="cgu-row">
+        <input type="checkbox" id="cguCheck" onchange="checkStep4()">
+        <label for="cguCheck">J'accepte ce principe de commission sur les devis signés via la plateforme et les <a href="cgu" target="_blank">Conditions Générales d'Utilisation</a> de l'annuaire SansAgents.</label>
+      </div>
+      <div class="nav-row">
+        <button class="btn-prev" onclick="goBack(4)"><i class="ti ti-arrow-left"></i> Retour</button>
+        <button class="btn-next" id="btnNext4" onclick="goNext(4)" disabled>Voir le récapitulatif <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- STEP 5 — Récap -->
+    <div class="step-panel" id="step5">
+      <p class="step-title">Vérifiez votre profil</p>
+      <p class="step-sub">Voici ce qui sera visible dans l'annuaire SansAgents.</p>
+      <div class="recap-card">
+        <div class="recap-row"><span class="recap-key">Nom affiché</span><span class="recap-val" id="rName">—</span></div>
+        <div class="recap-row"><span class="recap-key">Métier</span><span class="recap-val" id="rJob">—</span></div>
+        <div class="recap-row"><span class="recap-key">Ville</span><span class="recap-val" id="rCity">—</span></div>
+        <div class="recap-row"><span class="recap-key">Zone d'intervention</span><span class="recap-val" id="rZone">—</span></div>
+        <div class="recap-row"><span class="recap-key">Services</span><span class="recap-val" id="rServices">—</span></div>
+        <div class="recap-row"><span class="recap-key">Téléphone</span><span class="recap-val" id="rPhone">—</span></div>
+        <div class="recap-row"><span class="recap-key">Email</span><span class="recap-val" id="rEmail">—</span></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-prev" onclick="goBack(5)"><i class="ti ti-arrow-left"></i> Modifier</button>
+        <button class="btn-next" onclick="publish()"><i class="ti ti-check"></i> Publier mon profil</button>
+      </div>
+    </div>
+
+  </div><!-- /mainForm -->
+
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon"><i class="ti ti-check"></i></div>
+    <p class="success-title">Votre profil est en ligne !</p>
+    <p class="success-sub">Il est maintenant visible dans l'annuaire des professionnels SansAgents.</p>
+    <div class="success-actions">
+      <button class="btn-prev" onclick="window.location.href='professionnels'"><i class="ti ti-list"></i> Retour à l'annuaire</button>
+      <button class="btn-next" onclick="viewMyProfile()">Voir mon profil <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+  let selectedCat = 'immobilier';
+  let currentStep = 1;
+  let maxStepReached = 1;
+  let services = [];
+  let lastPublishedId = null;
+
+  const JOBS = {
+    immobilier: ["Notaire", "Diagnostiqueur DPE", "Géomètre-expert", "Architecte", "Courtier en prêt immobilier", "Autre"],
+    travaux: ["Électricien", "Plombier", "Carreleur", "Plaquiste", "Peintre", "Menuisier", "Maçon", "Couvreur", "Entreprise tous corps d'état", "Autre"]
+  };
+
+  function fillJobSelect() {
+    const sel = document.getElementById('jobSelect');
+    sel.innerHTML = '<option value="">Sélectionner</option>' + JOBS[selectedCat].map(j => `<option>${j}</option>`).join('');
+  }
+
+  function selectCat(cat) {
+    selectedCat = cat;
+    document.getElementById('catImmo').classList.toggle('selected', cat === 'immobilier');
+    document.getElementById('catTravaux').classList.toggle('selected', cat === 'travaux');
+    fillJobSelect();
+    checkStep1();
+  }
+
+  SA.init().then(function() { fillJobSelect(); });
+
+  function checkStep1() {
+    const job = document.getElementById('jobSelect').value;
+    const autreGroup = document.getElementById('jobAutreGroup');
+    const isAutre = job === 'Autre';
+    autreGroup.classList.toggle('hidden', !isAutre);
+    const ok = job && (!isAutre || document.getElementById('jobAutre').value.trim());
+    document.getElementById('btnNext1').disabled = !ok;
+  }
+
+  function checkStep2() {
+    const siretDigits = document.getElementById('proSiret').value.replace(/\s/g, '');
+    const ok = document.getElementById('proName').value.trim() && document.getElementById('proCity').value.trim() && document.getElementById('proZone').value.trim() && /^\d{14}$/.test(siretDigits);
+    document.getElementById('btnNext2').disabled = !ok;
+  }
+
+  function checkStep3() {
+    document.getElementById('descCount').textContent = document.getElementById('proDesc').value.length;
+    const ok = document.getElementById('proDesc').value.trim() && document.getElementById('proLongDesc').value.trim() && services.length > 0;
+    document.getElementById('btnNext3').disabled = !ok;
+  }
+
+  function addService() {
+    const input = document.getElementById('serviceInput');
+    const val = input.value.trim();
+    if (!val) return;
+    services.push(val);
+    input.value = '';
+    renderServices();
+    checkStep3();
+  }
+  function removeService(i) {
+    services.splice(i, 1);
+    renderServices();
+    checkStep3();
+  }
+  function renderServices() {
+    const tags = document.getElementById('serviceTags');
+    const empty = document.getElementById('serviceEmpty');
+    empty.style.display = services.length ? 'none' : 'block';
+    tags.innerHTML = services.map((s, i) => `
+      <span class="service-tag">${SA.escapeHtml(s)} <button type="button" onclick="removeService(${i})"><i class="ti ti-x" style="font-size:11px"></i></button></span>
+    `).join('');
+  }
+
+  function checkStep4() {
+    const ok = document.getElementById('proPhone').value.trim() && document.getElementById('proEmail').value.trim() && document.getElementById('cguCheck').checked;
+    document.getElementById('btnNext4').disabled = !ok;
+  }
+
+  function fillRecap() {
+    const job = document.getElementById('jobSelect').value === 'Autre' ? document.getElementById('jobAutre').value.trim() : document.getElementById('jobSelect').value;
+    document.getElementById('rName').textContent = document.getElementById('proName').value.trim() || '—';
+    document.getElementById('rJob').textContent = job || '—';
+    document.getElementById('rCity').textContent = document.getElementById('proCity').value.trim() || '—';
+    document.getElementById('rZone').textContent = document.getElementById('proZone').value.trim() || '—';
+    document.getElementById('rServices').textContent = services.length ? services.join(', ') : '—';
+    document.getElementById('rPhone').textContent = document.getElementById('proPhone').value.trim() || '—';
+    document.getElementById('rEmail').textContent = document.getElementById('proEmail').value.trim() || '—';
+  }
+
+  function showStep(step) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('step' + step).classList.add('active');
+    updateProgress(step);
+    if (step === 5) fillRecap();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function goNext(from) { currentStep = from + 1; maxStepReached = Math.max(maxStepReached, currentStep); showStep(currentStep); }
+  function goBack(from) { currentStep = from - 1; showStep(currentStep); }
+  function goToStep(step) { if (step <= maxStepReached) { currentStep = step; showStep(step); } }
+  function updateProgress(current) {
+    for (let i = 1; i <= 5; i++) {
+      const dot = document.getElementById('dot' + i);
+      const lbl = document.getElementById('lbl' + i);
+      dot.classList.remove('active', 'done');
+      lbl.classList.remove('active');
+      if (i < current) dot.classList.add('done');
+      else if (i === current) { dot.classList.add('active'); lbl.classList.add('active'); }
+    }
+  }
+
+  let proLogo = null;
+  function handleLogoUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    SA.compressImageFile(file, 400, 0.85).then(dataUrl => {
+      proLogo = dataUrl;
+      const zone = document.getElementById('logoUploadZone');
+      zone.classList.add('has-image');
+      zone.innerHTML = '<img src="' + dataUrl + '"><button class="sa-logo-remove" onclick="event.stopPropagation();removeLogo()"><i class="ti ti-x"></i></button>';
+    });
+    input.value = '';
+  }
+  function removeLogo() {
+    proLogo = null;
+    const zone = document.getElementById('logoUploadZone');
+    zone.classList.remove('has-image');
+    zone.innerHTML = '<i class="ti ti-camera-plus"></i><span>Ajouter un logo</span>';
+  }
+
+  function collectFormData() {
+    const job = document.getElementById('jobSelect').value === 'Autre' ? document.getElementById('jobAutre').value.trim() : document.getElementById('jobSelect').value;
+    return {
+      name: document.getElementById('proName').value.trim(),
+      logo: proLogo,
+      job: job,
+      cat: selectedCat,
+      city: document.getElementById('proCity').value.trim(),
+      zone: document.getElementById('proZone').value.trim(),
+      siret: document.getElementById('proSiret').value.trim(),
+      desc: document.getElementById('proDesc').value.trim(),
+      longDesc: document.getElementById('proLongDesc').value.trim(),
+      services: services.slice(),
+      phone: document.getElementById('proPhone').value.trim(),
+      email: document.getElementById('proEmail').value.trim()
+    };
+  }
+
+  async function publish() {
+    const btn = document.querySelector('.btn-publish');
+    if (btn) btn.disabled = true;
+    let pro;
+    try { pro = await SA.addPro(collectFormData()); } catch(e) { SA.toast(e.message === 'siret-invalid' ? 'Le SIRET doit contenir exactement 14 chiffres.' : 'Erreur : ' + e.message, 'ti-alert-circle'); if (btn) btn.disabled = false; return; }
+    lastPublishedId = pro.id;
+    document.getElementById('mainForm').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+    document.getElementById('progressBar').style.display = 'none';
+  }
+
+  function viewMyProfile() {
+    window.location.href = 'pro?id=' + encodeURIComponent(lastPublishedId || '');
+  }
+</script>
+</body>
+</html>

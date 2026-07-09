@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SansAgents — Profil professionnel</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:100}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+.sa-nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.sa-nav-link{font-size:13.5px;color:#555;padding:8px 14px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit}
+.sa-nav-link:hover{background:#f7f7f7;color:#111}
+.sa-nav-link.active{color:#E84533;background:#fff0ee}
+.sa-nav-actions{display:flex;align-items:center;gap:4px;margin-left:16px}
+.sa-nav-cta{font-size:13.5px;color:white;background:#E84533;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;border:none;font-family:inherit;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sa-nav-cta:hover{background:#c93a2a}
+.sa-nav-divider{width:1px;height:32px;background:#e5e5e5;margin:0 6px;flex-shrink:0}
+.sa-nav-icon-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:5px 9px;border-radius:8px;color:#444;font-family:inherit}
+.sa-nav-icon-btn:hover{background:#f5f5f5;color:#111}
+.sa-nav-icon-btn i{font-size:19px}
+.sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
+.sa-nav-account-wrap{position:relative}
+.sa-nav-avatar{width:19px;height:19px;border-radius:50%;background:#E84533;color:white;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.sa-nav-badge{position:absolute;top:1px;right:3px;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px;line-height:1}
+.sa-account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);min-width:220px;padding:8px;z-index:200}
+.sa-account-dropdown.show{display:block}
+.sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px;word-break:break-all}
+.sa-account-dropdown-email i{color:#E84533;flex-shrink:0}
+.sa-account-dropdown-logout{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;color:#c0392b;padding:9px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.sa-account-dropdown-logout:hover{background:#fff0ee}
+
+.sa-detail-wrap{max-width:1020px;margin:0 auto;padding:1.5rem 40px 4rem}
+.sa-back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#888;cursor:pointer;margin-bottom:1.1rem;font-weight:500}
+.sa-back-link:hover{color:#E84533}
+
+.sa-detail-grid{display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start}
+
+.sa-pro-banner{display:flex;gap:18px;align-items:flex-start;margin-bottom:1.6rem;position:relative}
+.sa-pro-detail-fav{position:absolute;top:0;right:0;background:rgba(255,255,255,0.92);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.15)}
+.sa-pro-detail-fav i{font-size:16px;color:#ccc}
+.sa-pro-detail-fav:hover i,.sa-pro-detail-fav.active i{color:#E84533}
+.sa-pro-avatar{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;color:white;flex-shrink:0}
+.sa-pro-name{font-size:22px;font-weight:700;letter-spacing:-0.4px;color:#111;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.sa-pro-job{font-size:14px;color:#E84533;font-weight:600;margin-top:2px}
+.sa-pro-meta-row{display:flex;align-items:center;gap:16px;margin-top:8px;font-size:12.5px;color:#888;flex-wrap:wrap}
+.sa-pro-meta-row span{display:flex;align-items:center;gap:5px}
+.sa-pro-meta-row .stars{color:#444;font-weight:600}
+.sa-pro-meta-row .stars i{color:#f5a623}
+.sa-pro-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.03em}
+.sa-pro-badge.verified{color:#1a8c4e;background:#e9f7ef}
+.sa-pro-badge.new{color:#1e6abf;background:#eaf1fb}
+
+.sa-section{margin-top:1.7rem}
+.sa-section-title{font-size:15px;font-weight:700;color:#111;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.sa-section-title i{color:#E84533}
+.sa-pro-longdesc{font-size:13.5px;color:#444;line-height:1.75}
+
+.sa-service-list{display:flex;flex-direction:column;gap:8px}
+.sa-service-item{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:#333;padding:9px 13px;background:#fafafa;border-radius:10px}
+.sa-service-item i{color:#1a8c4e;margin-top:1px;flex-shrink:0}
+
+.sa-zone-card{display:flex;align-items:center;gap:14px;border:1px solid #e8e8e8;border-radius:14px;padding:1rem 1.2rem}
+.sa-zone-card-icon{width:42px;height:42px;border-radius:10px;background:#fff0ee;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.sa-zone-card-text{font-size:13px;color:#555;line-height:1.5}
+.sa-zone-card-text strong{color:#111}
+
+/* contact card */
+.sa-contact-card{border:1px solid #e8e8e8;border-radius:18px;padding:1.4rem;position:sticky;top:88px}
+.sa-discount-tag{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:#888;background:#f7f7f7;padding:5px 8px 5px 12px;border-radius:999px;margin-bottom:1rem}
+.sa-discount-tag i{font-size:13px;color:#E84533}
+.sa-discount-tag-code{background:#E84533;color:#fff;font-weight:800;font-size:10.5px;letter-spacing:.02em;padding:3px 9px;border-radius:999px}
+.sa-contact-coords-row{font-size:13.5px;color:#333;display:flex;align-items:center;gap:9px;padding:8px 0}
+.sa-contact-coords-row i{color:#E84533;width:16px}
+.sa-contact-coords-row a{color:#333;text-decoration:none}
+.sa-contact-coords-row a:hover{color:#E84533}
+.sa-quote-btn{width:100%;margin-top:8px;background:#E84533;color:white;border:none;padding:11px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none}
+.sa-quote-btn:hover{background:#c93a2a}
+.sa-contact-note{font-size:11px;color:#aaa;line-height:1.55;margin-top:10px;display:flex;gap:6px}
+.sa-contact-note i{color:#bbb;flex-shrink:0;margin-top:1px}
+
+.sa-not-found{text-align:center;padding:5rem 1rem;color:#999}
+.sa-not-found i{font-size:42px;color:#f0c9c0;margin-bottom:16px;display:block}
+.sa-not-found button{margin-top:14px;background:#E84533;color:white;border:none;padding:11px 24px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+
+@media(max-width:900px){
+  .sa-nav{padding:0 24px}
+  .sa-nav-icon-btn .sa-nav-icon-label{display:none}
+  .sa-detail-wrap{padding:1.25rem 24px 3rem}
+  .sa-detail-grid{grid-template-columns:1fr}
+  .sa-contact-card{position:static}
+}
+</style>
+<link rel="stylesheet" href="sa-mobile.css">
+</head>
+<body>
+
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='./'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="sa-nav-links">
+      <button class="sa-nav-link" onclick="window.location.href='./'">Accueil</button>
+      <button class="sa-nav-link" onclick="window.location.href='annonces'">Annonces</button>
+      <button class="sa-nav-link active" onclick="window.location.href='professionnels'">Professionnels</button>
+    </div>
+    <div class="sa-nav-actions">
+      <button class="sa-nav-cta" onclick="window.open('deposer','_blank')">
+        <i class="ti ti-plus"></i> Déposer une annonce
+      </button>
+      <div class="sa-nav-divider"></div>
+      <button class="sa-nav-icon-btn" onclick="window.location.href='recherches'">
+        <i class="ti ti-search"></i>
+        <span class="sa-nav-icon-label">Mes recherches</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'">
+        <i class="ti ti-heart"></i>
+        <span class="sa-nav-badge" data-nav-fav-badge></span>
+        <span class="sa-nav-icon-label">Favoris</span>
+      </button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='messages'">
+        <i class="ti ti-message-2"></i>
+        <span class="sa-nav-badge" data-nav-msg-badge></span>
+        <span class="sa-nav-icon-label">Messages</span>
+      </button>
+      <div class="sa-nav-account-wrap" data-nav-account>
+        <button class="sa-nav-icon-btn">
+          <i class="ti ti-user"></i>
+          <span class="sa-nav-icon-label">Se connecter</span>
+        </button>
+        <div class="sa-account-dropdown"></div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="sa-detail-wrap" id="pageRoot"></div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const proId = params.get('id');
+
+function render() {
+  const root = document.getElementById('pageRoot');
+  const p = proId ? SA.getProById(proId) : null;
+  if (!p) {
+    root.innerHTML = `
+      <div class="sa-not-found">
+        <i class="ti ti-user-x"></i>
+        <h3>Ce profil n'existe pas ou plus.</h3>
+        <button onclick="window.location.href='professionnels'">Retour à l'annuaire</button>
+      </div>`;
+    return;
+  }
+  document.title = 'SansAgents — ' + p.name;
+
+  const services = Array.isArray(p.services) ? p.services : [];
+  const hasCoords = !!(p.phone || p.email);
+
+  root.innerHTML = `
+    <div class="sa-back-link" onclick="window.location.href='professionnels'"><i class="ti ti-arrow-left"></i> Retour à l'annuaire</div>
+
+    <div class="sa-detail-grid">
+      <div>
+        <div class="sa-pro-banner">
+          <button class="sa-pro-detail-fav${SA.isFavorite(p.id) ? ' active' : ''}" onclick="SA.toggleFavoriteUI(this,'${p.id}')" title="Ajouter aux favoris"><i class="ti ti-heart${SA.isFavorite(p.id) ? '-filled' : ''}"></i></button>
+          <div class="sa-pro-avatar" style="${p.logo ? `background-image:url('${p.logo}');background-size:cover;background-position:center` : `background:${p.color}`}">${!p.logo ? `<i class="ti ${p.icon}"></i>` : ''}</div>
+          <div>
+            <div class="sa-pro-name">
+              ${SA.escapeHtml(p.name)}
+              ${p.verified ? '<span class="sa-pro-badge verified" title="Le SIRET de ce professionnel a ete verifie manuellement par l\'equipe SansAgents"><i class="ti ti-check" style="font-size:9px"></i> Vérifié</span>' : ''}
+              ${p.isUserPro ? '<span class="sa-pro-badge new"><i class="ti ti-sparkles" style="font-size:9px"></i> Nouveau</span>' : ''}
+            </div>
+            <div class="sa-pro-job">${SA.escapeHtml(p.job)}</div>
+            <div class="sa-pro-meta-row">
+              ${p.reviews > 0 ? `<span class="stars"><i class="ti ti-star-filled"></i> ${p.rating.toFixed(1)} (${p.reviews} avis)</span>` : `<span><em>Pas encore d'avis</em></span>`}
+              <span><i class="ti ti-map-pin"></i> ${SA.escapeHtml(p.city)}</span>
+              <span><i class="ti ti-brand-google" style="font-size:12px"></i> Avis Google synchronisés</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-align-left"></i> À propos</div>
+          <div class="sa-pro-longdesc">${SA.escapeHtml(p.longDesc || p.desc || '')}</div>
+        </div>
+
+        ${services.length ? `
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-list-check"></i> Services proposés</div>
+          <div class="sa-service-list">
+            ${services.map(s => `<div class="sa-service-item"><i class="ti ti-circle-check"></i> ${SA.escapeHtml(s)}</div>`).join('')}
+          </div>
+        </div>` : ''}
+
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-map-pin"></i> Zone d'intervention</div>
+          <div class="sa-zone-card">
+            <div class="sa-zone-card-icon"><i class="ti ti-map-pin"></i></div>
+            <div class="sa-zone-card-text"><strong>${SA.escapeHtml(p.zone || p.city)}</strong></div>
+          </div>
+        </div>
+
+        ${p.siret ? `
+        <div class="sa-section">
+          <div class="sa-section-title"><i class="ti ti-shield-check"></i> Identité vérifiable</div>
+          <div class="sa-zone-card">
+            <div class="sa-zone-card-icon" style="background:#e9f7ef;color:#1a8c4e"><i class="ti ti-building-bank"></i></div>
+            <div class="sa-zone-card-text">SIRET <strong>${SA.escapeHtml(p.siret)}</strong><br><span style="font-size:11.5px;color:#999">Vous pouvez vérifier ce numéro sur annuaire-entreprises.data.gouv.fr</span></div>
+          </div>
+        </div>` : ''}
+      </div>
+
+      <div class="sa-contact-card">
+        <span class="sa-discount-tag"><i class="ti ti-discount-2"></i> <strong style="color:#E84533;font-weight:800">-5%</strong> avec le code <span class="sa-discount-tag-code">SANSAGENTS5</span></span>
+        ${hasCoords ? `
+          ${p.phone ? `<div class="sa-contact-coords-row"><i class="ti ti-phone"></i> ${SA.escapeHtml(p.phone)}</div>` : ''}
+          ${p.email ? `<div class="sa-contact-coords-row"><i class="ti ti-mail"></i> <a href="mailto:${SA.escapeHtml(p.email)}">${SA.escapeHtml(p.email)}</a></div>` : ''}
+          <a class="sa-quote-btn" href="mailto:${SA.escapeHtml(p.email || '')}?subject=${encodeURIComponent('Demande de devis via SansAgents (code SANSAGENTS5)')}"><i class="ti ti-send"></i> Demander un devis</a>
+          <div style="font-size:11px;color:#aaa;text-align:center;margin-top:10px"><i class="ti ti-flag" style="margin-right:4px"></i>Profil suspect ou agence déguisée ? <a href="aide-signaler" target="_blank" style="color:#E84533;font-weight:600;text-decoration:none">Signalez-le</a></div>
+        ` : `<p style="font-size:12.5px;color:#aaa;line-height:1.6">Profil de démonstration — aucune coordonnée réelle n'est associée à ce professionnel.</p>`}
+        <div class="sa-contact-note"><i class="ti ti-info-circle"></i> Les coordonnées des professionnels sont publiques : à la différence des annonces entre particuliers, l'annuaire est conçu pour être contacté directement.</div>
+      </div>
+    </div>`;
+}
+
+SA.init().then(render);
+</script>
+</body>
+</html>

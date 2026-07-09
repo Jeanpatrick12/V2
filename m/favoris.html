@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mes favoris — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+</head>
+<body>
+
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.location='/m/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+<button class="m-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div id="notLoggedIn" style="display:none;padding:60px var(--pad);text-align:center">
+  <i class="ti ti-heart-off" style="font-size:40px;color:#ddd;display:block;margin-bottom:14px"></i>
+  <h2 style="font-size:18px;font-weight:700;margin-bottom:8px">Connectez-vous</h2>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Connectez-vous pour retrouver vos annonces favorites.</p>
+  <button class="m-btn m-btn-primary m-btn-full" onclick="window.location='/m/connexion?redirect=/m/favoris'">
+    <i class="ti ti-login"></i> Se connecter
+  </button>
+</div>
+
+<div id="favContent" style="display:none;padding:14px var(--pad) 90px">
+  <div id="favListings"></div>
+  <div id="favPros"></div>
+</div>
+
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.location='/m/'"><i class="ti ti-home-2"></i>Accueil</button>
+  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i>Annonces</button>
+  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>Déposer
+  </button>
+  <button class="m-tab" onclick="window.location='/m/messages'"><i class="ti ti-message-circle"></i>Messages</button>
+  <button class="m-tab" onclick="window.location='/m/profil'"><i class="ti ti-user"></i>Profil</button>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js"></script>
+<script>
+function favHeart(id, btn){ event.stopPropagation(); SA.toggleFavorite(id,'listing'); btn.innerHTML='<i class="ti ti-heart" style="color:#ccc"></i>'; }
+
+SA.init().then(function(){
+  var u = SA.getUser();
+  if(!u){ document.getElementById('notLoggedIn').style.display=''; return; }
+  document.getElementById('favContent').style.display='';
+  _updateMenuAuth();
+
+  var favData = SA.getFavoritesData ? SA.getFavoritesData() : [];
+  var favIds  = SA.getFavorites ? SA.getFavorites() : [];
+
+  // ── Annonces favorites ──
+  var listingIds = favData.filter(function(f){ return !f.item_type || f.item_type==='listing'; }).map(function(f){ return f.item_id; });
+  if(!listingIds.length) listingIds = favIds; // fallback si item_type absent
+  var allListings = SA.getAllListings();
+  var favListings = allListings.filter(function(l){ return listingIds.indexOf(l.id)!==-1; });
+
+  var elL = document.getElementById('favListings');
+  if(favListings.length){
+    elL.innerHTML = '<div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">'
+      +'Annonces sauvegardées <span style="color:var(--text);font-weight:800">'+favListings.length+'</span></div>'
+      +'<div style="display:flex;overflow-x:auto;gap:12px;padding-bottom:12px;margin:0 -16px;padding-left:16px;scrollbar-width:none;-webkit-overflow-scrolling:touch">'
+      + favListings.map(function(l){
+        var _photos=Array.isArray(l.photos)?l.photos:[];var _mainPhoto=_photos[0]?(_photos[0].url||_photos[0]):null;var _grad=(SA.IMG_GRADIENTS&&SA.IMG_GRADIENTS[l.img])||'linear-gradient(135deg,#4f6d9e,#7890b8)';var photo=_mainPhoto?'url('+_mainPhoto+')':_grad;
+        var price = l.price ? l.price.toLocaleString('fr-FR')+'€'+(l.transaction==='location'?'/mois':'') : 'Prix sur demande';
+        var badge = l.transaction==='vente' ? 'vente' : 'location';
+        var badgeLbl = l.transaction==='vente' ? 'Vente' : 'Location';
+        var title = l.titre || (SA.TYPE_LABELS&&SA.TYPE_LABELS[l.type]||l.type||'Bien');
+        return '<div style="flex-shrink:0;width:200px;background:white;border-radius:14px;overflow:hidden;border:1.5px solid var(--border);cursor:pointer" onclick="SA.openListing(\''+l.id+'\')">'
+          +'<div style="height:130px;background-image:'+photo+';background-size:cover;background-position:center;position:relative">'
+          +'<span class="m-listing-row-badge '+badge+'" style="position:absolute;top:8px;left:8px">'+badgeLbl+'</span>'
+          +'<button class="m-listing-row-heart" style="top:8px;right:8px;bottom:auto" onclick="favHeart(\''+l.id+'\',this)"><i class="ti ti-heart-filled" style="color:#E84533"></i></button>'
+          +'</div>'
+          +'<div style="padding:10px 11px">'
+          +'<div style="font-size:15px;font-weight:800;color:var(--red);margin-bottom:3px">'+price+'</div>'
+          +'<div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+title+'</div>'
+          +'<div style="display:flex;gap:7px;font-size:11px;color:var(--text3);flex-wrap:wrap">'
+          +(l.surface?'<span><i class="ti ti-ruler-2"></i> '+l.surface+' m²</span>':'')
+          +(l.pieces?'<span><i class="ti ti-door"></i> '+l.pieces+' p.</span>':'')
+          +(l.ville?'<span><i class="ti ti-map-pin"></i> '+l.ville+'</span>':'')
+          +'</div></div></div>';
+      }).join('')
+      +'<div style="flex-shrink:0;width:16px"></div></div>';
+  } else {
+    elL.innerHTML = '<div style="text-align:center;padding:40px 0 20px">'
+      +'<i class="ti ti-heart" style="font-size:36px;color:#ddd;display:block;margin-bottom:12px"></i>'
+      +'<div style="font-size:15px;font-weight:700;color:#333;margin-bottom:6px">Aucune annonce favorite</div>'
+      +'<p style="font-size:12.5px;color:var(--text2);margin-bottom:18px">Cliquez sur ♡ sur une annonce pour la sauvegarder ici.</p>'
+      +'<button class="m-btn m-btn-primary" onclick="window.location=\'/m/annonces\'" style="display:inline-flex"><i class="ti ti-building-estate"></i> Parcourir</button>'
+      +'</div>';
+  }
+
+  // ── Pros favoris ──
+  // item_type is NULL in DB (toggleFavorite doesn't save it), so match against all favorites IDs directly
+  var allFavIds = SA.getFavorites ? SA.getFavorites() : favIds;
+  var elP = document.getElementById('favPros');
+  var allPros = SA.getAllPros ? SA.getAllPros() : [];
+  var favPros = allPros.filter(function(p){ return allFavIds.indexOf(p.id) !== -1; });
+  if(true){
+    if(favPros.length){
+      var colors=['#E84533','#3b82f6','#16a34a','#d97706','#7c3aed'];
+      elP.innerHTML = '<div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 10px">'
+        +'Professionnels sauvegardés <span style="color:var(--text);font-weight:800">'+favPros.length+'</span></div>'
+        +'<div style="display:flex;overflow-x:auto;gap:10px;padding-bottom:12px;margin:0 -16px;padding-left:16px;scrollbar-width:none;-webkit-overflow-scrolling:touch">'
+        + favPros.map(function(p,i){
+          var name = p.name || ((p.prenom||'')+' '+(p.nom||'')).trim() || 'Pro';
+          var initials = name.split(' ').slice(0,2).map(function(w){return w.charAt(0);}).join('').toUpperCase()||'P';
+          var col = p.color || colors[i%colors.length];
+          var rating = p.rating || p.note || 0;
+          var reviews = p.reviews || 0;
+          var job = p.job || p.metier || 'Professionnel';
+          var city = p.city || p.ville || '';
+          var stars = '';
+          if(rating){ for(var s=0;s<5;s++) stars+='<i class="ti ti-star'+(s<Math.round(rating)?'-filled':'')+'" style="font-size:9px;color:'+(s<Math.round(rating)?'#fbbf24':'#ddd')+'"></i>'; stars='<div style="display:flex;justify-content:center;align-items:center;gap:1px;margin-bottom:4px">'+stars+'<span style="font-size:9.5px;color:#999;margin-left:3px">'+rating.toFixed(1)+(reviews?' ('+reviews+')':'')+'</span></div>'; }
+          return '<div style="flex-shrink:0;width:150px;background:white;border-radius:14px;border:1.5px solid var(--border);padding:14px 10px;cursor:pointer;text-align:center;position:relative" onclick="window.location=\'/m/professionnel?id='+p.id+'\'">'
+            +'<button style="position:absolute;top:7px;right:7px;background:none;border:none;cursor:pointer;padding:2px;font-size:15px;color:#E84533;line-height:1" onclick="event.stopPropagation();SA.toggleFavorite(\''+p.id+'\');this.style.opacity=\'0.3\'"><i class="ti ti-heart-filled"></i></button>'
+            +'<div style="width:46px;height:46px;border-radius:12px;'+(p.logo?'background-image:url(\''+p.logo+'\');background-size:cover;background-position:center':'background:'+col+';display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:white')+';margin:0 auto 8px">'+(p.logo?'':'<i class="ti '+(p.icon||'ti-user')+'"></i>')+'</div>'
+            +'<div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+name+'</div>'
+            +'<div style="font-size:11px;color:var(--red);font-weight:600;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+job+'</div>'
+            +stars
+            +(city?'<div style="font-size:10px;color:var(--text3)"><i class="ti ti-map-pin" style="font-size:9px"></i> '+city+'</div>':'')
+            +'</div>';
+        }).join('')
+        +'<div style="flex-shrink:0;width:16px"></div></div>';
+    }
+  }
+});
+</script>
+
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/m/profil';else window.location='/m/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+</body>
+</html>
+
+
+
+
+
+
