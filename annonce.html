@@ -62,10 +62,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-back-link:hover{color:#E84533}
 
 .sa-detail-grid{display:grid;grid-template-columns:1fr 340px;gap:36px;align-items:start}
+.sa-detail-grid>div{min-width:0}
 
 /* ── GALERIE ── */
-.sa-gallery-hero{position:relative;height:440px;border-radius:18px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#eee}
-.sa-gallery-hero img{width:100%;height:100%;object-fit:cover}
+.sa-gallery-hero{position:relative;height:440px;border-radius:18px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#eee;width:100%}
+.sa-gallery-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.sa-thumb-row{max-width:100%}
 .sa-gallery-hero .no-photo-icon{font-size:54px;color:rgba(255,255,255,0.45)}
 .sa-gallery-badge{position:absolute;top:14px;left:14px;color:white;font-size:11.5px;font-weight:700;padding:5px 13px;border-radius:7px;z-index:2}
 .sa-gallery-badge.vente{background:#E84533}.sa-gallery-badge.location{background:#1e6abf}

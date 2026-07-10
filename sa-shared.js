@@ -1062,6 +1062,26 @@
     initMobileNav
   };
 
+  // Ctrl+clic / clic milieu sur les boutons de nav → ouvre dans un nouvel onglet
+  document.addEventListener("click", function(e) {
+    if (!e.ctrlKey && !e.metaKey) return;
+    var btn = e.target.closest(".sa-nav-link[onclick],.sa-nav-cta[onclick]");
+    if (!btn) return;
+    var m = btn.getAttribute("onclick").match(/href=['"]([^'"]+)['"]/);
+    if (!m) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    window.open(m[1], "_blank");
+  });
+  document.addEventListener("auxclick", function(e) {
+    if (e.button !== 1) return;
+    var btn = e.target.closest(".sa-nav-link[onclick],.sa-nav-cta[onclick]");
+    if (!btn) return;
+    var m = btn.getAttribute("onclick").match(/href=['"]([^'"]+)['"]/);
+    if (!m) return;
+    e.preventDefault();
+    window.open(m[1], "_blank");
+  });
+
   // Démarre automatiquement (sans bloquer le rendu de la page)
   document.addEventListener("DOMContentLoaded", function() {
     init().then(function() { initMobileNav(); });
