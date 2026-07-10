@@ -126,11 +126,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 /* ── Modal d'édition (reprend le langage visuel du formulaire) ── */
 .sa-edit-overlay{position:fixed;inset:0;background:rgba(15,20,25,0.55);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:3vh 16px;overflow-y:auto}
 .sa-edit-overlay.show{display:flex}
-.sa-edit-modal{background:#fff;border-radius:18px;max-width:680px;width:100%;margin-bottom:3vh}
-.sa-edit-head{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;border-bottom:1px solid #f0f0f0;position:sticky;top:0;background:#fff;border-radius:18px 18px 0 0}
+.sa-edit-modal{background:#fff;border-radius:18px;max-width:680px;width:100%;margin-bottom:3vh;display:flex;flex-direction:column;max-height:94vh}
+.sa-edit-head{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.6rem;border-bottom:1px solid #f0f0f0;background:#fff;border-radius:18px 18px 0 0;flex-shrink:0}
 .sa-edit-head h2{font-size:17px;font-weight:700;letter-spacing:-0.3px}
 .sa-edit-head button{background:#f5f5f5;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;color:#666}
-.sa-edit-body{padding:1.5rem 1.6rem}
+.sa-edit-body{padding:1.5rem 1.6rem;overflow-y:auto;flex:1}
 .sa-edit-section-title{font-size:11.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;margin:22px 0 10px;padding-bottom:7px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:6px}
 .sa-edit-section-title:first-child{margin-top:0}
 .sa-edit-section-title i{color:#E84533;font-size:13px}
@@ -148,16 +148,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-energy-letter:hover{opacity:.75}
 .sa-energy-letter.active{opacity:1;transform:scale(1);border-color:#111}
 .sa-ephotos{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:10px}
-.sa-ephoto-thumb{position:relative;width:78px;height:60px;border-radius:8px;overflow:hidden;border:1px solid #eee}
-.sa-ephoto-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.sa-ephoto-thumb .main-tag{position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,.6);color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:4px}
-.sa-ephoto-thumb .order-controls{position:absolute;top:0;right:0;display:flex;flex-direction:column}
-.sa-ephoto-thumb .order-controls button{width:18px;height:15px;background:rgba(0,0,0,.55);color:#fff;border:none;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.sa-ephoto-thumb .order-controls button:hover{background:#E84533}
-.sa-ephoto-remove{position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;border:none;width:18px;height:18px;border-radius:4px;font-size:10px;cursor:pointer}
+.sa-ephoto-thumb{position:relative;width:78px;height:60px;border-radius:8px;overflow:hidden;border:1px solid #eee;cursor:grab}
+.sa-ephoto-thumb.dragging{opacity:.4;border:1.5px dashed #E84533}
+.sa-ephoto-thumb.drag-over{border:2px solid #E84533;box-shadow:0 0 0 2px rgba(232,69,51,.2)}
+.sa-ephoto-thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.sa-ephoto-thumb .main-tag{position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,.6);color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:4px;pointer-events:none}
+.sa-ephoto-remove{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;border:none;width:18px;height:18px;border-radius:4px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .sa-eaddphoto{border:1.5px dashed #ddd;border-radius:9px;padding:9px 14px;font-size:12.5px;color:#777;cursor:pointer;background:none;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
 .sa-eaddphoto:hover{border-color:#E84533;color:#E84533}
-.sa-edit-foot{display:flex;justify-content:flex-end;gap:10px;padding:1.2rem 1.6rem;border-top:1px solid #f0f0f0;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px}
+.sa-edit-foot{display:flex;justify-content:flex-end;gap:10px;padding:1.2rem 1.6rem;border-top:1px solid #f0f0f0;background:#fff;border-radius:0 0 18px 18px;flex-shrink:0}
 .sa-edit-foot button{font-family:inherit;font-size:13.5px;font-weight:700;padding:11px 22px;border-radius:9px;cursor:pointer}
 .sa-edit-foot .cancel{background:none;border:1.5px solid #ddd;color:#555}
 .sa-edit-foot .save{background:#E84533;border:none;color:#fff}
@@ -601,23 +600,22 @@ function buildEnergyRow(scaleId, selectFn) {
 function selectEDpe(letter, el) { document.querySelectorAll('#eDpeScale .sa-energy-letter').forEach(e=>e.classList.remove('active')); el.classList.add('active'); eDpe = letter; }
 function selectEGes(letter, el) { document.querySelectorAll('#eGesScale .sa-energy-letter').forEach(e=>e.classList.remove('active')); el.classList.add('active'); eGes = letter; }
 
+let eDragIdx = null;
 function renderEPhotos() {
-  document.getElementById('ePhotos').innerHTML = ePhotos.map((p, i) => `
-    <div class="sa-ephoto-thumb">
+  const container = document.getElementById('ePhotos');
+  container.innerHTML = ePhotos.map((p, i) => `
+    <div class="sa-ephoto-thumb" draggable="true" data-idx="${i}">
       <img src="${photoUrl(p)}">
       ${i === 0 ? '<span class="main-tag">Principale</span>' : ''}
-      <div class="order-controls">
-        <button onclick="moveEPhoto(${i},-1)" title="Monter"><i class="ti ti-chevron-up"></i></button>
-        <button onclick="moveEPhoto(${i},1)" title="Descendre"><i class="ti ti-chevron-down"></i></button>
-      </div>
       <button class="sa-ephoto-remove" onclick="removeEPhoto(${i})" title="Retirer"><i class="ti ti-x"></i></button>
     </div>`).join('');
-}
-function moveEPhoto(i, dir) {
-  const t = i + dir;
-  if (t < 0 || t >= ePhotos.length) return;
-  [ePhotos[i], ePhotos[t]] = [ePhotos[t], ePhotos[i]];
-  renderEPhotos();
+  container.querySelectorAll('.sa-ephoto-thumb').forEach(el => {
+    el.addEventListener('dragstart', e => { eDragIdx = +el.dataset.idx; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    el.addEventListener('dragend', () => { el.classList.remove('dragging'); container.querySelectorAll('.drag-over').forEach(x => x.classList.remove('drag-over')); });
+    el.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; el.classList.add('drag-over'); });
+    el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+    el.addEventListener('drop', e => { e.preventDefault(); const to = +el.dataset.idx; if (eDragIdx !== null && eDragIdx !== to) { const tmp = ePhotos.splice(eDragIdx, 1)[0]; ePhotos.splice(to, 0, tmp); renderEPhotos(); } });
+  });
 }
 function removeEPhoto(i) { ePhotos.splice(i, 1); renderEPhotos(); }
 function addPhotos(input) {
@@ -662,26 +660,35 @@ function closeEdit() { document.getElementById('editOverlay').classList.remove('
 
 async function saveEdit() {
   if (!editingId) return;
-  const equip = Array.from(document.querySelectorAll('#eEquip input:checked')).map(i => i.value);
-  await SA.updateListing(editingId, {
-    desc: document.getElementById('eDesc').value,
-    price: parseFloat(document.getElementById('ePrice').value) || 0,
-    surface: parseFloat(document.getElementById('eSurface').value) || 0,
-    pieces: parseInt(document.getElementById('ePieces').value, 10) || null,
-    chambres: document.getElementById('eChambres').value !== '' ? parseInt(document.getElementById('eChambres').value, 10) : null,
-    sdb: document.getElementById('eSdb').value !== '' ? parseInt(document.getElementById('eSdb').value, 10) : null,
-    sallesEau: document.getElementById('eSallesEau').value !== '' ? parseInt(document.getElementById('eSallesEau').value, 10) : null,
-    anneeConstruction: document.getElementById('eAnnee').value !== '' ? parseInt(document.getElementById('eAnnee').value, 10) : null,
-    etatGeneral: document.getElementById('eEtat').value || null,
-    factureEnergie: document.getElementById('eFacture').value !== '' ? parseFloat(document.getElementById('eFacture').value) : null,
-    dpe: eDpe, ges: eGes,
-    equipements: equip,
-    photos: ePhotos
-  });
-  SA.toast('Annonce mise à jour', 'ti-circle-check');
-  closeEdit();
-  renderStats();
-  render();
+  const btn = document.querySelector('.sa-edit-foot .save');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2"></i> Enregistrement…';
+  try {
+    const equip = Array.from(document.querySelectorAll('#eEquip input:checked')).map(i => i.value);
+    await SA.updateListing(editingId, {
+      desc: document.getElementById('eDesc').value,
+      price: parseFloat(document.getElementById('ePrice').value) || 0,
+      surface: parseFloat(document.getElementById('eSurface').value) || 0,
+      pieces: parseInt(document.getElementById('ePieces').value, 10) || null,
+      chambres: document.getElementById('eChambres').value !== '' ? parseInt(document.getElementById('eChambres').value, 10) : null,
+      sdb: document.getElementById('eSdb').value !== '' ? parseInt(document.getElementById('eSdb').value, 10) : null,
+      sallesEau: document.getElementById('eSallesEau').value !== '' ? parseInt(document.getElementById('eSallesEau').value, 10) : null,
+      anneeConstruction: document.getElementById('eAnnee').value !== '' ? parseInt(document.getElementById('eAnnee').value, 10) : null,
+      etatGeneral: document.getElementById('eEtat').value || null,
+      factureEnergie: document.getElementById('eFacture').value !== '' ? parseFloat(document.getElementById('eFacture').value) : null,
+      dpe: eDpe, ges: eGes,
+      equipements: equip,
+      photos: ePhotos
+    });
+    SA.toast('Annonce mise à jour', 'ti-circle-check');
+    closeEdit();
+    renderStats();
+    render();
+  } catch(err) {
+    SA.toast('Erreur lors de la sauvegarde', 'ti-alert-circle');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-device-floppy"></i> Enregistrer les modifications';
+  }
 }
 
 SA.init().then(function() {

@@ -363,6 +363,7 @@
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
       overflow: hidden;
+      cursor: grab;
       position: relative;
       background: var(--bg-secondary);
       flex-shrink: 0;
@@ -395,6 +396,9 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
+    .photo-preview-item.dragging { opacity: .4; border: 1.5px dashed var(--red); }
+    .photo-preview-item.drag-over { border: 2px solid var(--red); box-shadow: 0 0 0 2px rgba(232,69,51,.2); }
+    .photo-preview-item.first-badge::after { content: 'Principale'; position: absolute; bottom: 2px; left: 2px; background: rgba(0,0,0,.6); color: #fff; font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 3px; pointer-events: none; }
     .photo-preview-remove {
       position: absolute;
       top: 2px;
@@ -1914,6 +1918,31 @@ function gfbPrevScreen(){
     }
   }
 
+  let _photoDragKey = null;
+  function _setupPhotoDrag(item, list) {
+    item.setAttribute('draggable', 'true');
+    item.addEventListener('dragstart', e => { _photoDragKey = item.dataset.key; item.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    item.addEventListener('dragend', () => { item.classList.remove('dragging'); list.querySelectorAll('.drag-over').forEach(x => x.classList.remove('drag-over')); _updateFirstBadge(list); });
+    item.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; item.classList.add('drag-over'); });
+    item.addEventListener('dragleave', () => item.classList.remove('drag-over'));
+    item.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!_photoDragKey || _photoDragKey === item.dataset.key) return;
+      const from = list.querySelector('[data-key="' + _photoDragKey + '"]');
+      if (!from) return;
+      const kids = Array.from(list.children);
+      const fromIdx = kids.indexOf(from), toIdx = kids.indexOf(item);
+      if (fromIdx < toIdx) list.insertBefore(from, item.nextSibling); else list.insertBefore(from, item);
+      // Re-sync uploadedPhotos order
+      const newOrder = Array.from(list.children).map(el => el.dataset.key).filter(Boolean);
+      uploadedPhotos.sort((a, b) => newOrder.indexOf(a.key) - newOrder.indexOf(b.key));
+      _updateFirstBadge(list);
+    });
+  }
+  function _updateFirstBadge(list) {
+    list.querySelectorAll('.photo-preview-item').forEach((el, i) => el.classList.toggle('first-badge', i === 0 && !el.classList.contains('file-only')));
+  }
+
   function handlePhotoUpload(input) {
     const list = document.getElementById('photoPreviewList');
     const note = document.getElementById('photoUploadNote');
@@ -1976,11 +2005,14 @@ function gfbPrevScreen(){
         uploadedPhotos = uploadedPhotos.filter(p => p.key !== key);
         if (isVideo) videoCount = Math.max(0, videoCount - 1);
         item.remove();
+        _updateFirstBadge(list);
         checkStep3();
       };
       item.appendChild(removeBtn);
 
+      if (isImage || isVideo) _setupPhotoDrag(item, list);
       list.appendChild(item);
+      _updateFirstBadge(list);
     });
 
     input.value = '';

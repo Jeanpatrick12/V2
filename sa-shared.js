@@ -186,21 +186,23 @@
   }
 
   /* ── Documents locaux ──────────────────────────────────────────── */
-  function _getLocalDocs() {
-    try { return JSON.parse(localStorage.getItem("sa_user_docs") || "[]"); } catch(e) { return []; }
+  function _docsKey(uid) { return uid ? "sa_user_docs_" + uid : "sa_user_docs"; }
+  function _getLocalDocs(uid) {
+    try { return JSON.parse(localStorage.getItem(_docsKey(uid)) || "[]"); } catch(e) { return []; }
   }
-  function _setLocalDocs(docs) {
-    localStorage.setItem("sa_user_docs", JSON.stringify(docs));
+  function _setLocalDocs(docs, uid) {
+    localStorage.setItem(_docsKey(uid), JSON.stringify(docs));
   }
 
   async function saveDoc(doc) {
     if (!doc || !doc.type) return;
-    var docs = _getLocalDocs();
+    var user = getUser();
+    var uid = user && user.id;
+    var docs = _getLocalDocs(uid);
     docs = docs.filter(function(d) { return d.type !== doc.type; });
     docs.unshift(doc);
     if (docs.length > 20) docs = docs.slice(0, 20);
-    _setLocalDocs(docs);
-    var user = getUser();
+    _setLocalDocs(docs, uid);
     if (user && _sb) {
       try {
         await _sb.from("user_documents").upsert(
@@ -212,10 +214,11 @@
   }
 
   async function deleteDoc(docType) {
-    var docs = _getLocalDocs();
-    docs = docs.filter(function(d) { return d.type !== docType; });
-    _setLocalDocs(docs);
     var user = getUser();
+    var uid = user && user.id;
+    var docs = _getLocalDocs(uid);
+    docs = docs.filter(function(d) { return d.type !== docType; });
+    _setLocalDocs(docs, uid);
     if (user && _sb) {
       try {
         await _sb.from("user_documents").delete().eq("user_id", user.id).eq("doc_type", docType);
@@ -224,7 +227,8 @@
   }
 
   function getDocs() {
-    return _getLocalDocs();
+    var uid = _cache.user && _cache.user.id;
+    return _getLocalDocs(uid);
   }
 
   /* ── Chargement des données utilisateur (après login) ──────────── */
@@ -246,14 +250,13 @@
     const ownerListings  = (soldRes.data || []).map(_normListing);
     const existingIds = new Set(_cache.dbListings.map(l => l.id));
     ownerListings.forEach(l => { if (!existingIds.has(l.id)) _cache.dbListings.push(l); });
-    // Sync documents: merge Supabase (authoritative) + unsynced local docs
+    // Sync documents: Supabase is authoritative. Merge only THIS user's unsynced local cache.
     const sbDocs = (docsRes.data || []).map(function(r) { return r.doc_data; }).filter(Boolean);
-    const localDocs = _getLocalDocs();
+    const localDocs = _getLocalDocs(userId);
     const sbTypes = new Set(sbDocs.map(function(d) { return d.type; }));
     localDocs.forEach(function(d) {
       if (!sbTypes.has(d.type)) {
         sbDocs.push(d);
-        // Push unsynced local doc to Supabase in background
         _sb.from("user_documents").upsert(
           { user_id: userId, doc_type: d.type, doc_data: d, updated_at: new Date().toISOString() },
           { onConflict: "user_id,doc_type" }
@@ -261,7 +264,7 @@
       }
     });
     if (sbDocs.length || localDocs.length) {
-      _setLocalDocs(sbDocs);
+      _setLocalDocs(sbDocs, userId);
       if (typeof window.loadDocs === "function") window.loadDocs();
     }
   }
@@ -900,7 +903,7 @@
           '<div class="sa-account-dropdown-email"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.email || "") + "</div>" +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'profil\'"><i class="ti ti-user-circle"></i> Mon profil</button>' +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (getDocs().length > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getDocs().length + '</span>' : '') + '</button>' +
           '<button class="sa-account-dropdown-logout" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>';
       } else {
         btn.onclick = function() {
