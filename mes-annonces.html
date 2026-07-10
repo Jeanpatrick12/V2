@@ -685,7 +685,8 @@ async function saveEdit() {
     renderStats();
     render();
   } catch(err) {
-    SA.toast('Erreur lors de la sauvegarde', 'ti-alert-circle');
+    console.error('saveEdit error:', err);
+    SA.toast('Erreur : ' + (err?.message || JSON.stringify(err) || 'inconnue'), 'ti-alert-circle');
     btn.disabled = false;
     btn.innerHTML = '<i class="ti ti-device-floppy"></i> Enregistrer les modifications';
   }
