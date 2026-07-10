@@ -130,6 +130,22 @@ input:focus{border-color:#E84533}
       <button class="sa-submit-btn" type="submit"><i class="ti ti-user-plus"></i> Créer mon compte</button>
     </form>
 
+    <!-- ── CONFIRMATION EMAIL ── -->
+    <div class="sa-form" id="formConfirm" style="text-align:center;padding:8px 0 12px">
+      <div style="width:60px;height:60px;background:#fff0ee;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+        <i class="ti ti-mail-check" style="font-size:28px;color:#E84533"></i>
+      </div>
+      <div class="sa-auth-title" style="margin-bottom:8px">Vérifiez votre email</div>
+      <div class="sa-auth-sub" style="margin-bottom:20px">
+        Un lien de confirmation a été envoyé à <strong id="confirmEmailDisplay"></strong>.<br>
+        Cliquez sur le lien pour activer votre compte, puis revenez vous connecter.
+      </div>
+      <button class="sa-submit-btn" style="margin-bottom:12px" onclick="switchTab('login')">
+        <i class="ti ti-login-2"></i> Se connecter
+      </button>
+      <div style="font-size:12px;color:#aaa">Pas reçu ? Vérifiez vos spams ou <button onclick="switchTab('signup')" style="background:none;border:none;color:#E84533;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600">réessayez</button>.</div>
+    </div>
+
     <div class="sa-auth-note">
       <i class="ti ti-shield-lock"></i>
       <span>Vos données sont stockées de manière sécurisée. Les mots de passe sont chiffrés et ne sont jamais accessibles en clair.</span>
@@ -198,8 +214,17 @@ async function doSignup() {
     const user = await SA.signup({ prenom, nom, email, password: pw, photo: suPhotoData });
     afterAuth(user.prenom);
   } catch(e) {
-    SA.toast(e.message || 'Erreur lors de la création du compte.', 'ti-alert-circle');
-    btn.disabled = false;
+    if (e.code === 'email-confirmation-required') {
+      // Afficher l'écran de confirmation email
+      document.getElementById('confirmEmailDisplay').textContent = email;
+      document.getElementById('formSignup').classList.remove('active');
+      document.getElementById('formConfirm').classList.add('active');
+      document.getElementById('tabLogin').style.display = 'none';
+      document.getElementById('tabSignup').style.display = 'none';
+    } else {
+      SA.toast(e.message || 'Erreur lors de la création du compte.', 'ti-alert-circle');
+      btn.disabled = false;
+    }
   }
 }
 

@@ -2,37 +2,55 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const BREVO_API_KEY = Deno.env.get('BREVO_API_KEY')!
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
-const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+
+// Supabase a déprécié SUPABASE_SERVICE_ROLE_KEY au profit de SUPABASE_SECRET_KEYS (JSON dict)
+function getServiceKey(): string {
+  const secretKeysRaw = Deno.env.get('SUPABASE_SECRET_KEYS')
+  if (secretKeysRaw) {
+    try {
+      const parsed = JSON.parse(secretKeysRaw)
+      if (parsed.service_role) return parsed.service_role
+    } catch (_) {}
+  }
+  return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+}
 
 Deno.serve(async (req) => {
   try {
     const payload = await req.json()
     const message = payload.record
+    console.log('notify-message: received payload', JSON.stringify({ listing_id: message?.listing_id, sender_id: message?.sender_id }))
+
     if (!message) return new Response('No record', { status: 400 })
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+    const supabase = createClient(SUPABASE_URL, getServiceKey())
 
-    // Récupérer l'annonce pour trouver le vendeur
-    const { data: listing } = await supabase
+    // Récupérer l'annonce pour trouver le vendeur (colonne owner_id, pas user_id)
+    const { data: listing, error: listingErr } = await supabase
       .from('listings')
-      .select('user_id, title, ville, type, transaction')
+      .select('owner_id, title, ville, type, transaction')
       .eq('id', message.listing_id)
       .single()
 
-    if (!listing) return new Response('Listing not found', { status: 404 })
-
-    // Email du vendeur via auth.admin
-    const { data: sellerAuth } = await supabase.auth.admin.getUserById(listing.user_id)
-    const sellerEmail = sellerAuth?.user?.email
-    if (!sellerEmail) return new Response('No seller email', { status: 404 })
+    console.log('notify-message: listing lookup', JSON.stringify({ owner_id: listing?.owner_id, error: listingErr?.message }))
+    if (!listing) return new Response('Listing not found: ' + listingErr?.message, { status: 404 })
 
     // Ne pas notifier si le vendeur s'envoie un message à lui-même
-    if (message.sender_id === listing.user_id) return new Response('Self-message', { status: 200 })
+    if (message.sender_id === listing.owner_id) {
+      console.log('notify-message: self-message, skipping')
+      return new Response('Self-message', { status: 200 })
+    }
+
+    // Email du vendeur via auth.admin
+    const { data: sellerAuth, error: sellerErr } = await supabase.auth.admin.getUserById(listing.owner_id)
+    const sellerEmail = sellerAuth?.user?.email
+    console.log('notify-message: seller email', JSON.stringify({ email: sellerEmail, error: sellerErr?.message }))
+    if (!sellerEmail) return new Response('No seller email: ' + sellerErr?.message, { status: 404 })
 
     const messageText = message.content || message.message || message.text || ''
     const listingLabel = listing.title || (listing.type || 'Votre bien') + (listing.ville ? ' à ' + listing.ville : '')
 
-    await fetch('https://api.brevo.com/v3/smtp/email', {
+    const brevoRes = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
         'api-key': BREVO_API_KEY,
@@ -73,9 +91,12 @@ Deno.serve(async (req) => {
       })
     })
 
+    const brevoBody = await brevoRes.text()
+    console.log('notify-message: brevo response', brevoRes.status, brevoBody)
+
     return new Response('OK', { status: 200 })
   } catch (err) {
-    console.error(err)
+    console.error('notify-message: unhandled error', err)
     return new Response('Error: ' + err.message, { status: 500 })
   }
 })

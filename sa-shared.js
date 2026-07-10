@@ -728,6 +728,12 @@
       options: { data: { prenom: data.prenom, nom: data.nom || "" } }
     });
     if (error) throw error;
+    // Si la confirmation email est activée, session = null → l'utilisateur doit confirmer son email
+    if (!authData.session) {
+      const err = new Error("Compte créé ! Vérifiez votre boîte email pour confirmer votre adresse.");
+      err.code = "email-confirmation-required";
+      throw err;
+    }
     // Update profile with prenom/nom/photo
     const updates = { prenom: data.prenom || "", nom: data.nom || "" };
     if (data.photo && authData.user) {
@@ -742,7 +748,19 @@
   }
 
   async function forgotPassword(email) {
-    await _sb.auth.resetPasswordForEmail(email);
+    await _sb.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://sansagents.fr/reset-password'
+    });
+  }
+
+  async function updatePassword(newPassword) {
+    const { error } = await _sb.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+  }
+
+  async function getRecoverySession() {
+    const { data: { session } } = await _sb.auth.getSession();
+    return session;
   }
 
   async function logout() {
@@ -1055,7 +1073,7 @@
     // Documents
     saveDoc, getDocs, deleteDoc,
     // Auth
-    getUser, login, signup, logout, updateUser, forgotPassword,
+    getUser, login, signup, logout, updateUser, forgotPassword, updatePassword, getRecoverySession,
     // UI
     toast, cardHTML, openListing, closeListing, toggleFavoriteModal,
     revealContact, mockContact, mountNavAuth, mountFavBadge, mountMsgBadge,
