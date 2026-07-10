@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
         sender: { name: 'SansAgents', email: 'notifications@sansagents.fr' },
         to: [{ email: sellerEmail }],
         replyTo: { email: 'contact@sansagents.fr' },
-        subject: `💬 Nouveau message — ${listingLabel}`,
+        subject: `Nouveau message — ${listingLabel}`,
         htmlContent: `
 <span style="display:none;max-height:0;overflow:hidden;mso-hide:all">Vous avez reçu un nouveau message concernant ${listingLabel} sur SansAgents.</span>
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;background:#fff">
