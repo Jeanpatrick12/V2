@@ -653,6 +653,8 @@ function openEdit(id) {
   document.getElementById('eEquip').innerHTML = EQUIP_OPTIONS.map(opt =>
     `<label><input type="checkbox" value="${opt}" ${equip.includes(opt) ? 'checked' : ''}> ${opt}</label>`).join('');
 
+  const saveBtn = document.querySelector('.sa-edit-foot .save');
+  if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = '<i class="ti ti-device-floppy"></i> Enregistrer les modifications'; }
   document.getElementById('editOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
