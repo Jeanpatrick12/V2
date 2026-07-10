@@ -94,9 +94,21 @@ input:focus{border-color:#E84533}
         <label class="field-label">Mot de passe</label>
         <input type="password" id="loginPassword" placeholder="••••••••" required>
       </div>
-      <button type="button" class="sa-auth-forgot" onclick="forgotPassword()">Mot de passe oublié ?</button>
+      <button type="button" class="sa-auth-forgot" onclick="showForgot()">Mot de passe oublié ?</button>
       <button class="sa-submit-btn" type="submit"><i class="ti ti-login-2"></i> Se connecter</button>
     </form>
+
+    <!-- ── MOT DE PASSE OUBLIÉ ── -->
+    <div class="sa-form" id="formForgot">
+      <div class="sa-auth-title" style="margin-bottom:6px">Réinitialiser le mot de passe</div>
+      <div class="sa-auth-sub">Entrez votre email pour recevoir un lien de réinitialisation.</div>
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input type="email" id="forgotEmail" placeholder="jean.dupont@email.com">
+      </div>
+      <button class="sa-submit-btn" type="button" id="forgotBtn" onclick="doForgot()"><i class="ti ti-mail"></i> Envoyer le lien</button>
+      <button type="button" style="margin-top:10px;background:none;border:none;font-size:12.5px;color:#888;cursor:pointer;font-family:inherit;width:100%;text-align:center" onclick="switchTab('login')">← Retour à la connexion</button>
+    </div>
 
     <!-- ── SIGNUP ── -->
     <form class="sa-form" id="formSignup" onsubmit="event.preventDefault();doSignup()">
@@ -160,8 +172,40 @@ const redirect = params.get('redirect') || './';
 function switchTab(tab) {
   document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
   document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
+  document.getElementById('tabLogin').style.display = '';
+  document.getElementById('tabSignup').style.display = '';
   document.getElementById('formLogin').classList.toggle('active', tab === 'login');
   document.getElementById('formSignup').classList.toggle('active', tab === 'signup');
+  document.getElementById('formForgot').classList.remove('active');
+  document.getElementById('formConfirm').classList.remove('active');
+}
+
+function showForgot() {
+  document.getElementById('formLogin').classList.remove('active');
+  document.getElementById('formSignup').classList.remove('active');
+  document.getElementById('formForgot').classList.add('active');
+  document.getElementById('tabLogin').classList.remove('active');
+  document.getElementById('tabSignup').classList.remove('active');
+  const email = document.getElementById('loginEmail').value;
+  if (email) document.getElementById('forgotEmail').value = email;
+}
+
+async function doForgot() {
+  const email = document.getElementById('forgotEmail').value.trim();
+  if (!email) { SA.toast('Entrez votre adresse email.', 'ti-alert-circle'); return; }
+  const btn = document.getElementById('forgotBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2"></i> Envoi…';
+  try {
+    await SA.init();
+    await SA.forgotPassword(email);
+    SA.toast('Lien envoyé ! Vérifiez votre boîte email.', 'ti-mail');
+    setTimeout(() => switchTab('login'), 1500);
+  } catch(e) {
+    SA.toast('Erreur lors de l\'envoi.', 'ti-alert-circle');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-mail"></i> Envoyer le lien';
+  }
 }
 
 function afterAuth(prenom) {
@@ -228,11 +272,6 @@ async function doSignup() {
   }
 }
 
-async function forgotPassword() {
-  const email = document.getElementById('loginEmail').value.trim();
-  if (email) { await SA.init(); await SA.forgotPassword(email); }
-  SA.toast('Si ce compte existe, un lien de réinitialisation a été envoyé.', 'ti-mail');
-}
 </script>
 </body>
 </html>

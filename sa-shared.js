@@ -166,6 +166,7 @@
     return {
       id:        row.id,
       from:      row.from_role,
+      senderId:  row.sender_id || null,
       text:      row.text,
       createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now()
     };
@@ -236,7 +237,7 @@
     const [favRes, convoRes, soldRes, docsRes] = await Promise.all([
       _sb.from("favorites").select("item_id,item_type").eq("user_id", userId),
       _sb.from("conversations")
-        .select("id,listing_id,listing_title,contact_name,contact_shared,buyer_confirmed_sale,buyer_confirmed_at,buyer_id,seller_id,last_message_at,last_read_at,created_at,messages(id,from_role,text,created_at)")
+        .select("id,listing_id,listing_title,contact_name,contact_shared,buyer_confirmed_sale,buyer_confirmed_at,buyer_id,seller_id,last_message_at,last_read_at,created_at,messages(id,from_role,sender_id,text,created_at)")
         .or("buyer_id.eq." + userId + ",seller_id.eq." + userId)
         .order("created_at", { ascending: false }),
       _sb.from("listings")
@@ -247,6 +248,22 @@
     _cache.favorites     = (favRes.data || []).map(f => f.item_id);
     _cache.favoritesData = (favRes.data || []);
     _cache.conversations = (convoRes.data || []).map(_normConvo);
+    // Pour les conversations où je suis vendeur, récupérer le prénom/nom de l'acheteur
+    const sellerConvos = _cache.conversations.filter(c => c.seller_id === userId && c.buyer_id);
+    if (sellerConvos.length > 0) {
+      const buyerIds = [...new Set(sellerConvos.map(c => c.buyer_id))];
+      const { data: buyerProfiles } = await _sb.from("profiles").select("id,prenom,nom").in("id", buyerIds);
+      if (buyerProfiles) {
+        const pm = {};
+        buyerProfiles.forEach(p => { pm[p.id] = p; });
+        _cache.conversations.forEach(c => {
+          if (c.seller_id === userId && c.buyer_id && pm[c.buyer_id]) {
+            const p = pm[c.buyer_id];
+            c.contactName = ((p.prenom || '') + ' ' + (p.nom || '')).trim() || "L'acheteur";
+          }
+        });
+      }
+    }
     const ownerListings  = (soldRes.data || []).map(_normListing);
     const existingIds = new Set(_cache.dbListings.map(l => l.id));
     ownerListings.forEach(l => { if (!existingIds.has(l.id)) _cache.dbListings.push(l); });

@@ -304,9 +304,9 @@ function renderThread(id) {
       <span class="sa-msg-thread-header-listing" onclick="window.location.href='annonce?id=${encodeURIComponent(c.listingId)}'"><i class="ti ti-home" style="font-size:11px"></i> ${SA.escapeHtml(c.listingTitle)}</span>
     </div>
     <div class="sa-msg-thread-body" id="threadBody">
-      ${c.messages.map(m => m.from === 'system' ? `
+      ${c.messages.slice().reverse().map(m => m.from === 'system' ? `
         <div class="sa-msg-system"><i class="ti ti-lock-open"></i> ${SA.escapeHtml(m.text)}</div>` : `
-        <div class="sa-msg-bubble ${m.from === 'me' ? 'me' : 'other'}">
+        <div class="sa-msg-bubble ${m.senderId ? (m.senderId === SA.getUser()?.id ? 'me' : 'other') : (m.from === 'me' ? 'me' : 'other')}">
           ${SA.escapeHtml(m.text)}
           <span class="sa-msg-bubble-time">${fmtTime(m.createdAt)}</span>
         </div>`).join('')}
@@ -316,7 +316,7 @@ function renderThread(id) {
       <button onclick="sendThreadMessage()"><i class="ti ti-send"></i> Envoyer</button>
     </div>`;
   const tb = document.getElementById('threadBody');
-  tb.scrollTop = tb.scrollHeight;
+  tb.scrollTop = 0;
 }
 
 async function toggleShare(convoId) {
