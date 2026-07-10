@@ -902,7 +902,7 @@
         dropdown.innerHTML =
           '<div class="sa-account-dropdown-email"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.email || "") + "</div>" +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'profil\'"><i class="ti ti-user-circle"></i> Mon profil</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:auto;background:#3b82f6;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getUserListings().length + '</span>' : '') + '</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;background:#c93a2a;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getUserListings().length + '</span>' : '') + '</button>' +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (getDocs().length > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getDocs().length + '</span>' : '') + '</button>' +
           '<button class="sa-account-dropdown-logout" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>';
       } else {

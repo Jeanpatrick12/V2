@@ -672,10 +672,6 @@ async function saveEdit() {
       pieces: parseInt(document.getElementById('ePieces').value, 10) || null,
       chambres: document.getElementById('eChambres').value !== '' ? parseInt(document.getElementById('eChambres').value, 10) : null,
       sdb: document.getElementById('eSdb').value !== '' ? parseInt(document.getElementById('eSdb').value, 10) : null,
-      sallesEau: document.getElementById('eSallesEau').value !== '' ? parseInt(document.getElementById('eSallesEau').value, 10) : null,
-      anneeConstruction: document.getElementById('eAnnee').value !== '' ? parseInt(document.getElementById('eAnnee').value, 10) : null,
-      etatGeneral: document.getElementById('eEtat').value || null,
-      factureEnergie: document.getElementById('eFacture').value !== '' ? parseFloat(document.getElementById('eFacture').value) : null,
       dpe: eDpe, ges: eGes,
       equipements: equip,
       photos: ePhotos
