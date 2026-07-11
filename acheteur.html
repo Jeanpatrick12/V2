@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documents acheteur — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+/* ── Doc preview CSS ── */
+.v-doc-preview{max-width:720px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13.5px;line-height:1.6;color:#111}
+.v-doc-preview .doc-header{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:14px 14px 0 0;overflow:hidden}
+.v-doc-preview .doc-header-top{display:flex;justify-content:space-between;align-items:center;padding:12px 18px 8px;border-bottom:1px solid rgba(255,255,255,.08)}
+.v-doc-preview .doc-brand{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.03em}
+.v-doc-preview .doc-badge{background:#E84533;color:white;font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px}
+.v-doc-preview .doc-meta{font-size:11px;color:rgba(255,255,255,.3);text-align:right;line-height:1.5}
+.v-doc-preview .doc-header-band{display:flex;align-items:center;gap:12px;padding:16px 18px}
+.v-doc-preview .doc-header-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.v-doc-preview .doc-header-title{font-size:19px;font-weight:800;color:white;letter-spacing:-.3px}
+.v-doc-preview .doc-header-sub{font-size:11.5px;color:rgba(255,255,255,.45);margin-top:2px}
+.v-doc-preview .doc-body{background:white;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 14px 14px;padding:20px}
+.v-doc-preview .doc-address{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;margin-bottom:14px}
+.v-doc-preview .doc-address i{color:#E84533;font-size:15px;margin-top:1px;flex-shrink:0}
+.v-doc-preview .doc-parties{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.v-doc-preview .doc-party{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:10px 12px}
+.v-doc-preview .doc-party-label{font-size:9.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.v-doc-preview .doc-party-value{font-size:13px;font-weight:700;color:#111}
+.v-doc-preview .doc-section{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:12px 14px;margin-bottom:12px}
+.v-doc-preview .doc-section-title{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #e2e8f0}
+.v-doc-preview .doc-kv{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f0f2f5;font-size:12.5px}
+.v-doc-preview .doc-kv:last-child{border-bottom:none}
+.v-doc-preview .doc-kv-k{color:#64748b}
+.v-doc-preview .doc-kv-v{font-weight:700;color:#111}
+.v-doc-preview .doc-kv-v.big{font-size:15px;color:#E84533}
+.v-doc-preview .doc-legal{font-size:12.5px;line-height:1.85;color:#334155;background:#fafafa;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px}
+.v-doc-preview .doc-sigs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;padding-top:18px;border-top:1.5px solid #f0f0f2}
+.v-doc-preview .doc-sig-box{border:1.5px solid #e4e5ea;border-radius:10px;overflow:hidden}
+.v-doc-preview .doc-sig-header{background:#f4f5f7;padding:8px 12px;font-size:10px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e4e5ea}
+.v-doc-preview .doc-sig-body{padding:12px 14px}
+.v-doc-preview .doc-sig-space{min-height:80px;border:1.5px dashed #d8dce6;border-radius:7px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;padding:8px}
+.v-doc-preview .doc-sig-fields{display:flex;gap:10px}
+.v-doc-preview .doc-sig-field{font-size:10.5px;color:#777;flex:1;padding-bottom:14px;border-bottom:1px solid #e0e2e8}
+.v-doc-preview .doc-footer{background:#f8f9fb;border-top:1px solid #eeeff2;padding:10px 20px;text-align:center;font-size:10.5px;color:#bbb;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;border-radius:0 0 14px 14px}
+
+/* ── Page styles ── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f4f5f7;color:#111}
+
+.page-header{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:48px 24px 40px}
+.page-header-inner{max-width:960px;margin:0 auto}
+.page-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(232,69,51,.15);color:#ff7a68;border:1px solid rgba(232,69,51,.25);padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:700;margin-bottom:16px}
+.page-header h1{font-size:30px;font-weight:800;color:white;letter-spacing:-.5px;margin-bottom:8px}
+.page-header p{font-size:14px;color:rgba(255,255,255,.5);max-width:480px}
+
+.page-body{max-width:960px;margin:0 auto;padding:32px 24px}
+
+/* Generate section */
+.gen-section{margin-bottom:40px}
+.section-title{font-size:13px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.gen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.gen-card{background:white;border:1.5px solid #ebebeb;border-radius:14px;padding:20px;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.gen-card:hover{border-color:#E84533;box-shadow:0 4px 20px rgba(232,69,51,.1);transform:translateY(-2px)}
+.gen-card-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.gen-card-title{font-size:14px;font-weight:700;color:#111;letter-spacing:-.2px}
+.gen-card-desc{font-size:12px;color:#888;line-height:1.5}
+.gen-card-btn{display:inline-flex;align-items:center;gap:5px;background:#E84533;color:white;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px}
+
+/* Doc cards */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.doc-card{background:white;border:1.5px solid #ebebeb;border-radius:14px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.doc-card:hover{border-color:#E84533;box-shadow:0 4px 20px rgba(232,69,51,.08)}
+.doc-card-header{padding:16px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f5f5f5}
+.doc-card-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.doc-card-title{font-size:14px;font-weight:700;color:#111;letter-spacing:-.2px}
+.doc-card-date{font-size:11.5px;color:#aaa;margin-top:2px}
+.doc-card-actions{padding:12px 18px;display:flex;gap:8px}
+.doc-btn-open{flex:1;padding:9px 14px;background:#0f172a;color:white;border:none;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s}
+.doc-btn-open:hover{background:#1e293b}
+.doc-btn-print{padding:9px 12px;background:#f8f9fb;color:#555;border:1.5px solid #e5e5e5;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;transition:all .2s}
+.doc-btn-print:hover{border-color:#0f172a;color:#0f172a}
+.doc-btn-del{padding:9px 12px;background:#fff5f4;color:#E84533;border:1.5px solid #fdd5d0;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s}
+.doc-btn-del:hover{background:#fee2e2;border-color:#E84533}
+
+.empty-state{text-align:center;padding:60px 20px;color:#aaa}
+.empty-state i{font-size:52px;display:block;margin-bottom:16px;color:#ddd}
+.empty-state h2{font-size:18px;font-weight:700;color:#555;margin-bottom:8px}
+.empty-state p{font-size:14px;line-height:1.6;max-width:360px;margin:0 auto}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:white;border-radius:18px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);transform:translateY(12px);transition:transform .2s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-header{padding:22px 24px 18px;border-bottom:1px solid #f0f0f2}
+.modal-header h2{font-size:17px;font-weight:800;color:#111;letter-spacing:-.3px;margin-bottom:2px}
+.modal-header p{font-size:13px;color:#888}
+.modal-body{padding:20px 24px}
+.modal-footer{padding:16px 24px;border-top:1px solid #f0f0f2;display:flex;gap:10px;justify-content:flex-end}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;padding:10px 13px;border:1.5px solid #e5e5e5;border-radius:9px;font-size:13.5px;font-family:inherit;color:#111;transition:border-color .2s;background:white}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:#E84533}
+.field textarea{resize:vertical;min-height:72px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-primary{padding:11px 22px;background:#E84533;color:white;border:none;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:7px;transition:background .2s}
+.btn-primary:hover{background:#c73b2a}
+.btn-primary:disabled{opacity:.6;cursor:default}
+.btn-secondary{padding:11px 18px;background:#f5f5f5;color:#555;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-secondary:hover{border-color:#ccc;color:#333}
+
+@media(max-width:600px){
+  .page-header{padding:32px 16px 28px}
+  .page-header h1{font-size:22px}
+  .page-body{padding:20px 16px}
+  .doc-grid,.gen-grid{grid-template-columns:1fr}
+  .field-row{grid-template-columns:1fr}
+  .v-doc-preview .doc-parties{grid-template-columns:1fr}
+  .v-doc-preview .doc-sigs{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div data-nav-account style="display:none"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js"></script>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+      <a href="./" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+        <div style="width:44px;height:44px;background:#E84533;border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(232,69,51,.35)"><i class="ti ti-key" style="color:white;font-size:22px"></i></div>
+        <span style="font-size:20px;font-weight:800;color:white;letter-spacing:-.3px">Sans<span style="color:#ff7a68">Agents</span></span>
+      </a>
+      <a href="./" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;display:flex;align-items:center;gap:5px"><i class="ti ti-arrow-left" style="font-size:15px"></i> Accueil</a>
+    </div>
+    <div class="page-header-badge"><i class="ti ti-home-search"></i> Espace acheteur</div>
+    <h1>Vos documents d'achat</h1>
+    <p>Générez, personnalisez et sauvegardez vos documents pour chaque étape de votre achat immobilier.</p>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- Generate section -->
+  <div class="gen-section">
+    <div class="section-title"><i class="ti ti-wand" style="font-size:16px"></i> Générer un document</div>
+    <div class="gen-grid">
+      <div class="gen-card" onclick="openModal('visite')">
+        <div class="gen-card-ico" style="background:#fff5f4"><i class="ti ti-door-enter" style="color:#E84533"></i></div>
+        <div>
+          <div class="gen-card-title">Bon de visite</div>
+          <div class="gen-card-desc">Enregistrez chaque visite — bien, date, vendeur et conditions.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+      <div class="gen-card" onclick="openModal('offre')">
+        <div class="gen-card-ico" style="background:#fff5f4"><i class="ti ti-file-euro" style="color:#E84533"></i></div>
+        <div>
+          <div class="gen-card-title">Offre d'achat</div>
+          <div class="gen-card-desc">Formulez une offre écrite avec prix, conditions et délai de réponse.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+      <div class="gen-card" onclick="openModal('contre')">
+        <div class="gen-card-ico" style="background:#fff7ed"><i class="ti ti-arrows-exchange" style="color:#d97706"></i></div>
+        <div>
+          <div class="gen-card-title">Contre-proposition</div>
+          <div class="gen-card-desc">Répondez à une contre-offre du vendeur avec votre nouveau prix.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+      <div class="gen-card" onclick="openModal('acceptation')">
+        <div class="gen-card-ico" style="background:#f0fdf4"><i class="ti ti-circle-check" style="color:#16a34a"></i></div>
+        <div>
+          <div class="gen-card-title">Acceptation d'offre</div>
+          <div class="gen-card-desc">Confirmez par écrit que vous acceptez le prix convenu avec le vendeur.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saved docs -->
+  <div class="section-title"><i class="ti ti-files" style="font-size:16px"></i> Mes documents sauvegardés</div>
+  <div id="docGrid" class="doc-grid"></div>
+  <div id="emptyState" class="empty-state" style="display:none">
+    <i class="ti ti-files"></i>
+    <h2>Aucun document sauvegardé</h2>
+    <p>Générez vos documents ci-dessus — bon de visite, offre d'achat… ils seront sauvegardés ici.</p>
+  </div>
+
+</div>
+
+<!-- Modal: Bon de visite -->
+<div class="modal-overlay" id="modal-visite" onclick="closeModal('visite',event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2><i class="ti ti-door-enter" style="color:#E84533;margin-right:6px"></i> Bon de visite</h2>
+      <p>Renseignez les informations de votre visite</p>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Adresse du bien visité</label><input id="v-adresse" type="text" placeholder="12 rue de la Paix, 75001 Paris"></div>
+      <div class="field-row">
+        <div class="field"><label>Date de visite</label><input id="v-date" type="date"></div>
+        <div class="field"><label>Heure</label><input id="v-heure" type="time"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Votre nom (acheteur)</label><input id="v-acheteur" type="text" placeholder="Prénom Nom"></div>
+        <div class="field"><label>Nom du vendeur</label><input id="v-vendeur" type="text" placeholder="Prénom Nom"></div>
+      </div>
+      <div class="field"><label>Type de bien</label>
+        <select id="v-type">
+          <option value="Appartement">Appartement</option>
+          <option value="Maison">Maison</option>
+          <option value="Studio">Studio</option>
+          <option value="Duplex">Duplex</option>
+          <option value="Local commercial">Local commercial</option>
+          <option value="Terrain">Terrain</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Surface (m²)</label><input id="v-surface" type="text" placeholder="65"></div>
+        <div class="field"><label>Prix affiché (€)</label><input id="v-prix" type="text" placeholder="250 000"></div>
+      </div>
+      <div class="field"><label>Observations (optionnel)</label><textarea id="v-obs" placeholder="État général, points à vérifier, impressions…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModalId('visite')">Annuler</button>
+      <button class="btn-primary" onclick="generateDoc('visite')"><i class="ti ti-file-check"></i> Générer et sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Offre d'achat -->
+<div class="modal-overlay" id="modal-offre" onclick="closeModal('offre',event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2><i class="ti ti-file-euro" style="color:#E84533;margin-right:6px"></i> Offre d'achat</h2>
+      <p>Rédigez votre offre formelle d'acquisition</p>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Adresse du bien</label><input id="o-adresse" type="text" placeholder="12 rue de la Paix, 75001 Paris"></div>
+      <div class="field-row">
+        <div class="field"><label>Votre nom (acheteur)</label><input id="o-acheteur" type="text" placeholder="Prénom Nom"></div>
+        <div class="field"><label>Nom du vendeur</label><input id="o-vendeur" type="text" placeholder="Prénom Nom"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Prix proposé (€)</label><input id="o-prix" type="text" placeholder="240 000"></div>
+        <div class="field"><label>Prix affiché (€)</label><input id="o-prix-affiche" type="text" placeholder="250 000"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Date de l'offre</label><input id="o-date" type="date"></div>
+        <div class="field"><label>Délai de réponse</label>
+          <select id="o-delai">
+            <option value="48 heures">48 heures</option>
+            <option value="72 heures">72 heures</option>
+            <option value="5 jours">5 jours</option>
+            <option value="7 jours">7 jours</option>
+            <option value="10 jours">10 jours</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Financement</label>
+        <select id="o-financement">
+          <option value="Comptant">Comptant (sans prêt)</option>
+          <option value="Prêt immobilier">Prêt immobilier</option>
+          <option value="Prêt + apport personnel">Prêt + apport personnel</option>
+        </select>
+      </div>
+      <div class="field"><label>Conditions suspensives (optionnel)</label><textarea id="o-conditions" placeholder="Obtention d'un prêt immobilier de X€, absence de servitude…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModalId('offre')">Annuler</button>
+      <button class="btn-primary" onclick="generateDoc('offre')"><i class="ti ti-file-check"></i> Générer et sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Contre-proposition -->
+<div class="modal-overlay" id="modal-contre" onclick="closeModal('contre',event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2><i class="ti ti-arrows-exchange" style="color:#d97706;margin-right:6px"></i> Contre-proposition</h2>
+      <p>Répondez à la contre-offre du vendeur</p>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Adresse du bien</label><input id="c-adresse" type="text" placeholder="12 rue de la Paix, 75001 Paris"></div>
+      <div class="field-row">
+        <div class="field"><label>Votre nom (acheteur)</label><input id="c-acheteur" type="text" placeholder="Prénom Nom"></div>
+        <div class="field"><label>Nom du vendeur</label><input id="c-vendeur" type="text" placeholder="Prénom Nom"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Prix initial proposé (€)</label><input id="c-prix-initial" type="text" placeholder="230 000"></div>
+        <div class="field"><label>Contre-offre vendeur (€)</label><input id="c-prix-vendeur" type="text" placeholder="245 000"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Votre nouveau prix (€)</label><input id="c-prix-new" type="text" placeholder="238 000"></div>
+        <div class="field"><label>Date</label><input id="c-date" type="date"></div>
+      </div>
+      <div class="field"><label>Message au vendeur (optionnel)</label><textarea id="c-message" placeholder="Motivez votre proposition, éléments de comparaison…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModalId('contre')">Annuler</button>
+      <button class="btn-primary" onclick="generateDoc('contre')"><i class="ti ti-file-check"></i> Générer et sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Acceptation d'offre -->
+<div class="modal-overlay" id="modal-acceptation" onclick="closeModal('acceptation',event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2><i class="ti ti-circle-check" style="color:#16a34a;margin-right:6px"></i> Acceptation d'offre</h2>
+      <p>Confirmez par écrit l'accord sur le prix</p>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Adresse du bien</label><input id="a-adresse" type="text" placeholder="12 rue de la Paix, 75001 Paris"></div>
+      <div class="field-row">
+        <div class="field"><label>Votre nom (acheteur)</label><input id="a-acheteur" type="text" placeholder="Prénom Nom"></div>
+        <div class="field"><label>Nom du vendeur</label><input id="a-vendeur" type="text" placeholder="Prénom Nom"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Prix convenu (€)</label><input id="a-prix" type="text" placeholder="242 000"></div>
+        <div class="field"><label>Date</label><input id="a-date" type="date"></div>
+      </div>
+      <div class="field"><label>Prochaine étape souhaitée</label>
+        <select id="a-etape">
+          <option value="signature du compromis de vente">Signature du compromis de vente</option>
+          <option value="signature d'une promesse de vente">Signature d'une promesse de vente</option>
+          <option value="rendez-vous notaire">Rendez-vous chez le notaire</option>
+        </select>
+      </div>
+      <div class="field"><label>Message (optionnel)</label><textarea id="a-message" placeholder="Remerciements, délais souhaités…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModalId('acceptation')">Annuler</button>
+      <button class="btn-primary" onclick="generateDoc('acceptation')"><i class="ti ti-file-check"></i> Générer et sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var ICONS={visite:'ti-door-enter',offre:'ti-file-euro',contre:'ti-arrows-exchange',acceptation:'ti-circle-check'};
+var COLORS={visite:'#E84533',offre:'#E84533',contre:'#d97706',acceptation:'#16a34a'};
+var BKGS={visite:'#fff5f4',offre:'#fff5f4',contre:'#fff7ed',acceptation:'#f0fdf4'};
+var TITLES={visite:'Bon de visite',offre:"Offre d'achat",contre:'Contre-proposition',acceptation:"Acceptation d'offre"};
+
+function docsKey(){
+  var uid=SA.getUser()&&SA.getUser().id;
+  return uid?'sa_buyer_docs_'+uid:'sa_buyer_docs_guest';
+}
+
+function loadDocs(){
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
+  var grid=document.getElementById('docGrid');
+  var empty=document.getElementById('emptyState');
+  if(!docs.length){grid.style.display='none';empty.style.display='';return;}
+  grid.style.display='';empty.style.display='none';
+  grid.innerHTML=docs.map(function(d,i){
+    var ico=ICONS[d.type]||'ti-file-text';
+    var col=COLORS[d.type]||'#E84533';
+    var bkg=BKGS[d.type]||'#fff5f4';
+    return '<div class="doc-card" id="card'+i+'">'
+      +'<div class="doc-card-header">'
+      +'<div class="doc-card-ico" style="background:'+bkg+'"><i class="ti '+ico+'" style="color:'+col+'"></i></div>'
+      +'<div><div class="doc-card-title">'+SA.escapeHtml(d.title)+'</div><div class="doc-card-date"><i class="ti ti-calendar" style="font-size:11px"></i> Sauvegardé le '+SA.escapeHtml(d.date)+'</div></div>'
+      +'</div>'
+      +'<div class="doc-card-actions">'
+      +'<button class="doc-btn-open" onclick="openDoc('+i+')"><i class="ti ti-eye"></i> Ouvrir</button>'
+      +'<button class="doc-btn-print" onclick="openDoc('+i+')" title="Télécharger en PDF"><i class="ti ti-printer"></i> PDF</button>'
+      +'<button class="doc-btn-del" onclick="deleteDoc('+i+')" title="Supprimer"><i class="ti ti-trash"></i></button>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function openModal(type){
+  var today=new Date().toISOString().split('T')[0];
+  var el=document.getElementById(type==='visite'?'v-date':type==='offre'?'o-date':type==='contre'?'c-date':'a-date');
+  if(el&&!el.value)el.value=today;
+  document.getElementById('modal-'+type).classList.add('open');
+}
+function closeModal(type,e){if(e.target===e.currentTarget)closeModalId(type);}
+function closeModalId(type){document.getElementById('modal-'+type).classList.remove('open');}
+
+function fmtDate(s){if(!s)return'—';var d=new Date(s);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
+function now(){return new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
+function val(id){return(document.getElementById(id)||{}).value||'';}
+
+function generateDoc(type){
+  var html='',title='';
+  if(type==='visite'){
+    var adresse=val('v-adresse'),date=val('v-date'),heure=val('v-heure'),acheteur=val('v-acheteur'),vendeur=val('v-vendeur'),typeBien=val('v-type'),surface=val('v-surface'),prix=val('v-prix'),obs=val('v-obs');
+    if(!adresse||!acheteur){SA.toast('Veuillez remplir l\'adresse et votre nom.','ti-alert-circle');return;}
+    title='Bon de visite — '+(adresse.split(',')[0]||adresse);
+    html=buildVisite({adresse,date:fmtDate(date),heure,acheteur,vendeur,typeBien,surface,prix,obs});
+  } else if(type==='offre'){
+    var adresse=val('o-adresse'),acheteur=val('o-acheteur'),vendeur=val('o-vendeur'),prix=val('o-prix'),prixAffiche=val('o-prix-affiche'),date=val('o-date'),delai=val('o-delai'),financement=val('o-financement'),conditions=val('o-conditions');
+    if(!adresse||!acheteur||!prix){SA.toast('Veuillez remplir l\'adresse, votre nom et le prix proposé.','ti-alert-circle');return;}
+    title="Offre d'achat — "+(adresse.split(',')[0]||adresse);
+    html=buildOffre({adresse,acheteur,vendeur,prix,prixAffiche,date:fmtDate(date),delai,financement,conditions});
+  } else if(type==='contre'){
+    var adresse=val('c-adresse'),acheteur=val('c-acheteur'),vendeur=val('c-vendeur'),prixInitial=val('c-prix-initial'),prixVendeur=val('c-prix-vendeur'),prixNew=val('c-prix-new'),date=val('c-date'),message=val('c-message');
+    if(!adresse||!acheteur||!prixNew){SA.toast('Veuillez remplir l\'adresse, votre nom et votre nouveau prix.','ti-alert-circle');return;}
+    title='Contre-proposition — '+(adresse.split(',')[0]||adresse);
+    html=buildContre({adresse,acheteur,vendeur,prixInitial,prixVendeur,prixNew,date:fmtDate(date),message});
+  } else if(type==='acceptation'){
+    var adresse=val('a-adresse'),acheteur=val('a-acheteur'),vendeur=val('a-vendeur'),prix=val('a-prix'),date=val('a-date'),etape=val('a-etape'),message=val('a-message');
+    if(!adresse||!acheteur||!prix){SA.toast('Veuillez remplir l\'adresse, votre nom et le prix convenu.','ti-alert-circle');return;}
+    title="Acceptation d'offre — "+(adresse.split(',')[0]||adresse);
+    html=buildAcceptation({adresse,acheteur,vendeur,prix,date:fmtDate(date),etape,message});
+  }
+
+  var doc={type,title,html,date:now()};
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
+  docs.unshift(doc);
+  localStorage.setItem(docsKey(),JSON.stringify(docs));
+  closeModalId(type);
+  loadDocs();
+  SA.toast('Document sauvegardé !','ti-circle-check');
+  setTimeout(function(){openDocFromHtml(doc);},300);
+}
+
+function esc(s){return SA.escapeHtml(s||'');}
+
+function docHeader(ico,color,bkg,title,sub){
+  return '<div class="doc-header">'
+    +'<div class="doc-header-top">'
+    +'<div class="doc-brand"><span class="doc-badge">SA</span> SansAgents</div>'
+    +'<div class="doc-meta">Document généré le '+now()+'</div>'
+    +'</div>'
+    +'<div class="doc-header-band">'
+    +'<div class="doc-header-ico" style="background:'+bkg+'"><i class="ti '+ico+'" style="color:'+color+'"></i></div>'
+    +'<div><div class="doc-header-title">'+esc(title)+'</div><div class="doc-header-sub">'+esc(sub)+'</div></div>'
+    +'</div>'
+    +'</div>';
+}
+
+function docFooter(){
+  return '<div class="doc-footer" style="background:#f8f9fb;border-top:1px solid #eeeff2;padding:10px 20px;text-align:center;font-size:10.5px;color:#bbb;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;border-radius:0 0 14px 14px">'
+    +'SansAgents <span style="width:3px;height:3px;background:#ddd;border-radius:50%;display:inline-block;vertical-align:middle"></span> Immobilier direct entre particuliers <span style="width:3px;height:3px;background:#ddd;border-radius:50%;display:inline-block;vertical-align:middle"></span> sansagents.fr'
+    +'</div>';
+}
+
+function sigBox(label,name){
+  return '<div class="doc-sig-box">'
+    +'<div class="doc-sig-header">'+esc(label)+'</div>'
+    +'<div class="doc-sig-body">'
+    +'<div class="doc-sig-space" style="min-height:80px;border:1.5px dashed #d8dce6;border-radius:7px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:11px">Signature</div>'
+    +'<div style="font-size:10.5px;color:#777;padding-bottom:14px;border-bottom:1px solid #e0e2e8">'+esc(name||'')+'</div>'
+    +'</div>'
+    +'</div>';
+}
+
+function buildVisite(f){
+  return '<div class="v-doc-preview">'
+    +docHeader('ti-door-enter','#E84533','#fff5f4','Bon de visite','Enregistrement de visite entre particuliers')
+    +'<div class="doc-body" style="background:white;border:1px solid #e2e8f0;border-top:none;padding:20px">'
+    +'<div class="doc-address"><i class="ti ti-map-pin"></i><div><div style="font-size:9.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Bien visité</div><div style="font-size:14px;font-weight:700;color:#111">'+esc(f.adresse)+'</div></div></div>'
+    +'<div class="doc-parties">'
+    +'<div class="doc-party"><div class="doc-party-label">Acheteur</div><div class="doc-party-value">'+esc(f.acheteur)+'</div></div>'
+    +'<div class="doc-party"><div class="doc-party-label">Vendeur</div><div class="doc-party-value">'+esc(f.vendeur||'Non renseigné')+'</div></div>'
+    +'</div>'
+    +'<div class="doc-section"><div class="doc-section-title"><i class="ti ti-info-circle"></i> Informations de la visite</div>'
+    +'<div class="doc-kv"><span class="doc-kv-k">Date</span><span class="doc-kv-v">'+esc(f.date)+'</span></div>'
+    +(f.heure?'<div class="doc-kv"><span class="doc-kv-k">Heure</span><span class="doc-kv-v">'+esc(f.heure)+'</span></div>':'')
+    +'<div class="doc-kv"><span class="doc-kv-k">Type de bien</span><span class="doc-kv-v">'+esc(f.typeBien)+'</span></div>'
+    +(f.surface?'<div class="doc-kv"><span class="doc-kv-k">Surface</span><span class="doc-kv-v">'+esc(f.surface)+' m²</span></div>':'')
+    +(f.prix?'<div class="doc-kv"><span class="doc-kv-k">Prix affiché</span><span class="doc-kv-v big">'+esc(f.prix)+' €</span></div>':'')
+    +'</div>'
+    +(f.obs?'<div class="doc-section"><div class="doc-section-title"><i class="ti ti-notes"></i> Observations</div><div class="doc-legal">'+esc(f.obs)+'</div></div>':'')
+    +'<div class="doc-sigs">'
+    +sigBox('Signature de l\'acheteur',f.acheteur)
+    +sigBox('Signature du vendeur',f.vendeur)
+    +'</div>'
+    +'</div>'
+    +docFooter()
+    +'</div>';
+}
+
+function buildOffre(f){
+  return '<div class="v-doc-preview">'
+    +docHeader('ti-file-euro','#E84533','#fff5f4',"Offre d'achat","Offre formelle d'acquisition immobilière")
+    +'<div class="doc-body" style="background:white;border:1px solid #e2e8f0;border-top:none;padding:20px">'
+    +'<div class="doc-address"><i class="ti ti-map-pin"></i><div><div style="font-size:9.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Bien concerné</div><div style="font-size:14px;font-weight:700;color:#111">'+esc(f.adresse)+'</div></div></div>'
+    +'<div class="doc-parties">'
+    +'<div class="doc-party"><div class="doc-party-label">Acheteur</div><div class="doc-party-value">'+esc(f.acheteur)+'</div></div>'
+    +'<div class="doc-party"><div class="doc-party-label">Vendeur</div><div class="doc-party-value">'+esc(f.vendeur||'Non renseigné')+'</div></div>'
+    +'</div>'
+    +'<div class="doc-section"><div class="doc-section-title"><i class="ti ti-coin-euro"></i> Conditions financières</div>'
+    +'<div class="doc-kv"><span class="doc-kv-k">Prix proposé</span><span class="doc-kv-v big">'+esc(f.prix)+' €</span></div>'
+    +(f.prixAffiche?'<div class="doc-kv"><span class="doc-kv-k">Prix affiché</span><span class="doc-kv-v">'+esc(f.prixAffiche)+' €</span></div>':'')
+    +'<div class="doc-kv"><span class="doc-kv-k">Financement</span><span class="doc-kv-v">'+esc(f.financement)+'</span></div>'
+    +'<div class="doc-kv"><span class="doc-kv-k">Date de l\'offre</span><span class="doc-kv-v">'+esc(f.date)+'</span></div>'
+    +'<div class="doc-kv"><span class="doc-kv-k">Délai de réponse</span><span class="doc-kv-v">'+esc(f.delai)+'</span></div>'
+    +'</div>'
+    +(f.conditions?'<div class="doc-section"><div class="doc-section-title"><i class="ti ti-list-check"></i> Conditions suspensives</div><div class="doc-legal">'+esc(f.conditions)+'</div></div>':'')
+    +'<div class="doc-legal" style="margin-bottom:16px;font-size:12px;color:#64748b">La présente offre d\'achat est valable pendant '+esc(f.delai)+' à compter de sa réception par le vendeur. Passé ce délai, elle sera considérée comme nulle et non avenue. Cette offre est établie entre particuliers, sans intermédiaire.</div>'
+    +'<div class="doc-sigs">'
+    +sigBox('Signature de l\'acheteur',f.acheteur)
+    +sigBox('Signature du vendeur (acceptation)',f.vendeur)
+    +'</div>'
+    +'</div>'
+    +docFooter()
+    +'</div>';
+}
+
+function buildContre(f){
+  return '<div class="v-doc-preview">'
+    +docHeader('ti-arrows-exchange','#d97706','#fff7ed','Contre-proposition','Proposition révisée de l\'acheteur')
+    +'<div class="doc-body" style="background:white;border:1px solid #e2e8f0;border-top:none;padding:20px">'
+    +'<div class="doc-address"><i class="ti ti-map-pin"></i><div><div style="font-size:9.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Bien concerné</div><div style="font-size:14px;font-weight:700;color:#111">'+esc(f.adresse)+'</div></div></div>'
+    +'<div class="doc-parties">'
+    +'<div class="doc-party"><div class="doc-party-label">Acheteur</div><div class="doc-party-value">'+esc(f.acheteur)+'</div></div>'
+    +'<div class="doc-party"><div class="doc-party-label">Vendeur</div><div class="doc-party-value">'+esc(f.vendeur||'Non renseigné')+'</div></div>'
+    +'</div>'
+    +'<div class="doc-section"><div class="doc-section-title"><i class="ti ti-arrows-exchange"></i> Historique de négociation</div>'
+    +(f.prixInitial?'<div class="doc-kv"><span class="doc-kv-k">Offre initiale</span><span class="doc-kv-v">'+esc(f.prixInitial)+' €</span></div>':'')
+    +(f.prixVendeur?'<div class="doc-kv"><span class="doc-kv-k">Contre-offre vendeur</span><span class="doc-kv-v">'+esc(f.prixVendeur)+' €</span></div>':'')
+    +'<div class="doc-kv"><span class="doc-kv-k">Nouvelle proposition</span><span class="doc-kv-v big">'+esc(f.prixNew)+' €</span></div>'
+    +'<div class="doc-kv"><span class="doc-kv-k">Date</span><span class="doc-kv-v">'+esc(f.date)+'</span></div>'
+    +'</div>'
+    +(f.message?'<div class="doc-section"><div class="doc-section-title"><i class="ti ti-message"></i> Message à l\'attention du vendeur</div><div class="doc-legal">'+esc(f.message)+'</div></div>':'')
+    +'<div class="doc-sigs">'
+    +sigBox('Signature de l\'acheteur',f.acheteur)
+    +sigBox('Réponse du vendeur',f.vendeur)
+    +'</div>'
+    +'</div>'
+    +docFooter()
+    +'</div>';
+}
+
+function buildAcceptation(f){
+  return '<div class="v-doc-preview">'
+    +docHeader('ti-circle-check','#16a34a','#f0fdf4',"Acceptation d'offre","Confirmation d'accord sur le prix")
+    +'<div class="doc-body" style="background:white;border:1px solid #e2e8f0;border-top:none;padding:20px">'
+    +'<div class="doc-address"><i class="ti ti-map-pin"></i><div><div style="font-size:9.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Bien concerné</div><div style="font-size:14px;font-weight:700;color:#111">'+esc(f.adresse)+'</div></div></div>'
+    +'<div class="doc-parties">'
+    +'<div class="doc-party"><div class="doc-party-label">Acheteur</div><div class="doc-party-value">'+esc(f.acheteur)+'</div></div>'
+    +'<div class="doc-party"><div class="doc-party-label">Vendeur</div><div class="doc-party-value">'+esc(f.vendeur||'Non renseigné')+'</div></div>'
+    +'</div>'
+    +'<div class="doc-section"><div class="doc-section-title"><i class="ti ti-circle-check"></i> Accord conclu</div>'
+    +'<div class="doc-kv"><span class="doc-kv-k">Prix convenu</span><span class="doc-kv-v big">'+esc(f.prix)+' €</span></div>'
+    +'<div class="doc-kv"><span class="doc-kv-k">Date</span><span class="doc-kv-v">'+esc(f.date)+'</span></div>'
+    +'<div class="doc-kv"><span class="doc-kv-k">Prochaine étape</span><span class="doc-kv-v">'+esc(f.etape)+'</span></div>'
+    +'</div>'
+    +(f.message?'<div class="doc-section"><div class="doc-section-title"><i class="ti ti-notes"></i> Message</div><div class="doc-legal">'+esc(f.message)+'</div></div>':'')
+    +'<div class="doc-legal" style="margin-bottom:16px;font-size:12px;color:#64748b">Les deux parties confirment s\'être accordées sur le prix de vente mentionné ci-dessus. La prochaine étape sera la '+esc(f.etape)+'. Ce document ne constitue pas un avant-contrat et n\'a pas de valeur juridique contraignante sans signature d\'un compromis de vente chez un notaire.</div>'
+    +'<div class="doc-sigs">'
+    +sigBox("Signature de l'acheteur",f.acheteur)
+    +sigBox('Signature du vendeur',f.vendeur)
+    +'</div>'
+    +'</div>'
+    +docFooter()
+    +'</div>';
+}
+
+function openDocFromHtml(d){
+  var docCss='.v-doc-preview{max-width:720px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;font-size:13.5px;line-height:1.6;color:#111}'
+    +'.doc-header{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:14px 14px 0 0;overflow:hidden}'
+    +'.doc-header-top{display:flex;justify-content:space-between;align-items:center;padding:12px 18px 8px;border-bottom:1px solid rgba(255,255,255,.08)}'
+    +'.doc-brand{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:rgba(255,255,255,.5)}'
+    +'.doc-badge{background:#E84533;color:white;font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px}'
+    +'.doc-meta{font-size:11px;color:rgba(255,255,255,.3);text-align:right}'
+    +'.doc-header-band{display:flex;align-items:center;gap:12px;padding:16px 18px}'
+    +'.doc-header-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}'
+    +'.doc-header-title{font-size:19px;font-weight:800;color:white;letter-spacing:-.3px}'
+    +'.doc-header-sub{font-size:11.5px;color:rgba(255,255,255,.45);margin-top:2px}'
+    +'.doc-body{background:white;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 14px 14px;padding:20px}'
+    +'.doc-address{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;margin-bottom:14px}'
+    +'.doc-parties{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}'
+    +'.doc-party{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:10px 12px}'
+    +'.doc-party-label{font-size:9.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}'
+    +'.doc-party-value{font-size:13px;font-weight:700;color:#111}'
+    +'.doc-section{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:12px 14px;margin-bottom:12px}'
+    +'.doc-section-title{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #e2e8f0}'
+    +'.doc-kv{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f0f2f5;font-size:12.5px}'
+    +'.doc-kv:last-child{border-bottom:none}'
+    +'.doc-kv-k{color:#64748b}'
+    +'.doc-kv-v{font-weight:700;color:#111}'
+    +'.doc-kv-v.big{font-size:15px;color:#E84533}'
+    +'.doc-legal{font-size:12.5px;line-height:1.85;color:#334155;background:#fafafa;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px}'
+    +'.doc-sigs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;padding-top:18px;border-top:1.5px solid #f0f0f2}'
+    +'.doc-sig-box{border:1.5px solid #e4e5ea;border-radius:10px;overflow:hidden}'
+    +'.doc-sig-header{background:#f4f5f7;padding:8px 12px;font-size:10px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e4e5ea}'
+    +'.doc-sig-body{padding:12px 14px}'
+    +'.doc-footer{background:#f8f9fb;border-top:1px solid #eeeff2;padding:10px 20px;text-align:center;font-size:10.5px;color:#bbb;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;border-radius:0 0 14px 14px}';
+  var pCss='@media print{'
+    +'@page{size:A4 portrait;margin:8mm}'
+    +'body{padding:12px!important;margin:0!important;background:#f0f2f5!important}'
+    +'.no-print{display:none!important}'
+    +'*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'
+    +'.doc-wrap{border-radius:14px!important;overflow:hidden!important}'
+    +'.v-doc-preview{max-width:none!important;width:100%!important}'
+    +'}';
+  var win=window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+d.title+'</title>'
+    +'<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">'
+    +'<style>'+docCss+'body{background:#f0f2f5;padding:24px;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif}.doc-wrap{max-width:720px;margin:0 auto;box-shadow:0 6px 32px rgba(0,0,0,.13);border-radius:16px;overflow:hidden}'+pCss+'</style>'
+    +'</head><body>'
+    +'<div class="no-print" style="max-width:720px;margin:0 auto 14px;display:flex;gap:10px;align-items:center;background:white;padding:12px 16px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.07)">'
+    +'<button onclick="window.print()" style="display:flex;align-items:center;gap:7px;padding:10px 20px;background:#E84533;color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit"><i class="ti ti-download"></i> Télécharger en PDF</button>'
+    +'<button onclick="window.close()" style="padding:10px 14px;background:#f5f5f5;color:#555;border:1.5px solid #e5e5e5;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit">Fermer</button>'
+    +'<span style="font-size:11px;color:#999;margin-left:4px">Sélectionnez <strong style="color:#555">Enregistrer en PDF</strong></span>'
+    +'</div>'
+    +'<div class="doc-wrap">'+d.html+'</div>'
+    +'</body></html>');
+  win.document.close();
+}
+
+function openDoc(idx){
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
+  var d=docs[idx];if(!d)return;
+  openDocFromHtml(d);
+}
+
+function deleteDoc(idx){
+  if(!confirm('Supprimer ce document ? Cette action est irréversible.'))return;
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
+  var card=document.getElementById('card'+idx);
+  if(card){card.style.opacity='0';card.style.transition='opacity .3s';}
+  setTimeout(function(){
+    docs.splice(idx,1);
+    localStorage.setItem(docsKey(),JSON.stringify(docs));
+    loadDocs();
+  },300);
+}
+
+SA.init().then(loadDocs).catch(loadDocs);
+</script>
+</body>
+</html>

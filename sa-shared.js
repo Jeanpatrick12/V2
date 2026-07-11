@@ -229,6 +229,7 @@
 
   function getDocs() {
     var uid = _cache.user && _cache.user.id;
+    if (!uid) return [];
     return _getLocalDocs(uid);
   }
 
@@ -652,9 +653,10 @@
     const { error } = await _sb.from("conversations").update({ contact_shared: !!shared }).eq("id", convoId);
     if (error) throw error;
     convo.contactShared = !!shared;
+    const myName = _cache.user ? ((_cache.user.prenom || '') + ' ' + (_cache.user.nom || '')).trim() || "L'annonceur" : "L'annonceur";
     const systemText = shared
-      ? (convo.contactName || "L'annonceur") + " a choisi de partager ses coordonnées avec vous."
-      : (convo.contactName || "L'annonceur") + " a retiré le partage de ses coordonnées.";
+      ? myName + " a choisi de partager ses coordonnées avec vous."
+      : myName + " a retiré le partage de ses coordonnées.";
     await _sb.from("messages").insert({ conversation_id: convoId, from_role: "system", text: systemText });
     convo.messages.push({ from: "system", text: systemText, createdAt: Date.now() });
     return convo;
@@ -741,6 +743,7 @@
   }
 
   async function signup(data) {
+    if (!_sb) _sb = supabase.createClient(SA_CONFIG.url, SA_CONFIG.anonKey);
     const { data: authData, error } = await _sb.auth.signUp({
       email: data.email,
       password: data.password,
@@ -767,10 +770,11 @@
   }
 
   async function forgotPassword(email) {
-    await init();
-    await _sb.auth.resetPasswordForEmail(email, {
+    if (!_sb) _sb = supabase.createClient(SA_CONFIG.url, SA_CONFIG.anonKey);
+    const { error } = await _sb.auth.resetPasswordForEmail(email, {
       redirectTo: 'https://sansagents.fr/reset-password'
     });
+    if (error) throw error;
   }
 
   async function updatePassword(newPassword) {
