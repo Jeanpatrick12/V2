@@ -293,9 +293,13 @@ function renderThread(id) {
           ${c.buyerConfirmedSale
             ? '<span class="sa-confirm-pill done"><i class="ti ti-circle-check"></i> Conclu(e) avec vous</span>'
             : `<button class="sa-confirm-pill" onclick="confirmBuyerSale('${c.id}')"><i class="ti ti-home-check"></i> Vente/location conclue ?</button>`}
-          <button class="sa-share-toggle${c.contactShared ? ' active' : ''}" onclick="toggleShare('${c.id}')">
-            <i class="ti ${c.contactShared ? 'ti-lock-open' : 'ti-lock'}"></i> ${c.contactShared ? 'Coordonnées partagées' : 'Partager mes coordonnées'}
-          </button>
+          ${SA.getUser()?.id === c.seller_id
+            ? `<button class="sa-share-toggle${c.contactShared ? ' active' : ''}" onclick="toggleShare('${c.id}')">
+                <i class="ti ${c.contactShared ? 'ti-lock-open' : 'ti-lock'}"></i> ${c.contactShared ? 'Coordonnées partagées' : 'Partager mes coordonnées'}
+               </button>`
+            : c.contactShared
+              ? `<span class="sa-share-toggle active" style="cursor:default"><i class="ti ti-lock-open"></i> Le vendeur a partagé ses coordonnées</span>`
+              : ''}
           <button class="sa-icon-btn-labeled" onclick="window.open('aide-signaler?listing=${encodeURIComponent(c.listingId)}', '_blank')" title="Signaler cette personne (agence, démarchage…)">
             <i class="ti ti-flag"></i> Signaler
           </button>

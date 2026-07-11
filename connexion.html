@@ -179,6 +179,14 @@ function switchTab(tab) {
   document.getElementById('formSignup').classList.toggle('active', tab === 'signup');
   document.getElementById('formForgot').classList.remove('active');
   document.getElementById('formConfirm').classList.remove('active');
+  if (tab === 'signup') {
+    const b = document.querySelector('#formSignup .sa-submit-btn');
+    if (b) { b.disabled = false; b.innerHTML = '<i class="ti ti-user-plus"></i> Créer mon compte'; }
+  }
+  if (tab === 'login') {
+    const b = document.querySelector('#formLogin .sa-submit-btn');
+    if (b) { b.disabled = false; b.innerHTML = '<i class="ti ti-login-2"></i> Se connecter'; }
+  }
 }
 
 function showForgot() {

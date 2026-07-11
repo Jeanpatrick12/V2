@@ -156,7 +156,7 @@
       buyerConfirmedAt:   row.buyer_confirmed_at,
       buyer_id:           row.buyer_id,
       seller_id:          row.seller_id,
-      lastMessageAt:      row.last_message_at,
+      lastMessageAt:      row.last_message_at ? new Date(row.last_message_at).getTime() : null,
       lastReadAt:         row.last_read_at,
       createdAt:          row.created_at ? new Date(row.created_at).getTime() : Date.now(),
       messages:           Array.isArray(row.messages) ? row.messages.map(_normMsg).sort((a,b) => a.createdAt - b.createdAt) : []
@@ -767,6 +767,7 @@
   }
 
   async function forgotPassword(email) {
+    await init();
     await _sb.auth.resetPasswordForEmail(email, {
       redirectTo: 'https://sansagents.fr/reset-password'
     });
