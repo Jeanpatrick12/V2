@@ -304,19 +304,24 @@ function renderThread(id) {
       <span class="sa-msg-thread-header-listing" onclick="window.location.href='annonce?id=${encodeURIComponent(c.listingId)}'"><i class="ti ti-home" style="font-size:11px"></i> ${SA.escapeHtml(c.listingTitle)}</span>
     </div>
     <div class="sa-msg-thread-body" id="threadBody">
-      ${c.messages.slice().reverse().map(m => m.from === 'system' ? `
-        <div class="sa-msg-system"><i class="ti ti-lock-open"></i> ${SA.escapeHtml(m.text)}</div>` : `
-        <div class="sa-msg-bubble ${m.senderId ? (m.senderId === SA.getUser()?.id ? 'me' : 'other') : (m.from === 'me' ? 'me' : 'other')}">
-          ${SA.escapeHtml(m.text)}
-          <span class="sa-msg-bubble-time">${fmtTime(m.createdAt)}</span>
-        </div>`).join('')}
+      ${(function() {
+        const myId = SA.getUser()?.id;
+        const isBuyer = c.buyer_id === myId;
+        return c.messages.map(m => {
+          if (m.from === 'system') return `<div class="sa-msg-system"><i class="ti ti-lock-open"></i> ${SA.escapeHtml(m.text)}</div>`;
+          const side = m.senderId
+            ? (m.senderId === myId ? 'me' : 'other')
+            : (isBuyer ? (m.from === 'me' ? 'me' : 'other') : (m.from === 'me' ? 'other' : 'me'));
+          return `<div class="sa-msg-bubble ${side}">${SA.escapeHtml(m.text)}<span class="sa-msg-bubble-time">${fmtTime(m.createdAt)}</span></div>`;
+        }).join('');
+      })()}
     </div>
     <div class="sa-msg-thread-input">
       <textarea id="threadInput" placeholder="Écrivez votre message…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendThreadMessage();}"></textarea>
       <button onclick="sendThreadMessage()"><i class="ti ti-send"></i> Envoyer</button>
     </div>`;
   const tb = document.getElementById('threadBody');
-  tb.scrollTop = 0;
+  tb.scrollTop = tb.scrollHeight;
 }
 
 async function toggleShare(convoId) {
@@ -357,7 +362,7 @@ SA.init().then(function(){
   setTimeout(function(){
     var dropdown=document.querySelector('.sa-account-dropdown');
     if(!dropdown||!SA.getUser())return;
-    var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+    var uid2=SA.getUser()&&SA.getUser().id;var docs=[];try{docs=JSON.parse(localStorage.getItem(uid2?'sa_user_docs_'+uid2:'sa_user_docs_guest')||'[]');}catch(e){}
     var badge=docs.length?'<span style="background:#E84533;color:white;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">'+docs.length+'</span>':'';
     var existing=Array.from(dropdown.querySelectorAll('button')).find(function(b){return b.innerHTML.indexOf('ti-files')!==-1;});
     if(existing){existing.innerHTML='<i class="ti ti-files"></i> Mes documents'+badge;}

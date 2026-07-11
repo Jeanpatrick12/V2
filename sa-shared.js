@@ -248,6 +248,7 @@
     _cache.favorites     = (favRes.data || []).map(f => f.item_id);
     _cache.favoritesData = (favRes.data || []);
     _cache.conversations = (convoRes.data || []).map(_normConvo);
+    _cache.searches      = _readLocalJSON("sa_searches_v1_" + userId, []);
     // Pour les conversations où je suis vendeur, récupérer le prénom/nom de l'acheteur
     const sellerConvos = _cache.conversations.filter(c => c.seller_id === userId && c.buyer_id);
     if (sellerConvos.length > 0) {
@@ -555,17 +556,18 @@
     toast(nowFav ? "Ajouté à vos favoris" : "Retiré de vos favoris", nowFav ? "ti-heart-filled" : "ti-heart");
   }
 
-  /* ── Recherches enregistrées (restent en localStorage) ───────────── */
+  /* ── Recherches enregistrées (par utilisateur) ───────────────────── */
+  function _searchesKey() { return _cache.user ? "sa_searches_v1_" + _cache.user.id : "sa_searches_v1_guest"; }
   function getSavedSearches() { return _cache.searches.slice(); }
   function addSavedSearch(criteria) {
     const search = { id: uid(), label: _labelForSearch(criteria), criteria: criteria, createdAt: Date.now() };
     _cache.searches.unshift(search);
-    _writeLocalJSON("sa_searches_v1", _cache.searches);
+    _writeLocalJSON(_searchesKey(), _cache.searches);
     return search;
   }
   function removeSavedSearch(id) {
     _cache.searches = _cache.searches.filter(s => s.id !== id);
-    _writeLocalJSON("sa_searches_v1", _cache.searches);
+    _writeLocalJSON(_searchesKey(), _cache.searches);
   }
   function _labelForSearch(c) {
     const bits = [];
@@ -626,7 +628,7 @@
       from_role:       "me",
       sender_id:       _cache.user.id,
       text:            text
-    }).select("id,from_role,text,created_at").single();
+    }).select("id,from_role,sender_id,text,created_at").single();
     if (me) {
       if (me.message && me.message.includes("CONTACT_INFO_BLOCKED")) {
         return { blocked: true, reason: "Pour la sécurité de tous, les coordonnées de contact ne peuvent pas être partagées directement dans un message." };
@@ -786,6 +788,7 @@
     _cache.favorites     = [];
     _cache.favoritesData = [];
     _cache.conversations = [];
+    _cache.searches      = [];
     mountNavAuth();
   }
 

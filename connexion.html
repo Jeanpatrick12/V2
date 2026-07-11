@@ -137,7 +137,7 @@ input:focus{border-color:#E84533}
       <div class="sa-error" id="suError">Les mots de passe ne correspondent pas.</div>
       <div class="sa-cgu-row">
         <input type="checkbox" id="suCgu" required>
-        <label for="suCgu">J'accepte les <a href="#" style="color:#E84533">Conditions Générales d'Utilisation</a> de SansAgents.</label>
+        <label for="suCgu">J'accepte les <a href="cgu" target="_blank" style="color:#E84533">Conditions Générales d'Utilisation</a> de SansAgents.</label>
       </div>
       <button class="sa-submit-btn" type="submit"><i class="ti ti-user-plus"></i> Créer mon compte</button>
     </form>
@@ -166,6 +166,7 @@ input:focus{border-color:#E84533}
 </div>
 
 <script>
+SA.init().catch(() => {});
 const params = new URLSearchParams(window.location.search);
 const redirect = params.get('redirect') || './';
 
@@ -196,15 +197,18 @@ async function doForgot() {
   const btn = document.getElementById('forgotBtn');
   btn.disabled = true;
   btn.innerHTML = '<i class="ti ti-loader-2"></i> Envoi…';
+  const reset = () => { btn.disabled = false; btn.innerHTML = '<i class="ti ti-mail"></i> Envoyer le lien'; };
   try {
-    await SA.init();
-    await SA.forgotPassword(email);
+    await Promise.race([
+      SA.forgotPassword(email),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 10000))
+    ]);
+    btn.innerHTML = '<i class="ti ti-circle-check"></i> Email envoyé !';
     SA.toast('Lien envoyé ! Vérifiez votre boîte email.', 'ti-mail');
-    setTimeout(() => switchTab('login'), 1500);
+    setTimeout(() => switchTab('login'), 2000);
   } catch(e) {
-    SA.toast('Erreur lors de l\'envoi.', 'ti-alert-circle');
-    btn.disabled = false;
-    btn.innerHTML = '<i class="ti ti-mail"></i> Envoyer le lien';
+    SA.toast('Erreur lors de l\'envoi. Réessayez.', 'ti-alert-circle');
+    reset();
   }
 }
 
