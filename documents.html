@@ -122,9 +122,11 @@ var ICONS={visite:'ti-door-enter',offre:'ti-file-euro',acceptation:'ti-circle-ch
 var COLORS={visite:'#ff7a68',offre:'#E84533',acceptation:'#E84533',contre:'#d97706',refus:'#dc2626',cles:'#ca8a04',plan:'#E84533'};
 var BKGS={visite:'#fff5f4',offre:'#fff5f4',acceptation:'#fff5f4',contre:'#fff7ed',refus:'#fef2f2',cles:'#fefce8',plan:'#fff5f4'};
 
+function docsKey(){var uid=SA.getUser()&&SA.getUser().id;return uid?'sa_user_docs_'+uid:'sa_user_docs_guest';}
+
 function loadDocs(){
   var docs=[];
-  try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
   var grid=document.getElementById('docGrid');
   var empty=document.getElementById('emptyState');
   if(!docs.length){grid.style.display='none';empty.style.display='';return;}
@@ -153,7 +155,7 @@ function getStyles(){
 }
 
 function openDoc(idx){
-  var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
   var d=docs[idx];if(!d)return;
   var docCss='.doc-header{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:18px 24px 16px;border-radius:14px 14px 0 0;overflow:hidden}'
     +'.doc-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}'
@@ -246,7 +248,7 @@ function printDoc(idx){
 }
 
 function editDoc(idx){
-  var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
   var d=docs[idx];if(!d)return;
   if(d.fields&&d.type&&d.type!=='prix'){
     var data=Object.assign({},d.fields,{t:d.type});
@@ -259,7 +261,7 @@ function editDoc(idx){
 
 function deleteDoc(idx){
   if(!confirm('Supprimer ce document ? Cette action est irréversible.'))return;
-  var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
   var d=docs[idx];if(!d)return;
   var card=document.getElementById('card'+idx);
   if(card){card.style.opacity='0';card.style.transition='opacity .3s';}
