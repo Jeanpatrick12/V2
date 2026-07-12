@@ -372,11 +372,20 @@ function loadDocs(){
       +'<div class="doc-card-actions">'
       +'<button class="doc-btn-open" onclick="openDoc('+i+')"><i class="ti ti-eye"></i> Ouvrir</button>'
       +'<button class="doc-btn-print" onclick="openDoc('+i+')" title="Télécharger en PDF"><i class="ti ti-printer"></i> PDF</button>'
+      +'<button class="doc-btn-print" onclick="editDoc('+i+')" title="Modifier le document" style="color:#7c3aed;border-color:#e9d5ff;background:#faf5ff"><i class="ti ti-pencil"></i></button>'
       +'<button class="doc-btn-del" onclick="deleteDoc('+i+')" title="Supprimer"><i class="ti ti-trash"></i></button>'
       +'</div>'
       +'</div>';
   }).join('');
 }
+
+var FIELD_IDS={
+  visite:['v-adresse','v-date','v-heure','v-acheteur','v-vendeur','v-type','v-surface','v-prix','v-obs'],
+  offre:['o-adresse','o-acheteur','o-vendeur','o-prix','o-prix-affiche','o-date','o-delai','o-financement','o-conditions'],
+  contre:['c-adresse','c-acheteur','c-vendeur','c-prix-initial','c-prix-vendeur','c-prix-new','c-date','c-message'],
+  acceptation:['a-adresse','a-acheteur','a-vendeur','a-prix','a-date','a-etape','a-message']
+};
+var editingIdx=null;
 
 function openModal(type){
   var today=new Date().toISOString().split('T')[0];
@@ -385,7 +394,19 @@ function openModal(type){
   document.getElementById('modal-'+type).classList.add('open');
 }
 function closeModal(type,e){if(e.target===e.currentTarget)closeModalId(type);}
-function closeModalId(type){document.getElementById('modal-'+type).classList.remove('open');}
+function closeModalId(type){document.getElementById('modal-'+type).classList.remove('open');editingIdx=null;}
+
+function editDoc(idx){
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
+  var d=docs[idx];if(!d)return;
+  if(!d.fields){SA.toast('Ce document ne peut pas être modifié — regénérez-le.','ti-info-circle');return;}
+  (FIELD_IDS[d.type]||[]).forEach(function(id){
+    var el=document.getElementById(id);
+    if(el&&d.fields[id]!==undefined)el.value=d.fields[id];
+  });
+  editingIdx=idx;
+  openModal(d.type);
+}
 
 function fmtDate(s){if(!s)return'—';var d=new Date(s);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
 function now(){return new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
@@ -415,9 +436,11 @@ function generateDoc(type){
     html=buildAcceptation({adresse,acheteur,vendeur,prix,date:fmtDate(date),etape,message});
   }
 
-  var doc={type,title,html,date:now()};
+  var fields={};
+  (FIELD_IDS[type]||[]).forEach(function(id){fields[id]=val(id);});
+  var doc={type:type,title:title,html:html,fields:fields,date:now()};
   var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
-  docs.unshift(doc);
+  if(editingIdx!==null&&docs[editingIdx]){docs[editingIdx]=doc;}else{docs.unshift(doc);}
   localStorage.setItem(docsKey(),JSON.stringify(docs));
   closeModalId(type);
   loadDocs();
