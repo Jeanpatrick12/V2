@@ -972,8 +972,7 @@
           '<div class="sa-account-dropdown-email"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.email || "") + "</div>" +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'profil\'"><i class="ti ti-user-circle"></i> Mon profil</button>' +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getUserListings().length + '</span>' : '') + '</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (getDocs().length > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getDocs().length + '</span>' : '') + '</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'acheteur\'"><i class="ti ti-home-search"></i> Documents acheteur' + (function(){ var n = 0; try { n = JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + n + '</span>' : ''; })() + '</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length; try { n += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + n + '</span>' : ''; })() + '</button>' +
           '<button class="sa-account-dropdown-logout" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>';
       } else {
         btn.onclick = function() {
@@ -1050,7 +1049,6 @@
         '<button class="sa-mobile-menu-item" onclick="window.location.href=\'recherches\'"><i class="ti ti-search"></i> Mes recherches</button>' +
         '<button class="sa-mobile-menu-item" onclick="window.location.href=\'mes-annonces\'"><i class="ti ti-home-edit"></i> Mes annonces</button>' +
         '<button class="sa-mobile-menu-item" onclick="window.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'acheteur\'"><i class="ti ti-home-search"></i> Documents acheteur</button>' +
         '<div class="sa-mobile-menu-divider"></div>' +
         '<button class="sa-mobile-menu-item" onclick="window.location.href=\'contact\'"><i class="ti ti-mail"></i> Nous contacter</button>' +
         '<div class="sa-mobile-menu-divider"></div>' +
