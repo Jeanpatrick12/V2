@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -155,7 +155,7 @@ SA.init().then(function(){
 
 function loadMesDocsMenu(){
   var docs=[];
-  try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  try{docs=JSON.parse(localStorage.getItem(((SA.getUser()&&SA.getUser().id)?'sa_user_docs_'+SA.getUser().id:'sa_user_docs_guest'))||'[]');}catch(e){}
   if(!docs.length) return;
   document.getElementById('mesDocsMobileGroup').style.display='block';
   document.getElementById('mesDocsCount').textContent = docs.length + ' document' + (docs.length>1?'s':'') + ' sauvegardé' + (docs.length>1?'s':'');

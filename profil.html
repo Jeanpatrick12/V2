@@ -226,7 +226,7 @@ SA.init().then(function(){
     var dropdown=document.querySelector('.sa-account-dropdown');
     if(!dropdown||!SA.getUser())return;
     var docs=[];
-    try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+    try{docs=JSON.parse(localStorage.getItem(((SA.getUser()&&SA.getUser().id)?'sa_user_docs_'+SA.getUser().id:'sa_user_docs_guest'))||'[]');}catch(e){}
     var badge=docs.length?'<span style="background:#E84533;color:white;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;margin-left:6px">'+docs.length+'</span>':'';
     var btn=document.createElement('button');
     btn.className='sa-account-dropdown-logout';
@@ -241,7 +241,7 @@ SA.init().then(function(){
 
 function openMesDocsOverlay(){
   var docs=[];
-  try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  try{docs=JSON.parse(localStorage.getItem(((SA.getUser()&&SA.getUser().id)?'sa_user_docs_'+SA.getUser().id:'sa_user_docs_guest'))||'[]');}catch(e){}
   var icons={visite:'ti-door-enter',offre:'ti-file-euro',acceptation:'ti-circle-check',contre:'ti-arrows-exchange',refus:'ti-x',cles:'ti-key'};
   var colors={visite:'#ff7a68',offre:'#3b82f6',acceptation:'#16a34a',contre:'#d97706',refus:'#dc2626',cles:'#ca8a04'};
   var overlay=document.createElement('div');
@@ -274,7 +274,7 @@ function openMesDocsOverlay(){
 
 function viewDocOverlay(idx){
   var docs=[];
-  try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  try{docs=JSON.parse(localStorage.getItem(((SA.getUser()&&SA.getUser().id)?'sa_user_docs_'+SA.getUser().id:'sa_user_docs_guest'))||'[]');}catch(e){}
   var doc=docs[idx];
   if(!doc)return;
   var styles=Array.from(document.querySelectorAll('style')).map(function(s){return s.outerHTML;}).join('');
@@ -288,11 +288,11 @@ function viewDocOverlay(idx){
 
 function deleteDocOverlay(idx){
   var docs=[];
-  try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  try{docs=JSON.parse(localStorage.getItem(((SA.getUser()&&SA.getUser().id)?'sa_user_docs_'+SA.getUser().id:'sa_user_docs_guest'))||'[]');}catch(e){}
   var row=document.getElementById('docRow'+idx);
   if(row){row.style.opacity='0';setTimeout(function(){
     docs.splice(idx,1);
-    localStorage.setItem('sa_user_docs',JSON.stringify(docs));
+    localStorage.setItem(((SA.getUser()&&SA.getUser().id)?'sa_user_docs_'+SA.getUser().id:'sa_user_docs_guest'),JSON.stringify(docs));
     document.getElementById('mesDocsOverlay').remove();
     openMesDocsOverlay();
   },300);}

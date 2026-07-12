@@ -271,8 +271,7 @@ function deleteDoc(idx){
   },300);
 }
 
-loadDocs();
-SA.init();
+SA.init().then(loadDocs).catch(loadDocs);
 </script>
 </body>
 </html>

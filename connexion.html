@@ -272,8 +272,8 @@ async function doSignup() {
   err.classList.remove('show');
   const btn = document.querySelector('#formSignup .sa-submit-btn');
   btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2"></i> Création…';
   try {
-    await SA.init();
     const user = await SA.signup({ prenom, nom, email, password: pw, photo: suPhotoData });
     afterAuth(user.prenom);
   } catch(e) {
@@ -287,6 +287,7 @@ async function doSignup() {
     } else {
       SA.toast(e.message || 'Erreur lors de la création du compte.', 'ti-alert-circle');
       btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-user-plus"></i> Créer mon compte';
     }
   }
 }

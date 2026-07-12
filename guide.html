@@ -1472,7 +1472,7 @@ SA.init().then(function(){
   setTimeout(function(){
     var dropdown=document.querySelector('.sa-account-dropdown');
     if(!dropdown||!SA.getUser())return;
-    var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+    var docs=[];try{docs=JSON.parse(localStorage.getItem(saDocsKey())||'[]');}catch(e){}
     if(!docs.length)return;
     var existing=Array.from(dropdown.querySelectorAll('button')).find(function(b){return b.textContent.indexOf('documents')!==-1||b.innerHTML.indexOf('ti-files')!==-1;});
     if(existing){existing.innerHTML='<i class="ti ti-files"></i> Mes documents<span style="background:#E84533;color:white;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">'+docs.length+'</span>';}
@@ -1742,9 +1742,10 @@ function savePrixDoc(btn){
 }
 
 // ── Mes Documents overlay (depuis le dropdown nav) ──
+function saDocsKey(){var u=SA.getUser();return u&&u.id?'sa_user_docs_'+u.id:'sa_user_docs_guest';}
 function openMesDocsOverlay(){
   document.querySelectorAll('.sa-account-dropdown.show').forEach(function(d){d.classList.remove('show');});
-  var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(saDocsKey())||'[]');}catch(e){}
   var icons={visite:'ti-door-enter',offre:'ti-file-euro',acceptation:'ti-circle-check',contre:'ti-arrows-exchange',refus:'ti-x',cles:'ti-key'};
   var colors={visite:'#ff7a68',offre:'#3b82f6',acceptation:'#16a34a',contre:'#d97706',refus:'#dc2626',cles:'#ca8a04'};
   var docCss=document.querySelector('style').textContent;
@@ -1777,7 +1778,7 @@ function openMesDocsOverlay(){
 }
 
 function viewDocInline(idx){
-  var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(saDocsKey())||'[]');}catch(e){}
   if(!docs[idx])return;
   var d=docs[idx];
   var allDocCss='';
@@ -1821,9 +1822,9 @@ function viewDocInline(idx){
 }
 
 function deleteSavedDocOverlay(idx,btn){
-  var docs=[];try{docs=JSON.parse(localStorage.getItem('sa_user_docs')||'[]');}catch(e){}
+  var docs=[];try{docs=JSON.parse(localStorage.getItem(saDocsKey())||'[]');}catch(e){}
   docs.splice(idx,1);
-  localStorage.setItem('sa_user_docs',JSON.stringify(docs));
+  localStorage.setItem(saDocsKey(),JSON.stringify(docs));
   var row=btn.closest('div[style*="border:1.5px"]');
   if(row){row.style.opacity='0';row.style.transition='opacity .3s';setTimeout(function(){row.remove();},300);}
 }

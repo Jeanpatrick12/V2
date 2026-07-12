@@ -76,26 +76,21 @@ Deno.serve(async (req) => {
         to: [{ email: sellerEmail }],
         replyTo: { email: 'contact@sansagents.fr' },
         subject: `Nouveau message — ${listingLabel}`,
-        htmlContent: `<div style="background:#f0f0f0;padding:32px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+        htmlContent: `<div style="background:#f0f0f0;padding:28px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
 <div style="max-width:540px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08)">
-  <div style="background:#E84533;padding:24px 28px;display:flex;align-items:center;gap:14px">
-    <div style="width:42px;height:42px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-      <img src="https://sansagents.fr/favicon.svg" width="26" height="26" alt="SansAgents" style="display:block">
-    </div>
-    <div>
-      <div style="color:white;font-size:18px;font-weight:700;margin:0">Nouveau message reçu</div>
-      <div style="color:rgba(255,255,255,0.75);font-size:13px;margin-top:2px">SansAgents · Immobilier sans agence</div>
-    </div>
+  <div style="background:#E84533;padding:24px 28px">
+    <div style="color:white;font-size:19px;font-weight:700;margin:0">Nouveau message reçu</div>
+    <div style="color:rgba(255,255,255,0.75);font-size:13px;margin-top:4px">SansAgents · Immobilier sans agence</div>
   </div>
-  <div style="padding:28px 28px 24px">
+  <div style="padding:26px 24px 22px">
     <p style="color:#555;font-size:14px;line-height:1.65;margin:0 0 20px">Quelqu'un vous a envoyé un message concernant votre annonce <strong style="color:#111">${listingLabel}</strong>.</p>
     <div style="background:#f7f7f7;border-radius:12px;padding:18px 20px;border-left:4px solid #E84533;margin-bottom:24px">
       <p style="color:#999;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px">Message</p>
       <p style="color:#111;font-size:14px;line-height:1.65;margin:0;white-space:pre-wrap">${messageText}</p>
     </div>
-    <a href="https://sansagents.fr/messages" style="display:inline-block;background:#E84533;color:white;text-decoration:none;padding:13px 26px;border-radius:10px;font-weight:700;font-size:14px">Répondre sur SansAgents →</a>
+    <a href="https://sansagents.fr/messages" style="display:block;text-align:center;background:#E84533;color:white;text-decoration:none;padding:14px 20px;border-radius:10px;font-weight:700;font-size:14px">Répondre sur SansAgents</a>
   </div>
-  <div style="border-top:1px solid #efefef;padding:16px 28px;background:#fafafa">
+  <div style="border-top:1px solid #efefef;padding:16px 24px;background:#fafafa">
     <p style="color:#bbb;font-size:11px;margin:0">SansAgents · Immobilier direct entre particuliers · <a href="https://sansagents.fr" style="color:#bbb">sansagents.fr</a></p>
   </div>
 </div>

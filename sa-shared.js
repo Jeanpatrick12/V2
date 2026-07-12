@@ -187,7 +187,7 @@
   }
 
   /* ── Documents locaux ──────────────────────────────────────────── */
-  function _docsKey(uid) { return uid ? "sa_user_docs_" + uid : "sa_user_docs"; }
+  function _docsKey(uid) { return uid ? "sa_user_docs_" + uid : "sa_user_docs_guest"; }
   function _getLocalDocs(uid) {
     try { return JSON.parse(localStorage.getItem(_docsKey(uid)) || "[]"); } catch(e) { return []; }
   }
@@ -743,38 +743,50 @@
   }
 
   async function signup(data) {
-    if (!_sb) _sb = supabase.createClient(SA_CONFIG.url, SA_CONFIG.anonKey);
-    const { data: authData, error } = await _sb.auth.signUp({
-      email: data.email,
-      password: data.password,
-      options: { data: { prenom: data.prenom, nom: data.nom || "" } }
+    // Appel REST direct (pas de client Supabase → jamais de blocage)
+    const res = await fetch(SA_CONFIG.url + "/auth/v1/signup", {
+      method: "POST",
+      headers: { "apikey": SA_CONFIG.anonKey, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+        data: { prenom: data.prenom || "", nom: data.nom || "" }
+      })
     });
-    if (error) throw error;
-    // Si la confirmation email est activée, session = null → l'utilisateur doit confirmer son email
-    if (!authData.session) {
+    const j = await res.json().catch(function() { return {}; });
+    if (!res.ok) {
+      let msg = j.msg || j.error_description || j.message || "Erreur lors de la création du compte.";
+      if (/already/i.test(msg)) msg = "Un compte existe déjà avec cet email.";
+      if (/at least|password/i.test(msg) && /6|characters/i.test(msg)) msg = "Le mot de passe doit contenir au moins 8 caractères.";
+      throw new Error(msg);
+    }
+    // Pas de session renvoyée → confirmation email requise
+    if (!j.access_token) {
       const err = new Error("Compte créé ! Vérifiez votre boîte email pour confirmer votre adresse.");
       err.code = "email-confirmation-required";
       throw err;
     }
-    // Update profile with prenom/nom/photo
-    const updates = { prenom: data.prenom || "", nom: data.nom || "" };
-    if (data.photo && authData.user) {
-      const url = await _uploadPhoto(data.photo);
-      if (url) updates.photo = url;
-    }
-    await _sb.from("profiles").update(updates).eq("id", authData.user.id);
-    const { data: profile } = await _sb.from("profiles").select("*").eq("id", authData.user.id).single();
-    _cache.user = profile;
-    mountNavAuth();
-    return _cache.user;
+    // Session immédiate (confirmation désactivée) → connexion classique
+    await init().catch(function() {});
+    return await login(data.email, data.password);
   }
 
   async function forgotPassword(email) {
-    if (!_sb) _sb = supabase.createClient(SA_CONFIG.url, SA_CONFIG.anonKey);
-    const { error } = await _sb.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://sansagents.fr/reset-password'
+    // Appel REST direct (pas de client Supabase → jamais de blocage)
+    const res = await fetch(SA_CONFIG.url + "/auth/v1/recover?redirect_to=" + encodeURIComponent("https://sansagents.fr/reset-password"), {
+      method: "POST",
+      headers: { "apikey": SA_CONFIG.anonKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email })
     });
-    if (error) throw error;
+    if (!res.ok) {
+      let msg = "Erreur lors de l'envoi de l'email.";
+      try {
+        const j = await res.json();
+        msg = j.msg || j.error_description || j.message || msg;
+        if (/rate limit|security purposes/i.test(msg)) msg = "Trop de demandes — patientez une minute puis réessayez.";
+      } catch(e) {}
+      throw new Error(msg);
+    }
   }
 
   async function updatePassword(newPassword) {
