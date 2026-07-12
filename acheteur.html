@@ -125,7 +125,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div data-nav-account style="display:none"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=3"></script>
+<script src="sa-shared.js?v=4"></script>
 
 <div class="page-header">
   <div class="page-header-inner">
@@ -396,9 +396,25 @@ function openModal(type){
 function closeModal(type,e){if(e.target===e.currentTarget)closeModalId(type);}
 function closeModalId(type){document.getElementById('modal-'+type).classList.remove('open');editingIdx=null;}
 
+function guideData(d){
+  var f=d.fields||{};
+  if(d.type==='visite')return{t:'visite',a:f['v-adresse'],v:f['v-vendeur'],vi:f['v-acheteur'],d:f['v-date'],p:f['v-prix']};
+  if(d.type==='offre')return{t:'offre',a:f['o-adresse'],ac:f['o-acheteur'],v:f['o-vendeur'],m:f['o-prix'],vd:f['o-delai'],d:f['o-date']};
+  if(d.type==='acceptation')return{t:'acceptation',a:f['a-adresse'],v:f['a-vendeur'],ac:f['a-acheteur'],p:f['a-prix'],d:f['a-date']};
+  if(d.type==='contre')return{t:'contre',a:f['c-adresse'],v:f['c-vendeur'],ac:f['c-acheteur'],pi:f['c-prix-initial'],pc:f['c-prix-new'],d:f['c-date']};
+  return null;
+}
+
 function editDoc(idx){
   var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
   var d=docs[idx];if(!d)return;
+  // Ouvre le guide avec le document affiché, pré-rempli, signable et partageable
+  var data=d.fields?guideData(d):null;
+  if(data){
+    var enc;try{enc=btoa(unescape(encodeURIComponent(JSON.stringify(data))));}catch(e){enc=null;}
+    if(enc){window.open('guide?sign='+enc,'_blank');return;}
+  }
+  // Repli : formulaire pré-rempli sur place
   if(!d.fields){SA.toast('Ce document ne peut pas être modifié — regénérez-le.','ti-info-circle');return;}
   (FIELD_IDS[d.type]||[]).forEach(function(id){
     var el=document.getElementById(id);

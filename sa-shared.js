@@ -187,6 +187,17 @@
   }
 
   /* ── Documents locaux ──────────────────────────────────────────── */
+  // Purge unique : les documents mélangés entre comptes (ancien bug) sont
+  // supprimés du stockage local une fois pour toutes chez chaque visiteur.
+  try {
+    if (!localStorage.getItem("sa_docs_purge_v1")) {
+      Object.keys(localStorage).forEach(function(k) {
+        if (k.indexOf("sa_user_docs") === 0) localStorage.removeItem(k);
+      });
+      localStorage.setItem("sa_docs_purge_v1", "1");
+    }
+  } catch(e) {}
+
   function _docsKey(uid) { return uid ? "sa_user_docs_" + uid : "sa_user_docs_guest"; }
   function _getLocalDocs(uid) {
     try { return JSON.parse(localStorage.getItem(_docsKey(uid)) || "[]"); } catch(e) { return []; }
