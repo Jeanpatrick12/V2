@@ -75,7 +75,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .empty-state i{font-size:52px;display:block;margin-bottom:16px;color:#ddd}
 .empty-state h2{font-size:18px;font-weight:700;color:#555;margin-bottom:8px}
 .empty-state p{font-size:14px;line-height:1.6;max-width:360px;margin:0 auto 24px}
-.empty-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:#E84533;color:white;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;border:none;font-family:inherit}
+.empty-cta{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:white;color:#0f172a;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13.5px;font-weight:700;text-decoration:none;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.empty-cta:hover{border-color:#E84533;color:#E84533;box-shadow:0 4px 14px rgba(232,69,51,.12)}
+.empty-cta i{color:#E84533;font-size:16px}
 
 @media(max-width:600px){
   .page-header{padding:32px 16px 28px}
@@ -90,7 +92,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div data-nav-account style="display:none"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=4"></script>
+<script src="sa-shared.js?v=5"></script>
 
 <div class="page-header">
   <div class="page-header-inner">
@@ -113,7 +115,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <i class="ti ti-files"></i>
     <h2>Aucun document sauvegardé</h2>
     <p>Générez et sauvegardez vos documents depuis le guide vendeur — bon de visite, offre d'achat, remise des clés…</p>
-    <a href="./vendre" class="empty-cta"><i class="ti ti-wand"></i> Accéder au guide vendeur</a>
+    <a href="guide" class="empty-cta"><i class="ti ti-book-2"></i> Ouvrir le guide vendeur</a>
   </div>
 </div>
 

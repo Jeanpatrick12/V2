@@ -768,7 +768,10 @@
     if (!res.ok) {
       let msg = j.msg || j.error_description || j.message || "Erreur lors de la création du compte.";
       if (/already/i.test(msg)) msg = "Un compte existe déjà avec cet email.";
-      if (/at least|password/i.test(msg) && /6|characters/i.test(msg)) msg = "Le mot de passe doit contenir au moins 8 caractères.";
+      else if (/rate limit|too many/i.test(msg)) msg = "Trop de demandes — patientez quelques minutes puis réessayez.";
+      else if (/invalid.*email|email.*invalid/i.test(msg)) msg = "Adresse email invalide.";
+      else if (/password/i.test(msg)) msg = "Le mot de passe doit contenir au moins 8 caractères.";
+      else msg = msg.charAt(0).toUpperCase() + msg.slice(1);
       throw new Error(msg);
     }
     // Pas de session renvoyée → confirmation email requise
