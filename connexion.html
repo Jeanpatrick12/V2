@@ -150,15 +150,12 @@ input:focus{border-color:#E84533}
       <div style="width:60px;height:60px;background:#fff0ee;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
         <i class="ti ti-mail-check" style="font-size:28px;color:#E84533"></i>
       </div>
-      <div class="sa-auth-title" style="margin-bottom:8px">Vérifiez votre email</div>
+      <div class="sa-auth-title" style="margin-bottom:8px">Vérifiez votre boîte mail</div>
       <div class="sa-auth-sub" style="margin-bottom:20px">
-        Un lien de confirmation a été envoyé à <strong id="confirmEmailDisplay"></strong>.<br>
-        Cliquez sur le lien pour activer votre compte, puis revenez vous connecter.
+        Nous venons d'envoyer un lien d'activation à <strong id="confirmEmailDisplay"></strong>.<br>
+        Un seul clic sur ce lien et c'est terminé : votre compte sera activé et vous serez connecté automatiquement.
       </div>
-      <button class="sa-submit-btn" style="margin-bottom:12px" onclick="switchTab('login')">
-        <i class="ti ti-login-2"></i> Se connecter
-      </button>
-      <div style="font-size:12px;color:#aaa">Pas reçu ? Vérifiez vos spams ou <button onclick="switchTab('signup')" style="background:none;border:none;color:#E84533;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600">réessayez</button>.</div>
+      <div style="font-size:12px;color:#aaa">Rien reçu après quelques minutes ? Vérifiez vos spams ou <button onclick="restoreTabs();switchTab('signup')" style="background:none;border:none;color:#E84533;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600">réessayez</button>.</div>
     </div>
 
     <div class="sa-auth-note">
@@ -197,6 +194,10 @@ function switchTab(tab) {
     const b = document.querySelector('#formLogin .sa-submit-btn');
     if (b) { b.disabled = false; b.innerHTML = '<i class="ti ti-login-2"></i> Se connecter'; }
   }
+}
+
+function restoreTabs() {
+  document.querySelector('.sa-auth-tabs').style.display = '';
 }
 
 function showForgot() {
@@ -282,8 +283,7 @@ async function doSignup() {
       document.getElementById('confirmEmailDisplay').textContent = email;
       document.getElementById('formSignup').classList.remove('active');
       document.getElementById('formConfirm').classList.add('active');
-      document.getElementById('tabLogin').style.display = 'none';
-      document.getElementById('tabSignup').style.display = 'none';
+      document.querySelector('.sa-auth-tabs').style.display = 'none';
     } else {
       SA.toast(e.message || 'Erreur lors de la création du compte.', 'ti-alert-circle');
       btn.disabled = false;
