@@ -235,7 +235,7 @@ function closeViewer(){
 
 function printViewer(){
   if(!_viewerDoc) return;
-  var html='<!DOCTYPE html><html><head><!--sa_mguard--><script>if(location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script><meta charset="UTF-8"><title>'+_viewerDoc.title+'</title>'
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+_viewerDoc.title+'</title>'
     +'<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">'
     +'<style>'
     +'body{background:#f0f2f5;padding:20px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0}'
@@ -293,7 +293,7 @@ function editViewerDoc(){ if(_viewerDoc) editDoc(_viewerDoc.type); }
 function shareViewer(){
   if(!_viewerDoc) return;
   // Generate a blob URL so the user can copy/share a link
-  var html='<!DOCTYPE html><html><head><!--sa_mguard--><script>if(location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script><meta charset="UTF-8"><title>'+_viewerDoc.title+'</title>'
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+_viewerDoc.title+'</title>'
     +'<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">'
     +'<style>body{background:#f0f2f5;padding:20px;font-family:-apple-system,sans-serif;margin:0}.doc-wrap{max-width:720px;margin:0 auto}'
     +'.vh-doc-preview{background:white;border:1.5px solid #e0e1e6;border-radius:12px;overflow:hidden;font-size:12.5px;line-height:1.75;color:#111}'
