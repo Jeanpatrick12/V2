@@ -464,15 +464,28 @@ body.sa-has-bottom-nav { padding-bottom: 56px !important; }
     bottom: 0 !important;
     width: 100% !important;
     max-width: none !important;
-    max-height: 72vh !important;
+    max-height: 78vh !important;
     overflow-y: auto !important;
-    padding: 18px 16px calc(18px + env(safe-area-inset-bottom)) !important;
-    border-radius: 18px 18px 0 0 !important;
-    border-top: 3px solid #E84533 !important;
+    padding: 14px 16px calc(80px + env(safe-area-inset-bottom)) !important;
+    border-radius: 20px 20px 0 0 !important;
+    border-top: none !important;
     font-size: 12.5px !important;
     box-shadow: 0 -10px 34px rgba(0,0,0,0.2) !important;
     z-index: 700 !important;
   }
+  /* Poignée de glissement en haut de la feuille */
+  .sa-pill-panel::before {
+    content: "";
+    display: block;
+    width: 36px; height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+  /* Fond assombri derrière la feuille (couvre aussi la barre du bas) */
+  .sa-pp-overlay { background: rgba(0,0,0,0.35) !important; z-index: 650 !important; }
+  /* Panneau "Filtres" avancés : une seule colonne */
+  .sa-pp-cols { display: block !important; }
   .sa-pp-w260, .sa-pp-w300, .sa-pp-w560 {
     width: 100% !important;
     max-width: none !important;
