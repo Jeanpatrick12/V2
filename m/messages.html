@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+<head><!--sa_mguard--><script>if(location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Messages — SansAgents</title>
@@ -21,7 +21,7 @@
 <body>
 
 <nav class="m-nav">
-  <div class="m-nav-logo" onclick="window.location='/m/'">
+  <div class="m-nav-logo" onclick="window.location='/'">
     <div class="m-nav-icon"><i class="ti ti-key"></i></div>
     <div class="m-nav-brand">Sans<span>Agents</span></div>
   </div>
@@ -33,7 +33,7 @@
   <i class="ti ti-message-off" style="font-size:40px;color:#ddd;display:block;margin-bottom:14px"></i>
   <h2 style="font-size:18px;font-weight:700;margin-bottom:8px">Connectez-vous</h2>
   <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Vous devez être connecté pour accéder à vos messages.</p>
-  <button class="m-btn m-btn-primary m-btn-full" onclick="window.location='/m/connexion?redirect=/m/messages'">
+  <button class="m-btn m-btn-primary m-btn-full" onclick="window.location='/connexion?redirect=/messages'">
     <i class="ti ti-login"></i> Se connecter
   </button>
 </div>
@@ -43,13 +43,13 @@
 </div>
 
 <nav class="m-bottom-nav sa-bottom-nav">
-  <button class="m-tab" onclick="window.location='/m/'"><i class="ti ti-home-2"></i>Accueil</button>
-  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i>Annonces</button>
-  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+  <button class="m-tab" onclick="window.location='/'"><i class="ti ti-home-2"></i>Accueil</button>
+  <button class="m-tab" onclick="window.location='/annonces'"><i class="ti ti-building-estate"></i>Annonces</button>
+  <button class="m-tab-cta" onclick="window.location='/deposer'">
     <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>Déposer
   </button>
   <button class="m-tab active"><i class="ti ti-message-circle"></i>Messages</button>
-  <button class="m-tab" onclick="window.location='/m/profil'"><i class="ti ti-user"></i>Profil</button>
+  <button class="m-tab" onclick="window.location='/profil'"><i class="ti ti-user"></i>Profil</button>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -86,17 +86,17 @@ SA.init().then(function(){
 <div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 <div class="m-menu" id="sideMenu">
   <div class="m-menu-section">Navigation</div>
-  <button class="m-menu-item" onclick="closeMenu();window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
-  <button class="m-menu-item" onclick="closeMenu();window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
-  <button class="m-menu-item" onclick="closeMenu();window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
-  <button class="m-menu-item" onclick="closeMenu();window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
-  <button class="m-menu-item" onclick="closeMenu();window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/guide'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
   <div class="m-menu-divider"></div>
   <div class="m-menu-section">Mon compte</div>
-  <button class="m-menu-item" onclick="closeMenu();window.location='/m/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
-  <button class="m-menu-item" onclick="closeMenu();window.location='/m/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
-  <button class="m-menu-item" onclick="closeMenu();window.location='/m/messages'"><i class="ti ti-message-circle"></i> Messages</button>
-  <button class="m-menu-item" onclick="closeMenu();window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/documents'"><i class="ti ti-files"></i> Mes documents</button>
   <div class="m-menu-divider"></div>
   <button class="m-menu-item" onclick="closeMenu();window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
   <div class="m-menu-divider"></div>
@@ -106,7 +106,7 @@ SA.init().then(function(){
 <script>
 function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
 function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
-function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/m/profil';else window.location='/m/connexion?redirect='+window.location.pathname;}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/profil';else window.location='/connexion?redirect='+window.location.pathname;}
 function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
 document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
 </script>

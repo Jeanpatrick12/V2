@@ -1,10 +1,630 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+<head><!--sa_mguard--><script>if(location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Annonces — SansAgents</title>
-<script>location.replace('/annonces'+location.search);</script>
-<meta http-equiv="refresh" content="0;url=/annonces">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+.m-an-header { background: linear-gradient(135deg,#0f1923,#1a2c3d); padding: 28px var(--pad) 24px; }
+.m-an-header h1 { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.3px; margin-bottom: 8px; line-height: 1.3; }
+.m-an-header p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; margin-bottom: 18px; }
+
+.m-panel-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.35); z-index: 300;
+}
+.m-panel-overlay.show { display: block; }
+.m-panel {
+  display: none; position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 20px var(--pad) calc(var(--bot-h) + 20px);
+  z-index: 400;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.m-panel.show { display: block; }
+.m-panel-handle { width: 36px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 18px; }
+.m-panel-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.m-panel-opt {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-bottom: 1px solid var(--bg);
+  font-size: 14px; font-weight: 500; cursor: pointer;
+}
+.m-panel-opt:last-child { border-bottom: none; }
+.m-panel-opt.selected, .m-panel-opt.active { color: var(--red); font-weight: 700; }
+.m-panel-opt-check { color: var(--red); font-size: 16px; }
+.m-range-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.m-range-label { font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 5px; }
+.m-range-input {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-size: 15px; outline: none; font-family: inherit;
+}
+.m-range-input:focus { border-color: var(--red); }
+
+/* DPE pill selector */
+.m-dpe-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.m-dpe-pill {
+  padding: 6px 13px; border-radius: 8px; font-size: 13px; font-weight: 700;
+  border: 2px solid transparent; cursor: pointer; color: white; opacity: 0.5;
+  transition: opacity .15s;
+}
+.m-dpe-pill.selected { opacity: 1; border-color: rgba(0,0,0,0.25); }
+.dpe-a { background: #009a44; }
+.dpe-b { background: #51b747; }
+.dpe-c { background: #9acc3d; }
+.dpe-d { background: #f6c314; color: #333; }
+.dpe-e { background: #ef7c21; }
+.dpe-f { background: #e94630; }
+.dpe-g { background: #b00020; }
+
+.m-results-bar {
+  padding: 8px var(--pad);
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border); background: white;
+}
+.m-results-count { font-size: 13px; color: var(--text2); }
+.m-results-count strong { color: var(--text); }
+.m-sort-btn {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; color: var(--text2);
+  padding: 6px 10px; border: 1.5px solid var(--border); border-radius: 8px;
+}
+
+.m-empty { text-align: center; padding: 56px var(--pad); }
+.m-empty i { font-size: 44px; color: #ddd; display: block; margin-bottom: 14px; }
+.m-empty h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.m-empty p { font-size: 13px; color: var(--text2); }
+
+/* Vertical card layout for listings */
+.m-an-card {
+  background: white; border: 1px solid var(--border); border-radius: 14px;
+  margin: 0 var(--pad) 12px; overflow: hidden; cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.m-an-card:active { opacity: 0.95; }
+.m-an-card-img {
+  width: 100%; height: 200px;
+  background: #e0e0e0; position: relative;
+  background-size: cover; background-position: center;
+}
+.m-an-card-badge {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 10.5px; font-weight: 700; padding: 4px 9px;
+  border-radius: 6px; color: white;
+}
+.m-an-card-badge.vente { background: var(--red); }
+.m-an-card-badge.location { background: #2563eb; }
+.m-an-card-fav {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(255,255,255,0.92); border: none; border-radius: 50%;
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: #bbb; cursor: pointer; backdrop-filter: blur(4px);
+}
+.m-an-card-fav.active { color: var(--red); }
+.m-an-card-body { padding: 12px 14px 14px; }
+.m-an-card-price { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 2px; letter-spacing: -0.3px; display: flex; align-items: baseline; gap: 8px; }
+.m-an-card-price-m2 { font-size: 12px; font-weight: 500; color: #999; }
+.m-an-card-title { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.m-an-card-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+.m-an-card-meta span { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
+.m-an-card-meta i { font-size: 13px; color: var(--text3); }
+
+#listingsContainer { padding-top: 10px; }
+</style>
 </head>
-<body></body>
+<body>
+
+<!-- TOP NAV -->
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.location='/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+  <button class="m-hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MENU -->
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/guide'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.location='/profil';else window.location='/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+
+<!-- HEADER -->
+<div class="m-an-header">
+  <h1>Toutes les <span style="color:#ff7a68">annonces</span></h1>
+  <p>Maisons, appartements, studios et lofts proposés directement par leurs propriétaires, partout en France. Aucune agence, aucun intermédiaire.</p>
+</div>
+
+<!-- FILTER BAR -->
+<div class="m-filter-bar" id="filterBar">
+  <button class="m-filter-pill" id="pillType" onclick="openPanel('panelType')">
+    <i class="ti ti-home-2"></i> <span id="pillTypeLabel">Transaction</span> <i class="ti ti-chevron-down" style="font-size:11px;color:var(--text3)"></i>
+  </button>
+  <button class="m-filter-pill" id="pillBien" onclick="openPanel('panelBien')">
+    <i class="ti ti-building"></i> <span id="pillBienLabel">Type de bien</span> <i class="ti ti-chevron-down" style="font-size:11px;color:var(--text3)"></i>
+  </button>
+  <button class="m-filter-pill" id="pillBudget" onclick="openPanel('panelBudget')">
+    <i class="ti ti-currency-euro"></i> <span id="pillBudgetLabel">Budget</span> <i class="ti ti-chevron-down" style="font-size:11px;color:var(--text3)"></i>
+  </button>
+  <button class="m-filter-pill" id="pillVille" onclick="openPanel('panelVille')">
+    <i class="ti ti-map-pin"></i> <span id="pillVilleLabel">Ville</span> <i class="ti ti-chevron-down" style="font-size:11px;color:var(--text3)"></i>
+  </button>
+  <button class="m-filter-pill" id="pillPieces" onclick="openPanel('panelPieces')">
+    <i class="ti ti-door"></i> <span id="pillPiecesLabel">Pièces</span> <i class="ti ti-chevron-down" style="font-size:11px;color:var(--text3)"></i>
+  </button>
+  <button class="m-filter-pill" id="pillSurface" onclick="openPanel('panelSurface')">
+    <i class="ti ti-ruler-2"></i> <span id="pillSurfaceLabel">Surface</span> <i class="ti ti-chevron-down" style="font-size:11px;color:var(--text3)"></i>
+  </button>
+  <button class="m-filter-pill" id="pillDpe" onclick="openPanel('panelDpe')">
+    <i class="ti ti-leaf"></i> <span id="pillDpeLabel">DPE / GES</span> <i class="ti ti-chevron-down" style="font-size:11px;color:var(--text3)"></i>
+  </button>
+  <button class="m-filter-pill" id="pillMotsCles" onclick="openPanel('panelMotsCles')">
+    <i class="ti ti-search"></i> <span id="pillMotsClesLabel">Mots-clés</span> <i class="ti ti-chevron-down" style="font-size:11px;color:var(--text3)"></i>
+  </button>
+</div>
+
+<!-- RESULTS BAR -->
+<div class="m-results-bar">
+  <span class="m-results-count"><strong id="resultsCount">0</strong> annonce<span id="resultsPlural"></span></span>
+  <button class="m-sort-btn" onclick="openPanel('panelSort')"><i class="ti ti-arrows-sort"></i> Trier</button>
+</div>
+
+<!-- LISTE -->
+<div id="listingsContainer"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.location='/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab active" onclick="window.location='/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.location='/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
+    <span>Déposer</span>
+  </button>
+  <button class="m-tab" onclick="window.location='/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" id="botProfile" onclick="handleAuthClick()"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+</nav>
+
+<!-- ── PANELS ── -->
+<div class="m-panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
+
+<!-- Panel: Transaction -->
+<div class="m-panel" id="panelType">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Transaction</div>
+  <div class="m-panel-opt" onclick="setFilter('transaction','vente');closeAllPanels()">Acheter <span id="checkVente"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('transaction','location');closeAllPanels()">Louer <span id="checkLoc"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('transaction','');closeAllPanels()">Tout voir <span id="checkAll"></span></div>
+</div>
+
+<!-- Panel: Type de bien -->
+<div class="m-panel" id="panelBien">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Type de bien</div>
+  <div class="m-panel-opt" onclick="setFilter('type','appartement');closeAllPanels()">Appartement <span id="checkAppart"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('type','maison');closeAllPanels()">Maison <span id="checkMaison"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('type','studio');closeAllPanels()">Studio <span id="checkStudio"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('type','loft');closeAllPanels()">Loft <span id="checkLoft"></span></div>
+  <div class="m-panel-opt" onclick="setFilter('type','');closeAllPanels()">Tous les types <span id="checkTout"></span></div>
+</div>
+
+<!-- Panel: Budget -->
+<div class="m-panel" id="panelBudget">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Budget</div>
+  <div class="m-range-row">
+    <div>
+      <div class="m-range-label">Prix min (€)</div>
+      <input class="m-range-input" type="number" id="budgetMin" placeholder="0" oninput="applyFilters()">
+    </div>
+    <div>
+      <div class="m-range-label">Prix max (€)</div>
+      <input class="m-range-input" type="number" id="budgetMax" placeholder="Sans limite" oninput="applyFilters()">
+    </div>
+  </div>
+  <button class="m-btn m-btn-primary m-btn-full" onclick="closeAllPanels()">Appliquer</button>
+</div>
+
+<!-- Panel: Ville -->
+<div class="m-panel" id="panelVille">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Ville ou région</div>
+  <input class="m-input" id="villeInput" type="text" placeholder="Paris, Lyon, Bordeaux…"
+         style="margin-bottom:14px" oninput="filterVilles(this.value)">
+  <div id="villeList"></div>
+  <button class="m-btn m-btn-primary m-btn-full" style="margin-top:10px" onclick="closeAllPanels()">Confirmer</button>
+</div>
+
+<!-- Panel: Pièces -->
+<div class="m-panel" id="panelPieces">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Pièces &amp; chambres</div>
+  <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="ti ti-door" style="color:var(--red)"></i> Nombre de pièces</div>
+  <div class="m-range-row">
+    <div>
+      <div class="m-range-label">Min</div>
+      <input class="m-range-input" type="number" id="piecesMin" placeholder="1" min="1" oninput="applyFilters()">
+    </div>
+    <div>
+      <div class="m-range-label">Max</div>
+      <input class="m-range-input" type="number" id="piecesMax" placeholder="Sans limite" min="1" oninput="applyFilters()">
+    </div>
+  </div>
+  <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="ti ti-bed" style="color:var(--red)"></i> Nombre de chambres</div>
+  <div class="m-range-row">
+    <div>
+      <div class="m-range-label">Min</div>
+      <input class="m-range-input" type="number" id="chambresMin" placeholder="1" min="1" oninput="applyFilters()">
+    </div>
+    <div>
+      <div class="m-range-label">Max</div>
+      <input class="m-range-input" type="number" id="chambresMax" placeholder="Sans limite" min="1" oninput="applyFilters()">
+    </div>
+  </div>
+  <button class="m-btn m-btn-primary m-btn-full" onclick="closeAllPanels()">Appliquer</button>
+</div>
+
+<!-- Panel: Surface -->
+<div class="m-panel" id="panelSurface">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Surface habitable (m²)</div>
+  <div class="m-range-row">
+    <div>
+      <div class="m-range-label">Surface min</div>
+      <input class="m-range-input" type="number" id="surfaceMin" placeholder="0" oninput="applyFilters()">
+    </div>
+    <div>
+      <div class="m-range-label">Surface max</div>
+      <input class="m-range-input" type="number" id="surfaceMax" placeholder="Sans limite" oninput="applyFilters()">
+    </div>
+  </div>
+  <button class="m-btn m-btn-primary m-btn-full" onclick="closeAllPanels()">Appliquer</button>
+</div>
+
+<!-- Panel: DPE / GES -->
+<div class="m-panel" id="panelDpe">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">DPE / GES</div>
+  <div class="m-range-label" style="margin-bottom:8px">DPE — Classe énergétique</div>
+  <div class="m-dpe-pills" id="dpePills">
+    <span class="m-dpe-pill dpe-a" onclick="toggleDpe(this,'A')">A</span>
+    <span class="m-dpe-pill dpe-b" onclick="toggleDpe(this,'B')">B</span>
+    <span class="m-dpe-pill dpe-c" onclick="toggleDpe(this,'C')">C</span>
+    <span class="m-dpe-pill dpe-d" onclick="toggleDpe(this,'D')">D</span>
+    <span class="m-dpe-pill dpe-e" onclick="toggleDpe(this,'E')">E</span>
+    <span class="m-dpe-pill dpe-f" onclick="toggleDpe(this,'F')">F</span>
+    <span class="m-dpe-pill dpe-g" onclick="toggleDpe(this,'G')">G</span>
+  </div>
+  <div class="m-range-label" style="margin-bottom:8px;margin-top:8px">GES — Émissions de gaz à effet de serre</div>
+  <div class="m-dpe-pills" id="gesPills">
+    <span class="m-dpe-pill dpe-a" onclick="toggleGes(this,'A')">A</span>
+    <span class="m-dpe-pill dpe-b" onclick="toggleGes(this,'B')">B</span>
+    <span class="m-dpe-pill dpe-c" onclick="toggleGes(this,'C')">C</span>
+    <span class="m-dpe-pill dpe-d" onclick="toggleGes(this,'D')">D</span>
+    <span class="m-dpe-pill dpe-e" onclick="toggleGes(this,'E')">E</span>
+    <span class="m-dpe-pill dpe-f" onclick="toggleGes(this,'F')">F</span>
+    <span class="m-dpe-pill dpe-g" onclick="toggleGes(this,'G')">G</span>
+  </div>
+  <button class="m-btn m-btn-primary m-btn-full" style="margin-top:8px" onclick="closeAllPanels()">Appliquer</button>
+  <button class="m-btn m-btn-secondary m-btn-full" style="margin-top:8px" onclick="clearDpe()">Réinitialiser</button>
+</div>
+
+<!-- Panel: Mots-clés -->
+<div class="m-panel" id="panelMotsCles">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Recherche par mots-clés</div>
+  <input class="m-input" id="motsClesInput" type="text" placeholder="garage, terrasse, piscine…"
+         style="margin-bottom:14px" oninput="setFilter('motsCles',this.value)">
+  <div style="font-size:12px;color:var(--text3);line-height:1.5;margin-bottom:14px">
+    La recherche s'effectue dans le titre, la description et les équipements de l'annonce.
+  </div>
+  <button class="m-btn m-btn-primary m-btn-full" onclick="closeAllPanels()">Rechercher</button>
+</div>
+
+<!-- Panel: Sort -->
+<div class="m-panel" id="panelSort">
+  <div class="m-panel-handle"></div>
+  <div class="m-panel-title">Trier les annonces</div>
+  <div class="m-panel-opt" onclick="setSort('recent');closeAllPanels()">Plus récents en premier <span id="sortRecent"></span></div>
+  <div class="m-panel-opt" onclick="setSort('price_asc');closeAllPanels()">Prix croissant <span id="sortPriceAsc"></span></div>
+  <div class="m-panel-opt" onclick="setSort('price_desc');closeAllPanels()">Prix décroissant <span id="sortPriceDesc"></span></div>
+  <div class="m-panel-opt" onclick="setSort('surface_desc');closeAllPanels()">Surface décroissante <span id="sortSurface"></span></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js?v=7"></script>
+<script>
+var filters = { transaction: '', type: '', ville: '', budgetMin: '', budgetMax: '', piecesMin: '', piecesMax: '', chambresMin: '', chambresMax: '', surfaceMin: '', surfaceMax: '', dpe: [], ges: [], motsCles: '' };
+var sortBy = 'recent';
+var allListings = [];
+
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('sideMenu').classList.toggle('open');
+  document.getElementById('menuOverlay').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('menuOverlay').classList.remove('open');
+}
+function handleAuthClick() {
+  var u = SA.getUser();
+  if (u) window.location = '/profil'; else window.location = '/connexion?redirect=/annonces';
+}
+
+// ── Panels ──
+function openPanel(id) {
+  closeAllPanels();
+  document.getElementById(id).classList.add('show');
+  document.getElementById('panelOverlay').classList.add('show');
+  updateChecks();
+  if (id === 'panelVille') filterVilles(document.getElementById('villeInput').value || '');
+}
+function closeAllPanels() {
+  ['panelType','panelBien','panelBudget','panelVille','panelPieces','panelSurface','panelDpe','panelMotsCles','panelSort'].forEach(function(id){
+    document.getElementById(id).classList.remove('show');
+  });
+  document.getElementById('panelOverlay').classList.remove('show');
+}
+function updateChecks() {
+  var t = filters.transaction;
+  document.getElementById('checkVente').innerHTML = t==='vente'?'<i class="ti ti-check m-panel-opt-check"></i>':'';
+  document.getElementById('checkLoc').innerHTML = t==='location'?'<i class="ti ti-check m-panel-opt-check"></i>':'';
+  document.getElementById('checkAll').innerHTML = !t?'<i class="ti ti-check m-panel-opt-check"></i>':'';
+  var checkMap = {appartement:'checkAppart',maison:'checkMaison',studio:'checkStudio',loft:'checkLoft','':'checkTout'};
+  Object.values(checkMap).forEach(function(id){ var e=document.getElementById(id); if(e) e.innerHTML=''; });
+  var cid = checkMap[filters.type];
+  if(cid) document.getElementById(cid).innerHTML = '<i class="ti ti-check m-panel-opt-check"></i>';
+  var pmap = {'':'checkPiecesAll','1':'checkP1','2':'checkP2','3':'checkP3','4':'checkP4','5':'checkP5'};
+  Object.values(pmap).forEach(function(id){ var e=document.getElementById(id); if(e) e.innerHTML=''; });
+  var pid = pmap[filters.pieces];
+  if(pid) document.getElementById(pid).innerHTML = '<i class="ti ti-check m-panel-opt-check"></i>';
+  document.getElementById('sortRecent').innerHTML = sortBy==='recent'?'<i class="ti ti-check m-panel-opt-check"></i>':'';
+  document.getElementById('sortPriceAsc').innerHTML = sortBy==='price_asc'?'<i class="ti ti-check m-panel-opt-check"></i>':'';
+  document.getElementById('sortPriceDesc').innerHTML = sortBy==='price_desc'?'<i class="ti ti-check m-panel-opt-check"></i>':'';
+  document.getElementById('sortSurface').innerHTML = sortBy==='surface_desc'?'<i class="ti ti-check m-panel-opt-check"></i>':'';
+}
+
+// ── DPE / GES ──
+function toggleDpe(el, val) {
+  var idx = filters.dpe.indexOf(val);
+  if(idx > -1) { filters.dpe.splice(idx, 1); el.classList.remove('selected'); }
+  else { filters.dpe.push(val); el.classList.add('selected'); }
+  updateFilterPills(); applyFilters();
+}
+function toggleGes(el, val) {
+  var idx = filters.ges.indexOf(val);
+  if(idx > -1) { filters.ges.splice(idx, 1); el.classList.remove('selected'); }
+  else { filters.ges.push(val); el.classList.add('selected'); }
+  updateFilterPills(); applyFilters();
+}
+function clearDpe() {
+  filters.dpe = []; filters.ges = [];
+  document.querySelectorAll('#dpePills .m-dpe-pill, #gesPills .m-dpe-pill').forEach(function(el){ el.classList.remove('selected'); });
+  updateFilterPills(); applyFilters();
+}
+
+// ── Filters ──
+function setFilter(key, val) { filters[key] = val; updateFilterPills(); applyFilters(); }
+function setSort(s) { sortBy = s; applyFilters(); }
+function updateFilterPills() {
+  document.getElementById('pillTypeLabel').textContent = {vente:'Acheter',location:'Louer','':'Transaction'}[filters.transaction]||'Transaction';
+  document.getElementById('pillType').className = 'm-filter-pill' + (filters.transaction ? ' active' : '');
+  document.getElementById('pillBienLabel').textContent = filters.type ? filters.type.charAt(0).toUpperCase()+filters.type.slice(1) : 'Type de bien';
+  document.getElementById('pillBien').className = 'm-filter-pill' + (filters.type ? ' active' : '');
+  var v = filters.ville;
+  document.getElementById('pillVilleLabel').textContent = v || 'Ville';
+  document.getElementById('pillVille').className = 'm-filter-pill' + (v ? ' active' : '');
+  var min = filters.budgetMin, max = filters.budgetMax;
+  document.getElementById('pillBudgetLabel').textContent = (min||max) ? ((min?min+'€':'0')+' – '+(max?max+'€':'∞')) : 'Budget';
+  document.getElementById('pillBudget').className = 'm-filter-pill' + ((min||max) ? ' active' : '');
+  var pmin = filters.piecesMin, pmax = filters.piecesMax, cmin = filters.chambresMin, cmax = filters.chambresMax;
+  var hasPieces = pmin||pmax||cmin||cmax;
+  var pLabel = hasPieces ? [(pmin||pmax ? (pmin||'1')+'–'+(pmax||'∞')+' p.' : ''), (cmin||cmax ? (cmin||'1')+'–'+(cmax||'∞')+' ch.' : '')].filter(Boolean).join(' | ') : 'Pièces';
+  document.getElementById('pillPiecesLabel').textContent = pLabel;
+  document.getElementById('pillPieces').className = 'm-filter-pill' + (hasPieces ? ' active' : '');
+  var smin = filters.surfaceMin, smax = filters.surfaceMax;
+  document.getElementById('pillSurfaceLabel').textContent = (smin||smax) ? ((smin||'0')+'–'+(smax?smax+'m²':'∞')) : 'Surface';
+  document.getElementById('pillSurface').className = 'm-filter-pill' + ((smin||smax) ? ' active' : '');
+  var hasDpe = (filters.dpe.length||filters.ges.length);
+  document.getElementById('pillDpeLabel').textContent = hasDpe ? 'DPE: '+[...filters.dpe,...filters.ges].join(',') : 'DPE / GES';
+  document.getElementById('pillDpe').className = 'm-filter-pill' + (hasDpe ? ' active' : '');
+  var mk = filters.motsCles;
+  document.getElementById('pillMotsClesLabel').textContent = mk ? '"'+mk+'"' : 'Mots-clés';
+  document.getElementById('pillMotsCles').className = 'm-filter-pill' + (mk ? ' active' : '');
+}
+
+function applyFilters() {
+  var res = allListings.filter(function(l){
+    if(l.status === 'sold') return false;
+    if(filters.transaction && l.transaction !== filters.transaction) return false;
+    if(filters.type && l.type !== filters.type) return false;
+    if(filters.ville && l.ville && l.ville.toLowerCase().indexOf(filters.ville.toLowerCase()) === -1) return false;
+    var min = parseInt(filters.budgetMin)||0, max = parseInt(filters.budgetMax)||0;
+    if(min && l.price < min) return false;
+    if(max && l.price > max) return false;
+    var pMin = parseInt(filters.piecesMin)||0, pMax = parseInt(filters.piecesMax)||0;
+    if(pMin && (parseInt(l.pieces)||0) < pMin) return false;
+    if(pMax && (parseInt(l.pieces)||0) > pMax) return false;
+    var cMin = parseInt(filters.chambresMin)||0, cMax = parseInt(filters.chambresMax)||0;
+    if(cMin && (parseInt(l.chambres)||0) < cMin) return false;
+    if(cMax && (parseInt(l.chambres)||0) > cMax) return false;
+    var smin = parseInt(filters.surfaceMin)||0, smax = parseInt(filters.surfaceMax)||0;
+    if(smin && (parseInt(l.surface)||0) < smin) return false;
+    if(smax && (parseInt(l.surface)||0) > smax) return false;
+    if(filters.dpe.length && l.dpe && filters.dpe.indexOf(l.dpe.toUpperCase()) === -1) return false;
+    if(filters.ges.length && l.ges && filters.ges.indexOf(l.ges.toUpperCase()) === -1) return false;
+    if(filters.motsCles) {
+      var q = filters.motsCles.toLowerCase();
+      var haystack = ((l.titre||'') + ' ' + (l.description||'') + ' ' + (l.equipements||'')).toLowerCase();
+      if(haystack.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+
+  if(sortBy === 'price_asc') res.sort(function(a,b){ return (a.price||0)-(b.price||0); });
+  else if(sortBy === 'price_desc') res.sort(function(a,b){ return (b.price||0)-(a.price||0); });
+  else if(sortBy === 'surface_desc') res.sort(function(a,b){ return (parseInt(b.surface)||0)-(parseInt(a.surface)||0); });
+  else res.sort(function(a,b){
+    // Support both createdAt (number timestamp) and created_at (string)
+    var ta = a.createdAt || (a.created_at ? new Date(a.created_at).getTime() : 0) || 0;
+    var tb = b.createdAt || (b.created_at ? new Date(b.created_at).getTime() : 0) || 0;
+    return tb - ta;
+  });
+
+  var cnt = res.length;
+  document.getElementById('resultsCount').textContent = cnt;
+  document.getElementById('resultsPlural').textContent = cnt > 1 ? 's' : '';
+  renderListings(res);
+}
+
+var IMG_GRADIENTS_FALLBACK = {
+  vente:'linear-gradient(135deg,#4f6d9e,#7890b8)',
+  location:'linear-gradient(135deg,#4a7c6b,#6aaa90)',
+  lyon:'linear-gradient(135deg,#4f6d9e,#7890b8)',bordeaux:'linear-gradient(135deg,#8b5a5a,#b87070)',
+  paris:'linear-gradient(135deg,#4a7c6b,#6aaa90)',lille:'linear-gradient(135deg,#6b6b8b,#9090b0)',
+  p0:'linear-gradient(135deg,#4f6d9e,#7890b8)',p1:'linear-gradient(135deg,#8b5a5a,#b87070)',
+  p2:'linear-gradient(135deg,#4a7c6b,#6aaa90)',p3:'linear-gradient(135deg,#6b6b8b,#9090b0)',
+  p4:'linear-gradient(135deg,#9e7d4f,#c4a878)',p5:'linear-gradient(135deg,#5a8b7a,#7fb8a3)',
+  p6:'linear-gradient(135deg,#7a5a8b,#a378b8)',p7:'linear-gradient(135deg,#8b7a4f,#c4ab78)'
+};
+
+function getPhotoUrl(l) {
+  var photos = Array.isArray(l.photos) ? l.photos : [];
+  var ph = photos[0];
+  if(!ph) return null;
+  // photos[0] can be a string URL or an object {url: "..."}
+  return (typeof ph === 'object' && ph !== null && ph.url) ? ph.url : String(ph);
+}
+
+function renderListings(listings) {
+  var el = document.getElementById('listingsContainer');
+  if(!listings.length){
+    el.innerHTML = '<div class="m-empty"><i class="ti ti-building-off"></i><h3>Aucune annonce trouvée</h3><p>Modifiez vos critères de recherche pour voir plus de résultats.</p></div>';
+    return;
+  }
+  var cards = [];
+  for(var i=0; i<listings.length; i++) {
+    try {
+      var l = listings[i];
+      var photoUrl = getPhotoUrl(l);
+      var photoStyle = photoUrl
+        ? 'background-image:url(' + photoUrl.replace(/['"]/g, '') + ');background-size:cover;background-position:center'
+        : 'background:' + (IMG_GRADIENTS_FALLBACK[l.img] || IMG_GRADIENTS_FALLBACK[l.transaction] || 'linear-gradient(135deg,#8b5a5a,#b87070)');
+      var price = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (l.transaction==='location'?'/mois':'') : 'Prix sur demande';
+      var priceM2 = (l.price && l.surface && l.transaction !== 'location') ? Math.round(l.price / l.surface).toLocaleString('fr-FR') + ' €/m²' : '';
+      var badge = l.transaction==='vente'?'vente':'location';
+      var badgeLabel = l.transaction==='vente'?'Vente':'Location';
+      var typeCapital = l.type ? l.type.charAt(0).toUpperCase() + l.type.slice(1) : 'Bien';
+      var title = l.titre || l.title || (typeCapital + (l.ville ? ' — ' + l.ville : ''));
+      var pieces = l.pieces ? l.pieces + ' pièce' + (parseInt(l.pieces) > 1 ? 's' : '') : '';
+      var dpeHtml = l.dpe ? '<span><i class="ti ti-leaf"></i> DPE ' + l.dpe.toUpperCase() + '</span>' : '';
+      var safeId = String(l.id).replace(/'/g,'');
+      cards.push(
+        '<div class="m-an-card" onclick="window.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')">' +
+          '<div class="m-an-card-img" style="' + photoStyle + '">' +
+            '<span class="m-an-card-badge ' + badge + '">' + badgeLabel + '</span>' +
+            '<button class="m-an-card-fav" onclick="event.stopPropagation();SA.toggleFavoriteUI(this,\'' + safeId + '\')" aria-label="Favori">' +
+              '<i class="ti ti-heart"></i>' +
+            '</button>' +
+          '</div>' +
+          '<div class="m-an-card-body">' +
+            '<div class="m-an-card-price">' + price + (priceM2 ? '<span class="m-an-card-price-m2">' + priceM2 + '</span>' : '') + '</div>' +
+            '<div class="m-an-card-title">' + title + '</div>' +
+            '<div class="m-an-card-meta">' +
+              (l.surface ? '<span><i class="ti ti-ruler-2"></i> ' + l.surface + ' m²</span>' : '') +
+              (pieces ? '<span><i class="ti ti-door"></i> ' + pieces + '</span>' : '') +
+              (l.ville ? '<span><i class="ti ti-map-pin"></i> ' + l.ville + '</span>' : '') +
+              dpeHtml +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    } catch(e) { /* skip malformed listing */ }
+  }
+  el.innerHTML = cards.join('');
+}
+
+function filterVilles(q) {
+  var villes = allListings.map(function(l){ return l.ville; }).filter(Boolean)
+    .filter(function(v, i, arr){ return arr.indexOf(v) === i; });
+  var filtered = q ? villes.filter(function(v){ return v.toLowerCase().indexOf(q.toLowerCase()) !== -1; }) : villes;
+  document.getElementById('villeList').innerHTML = filtered.slice(0, 10).map(function(v){
+    var active = filters.ville === v ? ' class="m-panel-opt active"' : ' class="m-panel-opt"';
+    return '<div'+active+' onclick="setFilter(\'ville\',\''+v+'\');closeAllPanels()">'+v+
+      (filters.ville===v ? '<i class="ti ti-check m-panel-opt-check"></i>' : '') +
+    '</div>';
+  }).join('') + (filtered.length > 10 ? '<div style="font-size:12px;color:var(--text3);padding:8px 0">'+filtered.length+' villes — affinez la recherche</div>' : '');
+}
+
+function initFromURL() {
+  var p = new URLSearchParams(window.location.search);
+  if(p.get('transaction')) {
+    var tx = p.get('transaction');
+    filters.transaction = tx === 'acheter' ? 'vente' : tx === 'louer' ? 'location' : tx;
+  }
+  if(p.get('ville')) filters.ville = p.get('ville');
+  if(p.get('type')) filters.type = p.get('type');
+  updateFilterPills();
+}
+
+SA.init().then(function(){
+  var u = SA.getUser();
+  document.getElementById('menuAuthLabel').textContent = u ? (u.email ? u.email.split('@')[0] : 'Mon profil') : 'Se connecter';
+  document.getElementById('menuLogout').style.display = u ? '' : 'none';
+  document.getElementById('botProfileLabel').textContent = u ? 'Profil' : 'Connexion';
+  allListings = SA.getAllListings() || [];
+  if (!allListings.length) {
+    allListings = [
+      {id:'a1',titre:'Appartement T3 lumineux — vue dégagée',type:'appartement',transaction:'vente',price:245000,surface:72,pieces:3,ville:'Lyon',dpe:'C',created_at:'2025-06-10',photos:[]},
+      {id:'a2',titre:'Maison 5 pièces avec jardin',type:'maison',transaction:'vente',price:389000,surface:118,pieces:5,ville:'Bordeaux',dpe:'B',created_at:'2025-06-08',photos:[]},
+      {id:'a3',titre:'Studio meublé proche transports',type:'studio',transaction:'location',price:650,surface:28,pieces:1,ville:'Paris',dpe:'D',created_at:'2025-06-07',photos:[]},
+      {id:'a4',titre:'Appartement T2 calme et rénové',type:'appartement',transaction:'vente',price:178000,surface:48,pieces:2,ville:'Nantes',dpe:'C',created_at:'2025-06-05',photos:[]},
+      {id:'a5',titre:'Loft industriel — centre-ville',type:'loft',transaction:'vente',price:310000,surface:95,pieces:3,ville:'Marseille',dpe:'E',created_at:'2025-06-03',photos:[]},
+      {id:'a6',titre:'Maison de caractère avec terrasse',type:'maison',transaction:'location',price:1200,surface:85,pieces:4,ville:'Toulouse',dpe:'C',created_at:'2025-06-01',photos:[]},
+      {id:'a7',titre:'Appartement T4 familial',type:'appartement',transaction:'vente',price:295000,surface:88,pieces:4,ville:'Lille',dpe:'B',created_at:'2025-05-28',photos:[]},
+      {id:'a8',titre:'Studio étudiant bien situé',type:'studio',transaction:'location',price:480,surface:22,pieces:1,ville:'Rennes',dpe:'D',created_at:'2025-05-25',photos:[]},
+    ];
+  }
+  initFromURL();
+  applyFilters();
+  filterVilles('');
+});
+</script>
+</body>
 </html>
+
+
+
+
