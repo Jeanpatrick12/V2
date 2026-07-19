@@ -432,39 +432,46 @@ body.sa-has-bottom-nav { padding-bottom: 56px !important; }
   .sa-an-header h1 { font-size: 19px !important; }
   .sa-an-body { padding: 0.8rem 12px 2rem !important; }
 
-  /* Filtres : wrap sur plusieurs lignes, taille réduite */
+  /* Filtres : une seule ligne, glissable horizontalement (comme une app) */
   .sa-filterbar {
-    padding: 7px 12px 8px !important;
-    gap: 5px !important;
-    flex-wrap: wrap !important;
-    overflow-x: unset !important;
+    padding: 9px 12px 10px !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .sa-filterbar::-webkit-scrollbar { display: none; }
+  .sa-pillgroup { flex-shrink: 0; }
   .sa-pill {
-    padding: 5px 10px !important;
-    font-size: 11px !important;
-    gap: 4px !important;
+    padding: 7px 12px !important;
+    font-size: 12px !important;
+    gap: 5px !important;
     border-radius: 999px !important;
+    flex-shrink: 0;
   }
   .sa-pill i.ti-chevron-down { font-size: 10px !important; }
   .sa-pill .picon { font-size: 12px !important; }
   .sa-pill-loc-input { font-size: 11px !important; width: 72px !important; }
   .sa-pill-count { font-size: 9px !important; min-width: 14px !important; height: 14px !important; }
 
-  /* Panels filtres : pleine largeur sous la nav, couvre la filterbar */
+  /* Panels filtres : feuille qui monte du bas de l'écran (style app) */
   .sa-pill-panel {
     position: fixed !important;
     left: 0 !important;
     right: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
     width: 100% !important;
     max-width: none !important;
-    top: 52px !important;
-    max-height: calc(100vh - 52px - 56px) !important;
+    max-height: 72vh !important;
     overflow-y: auto !important;
-    padding: 14px 14px !important;
-    border-radius: 0 0 16px 16px !important;
-    font-size: 12px !important;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.12) !important;
-    z-index: 600 !important;
+    padding: 18px 16px calc(18px + env(safe-area-inset-bottom)) !important;
+    border-radius: 18px 18px 0 0 !important;
+    border-top: 3px solid #E84533 !important;
+    font-size: 12.5px !important;
+    box-shadow: 0 -10px 34px rgba(0,0,0,0.2) !important;
+    z-index: 700 !important;
   }
   .sa-pp-w260, .sa-pp-w300, .sa-pp-w560 {
     width: 100% !important;
