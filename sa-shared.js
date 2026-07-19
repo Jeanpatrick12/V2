@@ -914,7 +914,7 @@
     return parts.join("-");
   }
   function openListing(id) {
-    window.location.href = "annonce?id=" + encodeURIComponent(id);
+    window.top.location.href = "annonce?id=" + encodeURIComponent(id);
   }
   function closeListing() {
     const root = document.getElementById("saListingModalRoot");
@@ -970,13 +970,13 @@
         btn.onclick = function(e) { e.stopPropagation(); dropdown.classList.toggle("show"); };
         dropdown.innerHTML =
           '<div class="sa-account-dropdown-email"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.email || "") + "</div>" +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'profil\'"><i class="ti ti-user-circle"></i> Mon profil</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getUserListings().length + '</span>' : '') + '</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length; try { n += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + n + '</span>' : ''; })() + '</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'profil\'"><i class="ti ti-user-circle"></i> Mon profil</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getUserListings().length + '</span>' : '') + '</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length; try { n += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + n + '</span>' : ''; })() + '</button>' +
           '<button class="sa-account-dropdown-logout" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>';
       } else {
         btn.onclick = function() {
-          window.location.href = "connexion?redirect=" + encodeURIComponent(window.location.pathname.split("/").pop() || "./");
+          window.top.location.href = "connexion?redirect=" + encodeURIComponent(window.location.pathname.split("/").pop() || "./");
         };
       }
     });
@@ -1012,7 +1012,7 @@
     bar.innerHTML =
       _navTab("./", "ti-home", "Accueil", isActive("./")) +
       _navTab("annonces", "ti-building-estate", "Annonces", isActive("annonces")) +
-      '<button class="sa-bottom-nav-cta" onclick="window.location.href=\'deposer\'">' +
+      '<button class="sa-bottom-nav-cta" onclick="window.top.location.href=\'deposer\'">' +
         '<div class="sa-bottom-nav-cta-circle"><i class="ti ti-plus"></i></div>' +
         '<span>Déposer</span>' +
       '</button>' +
@@ -1040,24 +1040,24 @@
       menu.className = "sa-mobile-menu";
       menu.innerHTML =
         '<div class="sa-mobile-menu-section">Navigation</div>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'./\'"><i class="ti ti-home"></i> Accueil</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'annonces\'"><i class="ti ti-building-estate"></i> Annonces</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'/m/vendre\'"><i class="ti ti-book-2"></i> Guide</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'professionnels\'"><i class="ti ti-briefcase"></i> Professionnels</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'./\'"><i class="ti ti-home"></i> Accueil</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'annonces\'"><i class="ti ti-building-estate"></i> Annonces</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'/m/vendre\'"><i class="ti ti-book-2"></i> Guide</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'professionnels\'"><i class="ti ti-briefcase"></i> Professionnels</button>' +
         '<div class="sa-mobile-menu-divider"></div>' +
         '<div class="sa-mobile-menu-section">Mon espace</div>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'favoris\'"><i class="ti ti-heart"></i> Favoris' + (favN > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + favN + '</span>' : '') + '</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'messages\'"><i class="ti ti-message-2"></i> Messages' + (msgN > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + msgN + '</span>' : '') + '</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'recherches\'"><i class="ti ti-search"></i> Mes recherches</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'mes-annonces\'"><i class="ti ti-home-edit"></i> Mes annonces</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'favoris\'"><i class="ti ti-heart"></i> Favoris' + (favN > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + favN + '</span>' : '') + '</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'messages\'"><i class="ti ti-message-2"></i> Messages' + (msgN > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + msgN + '</span>' : '') + '</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'recherches\'"><i class="ti ti-search"></i> Mes recherches</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'mes-annonces\'"><i class="ti ti-home-edit"></i> Mes annonces</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents</button>' +
         '<div class="sa-mobile-menu-divider"></div>' +
-        '<button class="sa-mobile-menu-item" onclick="window.location.href=\'contact\'"><i class="ti ti-mail"></i> Nous contacter</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'contact\'"><i class="ti ti-mail"></i> Nous contacter</button>' +
         '<div class="sa-mobile-menu-divider"></div>' +
         (user
-          ? '<button class="sa-mobile-menu-item" onclick="window.location.href=\'profil\'"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.prenom || "Mon profil") + '</button>' +
+          ? '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'profil\'"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.prenom || "Mon profil") + '</button>' +
             '<button class="sa-mobile-menu-item" style="color:#c0392b" onclick="SA.logout()"><i class="ti ti-logout" style="color:#c0392b"></i> Se déconnecter</button>'
-          : '<button class="sa-mobile-menu-item" onclick="window.location.href=\'connexion\'"><i class="ti ti-login-2"></i> Se connecter</button>'
+          : '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'connexion\'"><i class="ti ti-login-2"></i> Se connecter</button>'
         );
       document.body.appendChild(menu);
 
@@ -1084,11 +1084,11 @@
   }
 
   function _navTab(href, icon, label, active) {
-    return '<button class="sa-bottom-nav-tab' + (active ? ' active' : '') + '" onclick="window.location.href=\'' + href + '\'">' +
+    return '<button class="sa-bottom-nav-tab' + (active ? ' active' : '') + '" onclick="window.top.location.href=\'' + href + '\'">' +
       '<i class="ti ' + icon + '"></i><span>' + label + '</span></button>';
   }
   function _navTabBadge(href, icon, label, active, count) {
-    return '<button class="sa-bottom-nav-tab' + (active ? ' active' : '') + '" onclick="window.location.href=\'' + href + '\'">' +
+    return '<button class="sa-bottom-nav-tab' + (active ? ' active' : '') + '" onclick="window.top.location.href=\'' + href + '\'">' +
       '<div style="position:relative;display:inline-flex">' +
         '<i class="ti ' + icon + '"></i>' +
         (count > 0 ? '<span class="sa-bottom-nav-badge">' + count + '</span>' : '') +
@@ -1096,11 +1096,11 @@
   }
   function _navTabUser(user, active) {
     if (user) {
-      return '<button class="sa-bottom-nav-tab' + (active ? ' active' : '') + '" onclick="window.location.href=\'profil\'">' +
+      return '<button class="sa-bottom-nav-tab' + (active ? ' active' : '') + '" onclick="window.top.location.href=\'profil\'">' +
         '<div class="sa-bottom-nav-avatar">' + escapeHtml((user.prenom || "U").charAt(0).toUpperCase()) + '</div>' +
         '<span>Profil</span></button>';
     }
-    return '<button class="sa-bottom-nav-tab' + (active ? ' active' : '') + '" onclick="window.location.href=\'connexion\'">' +
+    return '<button class="sa-bottom-nav-tab' + (active ? ' active' : '') + '" onclick="window.top.location.href=\'connexion\'">' +
       '<i class="ti ti-user"></i><span>Connexion</span></button>';
   }
 

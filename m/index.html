@@ -90,7 +90,7 @@
 
 <!-- ─── TOP NAV ─────────────────────────────────────────────── -->
 <nav class="m-nav">
-  <div class="m-nav-logo" onclick="window.location='/'">
+  <div class="m-nav-logo" onclick="window.top.location='/'">
     <div class="m-nav-icon"><i class="ti ti-key"></i></div>
     <div class="m-nav-brand">Sans<span>Agents</span></div>
   </div>
@@ -103,19 +103,19 @@
 <div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 <div class="m-menu" id="sideMenu">
   <div class="m-menu-section">Navigation</div>
-  <button class="m-menu-item" onclick="window.location='/'"><i class="ti ti-home-2"></i> Accueil</button>
-  <button class="m-menu-item" onclick="window.location='/guide'"><i class="ti ti-book-2"></i> Guide</button>
-  <button class="m-menu-item" onclick="window.location='/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
-  <button class="m-menu-item" onclick="window.location='/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
-  <button class="m-menu-item" onclick="window.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <button class="m-menu-item" onclick="window.top.location='/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="window.top.location='/guide'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="window.top.location='/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="window.top.location='/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="window.top.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
   <div class="m-menu-divider"></div>
   <div class="m-menu-section">Mon compte</div>
-  <button class="m-menu-item" onclick="window.location='/favoris'" id="menuFavoris"><i class="ti ti-heart"></i> Mes favoris</button>
-  <button class="m-menu-item" onclick="window.location='/mes-annonces'" id="menuMesAnnonces"><i class="ti ti-home-star"></i> Mes annonces</button>
-  <button class="m-menu-item" onclick="window.location='/messages'" id="menuMessages"><i class="ti ti-message-circle"></i> Messages</button>
-  <button class="m-menu-item" onclick="window.location='/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <button class="m-menu-item" onclick="window.top.location='/favoris'" id="menuFavoris"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="window.top.location='/mes-annonces'" id="menuMesAnnonces"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="window.top.location='/messages'" id="menuMessages"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="window.top.location='/documents'"><i class="ti ti-files"></i> Mes documents</button>
   <div class="m-menu-divider"></div>
-  <button class="m-menu-item" onclick="window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <button class="m-menu-item" onclick="window.top.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
   <div class="m-menu-divider"></div>
   <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
   <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
@@ -143,13 +143,13 @@
   </div>
   <!-- CTA buttons — below stats -->
   <div class="m-hero-ctas" style="margin-top:20px">
-    <div class="m-hero-cta primary" onclick="window.location='/deposer'">
+    <div class="m-hero-cta primary" onclick="window.top.location='/deposer'">
       <i class="ti ti-home-plus m-hero-cta-icon"></i>
       <div class="m-hero-cta-title">Déposer une annonce</div>
       <div class="m-hero-cta-sub">Gratuit, en quelques étapes</div>
       <div class="m-hero-cta-link">Commencer <i class="ti ti-arrow-right"></i></div>
     </div>
-    <div class="m-hero-cta secondary" onclick="window.location='/annonces'">
+    <div class="m-hero-cta secondary" onclick="window.top.location='/annonces'">
       <i class="ti ti-search m-hero-cta-icon"></i>
       <div class="m-hero-cta-title">Explorer les annonces</div>
       <div class="m-hero-cta-sub">100% particuliers</div>
@@ -294,7 +294,7 @@
       </div>
       <div style="font-size:11px;color:#888;line-height:1.55;display:flex;gap:6px;align-items:flex-start;border-top:1px solid var(--bg);margin-top:10px;padding-top:10px"><i class="ti ti-bulb" style="color:var(--red);font-size:13px;flex-shrink:0;margin-top:1px"></i> Chaque document est expliqué en clair dans le formulaire de dépôt d'annonce.</div>
     </div>
-    <button onclick="window.location='/guide'" style="margin-top:14px;width:100%;padding:12px;background:white;border:1.5px solid #e0e0e4;border-radius:11px;font-size:13.5px;font-weight:700;color:#111;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
+    <button onclick="window.top.location='/guide'" style="margin-top:14px;width:100%;padding:12px;background:white;border:1.5px solid #e0e0e4;border-radius:11px;font-size:13.5px;font-weight:700;color:#111;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
       <i class="ti ti-book-2" style="color:var(--red)"></i> Consulter le guide complet du vendeur
       <i class="ti ti-arrow-right" style="color:#aaa;margin-left:auto"></i>
     </button>
@@ -345,7 +345,7 @@
     <!-- Rempli par JS -->
   </div>
   <div style="padding: 16px var(--pad) 0">
-    <button class="m-btn m-btn-outline m-btn-full" onclick="window.location='/annonces'">
+    <button class="m-btn m-btn-outline m-btn-full" onclick="window.top.location='/annonces'">
       <i class="ti ti-building-estate"></i> Voir toutes les annonces
     </button>
   </div>
@@ -366,7 +366,7 @@
       <div style="width:36px;height:36px;border-radius:50%;background:rgba(232,69,51,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-discount-2" style="color:#ff7a68;font-size:18px"></i></div>
       <div><div style="color:#ff9a8c;font-size:14px;font-weight:800;margin-bottom:1px">-5% sur votre devis</div><div style="font-size:11px;color:rgba(255,255,255,0.6);line-height:1.4">Mentionnez le code <strong style="color:rgba(255,255,255,0.9)">SANSAGENTS5</strong> au professionnel pour en bénéficier.</div></div>
     </div>
-    <button class="m-btn m-btn-primary m-btn-full" onclick="window.location='/professionnels'">
+    <button class="m-btn m-btn-primary m-btn-full" onclick="window.top.location='/professionnels'">
       <i class="ti ti-arrow-right"></i> Voir l'annuaire
     </button>
   </div>
@@ -399,10 +399,10 @@
 <div class="m-cta-section">
   <h3>Prêt à vendre ou louer sans agence ?</h3>
   <p>Publication gratuite, sans engagement. 1% de commission sur la vente uniquement (jamais sur une location), et seulement si elle se conclut.</p>
-  <button onclick="window.location='/deposer'" style="margin-bottom:12px;width:100%;padding:14px;background:white;color:#0f172a;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 12px rgba(0,0,0,0.15)">
+  <button onclick="window.top.location='/deposer'" style="margin-bottom:12px;width:100%;padding:14px;background:white;color:#0f172a;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 12px rgba(0,0,0,0.15)">
     <i class="ti ti-home-plus"></i> Déposer mon annonce gratuitement
   </button>
-  <button onclick="window.location='/annonces'" style="width:100%;padding:13px;background:#0f172a;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3)">
+  <button onclick="window.top.location='/annonces'" style="width:100%;padding:13px;background:#0f172a;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3)">
     <i class="ti ti-search"></i> Explorer les annonces
   </button>
 </div>
@@ -460,19 +460,19 @@
 
 <!-- ─── BOTTOM NAV ──────────────────────────────────── -->
 <nav class="m-bottom-nav sa-bottom-nav">
-  <button class="m-tab active" onclick="window.location='/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
-  <button class="m-tab" onclick="window.location='/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
-  <button class="m-tab-cta" onclick="window.location='/deposer'">
+  <button class="m-tab active" onclick="window.top.location='/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.top.location='/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.top.location='/deposer'">
     <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
     <span>Déposer</span>
   </button>
-  <button class="m-tab" onclick="window.location='/messages'" id="botMessages"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="window.top.location='/messages'" id="botMessages"><i class="ti ti-message-circle"></i><span>Messages</span></button>
   <button class="m-tab" id="botProfile" onclick="handleAuthClick()"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=8"></script>
+<script src="../sa-shared.js?v=9"></script>
 <script>
 // ── Navigation menu ──────────────────────────────────────────
 function toggleMenu() {
@@ -489,8 +489,8 @@ function closeMenu() {
 // ── Auth ─────────────────────────────────────────────────────
 function handleAuthClick() {
   const user = SA.getUser();
-  if (user) window.location = '/profil';
-  else window.location = '/connexion?redirect=/m/';
+  if (user) window.top.location = '/profil';
+  else window.top.location = '/connexion?redirect=/m/';
 }
 function updateAuthUI(user) {
   document.getElementById('menuAuthLabel').textContent = user ? (user.email ? user.email.split('@')[0] : 'Mon profil') : 'Se connecter';
@@ -521,7 +521,7 @@ function goSearch() {
   var city = document.getElementById('searchInput').value.trim();
   var url = '/annonces?transaction=' + type;
   if (city) url += '&ville=' + encodeURIComponent(city);
-  window.location = url;
+  window.top.location = url;
 }
 function quickSearch(city) {
   document.getElementById('searchInput').value = city;
@@ -624,7 +624,7 @@ function renderPros(pros) {
     var stars = Math.round(rating);
     var starsHtml = '<i class="ti ti-star-filled"></i> ' + rating.toFixed(1);
     var job = p.metier || p.profession || p.job || p.category || p.categorie || p.type || p.specialite || 'Professionnel';
-    return '<div class="m-pro-card-home m-carousel-item" onclick="window.location=\'/professionnels\'">' +
+    return '<div class="m-pro-card-home m-carousel-item" onclick="window.top.location=\'/professionnels\'">' +
       '<div class="m-pro-card-avatar" style="background:' + color + '">' + initials + '</div>' +
       '<div class="m-pro-card-name">' + (p.name || p.nom || 'Professionnel') + '</div>' +
       '<div class="m-pro-card-job">' + job + '</div>' +
@@ -644,7 +644,7 @@ function renderStaticPros() {
     {name:'Thomas Petit',job:'Carreleur',rating:4.7,city:'Lille',color:'#9333ea',icon:'ti-brick'}
   ];
   grid.innerHTML = staticPros.map(function(p) {
-    return '<div style="border:1px solid var(--border);border-radius:12px;padding:14px 10px;background:white;cursor:pointer;text-align:center" onclick="window.location=\'/professionnels\'">' +
+    return '<div style="border:1px solid var(--border);border-radius:12px;padding:14px 10px;background:white;cursor:pointer;text-align:center" onclick="window.top.location=\'/professionnels\'">' +
       '<div style="width:44px;height:44px;border-radius:50%;margin:0 auto 8px;background:' + p.color + ';display:flex;align-items:center;justify-content:center">' +
         '<i class="ti ' + p.icon + '" style="color:white;font-size:18px"></i>' +
       '</div>' +

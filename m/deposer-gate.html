@@ -41,7 +41,7 @@ body { background: #0c1622; min-height: 100vh; display: flex; flex-direction: co
 <body>
 
 <nav class="gate-nav">
-  <div class="gate-logo" onclick="window.location='/'">
+  <div class="gate-logo" onclick="window.top.location='/'">
     <div class="gate-logo-icon"><i class="ti ti-key"></i></div>
     <div class="gate-logo-brand">Sans<span>Agents</span></div>
   </div>
@@ -70,10 +70,10 @@ body { background: #0c1622; min-height: 100vh; display: flex; flex-direction: co
     </div>
   </div>
 
-  <button class="gate-btn gate-btn-primary" onclick="window.location='/deposer-form'">
+  <button class="gate-btn gate-btn-primary" onclick="window.top.location='/deposer-form'">
     <i class="ti ti-rocket"></i> Commencer le formulaire
   </button>
-  <button class="gate-btn gate-btn-ghost" onclick="window.location='/guide'">
+  <button class="gate-btn gate-btn-ghost" onclick="window.top.location='/guide'">
     <i class="ti ti-book-2"></i> Consulter le guide d'abord
   </button>
 </div>

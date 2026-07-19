@@ -30,7 +30,7 @@ body { background: var(--bg); padding-bottom: 0; }
 <body>
 
 <nav class="m-nav">
-  <div class="m-nav-logo" onclick="window.location='/'">
+  <div class="m-nav-logo" onclick="window.top.location='/'">
     <div class="m-nav-icon"><i class="ti ti-key"></i></div>
     <div class="m-nav-brand">Sans<span>Agents</span></div>
   </div>
@@ -115,7 +115,7 @@ body { background: var(--bg); padding-bottom: 0; }
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=8"></script>
+<script src="../sa-shared.js?v=9"></script>
 <script>
 var redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
 var tab = new URLSearchParams(window.location.search).get('tab');
@@ -151,7 +151,7 @@ async function doLogin() {
   setLoading('loginBtn',true);
   try {
     await SA.login(email, pwd);
-    window.location = redirect;
+    window.top.location = redirect;
   } catch(e) {
     setLoading('loginBtn',false);
     showErr('loginErr', (e && e.message) || 'Identifiants incorrects.');
@@ -169,7 +169,7 @@ async function doSignup() {
   var parts = name.split(/\s+/);
   try {
     await SA.signup({ email: email, password: pwd, prenom: parts[0], nom: parts.slice(1).join(' ') });
-    window.location = redirect;
+    window.top.location = redirect;
   } catch(e) {
     setLoading('signupBtn',false);
     if (e && e.code === 'email-confirmation-required') {
@@ -198,7 +198,7 @@ async function doForgot() {
 }
 
 SA.init().then(function(){
-  if(SA.getUser()) window.location = redirect;
+  if(SA.getUser()) window.top.location = redirect;
 });
 </script>
 </body>

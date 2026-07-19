@@ -178,25 +178,25 @@
   <button onclick="history.back()" style="width:100%;background:var(--red);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
     <i class="ti ti-arrow-left"></i> Retour
   </button>
-  <button onclick="window.location='/'" style="width:100%;background:white;color:var(--text);border:1.5px solid var(--border);border-radius:14px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px">
+  <button onclick="window.top.location='/'" style="width:100%;background:white;color:var(--text);border:1.5px solid var(--border);border-radius:14px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px">
     Accueil
   </button>
 </div>
 
 <nav class="m-bottom-nav sa-bottom-nav">
-  <button class="m-tab" onclick="window.location='/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
-  <button class="m-tab" onclick="window.location='/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
-  <button class="m-tab-cta" onclick="window.location='/deposer'">
+  <button class="m-tab" onclick="window.top.location='/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.top.location='/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.top.location='/deposer'">
     <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
     <span>Déposer</span>
   </button>
-  <button class="m-tab" onclick="window.location='/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
-  <button class="m-tab" onclick="window.location='/connexion'"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+  <button class="m-tab" onclick="window.top.location='/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="window.top.location='/connexion'"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=8"></script>
+<script src="../sa-shared.js?v=9"></script>
 <script>
 var selectedStar = 0;
 var selectedRole = '';
