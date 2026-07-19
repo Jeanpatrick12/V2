@@ -53,11 +53,25 @@
     <div class="m-profile-email" id="profileEmail"></div>
   </div>
 
-  <div class="m-menu-group" id="mesDocsMobileGroup" style="display:none">
+  <div class="m-menu-group" id="mesDocsMobileGroup">
     <div class="m-menu-row" onclick="openMesDocs()">
       <div class="m-menu-row-left">
         <div class="m-menu-row-icon" style="background:#fff5f4"><i class="ti ti-files" style="color:var(--red);font-size:16px"></i></div>
-        <div><div class="m-menu-row-label">Mes documents</div><div class="m-menu-row-sub" id="mesDocsCount">Documents sauvegardés</div></div>
+        <div><div class="m-menu-row-label">Mes documents</div><div class="m-menu-row-sub" id="mesDocsCount">Vos documents de vente et d'achat</div></div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
+    </div>
+    <div class="m-menu-row" onclick="window.location='/vendeur'">
+      <div class="m-menu-row-left">
+        <div class="m-menu-row-icon" style="background:#fff5f4"><i class="ti ti-home-2" style="color:var(--red);font-size:16px"></i></div>
+        <div><div class="m-menu-row-label">Documents vendeur</div><div class="m-menu-row-sub">Bon de visite, offre, remise des clés…</div></div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
+    </div>
+    <div class="m-menu-row" onclick="window.location='/acheteur'">
+      <div class="m-menu-row-left">
+        <div class="m-menu-row-icon" style="background:#fff5f4"><i class="ti ti-home-search" style="color:var(--red);font-size:16px"></i></div>
+        <div><div class="m-menu-row-label">Documents acheteur</div><div class="m-menu-row-sub">Offre d'achat, contre-proposition…</div></div>
       </div>
       <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
     </div>
@@ -95,13 +109,6 @@
       </div>
       <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
     </div>
-    <div class="m-menu-row" onclick="window.location='/accord'">
-      <div class="m-menu-row-left">
-        <div class="m-menu-row-icon" style="background:#f0fdf4"><i class="ti ti-file-description" style="color:#16a34a;font-size:16px"></i></div>
-        <div><div class="m-menu-row-label">Accord SansAgents</div><div class="m-menu-row-sub">Modalités & commission</div></div>
-      </div>
-      <i class="ti ti-chevron-right" style="font-size:16px;color:var(--text3)"></i>
-    </div>
   </div>
 
   <div class="m-menu-group">
@@ -114,10 +121,20 @@
     </div>
   </div>
 
-  <div style="padding:0 var(--pad) 24px">
+  <div style="padding:0 var(--pad) 16px">
     <button class="m-btn m-btn-full" onclick="doLogout()" style="border:1.5px solid #fee2e2;color:#dc2626;background:white;border-radius:10px">
       <i class="ti ti-logout"></i> Se déconnecter
     </button>
+  </div>
+
+  <div style="padding:8px var(--pad) 28px;text-align:center">
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-size:11.5px">
+      <a href="/cgu" style="color:var(--text3);text-decoration:none">CGU</a>
+      <a href="/confidentialite" style="color:var(--text3);text-decoration:none">Confidentialité</a>
+      <a href="/cookies" style="color:var(--text3);text-decoration:none">Cookies</a>
+      <a href="/mentions-legales" style="color:var(--text3);text-decoration:none">Mentions légales</a>
+    </div>
+    <div style="font-size:10.5px;color:var(--text3);margin-top:10px">SansAgents · Immobilier direct entre particuliers</div>
   </div>
 </div>
 
@@ -154,11 +171,11 @@ SA.init().then(function(){
 });
 
 function loadMesDocsMenu(){
-  var docs=[];
-  try{docs=JSON.parse(localStorage.getItem(((SA.getUser()&&SA.getUser().id)?'sa_user_docs_'+SA.getUser().id:'sa_user_docs_guest'))||'[]');}catch(e){}
-  if(!docs.length) return;
-  document.getElementById('mesDocsMobileGroup').style.display='block';
-  document.getElementById('mesDocsCount').textContent = docs.length + ' document' + (docs.length>1?'s':'') + ' sauvegardé' + (docs.length>1?'s':'');
+  var uid = SA.getUser() && SA.getUser().id;
+  var n = 0;
+  try{n += JSON.parse(localStorage.getItem(uid?'sa_user_docs_'+uid:'sa_user_docs_guest')||'[]').length;}catch(e){}
+  try{n += JSON.parse(localStorage.getItem(uid?'sa_buyer_docs_'+uid:'sa_buyer_docs_guest')||'[]').length;}catch(e){}
+  if(n > 0) document.getElementById('mesDocsCount').textContent = n + ' document' + (n>1?'s':'') + ' sauvegardé' + (n>1?'s':'');
 }
 
 function openMesDocs(){

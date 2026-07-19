@@ -993,6 +993,8 @@
   function initMobileNav() {
     if (window.innerWidth > 768) return;
     if (document.querySelector(".sa-bottom-nav")) return;
+    // Pages au design mobile dédié (m/) : elles ont leur propre navigation
+    if (document.querySelector(".m-nav") || document.querySelector(".m-bottom-nav")) return;
 
     var user = _cache.user;
     var msgN = getUnreadMessageCount();
