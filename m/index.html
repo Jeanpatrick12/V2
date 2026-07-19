@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+<head><!--sa_mguard--><script>if(location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SansAgents — L'immobilier sans intermédiaire</title>
@@ -103,17 +103,17 @@
 <div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 <div class="m-menu" id="sideMenu">
   <div class="m-menu-section">Navigation</div>
-  <button class="m-menu-item" onclick="window.location='/m/'"><i class="ti ti-home-2"></i> Accueil</button>
-  <button class="m-menu-item" onclick="window.location='/m/vendre'"><i class="ti ti-book-2"></i> Guide</button>
-  <button class="m-menu-item" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
-  <button class="m-menu-item" onclick="window.location='/m/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
-  <button class="m-menu-item" onclick="window.location='/m/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <button class="m-menu-item" onclick="window.location='/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="window.location='/guide'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="window.location='/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="window.location='/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="window.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
   <div class="m-menu-divider"></div>
   <div class="m-menu-section">Mon compte</div>
-  <button class="m-menu-item" onclick="window.location='/m/favoris'" id="menuFavoris"><i class="ti ti-heart"></i> Mes favoris</button>
-  <button class="m-menu-item" onclick="window.location='/m/mes-annonces'" id="menuMesAnnonces"><i class="ti ti-home-star"></i> Mes annonces</button>
-  <button class="m-menu-item" onclick="window.location='/m/messages'" id="menuMessages"><i class="ti ti-message-circle"></i> Messages</button>
-  <button class="m-menu-item" onclick="window.location='/m/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <button class="m-menu-item" onclick="window.location='/favoris'" id="menuFavoris"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="window.location='/mes-annonces'" id="menuMesAnnonces"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="window.location='/messages'" id="menuMessages"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="window.location='/documents'"><i class="ti ti-files"></i> Mes documents</button>
   <div class="m-menu-divider"></div>
   <button class="m-menu-item" onclick="window.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
   <div class="m-menu-divider"></div>
@@ -143,13 +143,13 @@
   </div>
   <!-- CTA buttons — below stats -->
   <div class="m-hero-ctas" style="margin-top:20px">
-    <div class="m-hero-cta primary" onclick="window.location='/m/deposer'">
+    <div class="m-hero-cta primary" onclick="window.location='/deposer'">
       <i class="ti ti-home-plus m-hero-cta-icon"></i>
       <div class="m-hero-cta-title">Déposer une annonce</div>
       <div class="m-hero-cta-sub">Gratuit, en quelques étapes</div>
       <div class="m-hero-cta-link">Commencer <i class="ti ti-arrow-right"></i></div>
     </div>
-    <div class="m-hero-cta secondary" onclick="window.location='/m/annonces'">
+    <div class="m-hero-cta secondary" onclick="window.location='/annonces'">
       <i class="ti ti-search m-hero-cta-icon"></i>
       <div class="m-hero-cta-title">Explorer les annonces</div>
       <div class="m-hero-cta-sub">100% particuliers</div>
@@ -294,7 +294,7 @@
       </div>
       <div style="font-size:11px;color:#888;line-height:1.55;display:flex;gap:6px;align-items:flex-start;border-top:1px solid var(--bg);margin-top:10px;padding-top:10px"><i class="ti ti-bulb" style="color:var(--red);font-size:13px;flex-shrink:0;margin-top:1px"></i> Chaque document est expliqué en clair dans le formulaire de dépôt d'annonce.</div>
     </div>
-    <button onclick="window.location='/m/vendre'" style="margin-top:14px;width:100%;padding:12px;background:white;border:1.5px solid #e0e0e4;border-radius:11px;font-size:13.5px;font-weight:700;color:#111;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
+    <button onclick="window.location='/guide'" style="margin-top:14px;width:100%;padding:12px;background:white;border:1.5px solid #e0e0e4;border-radius:11px;font-size:13.5px;font-weight:700;color:#111;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
       <i class="ti ti-book-2" style="color:var(--red)"></i> Consulter le guide complet du vendeur
       <i class="ti ti-arrow-right" style="color:#aaa;margin-left:auto"></i>
     </button>
@@ -345,7 +345,7 @@
     <!-- Rempli par JS -->
   </div>
   <div style="padding: 16px var(--pad) 0">
-    <button class="m-btn m-btn-outline m-btn-full" onclick="window.location='/m/annonces'">
+    <button class="m-btn m-btn-outline m-btn-full" onclick="window.location='/annonces'">
       <i class="ti ti-building-estate"></i> Voir toutes les annonces
     </button>
   </div>
@@ -366,7 +366,7 @@
       <div style="width:36px;height:36px;border-radius:50%;background:rgba(232,69,51,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-discount-2" style="color:#ff7a68;font-size:18px"></i></div>
       <div><div style="color:#ff9a8c;font-size:14px;font-weight:800;margin-bottom:1px">-5% sur votre devis</div><div style="font-size:11px;color:rgba(255,255,255,0.6);line-height:1.4">Mentionnez le code <strong style="color:rgba(255,255,255,0.9)">SANSAGENTS5</strong> au professionnel pour en bénéficier.</div></div>
     </div>
-    <button class="m-btn m-btn-primary m-btn-full" onclick="window.location='/m/professionnels'">
+    <button class="m-btn m-btn-primary m-btn-full" onclick="window.location='/professionnels'">
       <i class="ti ti-arrow-right"></i> Voir l'annuaire
     </button>
   </div>
@@ -399,10 +399,10 @@
 <div class="m-cta-section">
   <h3>Prêt à vendre ou louer sans agence ?</h3>
   <p>Publication gratuite, sans engagement. 1% de commission sur la vente uniquement (jamais sur une location), et seulement si elle se conclut.</p>
-  <button onclick="window.location='/m/deposer'" style="margin-bottom:12px;width:100%;padding:14px;background:white;color:#0f172a;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 12px rgba(0,0,0,0.15)">
+  <button onclick="window.location='/deposer'" style="margin-bottom:12px;width:100%;padding:14px;background:white;color:#0f172a;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 12px rgba(0,0,0,0.15)">
     <i class="ti ti-home-plus"></i> Déposer mon annonce gratuitement
   </button>
-  <button onclick="window.location='/m/annonces'" style="width:100%;padding:13px;background:#0f172a;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3)">
+  <button onclick="window.location='/annonces'" style="width:100%;padding:13px;background:#0f172a;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3)">
     <i class="ti ti-search"></i> Explorer les annonces
   </button>
 </div>
@@ -424,27 +424,27 @@
   <div style="padding:24px var(--pad);border-bottom:1px solid #1e2530;display:grid;grid-template-columns:1fr 1fr;gap:24px 20px">
     <div>
       <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Annonces</div>
-      <a href="/m/annonces?transaction=vente" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Acheter</a>
-      <a href="/m/annonces?transaction=location" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Louer</a>
-      <a href="/m/annonces" style="display:block;font-size:13px;color:#6b7585">Toutes les annonces</a>
+      <a href="/annonces?transaction=vente" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Acheter</a>
+      <a href="/annonces?transaction=location" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Louer</a>
+      <a href="/annonces" style="display:block;font-size:13px;color:#6b7585">Toutes les annonces</a>
     </div>
     <div>
       <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Vendre</div>
-      <a href="/m/vendre" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Guide vendeur</a>
-      <a href="/m/documents" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes documents</a>
-      <a href="/m/deposer" style="display:block;font-size:13px;color:#6b7585">Déposer une annonce</a>
+      <a href="/guide" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Guide vendeur</a>
+      <a href="/documents" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes documents</a>
+      <a href="/deposer" style="display:block;font-size:13px;color:#6b7585">Déposer une annonce</a>
     </div>
     <div>
       <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Professionnels</div>
-      <a href="/m/professionnels" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Trouver un pro</a>
-      <a href="/m/professionnels#rejoindre" style="display:block;font-size:13px;color:#6b7585">Rejoindre le réseau</a>
+      <a href="/professionnels" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Trouver un pro</a>
+      <a href="/professionnels#rejoindre" style="display:block;font-size:13px;color:#6b7585">Rejoindre le réseau</a>
     </div>
     <div>
       <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Mon compte</div>
-      <a href="/m/profil" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mon profil</a>
-      <a href="/m/mes-annonces" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes annonces</a>
-      <a href="/m/favoris" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes favoris</a>
-      <a href="/m/messages" style="display:block;font-size:13px;color:#6b7585">Messages</a>
+      <a href="/profil" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mon profil</a>
+      <a href="/mes-annonces" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes annonces</a>
+      <a href="/favoris" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes favoris</a>
+      <a href="/messages" style="display:block;font-size:13px;color:#6b7585">Messages</a>
     </div>
   </div>
   <!-- Legal -->
@@ -460,13 +460,13 @@
 
 <!-- ─── BOTTOM NAV ──────────────────────────────────── -->
 <nav class="m-bottom-nav sa-bottom-nav">
-  <button class="m-tab active" onclick="window.location='/m/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
-  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
-  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
+  <button class="m-tab active" onclick="window.location='/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.location='/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.location='/deposer'">
     <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
     <span>Déposer</span>
   </button>
-  <button class="m-tab" onclick="window.location='/m/messages'" id="botMessages"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="window.location='/messages'" id="botMessages"><i class="ti ti-message-circle"></i><span>Messages</span></button>
   <button class="m-tab" id="botProfile" onclick="handleAuthClick()"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
 </nav>
 
@@ -489,7 +489,7 @@ function closeMenu() {
 // ── Auth ─────────────────────────────────────────────────────
 function handleAuthClick() {
   const user = SA.getUser();
-  if (user) window.location = '/m/profil';
+  if (user) window.location = '/profil';
   else window.location = '/connexion?redirect=/m/';
 }
 function updateAuthUI(user) {
@@ -519,7 +519,7 @@ function toggleFaq(el) {
 function goSearch() {
   var type = document.getElementById('searchType').value;
   var city = document.getElementById('searchInput').value.trim();
-  var url = '/m/annonces?transaction=' + type;
+  var url = '/annonces?transaction=' + type;
   if (city) url += '&ville=' + encodeURIComponent(city);
   window.location = url;
 }
@@ -624,7 +624,7 @@ function renderPros(pros) {
     var stars = Math.round(rating);
     var starsHtml = '<i class="ti ti-star-filled"></i> ' + rating.toFixed(1);
     var job = p.metier || p.profession || p.job || p.category || p.categorie || p.type || p.specialite || 'Professionnel';
-    return '<div class="m-pro-card-home m-carousel-item" onclick="window.location=\'/m/professionnels\'">' +
+    return '<div class="m-pro-card-home m-carousel-item" onclick="window.location=\'/professionnels\'">' +
       '<div class="m-pro-card-avatar" style="background:' + color + '">' + initials + '</div>' +
       '<div class="m-pro-card-name">' + (p.name || p.nom || 'Professionnel') + '</div>' +
       '<div class="m-pro-card-job">' + job + '</div>' +
@@ -644,7 +644,7 @@ function renderStaticPros() {
     {name:'Thomas Petit',job:'Carreleur',rating:4.7,city:'Lille',color:'#9333ea',icon:'ti-brick'}
   ];
   grid.innerHTML = staticPros.map(function(p) {
-    return '<div style="border:1px solid var(--border);border-radius:12px;padding:14px 10px;background:white;cursor:pointer;text-align:center" onclick="window.location=\'/m/professionnels\'">' +
+    return '<div style="border:1px solid var(--border);border-radius:12px;padding:14px 10px;background:white;cursor:pointer;text-align:center" onclick="window.location=\'/professionnels\'">' +
       '<div style="width:44px;height:44px;border-radius:50%;margin:0 auto 8px;background:' + p.color + ';display:flex;align-items:center;justify-content:center">' +
         '<i class="ti ' + p.icon + '" style="color:white;font-size:18px"></i>' +
       '</div>' +
