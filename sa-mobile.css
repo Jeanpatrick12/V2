@@ -670,6 +670,24 @@ body.sa-has-bottom-nav { padding-bottom: 56px !important; }
   /* Contact / Accord */
   .contact-wrap { padding: 1.2rem 14px 4rem !important; }
   .contact-grid, .accord-grid, .cform-grid { grid-template-columns: 1fr !important; }
+
+  /* ══ PAGE ANNONCE (détail d'un bien) ═══════════════════════════ */
+  .sa-detail-wrap { padding: 0.6rem 14px 5rem !important; }
+  .sa-back-link { font-size: 12.5px !important; margin-bottom: 0.7rem !important; }
+  .sa-detail-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+  .sa-gallery-hero { height: 240px !important; border-radius: 14px !important; }
+  .sa-gallery-fav { width: 34px !important; height: 34px !important; font-size: 15px !important; }
+  .sa-gallery-allphotos { font-size: 11px !important; padding: 6px 11px !important; }
+  .sa-detail-head { margin-top: 1.1rem !important; }
+  .sa-detail-price { font-size: 22px !important; }
+  .sa-detail-pricem { font-size: 12px !important; }
+  .sa-detail-title { font-size: 13.5px !important; }
+  .sa-detail-desc { font-size: 13px !important; }
+  .sa-fact-grid { grid-template-columns: 1fr !important; }
+  .sa-energy-cols { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .sa-fmodal-grid { grid-template-columns: 1fr !important; }
+  .sa-contact-card { position: static !important; padding: 1.1rem !important; border-radius: 14px !important; }
+  .sa-similar-grid { grid-template-columns: 1fr !important; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
