@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><!--sa_mguard--><script>if(location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Laisser un avis — SansAgents</title>
@@ -178,20 +178,20 @@
   <button onclick="history.back()" style="width:100%;background:var(--red);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
     <i class="ti ti-arrow-left"></i> Retour
   </button>
-  <button onclick="window.location='/'" style="width:100%;background:white;color:var(--text);border:1.5px solid var(--border);border-radius:14px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px">
+  <button onclick="window.location='/m/'" style="width:100%;background:white;color:var(--text);border:1.5px solid var(--border);border-radius:14px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px">
     Accueil
   </button>
 </div>
 
 <nav class="m-bottom-nav sa-bottom-nav">
-  <button class="m-tab" onclick="window.location='/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
-  <button class="m-tab" onclick="window.location='/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
-  <button class="m-tab-cta" onclick="window.location='/deposer'">
+  <button class="m-tab" onclick="window.location='/m/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.location='/m/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.location='/m/deposer'">
     <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
     <span>Déposer</span>
   </button>
-  <button class="m-tab" onclick="window.location='/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
-  <button class="m-tab" onclick="window.location='/connexion'"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+  <button class="m-tab" onclick="window.location='/m/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="window.location='/m/connexion'"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><!--sa_mguard--><script>if(location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Déposer une annonce — SansAgents</title>
@@ -41,7 +41,7 @@ body { background: #0c1622; min-height: 100vh; display: flex; flex-direction: co
 <body>
 
 <nav class="gate-nav">
-  <div class="gate-logo" onclick="window.location='/'">
+  <div class="gate-logo" onclick="window.location='/m/'">
     <div class="gate-logo-icon"><i class="ti ti-key"></i></div>
     <div class="gate-logo-brand">Sans<span>Agents</span></div>
   </div>
@@ -65,15 +65,15 @@ body { background: #0c1622; min-height: 100vh; display: flex; flex-direction: co
       </div>
       <div class="gate-tip">
         <div class="gate-tip-num">3</div>
-        <div class="gate-tip-text"><strong>Prix de vente</strong> — estimez votre bien au prix du marché. Consultez notre <a href="/guide" style="color:#ff7a68;text-decoration:none">guide gratuit</a> en cas de doute.</div>
+        <div class="gate-tip-text"><strong>Prix de vente</strong> — estimez votre bien au prix du marché. Consultez notre <a href="/m/vendre" style="color:#ff7a68;text-decoration:none">guide gratuit</a> en cas de doute.</div>
       </div>
     </div>
   </div>
 
-  <button class="gate-btn gate-btn-primary" onclick="window.location='/deposer-form'">
+  <button class="gate-btn gate-btn-primary" onclick="window.location='/m/deposer-form'">
     <i class="ti ti-rocket"></i> Commencer le formulaire
   </button>
-  <button class="gate-btn gate-btn-ghost" onclick="window.location='/guide'">
+  <button class="gate-btn gate-btn-ghost" onclick="window.location='/m/vendre'">
     <i class="ti ti-book-2"></i> Consulter le guide d'abord
   </button>
 </div>
