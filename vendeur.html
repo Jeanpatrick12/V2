@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documents vendeur — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f4f5f7;color:#111}
+
+.page-header{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:48px 24px 40px}
+.page-header-inner{max-width:960px;margin:0 auto}
+.page-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(232,69,51,.15);color:#ff7a68;border:1px solid rgba(232,69,51,.25);padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:700;margin-bottom:16px}
+.page-header h1{font-size:30px;font-weight:800;color:white;letter-spacing:-.5px;margin-bottom:8px}
+.page-header p{font-size:14px;color:rgba(255,255,255,.5);max-width:480px}
+
+.page-body{max-width:960px;margin:0 auto;padding:32px 24px}
+
+/* Generate section */
+.gen-section{margin-bottom:40px}
+.section-title{font-size:13px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-title i{font-size:16px;color:#E84533;line-height:1}
+.gen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.gen-card{background:white;border:1.5px solid #ebebeb;border-radius:14px;padding:20px;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.gen-card:hover{border-color:#E84533;box-shadow:0 4px 20px rgba(232,69,51,.1);transform:translateY(-2px)}
+.gen-card-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.gen-card-title{font-size:14px;font-weight:700;color:#111;letter-spacing:-.2px}
+.gen-card-desc{font-size:12px;color:#888;line-height:1.5}
+.gen-card-btn{display:inline-flex;align-items:center;gap:5px;background:#E84533;color:white;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px}
+
+/* Doc cards */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.doc-card{background:white;border:1.5px solid #ebebeb;border-radius:14px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.doc-card:hover{border-color:#E84533;box-shadow:0 4px 20px rgba(232,69,51,.08)}
+.doc-card-header{padding:16px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f5f5f5}
+.doc-card-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.doc-card-title{font-size:14px;font-weight:700;color:#111;letter-spacing:-.2px}
+.doc-card-date{font-size:11.5px;color:#aaa;margin-top:2px}
+.doc-card-actions{padding:12px 18px;display:flex;gap:8px}
+.doc-btn-open{flex:1;padding:9px 14px;background:#0f172a;color:white;border:none;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s}
+.doc-btn-open:hover{background:#1e293b}
+.doc-btn-print{padding:9px 12px;background:#f8f9fb;color:#555;border:1.5px solid #e5e5e5;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;transition:all .2s}
+.doc-btn-print:hover{border-color:#0f172a;color:#0f172a}
+.doc-btn-del{padding:9px 12px;background:#fff5f4;color:#E84533;border:1.5px solid #fdd5d0;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s}
+.doc-btn-del:hover{background:#fee2e2;border-color:#E84533}
+
+.empty-state{text-align:center;padding:40px 20px;color:#aaa}
+.empty-state i{font-size:44px;display:block;margin-bottom:14px;color:#ddd}
+.empty-state h2{font-size:17px;font-weight:700;color:#555;margin-bottom:8px}
+.empty-state p{font-size:13.5px;line-height:1.6;max-width:380px;margin:0 auto}
+
+@media(max-width:600px){
+  .page-header{padding:32px 16px 28px}
+  .page-header h1{font-size:22px}
+  .page-body{padding:20px 16px}
+  .doc-grid,.gen-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div data-nav-account style="display:none"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js?v=7"></script>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+      <a href="./" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+        <div style="width:44px;height:44px;background:#E84533;border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(232,69,51,.35)"><i class="ti ti-key" style="color:white;font-size:22px"></i></div>
+        <span style="font-size:20px;font-weight:800;color:white;letter-spacing:-.3px">Sans<span style="color:#ff7a68">Agents</span></span>
+      </a>
+      <a href="./" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;display:flex;align-items:center;gap:5px"><i class="ti ti-arrow-left" style="font-size:15px"></i> Accueil</a>
+    </div>
+    <div class="page-header-badge"><i class="ti ti-home-2"></i> Espace vendeur</div>
+    <h1>Vos documents de vente</h1>
+    <p>Générez, personnalisez et sauvegardez vos documents pour chaque étape de votre vente immobilière.</p>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- Generate section -->
+  <div class="gen-section">
+    <div class="section-title"><i class="ti ti-wand"></i> Générer un document</div>
+    <div class="gen-grid">
+      <div class="gen-card" onclick="window.location.href='guide?doc=visite'">
+        <div class="gen-card-ico" style="background:#fff5f4"><i class="ti ti-door-enter" style="color:#ff7a68"></i></div>
+        <div>
+          <div class="gen-card-title">Bon de visite</div>
+          <div class="gen-card-desc">Faites signer chaque visiteur — votre protection anti-agence.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+      <div class="gen-card" onclick="window.location.href='guide?doc=offre'">
+        <div class="gen-card-ico" style="background:#eff6ff"><i class="ti ti-file-euro" style="color:#3b82f6"></i></div>
+        <div>
+          <div class="gen-card-title">Offre d'achat</div>
+          <div class="gen-card-desc">Formalisez la proposition écrite d'un acheteur.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+      <div class="gen-card" onclick="window.location.href='guide?doc=contre'">
+        <div class="gen-card-ico" style="background:#fff7ed"><i class="ti ti-arrows-exchange" style="color:#d97706"></i></div>
+        <div>
+          <div class="gen-card-title">Contre-proposition</div>
+          <div class="gen-card-desc">Répondez à une offre avec votre propre prix.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+      <div class="gen-card" onclick="window.location.href='guide?doc=acceptation'">
+        <div class="gen-card-ico" style="background:#f0fdf4"><i class="ti ti-circle-check" style="color:#16a34a"></i></div>
+        <div>
+          <div class="gen-card-title">Lettre d'acceptation</div>
+          <div class="gen-card-desc">Confirmez par écrit votre accord sur le prix.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+      <div class="gen-card" onclick="window.location.href='guide?doc=refus'">
+        <div class="gen-card-ico" style="background:#fef2f2"><i class="ti ti-x" style="color:#dc2626"></i></div>
+        <div>
+          <div class="gen-card-title">Lettre de refus</div>
+          <div class="gen-card-desc">Déclinez poliment une offre trop basse.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+      <div class="gen-card" onclick="window.location.href='guide?doc=cles'">
+        <div class="gen-card-ico" style="background:#fefce8"><i class="ti ti-key" style="color:#ca8a04"></i></div>
+        <div>
+          <div class="gen-card-title">Remise des clés</div>
+          <div class="gen-card-desc">Actez la remise des clés le jour J.</div>
+        </div>
+        <button class="gen-card-btn"><i class="ti ti-plus"></i> Générer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saved docs -->
+  <div class="section-title"><i class="ti ti-files"></i> Mes documents sauvegardés</div>
+  <div id="docGrid" class="doc-grid"></div>
+  <div id="emptyState" class="empty-state" style="display:none">
+    <i class="ti ti-files"></i>
+    <h2>Aucun document sauvegardé</h2>
+    <p>Générez vos documents ci-dessus — bon de visite, offre d'achat, remise des clés… ils seront sauvegardés ici.</p>
+  </div>
+
+</div>
+
+<script>
+var ICONS={visite:'ti-door-enter',offre:'ti-file-euro',acceptation:'ti-circle-check',contre:'ti-arrows-exchange',refus:'ti-x',cles:'ti-key',plan:'ti-layout-list'};
+var COLORS={visite:'#ff7a68',offre:'#3b82f6',acceptation:'#16a34a',contre:'#d97706',refus:'#dc2626',cles:'#ca8a04',plan:'#E84533'};
+var BKGS={visite:'#fff5f4',offre:'#eff6ff',acceptation:'#f0fdf4',contre:'#fff7ed',refus:'#fef2f2',cles:'#fefce8',plan:'#fff5f4'};
+
+function docsKey(){var uid=SA.getUser()&&SA.getUser().id;return uid?'sa_user_docs_'+uid:'sa_user_docs_guest';}
+function getDocs(){try{return JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){return [];}}
+
+function loadDocs(){
+  var docs=getDocs();
+  var grid=document.getElementById('docGrid');
+  var empty=document.getElementById('emptyState');
+  if(!docs.length){grid.style.display='none';empty.style.display='';return;}
+  grid.style.display='';empty.style.display='none';
+  grid.innerHTML=docs.map(function(d,i){
+    var ico=ICONS[d.type]||'ti-file-text';
+    var col=COLORS[d.type]||'#E84533';
+    var bkg=BKGS[d.type]||'#fff5f4';
+    return '<div class="doc-card" id="card'+i+'">'
+      +'<div class="doc-card-header">'
+      +'<div class="doc-card-ico" style="background:'+bkg+'"><i class="ti '+ico+'" style="color:'+col+'"></i></div>'
+      +'<div><div class="doc-card-title">'+d.title+'</div><div class="doc-card-date"><i class="ti ti-calendar" style="font-size:11px"></i> Sauvegardé le '+d.date+'</div></div>'
+      +'</div>'
+      +'<div class="doc-card-actions">'
+      +'<button class="doc-btn-open" onclick="openDoc('+i+')"><i class="ti ti-eye"></i> Ouvrir</button>'
+      +'<button class="doc-btn-print" onclick="openDoc('+i+')" title="Télécharger en PDF"><i class="ti ti-printer"></i> PDF</button>'
+      +'<button class="doc-btn-print" onclick="editDoc('+i+')" title="Modifier le document" style="color:#7c3aed;border-color:#e9d5ff;background:#faf5ff"><i class="ti ti-pencil"></i></button>'
+      +'<button class="doc-btn-del" onclick="deleteDoc('+i+')" title="Supprimer"><i class="ti ti-trash"></i></button>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function editDoc(idx){
+  var d=getDocs()[idx];if(!d)return;
+  var editable=['visite','offre','acceptation','contre','refus','cles'];
+  if(d.fields&&editable.indexOf(d.type)!==-1){
+    var data=Object.assign({},d.fields,{t:d.type});
+    var enc;try{enc=btoa(unescape(encodeURIComponent(JSON.stringify(data))));}catch(e){enc=null;}
+    if(enc){window.open('guide?sign='+enc,'_blank');return;}
+  }
+  SA.toast('Ce document ne peut pas être modifié — il reste consultable et imprimable.','ti-info-circle');
+  openDoc(idx);
+}
+
+function deleteDoc(idx){
+  if(!confirm('Supprimer ce document ? Cette action est irréversible.'))return;
+  var d=getDocs()[idx];if(!d)return;
+  var card=document.getElementById('card'+idx);
+  if(card){card.style.opacity='0';card.style.transition='opacity .3s';}
+  setTimeout(function(){
+    SA.deleteDoc(d.type);
+    loadDocs();
+  },300);
+}
+
+function openDoc(idx){
+  var d=getDocs()[idx];if(!d)return;
+  var docCss='.v-doc-preview{max-width:720px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;font-size:13.5px;line-height:1.75;color:#111}'
+    +'.doc-header{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:18px 24px 16px;border-radius:14px 14px 0 0;overflow:hidden}'
+    +'.doc-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}'
+    +'.doc-logo{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:rgba(255,255,255,.85);letter-spacing:.04em}'
+    +'.doc-logo-badge{width:22px;height:22px;background:#E84533;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:white;flex-shrink:0}'
+    +'.doc-meta{text-align:right;font-size:10.5px;color:rgba(255,255,255,.4);line-height:1.6}'
+    +'.doc-title-band{border-top:1px solid rgba(255,255,255,.1);padding-top:14px;display:flex;align-items:center;gap:12px}'
+    +'.doc-title-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}'
+    +'.doc-title{font-size:16px;font-weight:800;color:white;letter-spacing:-.2px}'
+    +'.doc-subtitle{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}'
+    +'.doc-body{padding:22px 24px 20px;background:white}'
+    +'.v-doc-preview .doc-parties{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}'
+    +'.v-doc-preview .doc-party{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:10px;padding:11px 13px}'
+    +'.v-doc-preview .doc-party-label{font-size:9.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}'
+    +'.v-doc-preview .doc-party-name,.v-doc-preview .doc-party-value{font-size:14px;font-weight:700;color:#111}'
+    +'.v-doc-preview .doc-address{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px}'
+    +'.v-doc-preview .doc-address i,.v-doc-preview .doc-address-ico{color:#E84533;font-size:16px;flex-shrink:0;margin-top:1px}'
+    +'.v-doc-preview .doc-address-label{font-size:9.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}'
+    +'.v-doc-preview .doc-address-val{font-size:14px;font-weight:700;color:#111}'
+    +'.v-doc-preview .doc-section{margin-bottom:16px}'
+    +'.v-doc-preview .doc-section-title{font-size:10.5px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;padding-bottom:7px;border-bottom:1.5px solid #f0f0f2;display:flex;align-items:center;gap:6px}'
+    +'.v-doc-preview .doc-kv{display:flex;margin-bottom:5px;border:1px solid #eeeff2;border-radius:8px;overflow:hidden}'
+    +'.v-doc-preview .doc-kv-k{font-size:11.5px;font-weight:700;color:#666;background:#f4f5f7;padding:8px 12px;min-width:155px;flex-shrink:0;border-right:1px solid #eeeff2}'
+    +'.v-doc-preview .doc-kv-v{font-size:12.5px;font-weight:600;color:#111;padding:8px 12px;flex:1}'
+    +'.v-doc-preview .doc-kv-v.big{font-size:16px;font-weight:800;color:#0f172a}'
+    +'.v-doc-preview .doc-legal{font-size:13px;color:#444;line-height:1.85;background:#fafbfc;border:1px solid #eeeef2;border-radius:10px;padding:14px 16px}'
+    +'.v-doc-preview .doc-sigs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;padding-top:18px;border-top:1.5px solid #f0f0f2}'
+    +'.v-doc-preview .doc-sig-box{border:1.5px solid #e4e5ea;border-radius:10px;overflow:hidden}'
+    +'.v-doc-preview .doc-sig-header{background:#f4f5f7;padding:8px 12px;font-size:10px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e4e5ea}'
+    +'.v-doc-preview .doc-sig-body{padding:12px 14px}'
+    +'.v-doc-preview .doc-sig-space{min-height:80px;border:1.5px dashed #d8dce6;border-radius:7px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;padding:8px}'
+    +'.v-doc-preview .doc-sig-fields{display:flex;gap:10px}'
+    +'.v-doc-preview .doc-sig-field{font-size:10.5px;color:#777;flex:1;padding-bottom:14px;border-bottom:1px solid #e0e2e8}'
+    +'.v-doc-preview .doc-footer{background:#f8f9fb;border-top:1px solid #eeeff2;padding:10px 20px;text-align:center;font-size:10.5px;color:#bbb;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;border-radius:0 0 14px 14px}'
+    +'.v-doc-preview .doc-footer-dot{width:3px;height:3px;background:#ddd;border-radius:50%;display:inline-block;vertical-align:middle}'
+    +'.doc-footer{background:#f8f9fb;border-top:1px solid #eeeff2;padding:10px 20px;text-align:center;font-size:10.5px;color:#bbb;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}'
+    +'.doc-footer-dot{width:3px;height:3px;background:#ddd;border-radius:50%;display:inline-block;vertical-align:middle}';
+  var pCss='@media print{'
+    +'@page{size:A4 portrait;margin:8mm}'
+    +'body{padding:12px!important;margin:0!important;background:#f0f2f5!important}'
+    +'.no-print{display:none!important}'
+    +'*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'
+    +'.doc-wrap{border-radius:14px!important;overflow:hidden!important;box-shadow:0 4px 20px rgba(0,0,0,.15)!important}'
+    +'.v-doc-preview{max-width:none!important;width:100%!important;border-radius:14px!important;overflow:hidden!important}'
+    +'.doc-section,.doc-parties,.doc-address{page-break-inside:avoid;break-inside:avoid}'
+    +'.doc-sigs,.doc-sig-box,.doc-footer{page-break-inside:avoid;break-inside:avoid}'
+    +'}';
+  var win=window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+d.title+'</title>'
+    +'<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">'
+    +'<style>'+docCss+'body{background:#f0f2f5;padding:24px;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif}.doc-wrap{max-width:720px;margin:0 auto;box-shadow:0 6px 32px rgba(0,0,0,.13);border-radius:16px;overflow:hidden}'+pCss+'</style>'
+    +'</head><body>'
+    +'<div class="no-print" style="max-width:720px;margin:0 auto 14px;display:flex;gap:10px;align-items:center;background:white;padding:12px 16px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.07)">'
+    +'<button onclick="window.print()" style="display:flex;align-items:center;gap:7px;padding:10px 20px;background:#E84533;color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit"><i class="ti ti-download"></i> Télécharger en PDF</button>'
+    +'<button onclick="window.close()" style="padding:10px 14px;background:#f5f5f5;color:#555;border:1.5px solid #e5e5e5;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit">Fermer</button>'
+    +'<span style="font-size:11px;color:#999;margin-left:4px">Sélectionnez <strong style="color:#555">Enregistrer en PDF</strong></span>'
+    +'</div>'
+    +'<div class="doc-wrap">'+d.html+'</div>'
+    +'</body></html>');
+  win.document.close();
+}
+
+SA.init().then(loadDocs).catch(loadDocs);
+</script>
+</body>
+</html>

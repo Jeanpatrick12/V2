@@ -1704,6 +1704,8 @@ function shareViaEmail(){
 // ── Auto-fill from shared link on page load ───────
 (function(){
   var p=new URLSearchParams(window.location.search);
+  var dtype=p.get('doc');
+  if(dtype){setTimeout(function(){openDocModal(dtype);},700);return;}
   var s=p.get('sign');if(!s)return;
   var data;try{data=JSON.parse(decodeURIComponent(escape(atob(s))));}catch(e){return;}
   if(!data||!data.t)return;
