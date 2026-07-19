@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SansAgents</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
-<script>(function(){if(window.innerWidth>768&&!localStorage.sa_force_desktop){location.replace("/");return;}document.documentElement.style.visibility="hidden";fetch("/m/avis.html").then(function(r){return r.text()}).then(function(h){h=h.replace(/<head([^>]*)>/i,'<head$1><base href="/m/">');document.open();document.write(h);document.close();}).catch(function(){location.replace("/");});})();</script>
+<script>(function(){if(window.innerWidth>768&&!localStorage.sa_force_desktop){location.replace("/");return;}document.documentElement.style.visibility="hidden";fetch("/m/avis.html").then(function(r){return r.text()}).then(function(h){h=h.replace(/<head([^>]*)>/i,'<head$1><base href="/m/">');var go=function(){document.open();document.write(h);document.close();};if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){setTimeout(go,0);});}else{go();}}).catch(function(){location.replace("/");});})();</script>
 </head>
 <body></body>
 </html>
