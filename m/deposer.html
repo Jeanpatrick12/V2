@@ -18,7 +18,7 @@ body{background:#0c1622;min-height:100vh;display:flex;flex-direction:column;font
 .dep-logo-brand{font-size:17px;font-weight:700;color:white}
 .dep-logo-brand span{color:#E84533}
 .dep-cancel{background:rgba(255,255,255,.08);border:none;border-radius:8px;padding:7px 13px;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:5px;cursor:pointer;font-family:inherit}
-.dep-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px var(--pad) 30px;text-align:center}
+.dep-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px var(--pad) 44px;text-align:center}
 .dep-icon-wrap{width:72px;height:72px;background:rgba(232,69,51,.15);border:2px solid rgba(232,69,51,.35);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
 .dep-icon-wrap i{color:#E84533;font-size:32px}
 .dep-title{font-size:24px;font-weight:900;line-height:1.2;letter-spacing:-.5px;margin-bottom:12px}
@@ -33,18 +33,9 @@ body{background:#0c1622;min-height:100vh;display:flex;flex-direction:column;font
 .dep-btn-primary:active{background:#c93a2a}
 .dep-btn-ghost{background:none;border:none;color:rgba(255,255,255,.4);font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:underline;text-decoration-color:rgba(255,255,255,.2);text-underline-offset:3px;padding:4px}
 .dep-btn-ghost:active{color:rgba(255,255,255,.7)}
-/* Petits écrans : tout tient sans défilement */
-@media(max-height:740px){
-  .dep-icon-wrap{width:54px;height:54px;border-radius:15px;margin-bottom:12px}
-  .dep-icon-wrap i{font-size:24px}
-  .dep-title{font-size:20px;margin-bottom:8px}
-  .dep-sub{font-size:12.5px;margin-bottom:16px}
-  .dep-features{gap:8px;margin-bottom:18px}
-  .dep-feat{padding:9px}
-  .dep-feat-txt{font-size:11px}
-  .dep-btn-primary{padding:13px;font-size:14px;margin-bottom:10px}
-  .dep-body{padding:6px var(--pad) 20px}
-}
+/* Petits écrans : tailles normales, la page défile naturellement
+   (même approche que la page « Vous êtes prêt à commencer ») */
+html,body{height:auto;overflow-y:auto;-webkit-overflow-scrolling:touch}
 </style>
 </head>
 <body>

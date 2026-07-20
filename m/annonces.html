@@ -115,6 +115,12 @@
 .m-an-card-meta { display: flex; flex-wrap: wrap; gap: 10px; }
 .m-an-card-meta span { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
 .m-an-card-meta i { font-size: 13px; color: var(--text3); }
+/* Pied de carte : vendeur + ancienneté (même style que la version ordinateur) */
+.m-an-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid #f2f2f2; font-size: 11.5px; color: #999; }
+.m-an-card-seller { display: flex; align-items: center; gap: 7px; color: #555; font-weight: 600; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-an-card-seller-avatar { width: 20px; height: 20px; border-radius: 50%; background: var(--red-light); color: var(--red); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-an-card-date { display: flex; align-items: center; gap: 4px; color: #999; flex-shrink: 0; }
+.m-an-card-date i { font-size: 12px; }
 
 #listingsContainer { padding-top: 10px; }
 </style>
@@ -520,6 +526,18 @@ var IMG_GRADIENTS_FALLBACK = {
   p6:'linear-gradient(135deg,#7a5a8b,#a378b8)',p7:'linear-gradient(135deg,#8b7a4f,#c4ab78)'
 };
 
+function relTime(ts) {
+  if(!ts) return '';
+  var day = 86400000;
+  var d = Math.floor((Date.now() - ts) / day);
+  if(d <= 0) return "Aujourd'hui";
+  if(d === 1) return 'Hier';
+  if(d < 7) return 'Il y a ' + d + ' jours';
+  if(d < 30) { var w = Math.floor(d/7); return 'Il y a ' + w + ' semaine' + (w>1?'s':''); }
+  if(d < 365) { var m = Math.floor(d/30); return 'Il y a ' + m + ' mois'; }
+  var y = Math.floor(d/365); return 'Il y a ' + y + ' an' + (y>1?'s':'');
+}
+
 function getPhotoUrl(l) {
   var photos = Array.isArray(l.photos) ? l.photos : [];
   var ph = photos[0];
@@ -568,7 +586,16 @@ function renderListings(listings) {
               (l.ville ? '<span><i class="ti ti-map-pin"></i> ' + l.ville + '</span>' : '') +
               dpeHtml +
             '</div>' +
-            (l.contactPrenom ? '<div style="font-size:11.5px;color:#999;margin-top:6px;display:flex;align-items:center;gap:5px"><i class="ti ti-user" style="font-size:12px"></i> Publié par <strong style="color:#555">' + l.contactPrenom + (l.contactNom ? ' ' + l.contactNom : '') + '</strong></div>' : '') +
+            (function(){
+              var prenom = l.contactPrenom || 'un particulier';
+              var initial = (l.contactPrenom || '?').charAt(0).toUpperCase();
+              var ts = l.createdAt || (l.created_at ? new Date(l.created_at).getTime() : 0) || 0;
+              var when = relTime(ts);
+              return '<div class="m-an-card-foot">' +
+                '<span class="m-an-card-seller"><span class="m-an-card-seller-avatar">' + initial + '</span>Publié par ' + prenom + '</span>' +
+                (when ? '<span class="m-an-card-date"><i class="ti ti-clock"></i> ' + when + '</span>' : '') +
+              '</div>';
+            })() +
           '</div>' +
         '</div>'
       );

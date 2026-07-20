@@ -9,27 +9,62 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <link rel="stylesheet" href="m.css">
 <style>
-.m-my-card { background: white; border-radius: 14px; margin: 0 var(--pad) 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.07); display: flex; min-height: 130px; }
-.m-my-card-photo { width: 42%; min-height: 130px; flex-shrink: 0; background: #e8e8e8; background-size: cover; background-position: center; position: relative; }
-.m-my-card-body { flex: 1; padding: 12px 13px; display: flex; flex-direction: column; min-width: 0; }
-.m-my-card-badges { display: flex; gap: 5px; margin-bottom: 6px; flex-wrap: wrap; }
-.m-my-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 5px; text-transform: uppercase; letter-spacing: .04em; }
-.m-my-badge-vente { background: #E84533; color: white; }
-.m-my-badge-location { background: #1e6abf; color: white; }
-.m-my-badge-active { background: #ecfdf5; color: #065f46; }
-.m-my-badge-pending { background: #fffbeb; color: #92400e; }
-.m-my-badge-sold { background: #f1f5f9; color: #475569; }
-.m-my-card-price { font-size: 16px; font-weight: 800; color: var(--red); margin-bottom: 3px; }
-.m-my-card-title { font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.m-my-card-meta { display: flex; gap: 8px; font-size: 11px; color: var(--text3); margin-bottom: 8px; flex-wrap: wrap; }
-.m-my-card-actions { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
-.m-my-card-actions-row { display: flex; gap: 6px; }
+/* ── Cartes : même langage visuel que la version ordinateur ── */
+.m-my-card { background: white; border: 1px solid var(--border); border-radius: 16px; margin: 0 var(--pad) 16px; overflow: hidden; }
+.m-my-card.sold { opacity: .65; background: #fafafa; }
+.m-my-photo { width: 100%; height: 180px; background: #e8e8e8; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: center; }
+.m-my-photo > i { font-size: 30px; color: rgba(255,255,255,.5); }
+.m-my-badge { position: absolute; top: 10px; left: 10px; color: #fff; font-size: 10.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+.m-my-badge.vente { background: var(--red); }
+.m-my-badge.location { background: #1e6abf; }
+.m-my-badge.sold { background: rgba(0,0,0,0.65); }
+.m-my-body { padding: 14px 16px 15px; }
+.m-my-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.m-my-price { font-size: 19px; font-weight: 700; color: #111; letter-spacing: -0.3px; }
+.m-my-pricem2 { font-size: 12px; color: #999; font-weight: 500; margin-left: 6px; }
+.m-my-title { font-size: 13px; color: #666; margin-top: 3px; }
+.m-my-status { font-size: 10.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+.m-my-status.active { background: #e9f7ef; color: #1a8c4e; }
+.m-my-status.pending { background: #fff8e6; color: #b87a00; }
+.m-my-status.sold { background: #2c3e50; color: #fff; }
+.m-my-meta { display: flex; gap: 14px; font-size: 12.5px; color: #444; font-weight: 600; margin: 11px 0 8px; flex-wrap: wrap; }
+.m-my-meta span { display: flex; align-items: center; gap: 5px; }
+.m-my-meta i { color: #bbb; font-size: 14px; }
+.m-my-addr { font-size: 12px; color: #999; display: flex; align-items: center; gap: 5px; }
+.m-my-msgs { font-size: 11.5px; color: #aaa; display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+.m-my-actions { display: flex; gap: 8px; margin-top: 13px; padding-top: 13px; border-top: 1px solid #f2f2f2; flex-wrap: wrap; }
+.m-my-btn { border: 1.5px solid #ddd; background: white; color: #444; font-size: 12px; font-weight: 600; padding: 9px 14px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; cursor: pointer; flex: 1; min-height: 40px; white-space: nowrap; }
+.m-my-btn.primary { background: #111; border-color: #111; color: #fff; }
+.m-my-btn.success { background: #1a8c4e; border-color: #1a8c4e; color: #fff; font-weight: 700; box-shadow: 0 2px 8px rgba(26,140,78,0.3); flex-basis: 100%; font-size: 13px; }
+.m-my-btn[disabled] { opacity: .5; cursor: default; }
+
+/* ── Stats : mêmes encadrés que la version ordinateur ── */
+.m-my-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px var(--pad) 0; }
+.m-my-stat { border-radius: 14px; padding: 13px 14px; display: flex; align-items: center; gap: 11px; min-width: 0; }
+.m-my-stat.c1 { background: linear-gradient(135deg,#fff5f3,#ffe9e5); }
+.m-my-stat.c2 { background: linear-gradient(135deg,#eef9f1,#e3f5ea); }
+.m-my-stat.c3 { background: linear-gradient(135deg,#0f1923,#1a2c3d); }
+.m-my-stat.c4 { background: linear-gradient(135deg,#f0f4ff,#e6ecff); }
+.m-my-stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.m-my-stat.c1 .m-my-stat-icon { background: var(--red); color: #fff; }
+.m-my-stat.c2 .m-my-stat-icon { background: #1a8c4e; color: #fff; }
+.m-my-stat.c3 .m-my-stat-icon { background: rgba(255,255,255,0.15); color: #ff7a68; }
+.m-my-stat.c4 .m-my-stat-icon { background: #3b5bdb; color: #fff; }
+.m-my-stat-value { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-my-stat.c3 .m-my-stat-value { color: #fff; }
+.m-my-stat.c4 .m-my-stat-value { color: #1e3a8a; }
+.m-my-stat-label { font-size: 10.5px; color: #888; font-weight: 600; }
+.m-my-stat.c3 .m-my-stat-label { color: rgba(255,255,255,0.55); }
+.m-my-stat.c4 .m-my-stat-label { color: #6b7fcc; }
 
 /* Edit modal */
 #editModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:none;align-items:flex-end}
 #editModal.open{display:flex}
-.em-sheet{background:#f8f9fb;border-radius:20px 20px 0 0;width:100%;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.em-header{position:sticky;top:0;background:white;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #ebebeb;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+/* Feuille en colonne : en-tête + zone défilante + pied TOUJOURS visible.
+   Hauteurs en % de l'overlay (fixe, plein écran) et non en vh : fiable même en iframe. */
+.em-sheet{background:#f8f9fb;border-radius:20px 20px 0 0;width:100%;max-height:calc(100% - 24px);display:flex;flex-direction:column;overflow:hidden}
+.em-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px}
+.em-header{background:white;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #ebebeb;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .em-title{font-size:15px;font-weight:800;color:#111;display:flex;align-items:center;gap:7px}
 .em-title i{color:#E84533}
 .em-close{width:32px;height:32px;border-radius:8px;background:#f4f5f7;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:#555}
@@ -59,7 +94,7 @@
 .em-cb-row:last-child{border-bottom:none}
 .em-cb-row input{width:16px;height:16px;accent-color:#E84533;flex-shrink:0;cursor:pointer}
 .em-hint{font-size:11.5px;color:#94a3b8;margin-top:5px}
-.em-footer{position:sticky;bottom:0;background:white;padding:12px 14px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #ebebeb;display:flex;gap:10px;margin-top:10px}
+.em-footer{flex-shrink:0;background:white;padding:12px 14px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #ebebeb;display:flex;gap:10px;box-shadow:0 -2px 10px rgba(0,0,0,.06)}
 </style>
 </head>
 <body>
@@ -84,28 +119,28 @@
 
 <div id="myContent" style="display:none">
   <div style="padding:16px var(--pad) 0">
-    <h1 style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin-bottom:4px">Mes annonces</h1>
+    <h1 style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px"><i class="ti ti-home" style="color:var(--red)"></i> Mes annonces</h1>
     <p style="font-size:12.5px;color:var(--text2);line-height:1.55">Modifiez tout — prix, photos, description, caractéristiques — ou signalez une vente/location conclue.</p>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px var(--pad) 0">
-    <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:9px">
-      <div style="width:30px;height:30px;border-radius:8px;background:#fff0ee;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-home" style="color:var(--red);font-size:15px"></i></div>
-      <div><div id="statTotal" style="font-size:16px;font-weight:800;color:var(--text)">0</div><div style="font-size:10.5px;color:var(--text3)">Annonces</div></div>
+  <div class="m-my-stats">
+    <div class="m-my-stat c1">
+      <div class="m-my-stat-icon"><i class="ti ti-home"></i></div>
+      <div style="min-width:0"><div id="statActive" class="m-my-stat-value">0</div><div class="m-my-stat-label">Annonces actives</div></div>
     </div>
-    <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:9px">
-      <div style="width:30px;height:30px;border-radius:8px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-eye" style="color:#16a34a;font-size:15px"></i></div>
-      <div><div id="statActive" style="font-size:16px;font-weight:800;color:var(--text)">0</div><div style="font-size:10.5px;color:var(--text3)">En ligne</div></div>
+    <div class="m-my-stat c2">
+      <div class="m-my-stat-icon"><i class="ti ti-circle-check"></i></div>
+      <div style="min-width:0"><div id="statSold" class="m-my-stat-value">0</div><div class="m-my-stat-label">Vendues / louées</div></div>
     </div>
-    <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:9px">
-      <div style="width:30px;height:30px;border-radius:8px;background:#fefce8;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-circle-check" style="color:#ca8a04;font-size:15px"></i></div>
-      <div><div id="statSold" style="font-size:16px;font-weight:800;color:var(--text)">0</div><div style="font-size:10.5px;color:var(--text3)">Vendues / louées</div></div>
+    <div class="m-my-stat c3">
+      <div class="m-my-stat-icon"><i class="ti ti-coin"></i></div>
+      <div style="min-width:0"><div id="statValue" class="m-my-stat-value">0 €</div><div class="m-my-stat-label">Valeur totale en ligne</div></div>
     </div>
-    <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:9px">
-      <div style="width:30px;height:30px;border-radius:8px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-message-circle" style="color:#3b82f6;font-size:15px"></i></div>
-      <div><div id="statConvos" style="font-size:16px;font-weight:800;color:var(--text)">0</div><div style="font-size:10.5px;color:var(--text3)">Conversations</div></div>
+    <div class="m-my-stat c4">
+      <div class="m-my-stat-icon"><i class="ti ti-message-circle"></i></div>
+      <div style="min-width:0"><div id="statConvos" class="m-my-stat-value">0</div><div class="m-my-stat-label">Conversations</div></div>
     </div>
   </div>
-  <div style="padding:14px var(--pad) 0;font-size:13px;color:var(--text2)">
+  <div style="padding:16px var(--pad) 0;font-size:13px;color:var(--text2)">
     <strong id="myCount" style="color:var(--text)">0</strong> annonce(s) publiée(s)
   </div>
   <div id="myList" style="margin-top:10px"></div>
@@ -130,11 +165,16 @@ SA.init().then(function(){
   if(!u){ document.getElementById('notLoggedIn').style.display=''; return; }
   document.getElementById('myContent').style.display='';
   var mine = SA.getUserListings ? SA.getUserListings() : SA.getAllListings().filter(function(l){ return l.owner_id === u.id; });
+  var convos = [];
+  try{ convos = (SA.getConversations?SA.getConversations():[]); }catch(e){}
+  var active = mine.filter(function(l){return l.status!=='sold';});
+  var sold = mine.filter(function(l){return l.status==='sold';});
+  var totalValue = active.reduce(function(s,l){return s+(l.price||0);},0);
   document.getElementById('myCount').textContent = mine.length;
-  document.getElementById('statTotal').textContent = mine.length;
-  document.getElementById('statActive').textContent = mine.filter(function(l){return l.status==='active';}).length;
-  document.getElementById('statSold').textContent = mine.filter(function(l){return l.status==='sold';}).length;
-  try{ document.getElementById('statConvos').textContent = (SA.getConversations?SA.getConversations():[]).filter(function(c){return c.seller_id===u.id;}).length; }catch(e){}
+  document.getElementById('statActive').textContent = active.length;
+  document.getElementById('statSold').textContent = sold.length;
+  document.getElementById('statValue').textContent = SA.fmtPrice ? SA.fmtPrice(totalValue) : totalValue.toLocaleString('fr-FR')+' €';
+  document.getElementById('statConvos').textContent = convos.filter(function(c){return c.seller_id===u.id;}).length;
   var el = document.getElementById('myList');
   if(!mine.length){
     el.innerHTML = '<div style="padding:40px var(--pad);text-align:center">' +
@@ -149,36 +189,58 @@ SA.init().then(function(){
     var _photos=Array.isArray(l.photos)?l.photos:[];var _mp=_photos[0]?(_photos[0].url||_photos[0]):null;
     var _grad=(SA.IMG_GRADIENTS&&SA.IMG_GRADIENTS[l.img])||'linear-gradient(135deg,#4f6d9e,#7890b8)';
     var photoBg=_mp?'background-image:url('+_mp+');background-size:cover;background-position:center':'background:'+_grad;
-    var priceNum = l.price ? l.price.toLocaleString('fr-FR')+'€'+(l.transaction==='location'?'/mois':'') : 'Prix non défini';
-    var priceM2 = (l.price && l.surface && l.transaction!=='location') ? ' <span style="font-size:11px;font-weight:500;color:#999">'+Math.round(l.price/l.surface).toLocaleString('fr-FR')+'€/m²</span>' : '';
-    var txBadge = l.transaction==='location'?'<span class="m-my-badge m-my-badge-location">Location</span>':'<span class="m-my-badge m-my-badge-vente">Vente</span>';
-    var status = l.status==='active'?'En ligne':l.status==='sold'?'Vendue':'En attente';
-    var statusCls = l.status==='active'?'m-my-badge-active':l.status==='sold'?'m-my-badge-sold':'m-my-badge-pending';
-    var soldBtn = (l.status!=='sold' && l.transaction!=='location') ? '<button class="m-btn m-btn-sm" style="background:#16a34a;color:white;border:none;width:100%;justify-content:center" onclick="markSold(\''+l.id+'\')"><i class="ti ti-check"></i> Marquer vendue</button>' : '';
-    return '<div class="m-my-card">' +
-      '<div class="m-my-card-photo" style="'+photoBg+'"></div>' +
-      '<div class="m-my-card-body">' +
-        '<div class="m-my-card-badges">'+txBadge+'<span class="m-my-badge '+statusCls+'">'+status+'</span></div>' +
-        '<div class="m-my-card-price">'+priceNum+priceM2+'</div>' +
-        '<div class="m-my-card-title">'+(l.titre||(SA.TYPE_LABELS&&SA.TYPE_LABELS[l.type]||l.type||'Bien'))+'</div>' +
-        '<div class="m-my-card-meta">'+(l.surface?'<span><i class="ti ti-ruler-2"></i> '+l.surface+' m²</span>':'')+(l.pieces?'<span><i class="ti ti-door"></i> '+l.pieces+'p</span>':'')+(l.ville?'<span><i class="ti ti-map-pin"></i> '+l.ville+'</span>':'')+'</div>' +
-        '<div class="m-my-card-actions">' +
-          '<div class="m-my-card-actions-row">' +
-            '<button class="m-btn m-btn-secondary m-btn-sm" onclick="SA.openListing(\''+l.id+'\')"><i class="ti ti-eye"></i></button>' +
-            '<button class="m-btn m-btn-secondary m-btn-sm" style="flex:1" onclick="openEditModal(\''+l.id+'\')"><i class="ti ti-edit"></i> Modifier</button>' +
+    var _icon=(SA.TYPE_ICONS&&SA.TYPE_ICONS[l.type])||'ti-home';
+    var isSold = l.status==='sold';
+    var soldLabel = l.transaction==='location'?'Louée':'Vendue';
+    var priceNum = l.price ? l.price.toLocaleString('fr-FR')+' €'+(l.transaction==='location'?'/mois':'') : 'Prix non défini';
+    var m2 = (l.price && l.surface && l.transaction!=='location') ? Math.round(l.price/l.surface).toLocaleString('fr-FR')+' €/m²' : '';
+    var badgeCls = isSold?'sold':(l.transaction==='location'?'location':'vente');
+    var badgeLabel = isSold?soldLabel:(l.transaction==='location'?'Location':'Vente');
+    var status = l.status==='active'?'En ligne':isSold?soldLabel:'En attente';
+    var statusCls = l.status==='active'?'active':isSold?'sold':'pending';
+    var msgCount = convos.filter(function(c){return c.listingId===l.id;}).length;
+    var title = l.titre||(SA.TYPE_LABELS&&SA.TYPE_LABELS[l.type]||l.type||'Bien');
+    return '<div class="m-my-card'+(isSold?' sold':'')+'">' +
+      '<div class="m-my-photo" style="'+photoBg+'">' +
+        (_mp?'':'<i class="ti '+_icon+'"></i>') +
+        '<span class="m-my-badge '+badgeCls+'">'+badgeLabel+'</span>' +
+      '</div>' +
+      '<div class="m-my-body">' +
+        '<div class="m-my-top">' +
+          '<div style="min-width:0">' +
+            '<span class="m-my-price">'+priceNum+'</span>'+(m2?'<span class="m-my-pricem2">'+m2+'</span>':'') +
+            '<div class="m-my-title">'+title+'</div>' +
           '</div>' +
-          (soldBtn?'<div>'+soldBtn+'</div>':'') +
+          '<span class="m-my-status '+statusCls+'">'+status+'</span>' +
+        '</div>' +
+        '<div class="m-my-meta">' +
+          '<span><i class="ti ti-ruler-2"></i> '+(l.surface||'—')+' m²</span>' +
+          '<span><i class="ti ti-door"></i> '+(l.pieces||'—')+' pièce'+(l.pieces>1?'s':'')+'</span>' +
+          (l.chambres?'<span><i class="ti ti-bed"></i> '+l.chambres+' ch.</span>':'') +
+          (l.dpe?'<span><i class="ti ti-bolt"></i> DPE '+l.dpe+'</span>':'') +
+        '</div>' +
+        (l.ville?'<div class="m-my-addr"><i class="ti ti-map-pin"></i> '+l.ville+(l.postal?' ('+l.postal+')':'')+'</div>':'') +
+        (msgCount?'<div class="m-my-msgs"><i class="ti ti-message-2"></i> '+msgCount+' conversation'+(msgCount>1?'s':'')+'</div>':'') +
+        '<div class="m-my-actions">' +
+          '<button class="m-my-btn primary" onclick="openEditModal(\''+l.id+'\')"'+(isSold?' disabled':'')+'><i class="ti ti-edit"></i> Modifier</button>' +
+          '<button class="m-my-btn" onclick="SA.openListing(\''+l.id+'\')"><i class="ti ti-eye"></i> Voir l\'annonce</button>' +
+          (!isSold?'<button class="m-my-btn success" onclick="markSold(\''+l.id+'\',\''+(l.transaction||'vente')+'\')"><i class="ti ti-circle-check"></i> Marquer '+(l.transaction==='location'?'louée':'vendue')+'</button>':'') +
         '</div>' +
       '</div>' +
     '</div>';
   }).join('');
 });
 
-function markSold(id){
+function markSold(id, transaction){
   var all=SA.getAllListings?SA.getAllListings():[];
   var l=all.find(function(x){return x.id===id;});
   if(!l)return;
-  if(!confirm('Marquer "'+((l.titre||l.type||'ce bien'))+'" comme vendu ?'))return;
+  var isLoc = (transaction||l.transaction)==='location';
+  if(!confirm('Confirmer : cette annonce est '+(isLoc?'louée':'vendue')+' ? Elle sera retirée des résultats de recherche.'))return;
+  if(SA.updateListing){
+    SA.updateListing(id,{status:'sold'}).then(function(){ window.location.reload(); }).catch(function(){ window.location.reload(); });
+    return;
+  }
   l.status='sold';
   try{
     var key='sa_listings';
@@ -197,6 +259,8 @@ function markSold(id){
       <div class="em-title"><i class="ti ti-edit"></i> Modifier l'annonce</div>
       <button class="em-close" onclick="closeEditModal()"><i class="ti ti-x"></i></button>
     </div>
+
+    <div class="em-body" id="emBody">
 
     <!-- Photos -->
     <div class="em-card">
@@ -298,6 +362,8 @@ function markSold(id){
       </div>
     </div>
 
+    </div><!-- /em-body -->
+
     <div class="em-footer">
       <button class="m-btn m-btn-secondary" style="flex:1" onclick="closeEditModal()">Annuler</button>
       <button class="m-btn m-btn-primary" style="flex:2" onclick="saveEdit()"><i class="ti ti-check"></i> Enregistrer les modifications</button>
@@ -381,11 +447,16 @@ function openEditModal(id){
   renderEmPhotos();
   document.getElementById('editModal').classList.add('open');
   document.body.style.overflow='hidden';
+  // La barre de navigation basse est masquée pendant l'édition :
+  // elle ne peut plus passer devant les boutons Annuler / Enregistrer.
+  var bn=document.querySelector('.m-bottom-nav'); if(bn) bn.style.display='none';
+  var eb=document.getElementById('emBody'); if(eb) eb.scrollTop=0;
 }
 
 function closeEditModal(){
   document.getElementById('editModal').classList.remove('open');
   document.body.style.overflow='';
+  var bn=document.querySelector('.m-bottom-nav'); if(bn) bn.style.display='';
   _editId=null;
 }
 

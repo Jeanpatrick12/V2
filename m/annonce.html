@@ -311,8 +311,9 @@ function render(l) {
     });
   }
 
-  var sellerInit = (l.seller_name||l.owner_name||l.contact_name||'V').charAt(0).toUpperCase();
-  var sellerName = ((l.contactPrenom||'')+' '+(l.contactNom||'')).trim()||l.seller_name||l.owner_name||l.contact_name||'Particulier';
+  // Prénom seul (comme sur les cartes de la version ordinateur)
+  var sellerName = l.contactPrenom || (l.seller_name||l.owner_name||l.contact_name||'').split(' ')[0] || 'Particulier';
+  var sellerInit = sellerName.charAt(0).toUpperCase();
   var safeId = String(l.id).replace(/'/g,'');
 
   // ── Construire liste de caractéristiques (par catégorie) ──
