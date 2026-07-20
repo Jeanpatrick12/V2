@@ -140,15 +140,29 @@
 </div>
 
 <div id="docsContent" style="display:none;padding:14px 16px 90px">
-  <div id="emptyState" style="display:none;text-align:center;padding:60px 0">
-    <i class="ti ti-files" style="font-size:44px;color:#ddd;display:block;margin-bottom:14px"></i>
-    <div style="font-size:16px;font-weight:700;color:#333;margin-bottom:6px">Aucun document</div>
-    <div style="font-size:13px;color:#999;margin-bottom:24px">Remplissez et sauvegardez un document depuis le Guide vendeur.</div>
-    <button class="m-btn m-btn-primary" onclick="window.top.location='/guide'" style="display:inline-flex">
-      <i class="ti ti-book"></i> Ouvrir le Guide
+
+  <div style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.06em;margin:4px 2px 12px"><i class="ti ti-home-2" style="color:#E84533;margin-right:5px"></i>Documents de vente</div>
+  <div id="docGrid"></div>
+  <div id="emptyState" style="display:none;text-align:center;padding:22px 0 6px">
+    <div style="font-size:13px;color:#999">Aucun document de vente sauvegardé.</div>
+  </div>
+  <div style="text-align:center;margin:14px 0 4px">
+    <button class="m-btn m-btn-primary" onclick="window.top.location='/vendeur'" style="display:inline-flex">
+      <i class="ti ti-home-2"></i> Ouvrir l'espace vendeur
     </button>
   </div>
-  <div id="docGrid"></div>
+
+  <div style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.06em;margin:30px 2px 12px"><i class="ti ti-home-search" style="color:#E84533;margin-right:5px"></i>Documents d'achat</div>
+  <div id="buyGrid"></div>
+  <div id="emptyBuy" style="display:none;text-align:center;padding:22px 0 6px">
+    <div style="font-size:13px;color:#999">Aucun document d'achat sauvegardé.</div>
+  </div>
+  <div style="text-align:center;margin:14px 0">
+    <button class="m-btn m-btn-primary" onclick="window.top.location='/acheteur'" style="display:inline-flex">
+      <i class="ti ti-home-search"></i> Ouvrir l'espace acheteur
+    </button>
+  </div>
+
 </div>
 
 <!-- Document viewer overlay -->
@@ -187,31 +201,72 @@ var BKGS={visite:'#fff5f4',offre:'#fff5f4',acceptation:'#f0fdf4',contre:'#fff7ed
 
 var _viewerDoc = null;
 
+function _docCardM(d,i,fns){
+  var ico = ICONS[d.type]||'ti-file-text';
+  var col = COLORS[d.type]||'#E84533';
+  var bkg = BKGS[d.type]||'#fff5f4';
+  return '<div class="doc-card">'
+    +'<div class="doc-card-top">'
+    +'<div class="doc-ico" style="background:'+bkg+'"><i class="ti '+ico+'" style="color:'+col+'"></i></div>'
+    +'<div style="flex:1;min-width:0">'
+    +'<div class="doc-title">'+d.title+'</div>'
+    +'<div class="doc-date"><i class="ti ti-calendar" style="font-size:10px"></i> '+d.date+'</div>'
+    +'</div>'
+    +'</div>'
+    +'<div class="doc-actions">'
+    +'<button class="doc-action" onclick="'+fns.open+'('+i+')"><i class="ti ti-eye"></i> Ouvrir</button>'
+    +'<button class="doc-action" onclick="'+fns.edit+'"><i class="ti ti-edit"></i> Modifier</button>'
+    +'<button class="doc-action red" onclick="'+fns.del+'('+i+')"><i class="ti ti-trash"></i></button>'
+    +'</div>'
+    +'</div>';
+}
+
+function getBuyDocsM(){
+  var uid = SA.getUser() && SA.getUser().id;
+  try{ return JSON.parse(localStorage.getItem(uid?'sa_buyer_docs_'+uid:'sa_buyer_docs_guest')||'[]'); }catch(e){ return []; }
+}
+
 function loadDocs(){
   var docs = SA.getDocs ? SA.getDocs() : [];
   var grid = document.getElementById('docGrid');
   var empty = document.getElementById('emptyState');
-  if(!docs.length){ grid.innerHTML=''; empty.style.display=''; return; }
-  empty.style.display='none';
-  grid.innerHTML = docs.map(function(d,i){
-    var ico = ICONS[d.type]||'ti-file-text';
-    var col = COLORS[d.type]||'#E84533';
-    var bkg = BKGS[d.type]||'#fff5f4';
-    return '<div class="doc-card" id="mcard'+i+'">'
-      +'<div class="doc-card-top">'
-      +'<div class="doc-ico" style="background:'+bkg+'"><i class="ti '+ico+'" style="color:'+col+'"></i></div>'
-      +'<div style="flex:1;min-width:0">'
-      +'<div class="doc-title">'+d.title+'</div>'
-      +'<div class="doc-date"><i class="ti ti-calendar" style="font-size:10px"></i> '+d.date+'</div>'
-      +'</div>'
-      +'</div>'
-      +'<div class="doc-actions">'
-      +'<button class="doc-action" onclick="openViewer('+i+')"><i class="ti ti-eye"></i> Ouvrir</button>'
-      +'<button class="doc-action" onclick="editDoc(\''+d.type+'\')"><i class="ti ti-edit"></i> Modifier</button>'
-      +'<button class="doc-action red" onclick="deleteDocMobile('+i+')"><i class="ti ti-trash"></i></button>'
-      +'</div>'
-      +'</div>';
-  }).join('');
+  if(!docs.length){ grid.innerHTML=''; empty.style.display=''; }
+  else {
+    empty.style.display='none';
+    grid.innerHTML = docs.map(function(d,i){
+      return _docCardM(d,i,{open:'openViewer',edit:"editDoc('"+d.type+"')",del:'deleteDocMobile'});
+    }).join('');
+  }
+  var bdocs = getBuyDocsM();
+  var bgrid = document.getElementById('buyGrid');
+  var bempty = document.getElementById('emptyBuy');
+  if(!bdocs.length){ bgrid.innerHTML=''; bempty.style.display=''; }
+  else {
+    bempty.style.display='none';
+    bgrid.innerHTML = bdocs.map(function(d,i){
+      return _docCardM(d,i,{open:'openViewerB',edit:"window.top.location='/acheteur'",del:'deleteBuyDocMobile'});
+    }).join('');
+  }
+}
+
+function openViewerB(idx){
+  var d = getBuyDocsM()[idx]; if(!d) return;
+  _viewerDoc = d;
+  document.getElementById('dvTitle').textContent = d.title;
+  document.getElementById('dvContent').innerHTML = d.html || '';
+  document.getElementById('docViewer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('dvShareBtn').style.display = navigator.share ? '' : 'none';
+}
+
+function deleteBuyDocMobile(idx){
+  if(!confirm('Supprimer ce document ?')) return;
+  var uid = SA.getUser() && SA.getUser().id;
+  var key = uid?'sa_buyer_docs_'+uid:'sa_buyer_docs_guest';
+  var docs = getBuyDocsM();
+  docs.splice(idx,1);
+  localStorage.setItem(key, JSON.stringify(docs));
+  loadDocs();
 }
 
 function openViewer(idx){

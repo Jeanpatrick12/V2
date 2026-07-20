@@ -312,7 +312,7 @@ function render(l) {
   }
 
   var sellerInit = (l.seller_name||l.owner_name||l.contact_name||'V').charAt(0).toUpperCase();
-  var sellerName = l.seller_name||l.owner_name||l.contact_name||'Particulier';
+  var sellerName = ((l.contactPrenom||'')+' '+(l.contactNom||'')).trim()||l.seller_name||l.owner_name||l.contact_name||'Particulier';
   var safeId = String(l.id).replace(/'/g,'');
 
   // ── Construire liste de caractéristiques (par catégorie) ──
@@ -542,13 +542,13 @@ function render(l) {
       '<div class="m-seller-top">' +
         '<div class="m-seller-avatar">' + sellerInit + '</div>' +
         '<div>' +
-          '<div class="m-seller-name">' + sellerName + '</div>' +
-          '<div class="m-seller-badge"><i class="ti ti-users-group" style="font-size:11px"></i> Particulier — réponse sous 24h</div>' +
+          '<div class="m-seller-name" style="font-weight:700">' + sellerName + '</div>' +
+          '<div class="m-seller-badge"><i class="ti ti-users-group" style="font-size:11px"></i> Particulier · sans agence</div>' +
         '</div>' +
       '</div>' +
-      '<textarea class="m-contact-msg" id="contactMsg" placeholder="Bonjour, je suis intéressé(e) par votre annonce. Seriez-vous disponible pour une visite ?"></textarea>' +
+      '<textarea class="m-contact-msg" id="contactMsg">Bonjour, je suis intéressé(e) par votre annonce. Seriez-vous disponible pour une visite ?</textarea>' +
       '<button class="m-btn m-btn-primary m-btn-full" style="margin-top:10px" onclick="sendMsg()"><i class="ti ti-send"></i> Envoyer le message</button>' +
-      '<button class="m-btn m-btn-secondary m-btn-full" style="margin-top:8px" onclick="callSeller()"><i class="ti ti-phone"></i> Voir le numéro de téléphone</button>' +
+      '<button class="m-btn m-btn-secondary m-btn-full" style="margin-top:8px" onclick="requestDossierM()"><i class="ti ti-folder-open"></i> Demander le dossier complet</button>' +
     '</div>' +
 
     // ── Avis vendeur ──
@@ -605,6 +605,14 @@ function renderSimilar(l) {
   }).join('') + '<div style="width:1px;flex-shrink:0;margin-right:6px"></div>';
 }
 
+function requestDossierM() {
+  var t = document.getElementById('contactMsg');
+  if (!t) return;
+  t.value = 'Bonjour,\n\nVotre bien m\'intéresse vivement. Pourriez-vous me transmettre le dossier complet (diagnostics, documents de copropriété et tout autre justificatif utile) ?\n\nJe reste disponible pour convenir d\'une visite selon vos disponibilités.\n\nCordialement.';
+  t.scrollIntoView({behavior:'smooth',block:'center'});
+  t.focus();
+}
+
 function sendMsg() {
   var msg = document.getElementById('contactMsg').value.trim();
   if(!msg) { alert('Écrivez un message avant d\'envoyer.'); return; }
@@ -651,10 +659,10 @@ function updateOfferSim() {
         '<span>Prix du bien</span><span style="font-weight:600;color:var(--text)">' + amount.toLocaleString('fr-FR') + ' €</span>' +
       '</div>' +
       '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);color:var(--text2)">' +
-        '<span>Frais de notaire estimés (~7,5%)</span><span style="font-weight:600;color:var(--text)">~' + notaire.toLocaleString('fr-FR') + ' €</span>' +
+        '<span style="flex:1;padding-right:12px">Frais de notaire estimés (~7,5%)</span><span style="font-weight:600;color:var(--text);white-space:nowrap">~' + notaire.toLocaleString('fr-FR') + ' €</span>' +
       '</div>' +
       '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);color:var(--text3);font-size:12px">' +
-        '<span>Commission SansAgents (1%, à la charge du vendeur)</span><span style="font-weight:600">' + commission.toLocaleString('fr-FR') + ' €</span>' +
+        '<span style="flex:1;padding-right:12px">Commission SansAgents<br>(1%, à la charge du vendeur)</span><span style="font-weight:600;white-space:nowrap">' + commission.toLocaleString('fr-FR') + ' €</span>' +
       '</div>' +
       '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:14px;font-weight:800;color:var(--text)">' +
         '<span>Montant total</span><span style="color:var(--red)">' + total.toLocaleString('fr-FR') + ' €</span>' +

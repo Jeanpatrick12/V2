@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="m.css">
 <style>
 .m-my-card { background: white; border-radius: 14px; margin: 0 var(--pad) 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.07); display: flex; min-height: 130px; }
-.m-my-card-photo { width: 42%; flex-shrink: 0; background: #e8e8e8; background-size: cover; background-position: center; position: relative; }
+.m-my-card-photo { width: 42%; min-height: 130px; flex-shrink: 0; background: #e8e8e8; background-size: cover; background-position: center; position: relative; }
 .m-my-card-body { flex: 1; padding: 12px 13px; display: flex; flex-direction: column; min-width: 0; }
 .m-my-card-badges { display: flex; gap: 5px; margin-bottom: 6px; flex-wrap: wrap; }
 .m-my-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 5px; text-transform: uppercase; letter-spacing: .04em; }
@@ -28,7 +28,7 @@
 /* Edit modal */
 #editModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:none;align-items:flex-end}
 #editModal.open{display:flex}
-.em-sheet{background:#f8f9fb;border-radius:20px 20px 0 0;width:100%;max-height:94vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.em-sheet{background:#f8f9fb;border-radius:20px 20px 0 0;width:100%;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .em-header{position:sticky;top:0;background:white;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #ebebeb;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .em-title{font-size:15px;font-weight:800;color:#111;display:flex;align-items:center;gap:7px}
 .em-title i{color:#E84533}
@@ -59,7 +59,7 @@
 .em-cb-row:last-child{border-bottom:none}
 .em-cb-row input{width:16px;height:16px;accent-color:#E84533;flex-shrink:0;cursor:pointer}
 .em-hint{font-size:11.5px;color:#94a3b8;margin-top:5px}
-.em-footer{position:sticky;bottom:0;background:white;padding:12px 14px;border-top:1px solid #ebebeb;display:flex;gap:10px;margin-top:10px}
+.em-footer{position:sticky;bottom:0;background:white;padding:12px 14px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #ebebeb;display:flex;gap:10px;margin-top:10px}
 </style>
 </head>
 <body>
@@ -83,7 +83,29 @@
 </div>
 
 <div id="myContent" style="display:none">
-  <div style="padding:12px var(--pad) 0;font-size:13px;color:var(--text2)">
+  <div style="padding:16px var(--pad) 0">
+    <h1 style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin-bottom:4px">Mes annonces</h1>
+    <p style="font-size:12.5px;color:var(--text2);line-height:1.55">Modifiez tout — prix, photos, description, caractéristiques — ou signalez une vente/location conclue.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px var(--pad) 0">
+    <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:9px">
+      <div style="width:30px;height:30px;border-radius:8px;background:#fff0ee;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-home" style="color:var(--red);font-size:15px"></i></div>
+      <div><div id="statTotal" style="font-size:16px;font-weight:800;color:var(--text)">0</div><div style="font-size:10.5px;color:var(--text3)">Annonces</div></div>
+    </div>
+    <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:9px">
+      <div style="width:30px;height:30px;border-radius:8px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-eye" style="color:#16a34a;font-size:15px"></i></div>
+      <div><div id="statActive" style="font-size:16px;font-weight:800;color:var(--text)">0</div><div style="font-size:10.5px;color:var(--text3)">En ligne</div></div>
+    </div>
+    <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:9px">
+      <div style="width:30px;height:30px;border-radius:8px;background:#fefce8;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-circle-check" style="color:#ca8a04;font-size:15px"></i></div>
+      <div><div id="statSold" style="font-size:16px;font-weight:800;color:var(--text)">0</div><div style="font-size:10.5px;color:var(--text3)">Vendues / louées</div></div>
+    </div>
+    <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:9px">
+      <div style="width:30px;height:30px;border-radius:8px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-message-circle" style="color:#3b82f6;font-size:15px"></i></div>
+      <div><div id="statConvos" style="font-size:16px;font-weight:800;color:var(--text)">0</div><div style="font-size:10.5px;color:var(--text3)">Conversations</div></div>
+    </div>
+  </div>
+  <div style="padding:14px var(--pad) 0;font-size:13px;color:var(--text2)">
     <strong id="myCount" style="color:var(--text)">0</strong> annonce(s) publiée(s)
   </div>
   <div id="myList" style="margin-top:10px"></div>
@@ -109,6 +131,10 @@ SA.init().then(function(){
   document.getElementById('myContent').style.display='';
   var mine = SA.getUserListings ? SA.getUserListings() : SA.getAllListings().filter(function(l){ return l.owner_id === u.id; });
   document.getElementById('myCount').textContent = mine.length;
+  document.getElementById('statTotal').textContent = mine.length;
+  document.getElementById('statActive').textContent = mine.filter(function(l){return l.status==='active';}).length;
+  document.getElementById('statSold').textContent = mine.filter(function(l){return l.status==='sold';}).length;
+  try{ document.getElementById('statConvos').textContent = (SA.getConversations?SA.getConversations():[]).filter(function(c){return c.seller_id===u.id;}).length; }catch(e){}
   var el = document.getElementById('myList');
   if(!mine.length){
     el.innerHTML = '<div style="padding:40px var(--pad);text-align:center">' +
@@ -329,7 +355,7 @@ function openEditModal(id){
   _emDpe=l.dpe||null;
   _emGes=l.ges||null;
   _emNewPhotos=[];
-  _emCurrentPhotos=l.photos&&l.photos.length?l.photos:(l.photo?[l.photo]:[]);
+  _emCurrentPhotos=(l.photos&&l.photos.length?l.photos:(l.photo?[l.photo]:[])).map(function(p){return (p&&p.url)?p.url:p;});
 
   document.getElementById('emDesc').value=l.description||l.desc||'';
   document.getElementById('emPrix').value=l.prix||l.price||'';

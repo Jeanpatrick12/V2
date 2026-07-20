@@ -848,7 +848,7 @@ function renderContact(l) {
     body = `
       <div class="sa-contact-form">
         <button class="sa-dossier-btn" onclick="requestDossier('${l.id}')"><i class="ti ti-folder-open"></i> Demander le dossier complet</button>
-        <textarea id="msgInput" placeholder="Bonjour, votre bien m'intéresse, serait-il possible d'organiser une visite ?"></textarea>
+        <textarea id="msgInput">Bonjour, votre bien m'intéresse, serait-il possible d'organiser une visite ?</textarea>
         <button class="sa-contact-send" onclick="sendContactMessage('${l.id}')"><i class="ti ti-send"></i> Envoyer un message</button>
       </div>
       <div class="sa-contact-privacy"><i class="ti ti-shield-lock"></i> Vos coordonnées restent privées. C'est l'annonceur qui décide, personne par personne, de partager les siennes.</div>
