@@ -1204,6 +1204,14 @@ SA.init().then(function(){
   var u=SA.getUser();
   if(u)document.getElementById('botProfileLabel').textContent=u.prenom||'Profil';
 });
+
+// Ouverture automatique d'un document depuis /documents ("Générer" -> /guide?doc=TYPE
+// -> ici sur mobile) : la page guide desktop lit ce paramètre, mais la version mobile
+// (cette page) ne le faisait pas encore, donc le document ne s'ouvrait jamais.
+(function(){
+  var docType = new URLSearchParams(window.location.search).get('doc');
+  if(docType && _docModalMap[docType]) setTimeout(function(){ openDoc(docType); }, 300);
+})();
 </script>
 
 <div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>

@@ -10,15 +10,17 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--red:#E84533;--pad:18px}
-body{background:#0c1622;min-height:100vh;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:white}
-.dep-nav{display:flex;align-items:center;justify-content:space-between;padding:14px var(--pad);flex-shrink:0}
+html{background:#0c1622}
+body{background:#0c1622;min-height:100vh;min-height:100dvh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:white}
+/* Haut de page figé, comme sur "Vous êtes prêt à commencer" (.gate-nav) */
+.dep-nav{display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;padding:14px var(--pad);z-index:10;background:#0c1622}
 .dep-logo{display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none}
 .dep-logo-icon{width:32px;height:32px;background:#E84533;border-radius:9px;display:flex;align-items:center;justify-content:center}
 .dep-logo-icon i{color:white;font-size:15px}
 .dep-logo-brand{font-size:17px;font-weight:700;color:white}
 .dep-logo-brand span{color:#E84533}
 .dep-cancel{background:rgba(255,255,255,.08);border:none;border-radius:8px;padding:7px 13px;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:5px;cursor:pointer;font-family:inherit}
-.dep-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px var(--pad) 44px;text-align:center}
+.dep-body{display:flex;flex-direction:column;align-items:center;padding:82px var(--pad) 44px;text-align:center}
 .dep-icon-wrap{width:72px;height:72px;background:rgba(232,69,51,.15);border:2px solid rgba(232,69,51,.35);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
 .dep-icon-wrap i{color:#E84533;font-size:32px}
 .dep-title{font-size:24px;font-weight:900;line-height:1.2;letter-spacing:-.5px;margin-bottom:12px}
@@ -33,9 +35,6 @@ body{background:#0c1622;min-height:100vh;display:flex;flex-direction:column;font
 .dep-btn-primary:active{background:#c93a2a}
 .dep-btn-ghost{background:none;border:none;color:rgba(255,255,255,.4);font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:underline;text-decoration-color:rgba(255,255,255,.2);text-underline-offset:3px;padding:4px}
 .dep-btn-ghost:active{color:rgba(255,255,255,.7)}
-/* Petits écrans : tailles normales, la page défile naturellement
-   (même approche que la page « Vous êtes prêt à commencer ») */
-html,body{height:auto;overflow-y:auto;-webkit-overflow-scrolling:touch}
 </style>
 </head>
 <body>
