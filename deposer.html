@@ -929,6 +929,9 @@
     .d-gfb-btn-confirm:hover{background:#c73525;transform:translateY(-1px)}
     @media(max-width:600px){.d-gfb-title{font-size:22px}.d-gfb-checks{grid-template-columns:1fr}
       .d-gfb{padding:70px 16px calc(40px + env(safe-area-inset-bottom))}
+      /* Haut de page figé pendant que la bannière est ouverte, comme sur
+         "Vous êtes prêt à commencer" (nav en position:fixed, pas sticky). */
+      body.gfb-open .sa-nav-wrapper{position:fixed;top:0;left:0;right:0;z-index:1000}
     }
     .d-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 20px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
     .d-stat:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.18)}

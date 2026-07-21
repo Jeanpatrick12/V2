@@ -378,6 +378,8 @@ var _editId=null;
 var _emDpe=null;
 var _emGes=null;
 var _emNewPhotos=[];
+var _bottomNavEl=null;
+var _bottomNavPlaceholder=null;
 
 function selectDpe(type,letter){
   if(type==='dpe'){
@@ -453,6 +455,10 @@ function openEditModal(id){
   document.body.style.overflow='hidden';
   var eb=document.getElementById('emBody'); if(eb) eb.scrollTop=0;
   _emFitViewport();
+  // Solution la plus radicale : on retire carrément la barre du DOM tant que
+  // l'édition est en cours, impossible qu'elle repasse devant les boutons.
+  var bn=document.querySelector('.m-bottom-nav');
+  if(bn){ _bottomNavPlaceholder=document.createComment('bottom-nav'); bn.parentNode.replaceChild(_bottomNavPlaceholder,bn); _bottomNavEl=bn; }
 }
 
 function closeEditModal(){
@@ -460,6 +466,10 @@ function closeEditModal(){
   document.getElementById('editModal').style.height='';
   document.body.classList.remove('em-open');
   document.body.style.overflow='';
+  if(_bottomNavEl && _bottomNavPlaceholder && _bottomNavPlaceholder.parentNode){
+    _bottomNavPlaceholder.parentNode.replaceChild(_bottomNavEl,_bottomNavPlaceholder);
+  }
+  _bottomNavEl=null; _bottomNavPlaceholder=null;
   _editId=null;
 }
 

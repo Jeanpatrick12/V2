@@ -342,7 +342,7 @@ function printViewer(){
   window.open(url,'_blank');
 }
 
-function editDoc(type){ window.top.location='/guide?openDoc='+type; }
+function editDoc(type){ window.top.location='/guide?doc='+type; }
 function editViewerDoc(){ if(_viewerDoc) editDoc(_viewerDoc.type); }
 
 function shareViewer(){
