@@ -892,9 +892,18 @@
     .d-hero-step{display:flex;align-items:center;gap:12px;font-size:13.5px;color:rgba(255,255,255,.65)}
     .d-hero-step-ico{width:28px;height:28px;border-radius:50%;background:rgba(232,69,51,.2);border:1px solid rgba(232,69,51,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:800;color:#ff7a68}
     .d-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    /* Guide-first banner */
-    .d-gfb{position:fixed;inset:0;z-index:9000;background:linear-gradient(145deg,#07080f 0%,#0f172a 60%,#16203a 100%);display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-    .d-gfb-inner{max-width:620px;width:100%;text-align:center;padding:8px}
+    /* Guide-first banner : contenu en flux normal (comme la page "Vous êtes prêt à
+       commencer"), pas de position:fixed + overflow interne — c'est le BODY qui
+       défile, ce qui est fiable partout sur mobile. Tout le reste de la page
+       (hero, formulaire, barre de navigation basse) est masqué tant qu'elle est ouverte. */
+    .d-gfb{display:none;background:linear-gradient(145deg,#07080f 0%,#0f172a 60%,#16203a 100%);padding:40px 24px;min-height:100vh;box-sizing:border-box}
+    .d-gfb.open{display:block}
+    .d-gfb-inner{max-width:620px;width:100%;margin:0 auto;text-align:center;padding:8px}
+    body.gfb-open{overflow:visible}
+    body.gfb-open > .d-hero,
+    body.gfb-open .m-bottom-nav,
+    body.gfb-open .sa-bottom-nav,
+    body.gfb-open #dGuideBanner ~ *{display:none!important}
     .d-gfb-ico{width:72px;height:72px;border-radius:50%;background:rgba(232,69,51,.12);border:2px solid rgba(232,69,51,.35);display:flex;align-items:center;justify-content:center;font-size:30px;color:#E84533;margin:0 auto 24px;animation:gfbPulse 2s ease-in-out infinite}
     @keyframes gfbPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,69,51,.3)}50%{box-shadow:0 0 0 14px rgba(232,69,51,0)}}
     .d-gfb-title{font-size:28px;font-weight:800;color:white;letter-spacing:-.5px;margin-bottom:12px;line-height:1.25}
@@ -919,10 +928,7 @@
     .d-gfb-btn-confirm{display:inline-flex;align-items:center;gap:8px;padding:14px 36px;background:#E84533;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 8px 28px rgba(232,69,51,.35);transition:all .15s;margin-bottom:12px}
     .d-gfb-btn-confirm:hover{background:#c73525;transform:translateY(-1px)}
     @media(max-width:600px){.d-gfb-title{font-size:22px}.d-gfb-checks{grid-template-columns:1fr}
-      /* align-items:center coupe le haut du contenu quand il dépasse la hauteur de l'écran
-         (bug classique flexbox + overflow) : on ancre en haut sur mobile pour que le
-         défilement atteigne bien le bas, comme sur la page « Vous êtes prêt à commencer ». */
-      .d-gfb{align-items:flex-start;padding:26px 16px calc(56px + env(safe-area-inset-bottom))}
+      .d-gfb{padding:70px 16px calc(40px + env(safe-area-inset-bottom))}
     }
     .d-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 20px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
     .d-stat:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.18)}
@@ -1164,7 +1170,7 @@
         <div class="d-gfb-tip-text"><strong>Votre saisie est sauvegardée automatiquement</strong> à chaque étape. Vous pouvez quitter et revenir à tout moment sans perdre vos données.</div>
       </div>
 
-      <button class="d-gfb-btn-confirm" onclick="document.getElementById('dGuideBanner').style.display='none';gfbLockBodyScroll(false);gfbSyncBottomNav()">
+      <button class="d-gfb-btn-confirm" onclick="gfbSetOpen(false)">
         <i class="ti ti-rocket"></i> Commencer le formulaire
       </button>
       <button class="d-gfb-skip" onclick="gfbPrevScreen()">← Retour</button>
@@ -1173,43 +1179,30 @@
   </div>
 </div>
 <script>
-// Sur mobile, ne pas bloquer le scroll du body derrière la bannière : sur iOS, un
-// conteneur position:fixed + overflow-y:auto imbriqué dans un body overflow:hidden
-// peut devenir impossible à faire défiler. La bannière couvre déjà tout l'écran,
-// donc ce n'est pas nécessaire — seul le bureau (souris/molette) en profite.
-function gfbLockBodyScroll(lock){
-  if(window.innerWidth > 768) document.body.style.overflow = lock ? 'hidden' : '';
-  else document.body.style.overflow = '';
+// Bannière en flux normal : c'est le BODY qui défile (comme la page "Vous êtes prêt
+// à commencer"), et body.gfb-open masque le reste de la page (hero, formulaire,
+// barre de navigation basse) via CSS. Plus simple et plus fiable sur mobile qu'un
+// overlay position:fixed avec son propre scroll interne.
+function gfbSetOpen(open){
+  document.getElementById('dGuideBanner').classList.toggle('open', open);
+  document.body.classList.toggle('gfb-open', open);
+  document.body.style.overflow = (open && window.innerWidth > 768) ? 'hidden' : '';
+  window.scrollTo(0, 0);
 }
-// La barre de navigation basse (ajoutée après coup par sa-shared.js) ne doit jamais
-// passer devant la bannière : on la masque tant que la bannière est affichée.
-function gfbSyncBottomNav(){
-  var banner = document.getElementById('dGuideBanner');
-  var nav = document.querySelector('.sa-bottom-nav');
-  if(!nav || !banner) return;
-  var open = getComputedStyle(banner).display !== 'none';
-  // sa-mobile.css force "display:flex !important" sur mobile : un simple
-  // nav.style.display='none' est ignoré, il faut passer par setProperty(...,'important').
-  if(open) nav.style.setProperty('display','none','important');
-  else nav.style.removeProperty('display');
-}
-new MutationObserver(gfbSyncBottomNav).observe(document.body, {childList:true});
-
-if(new URLSearchParams(window.location.search).get('skip')==='1'){document.getElementById('dGuideBanner').style.display='none';gfbLockBodyScroll(false);}else{gfbLockBodyScroll(true);}
-gfbSyncBottomNav();
+gfbSetOpen(new URLSearchParams(window.location.search).get('skip') !== '1');
 function gfbNextScreen(){
   document.getElementById('gfbS0').classList.remove('visible');
   document.getElementById('gfbS1').classList.add('visible');
   document.getElementById('gfbDot0').classList.replace('active','done');
   document.getElementById('gfbDot1').classList.add('active');
-  document.getElementById('dGuideBanner').scrollTop = 0;
+  window.scrollTo(0, 0);
 }
 function gfbPrevScreen(){
   document.getElementById('gfbS1').classList.remove('visible');
   document.getElementById('gfbS0').classList.add('visible');
   document.getElementById('gfbDot1').classList.remove('active');
   document.getElementById('gfbDot0').classList.replace('done','active');
-  document.getElementById('dGuideBanner').scrollTop = 0;
+  window.scrollTo(0, 0);
 }
 </script>
 

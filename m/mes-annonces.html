@@ -60,6 +60,9 @@
 /* Edit modal */
 #editModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:none;align-items:flex-end}
 #editModal.open{display:flex}
+/* Sécurité CSS déclarative en plus du style inline : la barre de navigation basse
+   ne doit jamais pouvoir repasser devant le pied du modal (Annuler/Enregistrer). */
+body.em-open .m-bottom-nav{display:none!important}
 /* Feuille en colonne : en-tête + zone défilante + pied TOUJOURS visible.
    Hauteurs en % de l'overlay (fixe, plein écran) et non en vh : fiable même en iframe. */
 .em-sheet{background:#f8f9fb;border-radius:20px 20px 0 0;width:100%;max-height:calc(100% - 24px);display:flex;flex-direction:column;overflow:hidden}
@@ -446,11 +449,8 @@ function openEditModal(id){
 
   renderEmPhotos();
   document.getElementById('editModal').classList.add('open');
+  document.body.classList.add('em-open');
   document.body.style.overflow='hidden';
-  // La barre de navigation basse est masquée pendant l'édition (avec !important
-  // en défense, au cas où une autre règle CSS la forcerait à s'afficher) :
-  // elle ne peut plus passer devant les boutons Annuler / Enregistrer.
-  var bn=document.querySelector('.m-bottom-nav'); if(bn) bn.style.setProperty('display','none','important');
   var eb=document.getElementById('emBody'); if(eb) eb.scrollTop=0;
   _emFitViewport();
 }
@@ -458,8 +458,8 @@ function openEditModal(id){
 function closeEditModal(){
   document.getElementById('editModal').classList.remove('open');
   document.getElementById('editModal').style.height='';
+  document.body.classList.remove('em-open');
   document.body.style.overflow='';
-  var bn=document.querySelector('.m-bottom-nav'); if(bn) bn.style.removeProperty('display');
   _editId=null;
 }
 
