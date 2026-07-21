@@ -123,10 +123,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-msg-bubble.other{align-self:flex-start;background:#f2f2f2;color:#111;border-bottom-left-radius:4px}
 .sa-msg-bubble-time{font-size:10px;opacity:.7;margin-top:4px;display:block}
 .sa-msg-system{align-self:center;background:#eef9f1;color:#1a8c4e;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:999px;display:flex;align-items:center;gap:6px;margin:4px 0}
-.sa-msg-thread-input{display:flex;gap:10px;padding:14px 16px;border-top:1px solid #efefef;flex-shrink:0}
-.sa-msg-thread-input textarea{flex:1;resize:none;border:1px solid #e0e0e0;border-radius:10px;padding:10px 13px;font-size:13.5px;font-family:inherit;outline:none;height:42px;line-height:1.4}
+.sa-msg-thread-input{display:flex;align-items:flex-end;gap:10px;padding:14px 16px;border-top:1px solid #efefef;flex-shrink:0}
+.sa-msg-thread-input textarea{flex:1;resize:none;border:1px solid #e0e0e0;border-radius:10px;padding:10px 13px;font-size:13.5px;font-family:inherit;outline:none;height:auto;min-height:74px;line-height:1.4}
 .sa-msg-thread-input textarea:focus{border-color:#E84533}
-.sa-msg-thread-input button{background:#E84533;color:white;border:none;border-radius:10px;padding:0 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sa-msg-thread-input button{background:#E84533;color:white;border:none;border-radius:10px;padding:0 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;flex-shrink:0;min-height:44px}
 .sa-msg-thread-input button:hover{background:#c93a2a}
 
 @media(max-width:760px){
@@ -139,11 +139,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   .sa-msg-thread-header-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
   .sa-confirm-pill,.sa-share-toggle,.sa-icon-btn-labeled{white-space:normal;justify-content:center;text-align:center;padding:10px 8px;width:100%;line-height:1.3}
   .sa-icon-btn-labeled{grid-column:1 / -1}
-  /* Bulles et zone de réponse : même taille de texte pour rester cohérent */
-  .sa-msg-bubble{max-width:85%;font-size:16px}
+  /* Bulles : on garde la taille d'origine (16px était trop grand). La zone de
+     réponse reste au même corps de texte que les bulles reçues, pour rester cohérent,
+     et gagne en hauteur pour mieux remplir l'espace disponible. */
+  .sa-msg-bubble{max-width:85%;font-size:14px}
   .sa-msg-thread-body{padding:14px}
   .sa-msg-thread-input{align-items:flex-end;padding:12px 14px}
-  .sa-msg-thread-input textarea{height:auto;min-height:92px;font-size:16px;padding:12px 14px;line-height:1.45}
+  .sa-msg-thread-input textarea{height:auto;min-height:112px;font-size:14px;padding:12px 14px;line-height:1.45}
   .sa-msg-thread-input button{min-height:46px;padding:12px 16px}
 }
 
@@ -333,7 +335,7 @@ function renderThread(id) {
       })()}
     </div>
     <div class="sa-msg-thread-input">
-      <textarea id="threadInput" placeholder="Écrivez votre message…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendThreadMessage();}"></textarea>
+      <textarea id="threadInput" placeholder="Écrivez votre message…"></textarea>
       <button onclick="sendThreadMessage()"><i class="ti ti-send"></i> Envoyer</button>
     </div>`;
   const tb = document.getElementById('threadBody');

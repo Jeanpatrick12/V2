@@ -447,18 +447,34 @@ function openEditModal(id){
   renderEmPhotos();
   document.getElementById('editModal').classList.add('open');
   document.body.style.overflow='hidden';
-  // La barre de navigation basse est masquée pendant l'édition :
+  // La barre de navigation basse est masquée pendant l'édition (avec !important
+  // en défense, au cas où une autre règle CSS la forcerait à s'afficher) :
   // elle ne peut plus passer devant les boutons Annuler / Enregistrer.
-  var bn=document.querySelector('.m-bottom-nav'); if(bn) bn.style.display='none';
+  var bn=document.querySelector('.m-bottom-nav'); if(bn) bn.style.setProperty('display','none','important');
   var eb=document.getElementById('emBody'); if(eb) eb.scrollTop=0;
+  _emFitViewport();
 }
 
 function closeEditModal(){
   document.getElementById('editModal').classList.remove('open');
+  document.getElementById('editModal').style.height='';
   document.body.style.overflow='';
-  var bn=document.querySelector('.m-bottom-nav'); if(bn) bn.style.display='';
+  var bn=document.querySelector('.m-bottom-nav'); if(bn) bn.style.removeProperty('display');
   _editId=null;
 }
+
+// iOS ne redimensionne pas toujours la fenêtre "position:fixed;inset:0" de façon fiable
+// (barre d'outils Safari qui apparaît/disparaît) : on fixe explicitement la hauteur du
+// modal sur la hauteur réelle visible, pour que le pied (Annuler/Enregistrer) reste
+// toujours dans l'écran au lieu d'être poussé hors champ.
+function _emFitViewport(){
+  var em=document.getElementById('editModal');
+  if(!em || !em.classList.contains('open')) return;
+  var h = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  em.style.height = h + 'px';
+}
+window.addEventListener('resize', _emFitViewport);
+if(window.visualViewport) window.visualViewport.addEventListener('resize', _emFitViewport);
 
 function saveEdit(){
   if(!_editId)return;
