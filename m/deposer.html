@@ -12,6 +12,10 @@
 :root{--red:#E84533;--pad:18px}
 html{background:#0c1622}
 body{background:#0c1622;min-height:100vh;min-height:100dvh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:white}
+/* Couche de fond fixe indépendante de la hauteur réelle du contenu : couvre tout
+   l'écran (y compris la zone de rebond iOS / barre d'outils dynamique) en noir,
+   quelle que soit la façon dont le navigateur recalcule le viewport au défilement. */
+body::before{content:'';position:fixed;inset:0;z-index:-1;background:#0c1622}
 /* Haut de page figé, comme sur "Vous êtes prêt à commencer" (.gate-nav) */
 .dep-nav{display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;padding:14px var(--pad);z-index:10;background:#0c1622}
 .dep-logo{display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none}
@@ -20,7 +24,7 @@ body{background:#0c1622;min-height:100vh;min-height:100dvh;font-family:-apple-sy
 .dep-logo-brand{font-size:17px;font-weight:700;color:white}
 .dep-logo-brand span{color:#E84533}
 .dep-cancel{background:rgba(255,255,255,.08);border:none;border-radius:8px;padding:7px 13px;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:5px;cursor:pointer;font-family:inherit}
-.dep-body{display:flex;flex-direction:column;align-items:center;padding:82px var(--pad) 44px;text-align:center}
+.dep-body{display:flex;flex-direction:column;align-items:center;padding:82px var(--pad) calc(44px + env(safe-area-inset-bottom));text-align:center}
 .dep-icon-wrap{width:72px;height:72px;background:rgba(232,69,51,.15);border:2px solid rgba(232,69,51,.35);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
 .dep-icon-wrap i{color:#E84533;font-size:32px}
 .dep-title{font-size:24px;font-weight:900;line-height:1.2;letter-spacing:-.5px;margin-bottom:12px}
