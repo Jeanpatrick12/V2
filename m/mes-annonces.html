@@ -92,6 +92,10 @@ body.em-open .m-bottom-nav{display:none!important}
 .em-photo-img{width:80px;height:80px;border-radius:10px;object-fit:cover;display:block;border:2px solid transparent}
 .em-photo-img.main{border-color:#E84533}
 .em-photo-badge{position:absolute;bottom:0;left:0;right:0;border-radius:0 0 8px 8px;text-align:center;font-size:8.5px;font-weight:700;color:white;background:rgba(232,69,51,.9);padding:2px 0}
+.em-photo-reorder{position:absolute;top:3px;left:3px;right:3px;display:flex;justify-content:space-between}
+.em-photo-move{width:22px;height:22px;border-radius:6px;background:rgba(0,0,0,.6);color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;padding:0;flex-shrink:0}
+.em-photo-move:active{background:rgba(0,0,0,.8)}
+.em-photo-move-spacer{width:22px;flex-shrink:0}
 .em-add-photo{width:80px;height:80px;border-radius:10px;border:2px dashed #ddd;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;flex-shrink:0;color:#aaa;font-size:10px;font-weight:600;background:white}
 .em-add-photo i{font-size:20px}
 .em-dpe-row{display:flex;gap:5px;flex-wrap:wrap}
@@ -418,9 +422,28 @@ function renderEmPhotos(){
   all.forEach(function(p,i){
     var wrap=document.createElement('div');
     wrap.className='em-photo-wrap';
-    wrap.innerHTML='<img src="'+p+'" class="em-photo-img'+(i===0?' main':'')+'">'+(i===0?'<span class="em-photo-badge">Principale</span>':'');
+    wrap.innerHTML='<img src="'+p+'" class="em-photo-img'+(i===0?' main':'')+'">'+
+      (i===0?'<span class="em-photo-badge">Principale</span>':'') +
+      '<div class="em-photo-reorder">' +
+        (i>0 ? '<button type="button" class="em-photo-move" onclick="moveEmPhoto('+i+',-1)"><i class="ti ti-chevron-left"></i></button>' : '<span class="em-photo-move-spacer"></span>') +
+        (i<all.length-1 ? '<button type="button" class="em-photo-move" onclick="moveEmPhoto('+i+',1)"><i class="ti ti-chevron-right"></i></button>' : '<span class="em-photo-move-spacer"></span>') +
+      '</div>';
     el.appendChild(wrap);
   });
+}
+// Réordonner les photos sur mobile (équivalent du glisser-déposer de la version
+// ordinateur, qui ne fonctionne pas au toucher) : on échange la photo avec sa
+// voisine, en travaillant sur la liste combinée (déjà en ligne + nouvellement
+// ajoutées) puisque l'ordre final ne fait plus la distinction entre les deux.
+function moveEmPhoto(i, dir){
+  var all=_emCurrentPhotos.concat(_emNewPhotos);
+  var j=i+dir;
+  if(j<0||j>=all.length) return;
+  var tmp=all[i]; all[i]=all[j]; all[j]=tmp;
+  var splitAt=_emCurrentPhotos.length;
+  _emCurrentPhotos=all.slice(0,splitAt);
+  _emNewPhotos=all.slice(splitAt);
+  renderEmPhotos();
 }
 
 function openEditModal(id){

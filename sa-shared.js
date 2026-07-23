@@ -995,6 +995,11 @@
     if (document.querySelector(".sa-bottom-nav")) return;
     // Pages au design mobile dédié (m/) : elles ont leur propre navigation
     if (document.querySelector(".m-nav") || document.querySelector(".m-bottom-nav")) return;
+    // Page "conteneur" wrappée par le mloader (son body a été vidé et remplacé par
+    // une iframe vers /m/...) : la vraie navigation vit DANS l'iframe, il ne faut
+    // surtout pas en injecter une deuxième par-dessus dans le document extérieur
+    // (elle se retrouverait au-dessus du contenu de l'iframe, cachant des boutons).
+    if (document.querySelector('iframe[src^="/m/"]')) return;
 
     var user = _cache.user;
     var msgN = getUnreadMessageCount();
