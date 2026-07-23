@@ -428,27 +428,45 @@ function renderEmPhotos(){
 
 // Glisser-déposer tactile des photos, équivalent du drag-and-drop souris de la
 // version ordinateur (le drag-and-drop HTML5 natif ne fonctionne pas au doigt).
-// Pointer Events unifie souris/tactile/stylet en une seule API.
+// La bande de photos défile aussi horizontalement au doigt : pour ne pas
+// bloquer ce défilement, un simple glissement rapide fait défiler (scroll
+// géré à la main puisque touch-action:none désactive le scroll natif), et
+// seul un appui maintenu (~300ms) sans bouger déclenche le mode réorganisation.
 var _emDrag=null;
+var _emPressTimer=null;
+var EM_HOLD_MS=300;
 function emPhotoPointerDown(e, i){
   if(e.pointerType==='mouse' && e.button!==0) return;
   var wrap=e.currentTarget;
-  var rects=Array.from(document.querySelectorAll('#emPhotos .em-photo-wrap')).map(function(el){return el.getBoundingClientRect();});
-  _emDrag={index:i, startX:e.clientX, el:wrap, rects:rects, moved:false};
+  var container=document.getElementById('emPhotos');
+  _emDrag={index:i, startX:e.clientX, startScrollLeft:container.scrollLeft, el:wrap, container:container, mode:null};
   wrap.setPointerCapture(e.pointerId);
   wrap.addEventListener('pointermove', emPhotoPointerMove);
   wrap.addEventListener('pointerup', emPhotoPointerUp);
   wrap.addEventListener('pointercancel', emPhotoPointerUp);
+  _emPressTimer=setTimeout(function(){
+    if(_emDrag && _emDrag.mode===null){
+      _emDrag.mode='drag';
+      _emDrag.rects=Array.from(document.querySelectorAll('#emPhotos .em-photo-wrap')).map(function(el){return el.getBoundingClientRect();});
+      _emDrag.el.classList.add('dragging');
+      if(navigator.vibrate) navigator.vibrate(12);
+    }
+  }, EM_HOLD_MS);
 }
 function emPhotoPointerMove(e){
   if(!_emDrag) return;
-  e.preventDefault();
   var dx=e.clientX-_emDrag.startX;
-  if(Math.abs(dx)>4 && !_emDrag.moved){ _emDrag.moved=true; _emDrag.el.classList.add('dragging'); }
+  if(_emDrag.mode===null){
+    if(Math.abs(dx)>8){ clearTimeout(_emPressTimer); _emDrag.mode='scroll'; }
+    else return;
+  }
+  if(_emDrag.mode==='scroll'){ _emDrag.container.scrollLeft=_emDrag.startScrollLeft-dx; return; }
+  e.preventDefault();
   _emDrag.el.style.transform='translateX('+dx+'px)';
 }
 function emPhotoPointerUp(e){
   if(!_emDrag) return;
+  clearTimeout(_emPressTimer);
   var d=_emDrag;
   d.el.removeEventListener('pointermove', emPhotoPointerMove);
   d.el.removeEventListener('pointerup', emPhotoPointerUp);
@@ -456,7 +474,7 @@ function emPhotoPointerUp(e){
   d.el.classList.remove('dragging');
   d.el.style.transform='';
   _emDrag=null;
-  if(!d.moved) return;
+  if(d.mode!=='drag') return;
 
   // Nouvel index = nombre d'autres photos dont le centre est passé à gauche
   // du point de lâcher (référentiel figé au début du glisser, transform n'a
