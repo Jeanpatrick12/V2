@@ -610,7 +610,10 @@ function renderListings(listings) {
       if (firstPhoto) {
         // firstPhoto peut être une chaîne (ancien format) ou un objet {url:...}
         // (photos ajoutées via le formulaire mobile) - les deux sont gérés ci-dessus.
-        photoStyle = 'background-image:url("' + String(firstPhoto).replace(/"/g,'%22') + '");background-size:cover;background-position:center';
+        // Guillemets SIMPLES autour de l'URL : l'attribut style="" du markup est
+        // en guillemets doubles, un url("...") aurait fermé l'attribut au premier
+        // guillemet et cassé le HTML - l'image ne s'affichait donc jamais.
+        photoStyle = "background-image:url('" + String(firstPhoto).replace(/'/g,"%27") + "');background-size:cover;background-position:center";
       } else {
         photoStyle = 'background:' + (GRADIENTS[l.transaction] || 'linear-gradient(135deg,#8b5a5a,#b87070)');
       }
