@@ -604,8 +604,11 @@ function renderListings(listings) {
   };
   el.innerHTML = recent.map(function(l) {
     var photoStyle;
-    if (l.photos && l.photos[0]) {
-      photoStyle = 'background-image:url("' + l.photos[0].replace(/"/g,'%22') + '");background-size:cover;background-position:center';
+    var firstPhoto = l.photos && l.photos[0] ? ((l.photos[0] && l.photos[0].url) ? l.photos[0].url : l.photos[0]) : null;
+    if (firstPhoto) {
+      // firstPhoto peut être une chaîne (ancien format) ou un objet {url:...}
+      // (photos ajoutées via le formulaire mobile) - les deux sont gérés ci-dessus.
+      photoStyle = 'background-image:url("' + String(firstPhoto).replace(/"/g,'%22') + '");background-size:cover;background-position:center';
     } else {
       photoStyle = 'background:' + (GRADIENTS[l.transaction] || 'linear-gradient(135deg,#8b5a5a,#b87070)');
     }
@@ -694,7 +697,7 @@ SA.init().then(function() {
   updateAuthUI(SA.getUser());
   renderListings(SA.getAllListings());
   if (SA.getAllPros) {
-    var pros = SA.getAllPros().slice().sort(function(a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+    var pros = SA.getAllPros();
     if (pros && pros.length) { renderPros(pros); return; }
   }
   renderPros([]);

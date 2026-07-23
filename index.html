@@ -743,8 +743,35 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 <div class="sa-section">
   <p class="sa-section-title">Besoin d'un professionnel ?</p>
   <p class="sa-section-sub">Notaires, diagnostiqueurs, artisans… des professionnels de confiance à portée de main, avec une réduction exclusive pour les utilisateurs de SansAgents.</p>
-  <div class="sa-pros-grid" id="homepagePros">
-    <!-- Rempli dynamiquement par JS (professionnels les plus récents) -->
+  <div class="sa-pros-grid">
+    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+      <div class="sa-pro-avatar" style="background:#2563eb"><i class="ti ti-stamp"></i></div>
+      <div class="sa-pro-name">Maître Lefebvre</div>
+      <div class="sa-pro-job">Notaire</div>
+      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.9 (127 avis)</div>
+      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Lyon</div>
+    </div>
+    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+      <div class="sa-pro-avatar" style="background:#E84533"><i class="ti ti-bulb"></i></div>
+      <div class="sa-pro-name">Karim Benali</div>
+      <div class="sa-pro-job">Électricien</div>
+      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.8 (84 avis)</div>
+      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Bordeaux</div>
+    </div>
+    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+      <div class="sa-pro-avatar" style="background:#1a8c4e"><i class="ti ti-ruler-2"></i></div>
+      <div class="sa-pro-name">Julie Marchand</div>
+      <div class="sa-pro-job">Diagnostiqueur DPE</div>
+      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 5.0 (52 avis)</div>
+      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Paris</div>
+    </div>
+    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+      <div class="sa-pro-avatar" style="background:#9333ea"><i class="ti ti-brick"></i></div>
+      <div class="sa-pro-name">Thomas Petit</div>
+      <div class="sa-pro-job">Carreleur</div>
+      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.7 (63 avis)</div>
+      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Lille</div>
+    </div>
   </div>
   <div class="sa-pros-banner">
     <div class="sa-pros-banner-text">
@@ -1033,27 +1060,9 @@ function renderHomeListings(listings) {
   }).join('');
 }
 
-function renderHomePros() {
-  const el = document.getElementById('homepagePros');
-  if (!el) return;
-  const recent = SA.getAllPros()
-    .slice()
-    .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
-    .slice(0, 4);
-  el.innerHTML = recent.map(p => `
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
-      <div class="sa-pro-avatar" style="background:${p.color || '#E84533'}"><i class="ti ${p.icon || 'ti-briefcase'}"></i></div>
-      <div class="sa-pro-name">${SA.escapeHtml(p.name)}</div>
-      <div class="sa-pro-job">${SA.escapeHtml(p.job || '')}</div>
-      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> ${(p.rating||0).toFixed(1)} (${p.reviews||0} avis)</div>
-      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> ${SA.escapeHtml(p.city || '')}</div>
-    </div>`).join('');
-}
-
 document.addEventListener('DOMContentLoaded', function() {
   SA.init().then(function() {
     renderHomeListings(SA.getAllListings());
-    renderHomePros();
     setTimeout(function(){
       var dropdown=document.querySelector('.sa-account-dropdown');
       if(!dropdown||!SA.getUser())return;
