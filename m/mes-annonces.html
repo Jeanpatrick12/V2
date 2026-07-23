@@ -88,14 +88,11 @@ body.em-open .m-bottom-nav{display:none!important}
 .em-textarea{width:100%;border:1.5px solid #e4e5ea;border-radius:10px;padding:11px 13px;font-size:13.5px;font-family:inherit;color:#111;background:white;outline:none;box-sizing:border-box;resize:vertical;min-height:90px;line-height:1.5}
 .em-textarea:focus{border-color:#E84533}
 .em-photos{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch}
-.em-photo-wrap{position:relative;flex-shrink:0;width:80px;height:80px}
-.em-photo-img{width:80px;height:80px;border-radius:10px;object-fit:cover;display:block;border:2px solid transparent}
+.em-photo-wrap{position:relative;flex-shrink:0;width:80px;height:80px;touch-action:none;cursor:grab}
+.em-photo-wrap.dragging{z-index:20;cursor:grabbing;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:none}
+.em-photo-img{width:80px;height:80px;border-radius:10px;object-fit:cover;display:block;border:2px solid transparent;pointer-events:none;-webkit-user-drag:none;user-select:none}
 .em-photo-img.main{border-color:#E84533}
-.em-photo-badge{position:absolute;bottom:0;left:0;right:0;border-radius:0 0 8px 8px;text-align:center;font-size:8.5px;font-weight:700;color:white;background:rgba(232,69,51,.9);padding:2px 0}
-.em-photo-reorder{position:absolute;top:3px;left:3px;right:3px;display:flex;justify-content:space-between}
-.em-photo-move{width:22px;height:22px;border-radius:6px;background:rgba(0,0,0,.6);color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;padding:0;flex-shrink:0}
-.em-photo-move:active{background:rgba(0,0,0,.8)}
-.em-photo-move-spacer{width:22px;flex-shrink:0}
+.em-photo-badge{position:absolute;bottom:0;left:0;right:0;border-radius:0 0 8px 8px;text-align:center;font-size:8.5px;font-weight:700;color:white;background:rgba(232,69,51,.9);padding:2px 0;pointer-events:none}
 .em-add-photo{width:80px;height:80px;border-radius:10px;border:2px dashed #ddd;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;flex-shrink:0;color:#aaa;font-size:10px;font-weight:600;background:white}
 .em-add-photo i{font-size:20px}
 .em-dpe-row{display:flex;gap:5px;flex-wrap:wrap}
@@ -423,23 +420,59 @@ function renderEmPhotos(){
     var wrap=document.createElement('div');
     wrap.className='em-photo-wrap';
     wrap.innerHTML='<img src="'+p+'" class="em-photo-img'+(i===0?' main':'')+'">'+
-      (i===0?'<span class="em-photo-badge">Principale</span>':'') +
-      '<div class="em-photo-reorder">' +
-        (i>0 ? '<button type="button" class="em-photo-move" onclick="moveEmPhoto('+i+',-1)"><i class="ti ti-chevron-left"></i></button>' : '<span class="em-photo-move-spacer"></span>') +
-        (i<all.length-1 ? '<button type="button" class="em-photo-move" onclick="moveEmPhoto('+i+',1)"><i class="ti ti-chevron-right"></i></button>' : '<span class="em-photo-move-spacer"></span>') +
-      '</div>';
+      (i===0?'<span class="em-photo-badge">Principale</span>':'');
+    wrap.addEventListener('pointerdown', function(e){ emPhotoPointerDown(e, i); });
     el.appendChild(wrap);
   });
 }
-// Réordonner les photos sur mobile (équivalent du glisser-déposer de la version
-// ordinateur, qui ne fonctionne pas au toucher) : on échange la photo avec sa
-// voisine, en travaillant sur la liste combinée (déjà en ligne + nouvellement
-// ajoutées) puisque l'ordre final ne fait plus la distinction entre les deux.
-function moveEmPhoto(i, dir){
+
+// Glisser-déposer tactile des photos, équivalent du drag-and-drop souris de la
+// version ordinateur (le drag-and-drop HTML5 natif ne fonctionne pas au doigt).
+// Pointer Events unifie souris/tactile/stylet en une seule API.
+var _emDrag=null;
+function emPhotoPointerDown(e, i){
+  if(e.pointerType==='mouse' && e.button!==0) return;
+  var wrap=e.currentTarget;
+  var rects=Array.from(document.querySelectorAll('#emPhotos .em-photo-wrap')).map(function(el){return el.getBoundingClientRect();});
+  _emDrag={index:i, startX:e.clientX, el:wrap, rects:rects, moved:false};
+  wrap.setPointerCapture(e.pointerId);
+  wrap.addEventListener('pointermove', emPhotoPointerMove);
+  wrap.addEventListener('pointerup', emPhotoPointerUp);
+  wrap.addEventListener('pointercancel', emPhotoPointerUp);
+}
+function emPhotoPointerMove(e){
+  if(!_emDrag) return;
+  e.preventDefault();
+  var dx=e.clientX-_emDrag.startX;
+  if(Math.abs(dx)>4 && !_emDrag.moved){ _emDrag.moved=true; _emDrag.el.classList.add('dragging'); }
+  _emDrag.el.style.transform='translateX('+dx+'px)';
+}
+function emPhotoPointerUp(e){
+  if(!_emDrag) return;
+  var d=_emDrag;
+  d.el.removeEventListener('pointermove', emPhotoPointerMove);
+  d.el.removeEventListener('pointerup', emPhotoPointerUp);
+  d.el.removeEventListener('pointercancel', emPhotoPointerUp);
+  d.el.classList.remove('dragging');
+  d.el.style.transform='';
+  _emDrag=null;
+  if(!d.moved) return;
+
+  // Nouvel index = nombre d'autres photos dont le centre est passé à gauche
+  // du point de lâcher (référentiel figé au début du glisser, transform n'a
+  // pas déplacé les autres vignettes dans le flux).
+  var finalX=e.clientX;
+  var newIndex=0;
+  d.rects.forEach(function(r, idx){
+    if(idx===d.index) return;
+    var center=r.left+r.width/2;
+    if(finalX>center) newIndex++;
+  });
+  if(newIndex===d.index) return;
+
   var all=_emCurrentPhotos.concat(_emNewPhotos);
-  var j=i+dir;
-  if(j<0||j>=all.length) return;
-  var tmp=all[i]; all[i]=all[j]; all[j]=tmp;
+  var moved=all.splice(d.index,1)[0];
+  all.splice(newIndex,0,moved);
   var splitAt=_emCurrentPhotos.length;
   _emCurrentPhotos=all.slice(0,splitAt);
   _emNewPhotos=all.slice(splitAt);

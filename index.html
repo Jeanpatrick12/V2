@@ -280,27 +280,40 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 .sa-safety-banner-text{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5}
 .sa-safety-banner-text strong{color:white;font-weight:700}
 
-/* ── LISTINGS — grid (4 cols like v3 but cleaner) ── */
+/* ── LISTINGS — mêmes cartes que la page Annonces ── */
 .sa-listings{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.sa-listing-card{border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;cursor:pointer;transition:all .15s;background:white}
-.sa-listing-card:hover{border-color:#E84533;box-shadow:0 6px 24px rgba(232,69,51,0.1);transform:translateY(-2px)}
-.sa-listing-img{height:130px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.sa-listing-img-lyon{background:linear-gradient(135deg,#4f6d9e,#7890b8)}
-.sa-listing-img-bordeaux{background:linear-gradient(135deg,#8b5a5a,#b87070)}
-.sa-listing-img-paris{background:linear-gradient(135deg,#4a7c6b,#6aaa90)}
-.sa-listing-img-lille{background:linear-gradient(135deg,#6b6b8b,#9090b0)}
-.sa-listing-img i{font-size:32px;color:rgba(255,255,255,0.4)}
-.sa-listing-badge{position:absolute;top:8px;left:8px;color:white;font-size:10px;font-weight:600;padding:3px 9px;border-radius:5px}
-.sa-listing-badge.vente{background:#E84533}
-.sa-listing-badge.location{background:#1e6abf}
-.sa-listing-fav{position:absolute;top:8px;right:8px;background:white;border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.15)}
-.sa-listing-fav i{font-size:14px;color:#ccc}
-.sa-listing-fav:hover i{color:#E84533}
-.sa-listing-body{padding:13px 15px}
-.sa-listing-price{font-size:16px;font-weight:700;color:#111;margin-bottom:3px;letter-spacing:-0.4px}
-.sa-listing-title{font-size:12px;color:#666;margin-bottom:8px;line-height:1.4}
-.sa-listing-meta{display:flex;gap:10px;font-size:11px;color:#bbb}
-.sa-listing-meta span{display:flex;align-items:center;gap:3px}
+.sa-card{border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;cursor:pointer;transition:all .15s;background:white}
+.sa-card:hover{border-color:#E84533;box-shadow:0 8px 28px rgba(232,69,51,0.1);transform:translateY(-2px)}
+.sa-card-photos{position:relative;display:flex;gap:3px;flex-shrink:0;background:#eee;height:170px}
+.sa-card-photo-main{flex:1 1 66%;position:relative;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.sa-card-photo-side{flex:1 1 34%;display:flex;flex-direction:column;gap:3px}
+.sa-card-photo-side .thumb{flex:1;background-size:cover;background-position:center;background-color:#dfdfdf;min-height:0}
+.sa-card-noimg{font-size:30px;color:rgba(255,255,255,0.42)}
+.sa-card-badge{position:absolute;top:9px;left:9px;color:#fff;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:6px;z-index:2}
+.sa-card-badge.vente{background:#E84533}
+.sa-card-badge.location{background:#1e6abf}
+.sa-card-fav{position:absolute;top:9px;right:9px;background:rgba(255,255,255,0.92);border:none;border-radius:50%;width:31px;height:31px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,0.15)}
+.sa-card-fav i{font-size:14.5px;color:#ccc}
+.sa-card-fav:hover i,.sa-card-fav.active i{color:#E84533}
+.sa-card-chiprow{position:absolute;bottom:9px;left:9px;display:flex;gap:5px;z-index:2}
+.sa-card-chip{font-size:10px;font-weight:700;color:#fff;padding:3px 8px;border-radius:5px;display:flex;align-items:center;gap:3px}
+.sa-card-chip.new{background:#1a8c4e}
+.sa-card-count{position:absolute;bottom:9px;right:9px;background:rgba(15,20,25,0.62);color:#fff;font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:6px;display:flex;align-items:center;gap:4px;z-index:2}
+.sa-card-body{padding:13px 16px}
+.sa-card-pricerow{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.sa-card-price{font-size:17px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-card-pricem2{font-size:11.5px;color:#999;font-weight:500}
+.sa-card-typeline{font-size:12.5px;color:#666;margin:3px 0 8px;font-weight:500}
+.sa-card-meta{display:flex;gap:11px;flex-wrap:wrap;font-size:12px;color:#555;margin-bottom:7px}
+.sa-card-meta span{display:flex;align-items:center;gap:4px}
+.sa-card-meta i{color:#bbb;font-size:13px}
+.sa-card-address{font-size:12px;color:#888;display:flex;align-items:center;gap:5px}
+.sa-card-address i{color:#E84533;font-size:13px;flex-shrink:0}
+.sa-card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:11px;padding-top:10px;border-top:1px solid #f2f2f2;font-size:11.5px;color:#999}
+.sa-card-seller{display:flex;align-items:center;gap:7px;color:#555;font-weight:600;min-width:0}
+.sa-card-seller-avatar{width:20px;height:20px;border-radius:50%;background:#fff0ee;color:#E84533;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-card-date{display:flex;align-items:center;gap:4px;color:#999;flex-shrink:0}
+.sa-card-date i{font-size:12px}
 .sa-listings-cta{text-align:center;margin-top:1.5rem}
 .sa-listings-link{font-size:13.5px;color:#E84533;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;background:none;border:1.5px solid #E84533;font-family:inherit;padding:9px 22px;border-radius:999px}
 .sa-listings-link:hover{background:#fff5f4}
@@ -730,35 +743,8 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 <div class="sa-section">
   <p class="sa-section-title">Besoin d'un professionnel ?</p>
   <p class="sa-section-sub">Notaires, diagnostiqueurs, artisans… des professionnels de confiance à portée de main, avec une réduction exclusive pour les utilisateurs de SansAgents.</p>
-  <div class="sa-pros-grid">
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
-      <div class="sa-pro-avatar" style="background:#2563eb"><i class="ti ti-stamp"></i></div>
-      <div class="sa-pro-name">Maître Lefebvre</div>
-      <div class="sa-pro-job">Notaire</div>
-      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.9 (127 avis)</div>
-      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Lyon</div>
-    </div>
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
-      <div class="sa-pro-avatar" style="background:#E84533"><i class="ti ti-bulb"></i></div>
-      <div class="sa-pro-name">Karim Benali</div>
-      <div class="sa-pro-job">Électricien</div>
-      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.8 (84 avis)</div>
-      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Bordeaux</div>
-    </div>
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
-      <div class="sa-pro-avatar" style="background:#1a8c4e"><i class="ti ti-ruler-2"></i></div>
-      <div class="sa-pro-name">Julie Marchand</div>
-      <div class="sa-pro-job">Diagnostiqueur DPE</div>
-      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 5.0 (52 avis)</div>
-      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Paris</div>
-    </div>
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
-      <div class="sa-pro-avatar" style="background:#9333ea"><i class="ti ti-brick"></i></div>
-      <div class="sa-pro-name">Thomas Petit</div>
-      <div class="sa-pro-job">Carreleur</div>
-      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.7 (63 avis)</div>
-      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Lille</div>
-    </div>
+  <div class="sa-pros-grid" id="homepagePros">
+    <!-- Rempli dynamiquement par JS (professionnels les plus récents) -->
   </div>
   <div class="sa-pros-banner">
     <div class="sa-pros-banner-text">
@@ -968,57 +954,106 @@ function goHeroSearch() {
   window.location.href = 'annonces?' + params.toString();
 }
 
-/* ── annonces récentes dynamiques ── */
+/* ── annonces récentes dynamiques (mêmes cartes que la page Annonces) ── */
+function homeRelTime(ts) {
+  if (!ts) return '';
+  const day = 86400000;
+  const d = Math.floor((Date.now() - ts) / day);
+  if (d <= 0) return "Aujourd'hui";
+  if (d === 1) return 'Hier';
+  if (d < 7) return 'Il y a ' + d + ' jours';
+  if (d < 30) { const w = Math.floor(d/7); return 'Il y a ' + w + ' semaine' + (w>1?'s':''); }
+  if (d < 365) { const m = Math.floor(d/30); return 'Il y a ' + m + ' mois'; }
+  const y = Math.floor(d/365); return 'Il y a ' + y + ' an' + (y>1?'s':'');
+}
+function homeDpeColor(letter) {
+  return { A:'#0a9e4f', B:'#4cb85c', C:'#a3c93a', D:'#f0c419', E:'#f0941f', F:'#e8602c', G:'#E84533' }[letter] || '#999';
+}
+function homePhotoUrl(p) { return (p && p.url) ? p.url : p; }
+
 function renderHomeListings(listings) {
   const el = document.getElementById('homepageListings');
   if (!el) return;
+  // Tri par date de création réelle (createdAt, timestamp numérique) — le tri
+  // précédent ne regardait que created_at/date (souvent absents), ce qui ne
+  // remontait pas vraiment les annonces les plus récentes en premier.
   const recent = listings
     .filter(l => l.status !== 'sold')
-    .sort((a, b) => (b.created_at || b.date || '').localeCompare(a.created_at || a.date || ''))
+    .sort((a, b) => {
+      const ta = a.createdAt || (a.created_at ? new Date(a.created_at).getTime() : 0) || 0;
+      const tb = b.createdAt || (b.created_at ? new Date(b.created_at).getTime() : 0) || 0;
+      return tb - ta;
+    })
     .slice(0, 4);
   if (!recent.length) {
     el.innerHTML = '<p style="color:#999;font-size:14px;grid-column:1/-1;text-align:center;padding:2rem 0">Aucune annonce pour le moment.</p>';
     return;
   }
-  const GRADIENTS = { vente: 'linear-gradient(135deg,#4f6d9e,#7890b8)', location: 'linear-gradient(135deg,#4a7c6b,#6aaa90)' };
   el.innerHTML = recent.map(l => {
-    const imgStyle = (l.photos && l.photos[0])
-      ? `background-image:url("${l.photos[0].replace(/"/g,'%22')}");background-size:cover;background-position:center`
-      : `background:${GRADIENTS[l.transaction] || 'linear-gradient(135deg,#8b6b6b,#b08080)'}`;
-    const price = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (l.transaction === 'location' ? '/mois' : '') : 'Prix sur demande';
-    const badge = l.transaction === 'location' ? 'location' : 'vente';
-    const badgeLabel = l.transaction === 'location' ? 'Location' : 'Vente';
-    const typeLabel = l.type ? l.type.charAt(0).toUpperCase() + l.type.slice(1) : 'Bien';
-    const title = l.titre || (typeLabel + (l.ville ? ' — ' + l.ville : ''));
-    const pieces = l.pieces ? l.pieces + ' pièce' + (parseInt(l.pieces) > 1 ? 's' : '') : '';
-    return `<div class="sa-listing-card" onclick="SA.openListing('${l.id}')">
-      <div class="sa-listing-img" style="${imgStyle}">
-        <span class="sa-listing-badge ${badge}">${badgeLabel}</span>
-        <button class="sa-listing-fav" data-id="${l.id}" onclick="event.stopPropagation();SA.toggleFavoriteUI(this,'${l.id}')"><i class="ti ti-heart"></i></button>
+    const photos = Array.isArray(l.photos) ? l.photos : [];
+    const grad = SA.IMG_GRADIENTS[l.img] || SA.IMG_GRADIENTS.p0;
+    const icon = SA.TYPE_ICONS[l.type] || 'ti-home';
+    const fav = SA.isFavorite(l.id);
+    const main = photos[0] ? homePhotoUrl(photos[0]) : null;
+    const side = photos.slice(1,3).map(homePhotoUrl);
+    const isNew = l.createdAt && (Date.now() - l.createdAt) < 7*86400000;
+    const m2 = l.surface ? Math.round(l.price / l.surface) : null;
+    let metaParts = l.surface ? [`<span><i class="ti ti-ruler-2"></i> ${l.surface} m²</span>`] : [];
+    if (l.pieces) metaParts.push(`<span><i class="ti ti-door"></i> ${l.pieces} pièce${l.pieces>1?'s':''}</span>`);
+    if (l.chambres) metaParts.push(`<span><i class="ti ti-bed"></i> ${l.chambres} ch.</span>`);
+    return `
+    <div class="sa-card" data-id="${l.id}" onclick="SA.openListing('${l.id}')">
+      <div class="sa-card-photos" style="${main ? '' : 'background:' + grad}">
+        <div class="sa-card-photo-main" style="${main ? "background-image:url('" + main + "')" : ''}">
+          ${!main ? `<i class="ti ${icon} sa-card-noimg"></i>` : ''}
+        </div>
+        ${side.length ? `<div class="sa-card-photo-side">${side.map(u=>`<div class="thumb" style="background-image:url('${u}')"></div>`).join('')}</div>` : ''}
+        <span class="sa-card-badge ${l.transaction === 'vente' ? 'vente' : 'location'}">${l.transaction === 'vente' ? 'Vente' : 'Location'}</span>
+        <button class="sa-card-fav${fav ? ' active' : ''}" onclick="event.stopPropagation();SA.toggleFavoriteUI(this,'${l.id}')"><i class="ti ti-heart${fav ? '-filled' : ''}"></i></button>
+        <div class="sa-card-chiprow">
+          ${isNew ? '<span class="sa-card-chip new">Nouveau</span>' : ''}
+          ${l.dpe ? `<span class="sa-card-chip" style="background:${homeDpeColor(l.dpe)}">${l.dpe}</span>` : ''}
+        </div>
+        ${photos.length ? `<span class="sa-card-count"><i class="ti ti-photo" style="font-size:11px"></i> ${photos.length}</span>` : ''}
       </div>
-      <div class="sa-listing-body">
-        <div class="sa-listing-price">${price}</div>
-        <div class="sa-listing-title">${title}</div>
-        <div class="sa-listing-meta">
-          ${l.surface ? `<span><i class="ti ti-ruler-2"></i> ${l.surface} m²</span>` : ''}
-          ${pieces ? `<span><i class="ti ti-door"></i> ${pieces}</span>` : ''}
-          ${l.ville ? `<span><i class="ti ti-map-pin"></i> ${l.ville}</span>` : ''}
+      <div class="sa-card-body">
+        <div class="sa-card-pricerow">
+          <span class="sa-card-price">${SA.fmtPriceTransaction(l)}</span>
+          ${m2 ? `<span class="sa-card-pricem2">${SA.fmtPrice(m2)}/m²</span>` : ''}
+        </div>
+        <div class="sa-card-typeline">${SA.TYPE_LABELS[l.type] || 'Bien'} ${l.transaction === 'vente' ? 'à vendre' : 'à louer'}</div>
+        <div class="sa-card-meta">${metaParts.join('')}</div>
+        <div class="sa-card-address"><i class="ti ti-map-pin"></i> ${SA.escapeHtml(l.ville || '')}${l.postal ? ' (' + l.postal + ')' : ''}</div>
+        <div class="sa-card-foot">
+          <span class="sa-card-seller"><span class="sa-card-seller-avatar">${SA.escapeHtml((l.contactPrenom || '?').charAt(0).toUpperCase())}</span>Publié par ${SA.escapeHtml(l.contactPrenom || 'un particulier')}</span>
+          <span class="sa-card-date"><i class="ti ti-clock"></i> ${homeRelTime(l.createdAt)}</span>
         </div>
       </div>
     </div>`;
   }).join('');
-  // sync favorites
-  el.querySelectorAll('.sa-listing-fav[data-id]').forEach(btn => {
-    if (SA.isFavorite && SA.isFavorite(btn.dataset.id)) {
-      btn.classList.add('active');
-      btn.querySelector('i').className = 'ti ti-heart-filled';
-    }
-  });
+}
+
+function renderHomePros() {
+  const el = document.getElementById('homepagePros');
+  if (!el) return;
+  const recent = SA.getAllPros()
+    .slice()
+    .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+    .slice(0, 4);
+  el.innerHTML = recent.map(p => `
+    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+      <div class="sa-pro-avatar" style="background:${p.color || '#E84533'}"><i class="ti ${p.icon || 'ti-briefcase'}"></i></div>
+      <div class="sa-pro-name">${SA.escapeHtml(p.name)}</div>
+      <div class="sa-pro-job">${SA.escapeHtml(p.job || '')}</div>
+      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> ${(p.rating||0).toFixed(1)} (${p.reviews||0} avis)</div>
+      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> ${SA.escapeHtml(p.city || '')}</div>
+    </div>`).join('');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
   SA.init().then(function() {
     renderHomeListings(SA.getAllListings());
+    renderHomePros();
     setTimeout(function(){
       var dropdown=document.querySelector('.sa-account-dropdown');
       if(!dropdown||!SA.getUser())return;
