@@ -138,7 +138,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 @media(max-width:760px){
   .sa-msg-layout{grid-template-columns:1fr;height:auto}
   .sa-msg-list{border-right:none;border-bottom:1px solid #efefef;max-height:240px}
-  .sa-msg-thread{height:560px}
+  /* min-height (pas height) : quand la zone de texte grandit, c'est le bas du
+     cadre qui s'étend, pas la conversation qui se fait comprimer par le haut. */
+  .sa-msg-thread{min-height:560px}
+  .sa-msg-thread-body{min-height:360px}
   /* En-tête : actions sur leur propre ligne, chaque bouton entièrement visible */
   .sa-msg-thread-header{padding:12px 14px}
   .sa-msg-thread-header-toprow{flex-direction:column;align-items:stretch;gap:8px}

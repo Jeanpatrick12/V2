@@ -61,7 +61,12 @@
 #editModal{position:fixed;inset:0;height:100vh;height:100dvh;background:rgba(0,0,0,.55);z-index:9999;display:none;align-items:flex-end}
 #editModal.open{display:flex}
 /* Sécurité CSS déclarative en plus du style inline : la barre de navigation basse
-   ne doit jamais pouvoir repasser devant le pied du modal (Annuler/Enregistrer). */
+   ne doit jamais pouvoir repasser devant le pied du modal (Annuler/Enregistrer).
+   La règle :has() ne dépend d'aucun script JS (juste de la classe "open" posée
+   sur #editModal, la toute première chose que fait openEditModal) : elle marche
+   même si un script plus loin dans la fonction échoue avant d'atteindre le JS
+   qui retire la barre du DOM. */
+body:has(#editModal.open) .m-bottom-nav{display:none!important}
 body.em-open .m-bottom-nav{display:none!important}
 /* Feuille en colonne : en-tête + zone défilante + pied TOUJOURS visible.
    Hauteurs en % de l'overlay (fixe, plein écran) et non en vh : fiable même en iframe. */

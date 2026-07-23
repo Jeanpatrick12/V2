@@ -10,12 +10,12 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--red:#E84533;--pad:18px}
-html{background:#0c1622}
+/* Fond du "canevas" entier (au-delà même de la boîte du body, y compris la zone
+   révélée quand la barre d'adresse du navigateur se rétracte au défilement) :
+   ne PAS fixer le fond sur <html> en plus de <body> — cela casse la propagation
+   du fond de body vers le canevas complet prévue par la spec CSS, qui est
+   justement le mécanisme fiable pour éviter tout blanc résiduel. */
 body{background:#0c1622;min-height:100vh;min-height:100dvh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:white}
-/* Couche de fond fixe indépendante de la hauteur réelle du contenu : couvre tout
-   l'écran (y compris la zone de rebond iOS / barre d'outils dynamique) en noir,
-   quelle que soit la façon dont le navigateur recalcule le viewport au défilement. */
-body::before{content:'';position:fixed;inset:0;z-index:-1;background:#0c1622}
 /* Haut de page figé, comme sur "Vous êtes prêt à commencer" (.gate-nav) */
 .dep-nav{display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;padding:14px var(--pad);z-index:10;background:#0c1622}
 .dep-logo{display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none}
