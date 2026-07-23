@@ -84,6 +84,14 @@
 }
 .m-cta-section h3 { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; margin-bottom: 10px; line-height: 1.3; }
 .m-cta-section p { font-size: 13px; color: rgba(255,255,255,0.82); margin-bottom: 22px; line-height: 1.55; }
+
+/* Cartes "annonces récentes" : même visuel que la page Annonces (vendeur + ancienneté) */
+.m-home-listing-card { width: 78vw; max-width: 280px; }
+.m-home-listing-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 10px 12px 12px; padding-top: 10px; border-top: 1px solid var(--bg); font-size: 11px; color: var(--text3); }
+.m-home-listing-seller { display: flex; align-items: center; gap: 6px; color: var(--text2); font-weight: 600; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-home-listing-seller-avatar { width: 18px; height: 18px; border-radius: 50%; background: var(--red-light); color: var(--red); font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-home-listing-date { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.m-home-listing-date i { font-size: 11px; }
 </style>
 </head>
 <body>
@@ -560,15 +568,30 @@ function calcCustom(raw) {
   bannerAmt.innerHTML = '<em>' + fmt(gain) + '</em> de plus dans votre poche';
 }
 
+// ── Ancienneté relative (identique à la page Annonces) ──
+function homeListingRelTime(ts) {
+  if (!ts) return '';
+  var day = 86400000;
+  var d = Math.floor((Date.now() - ts) / day);
+  if (d <= 0) return "Aujourd'hui";
+  if (d === 1) return 'Hier';
+  if (d < 7) return 'Il y a ' + d + ' jours';
+  if (d < 30) { var w = Math.floor(d/7); return 'Il y a ' + w + ' semaine' + (w>1?'s':''); }
+  if (d < 365) { var m = Math.floor(d/30); return 'Il y a ' + m + ' mois'; }
+  var y = Math.floor(d/365); return 'Il y a ' + y + ' an' + (y>1?'s':'');
+}
+
 // ── Render listings carousel ─────────────────────────────────
 function renderListings(listings) {
   var el = document.getElementById('listingsCarousel');
   var recent = listings
     .filter(function(l) { return l.status !== 'sold'; })
     .sort(function(a, b) {
-      var da = a.created_at || a.date || '';
-      var db = b.created_at || b.date || '';
-      return db.localeCompare(da);
+      // Tri sur le vrai timestamp (createdAt), pas sur created_at/date qui
+      // sont quasiment toujours absents et ne remontaient donc rien de récent.
+      var ta = a.createdAt || (a.created_at ? new Date(a.created_at).getTime() : 0) || 0;
+      var tb = b.createdAt || (b.created_at ? new Date(b.created_at).getTime() : 0) || 0;
+      return tb - ta;
     })
     .slice(0, 6);
   if (!recent.length) {
@@ -593,7 +616,11 @@ function renderListings(listings) {
     var typeCapital = l.type ? l.type.charAt(0).toUpperCase() + l.type.slice(1) : '';
     var title = l.titre || (typeCapital + (l.ville ? ' — ' + l.ville : ''));
     var pieces = l.pieces ? l.pieces + ' pièce' + (parseInt(l.pieces) > 1 ? 's' : '') : '';
-    return '<div class="m-listing-card m-carousel-item" onclick="SA.openListing(\'' + l.id + '\')">' +
+    var initial = (l.contactPrenom || '?').charAt(0).toUpperCase();
+    var prenom = l.contactPrenom || 'un particulier';
+    var ts = l.createdAt || (l.created_at ? new Date(l.created_at).getTime() : 0) || 0;
+    var when = homeListingRelTime(ts);
+    return '<div class="m-listing-card m-home-listing-card m-carousel-item" onclick="SA.openListing(\'' + l.id + '\')">' +
       '<div class="m-listing-img" style="' + photoStyle + '">' +
         '<span class="m-listing-badge ' + badge + '">' + badgeLabel + '</span>' +
       '</div>' +
@@ -604,6 +631,10 @@ function renderListings(listings) {
           (l.surface ? '<span><i class="ti ti-ruler-2"></i> ' + l.surface + ' m²</span>' : '') +
           (pieces ? '<span><i class="ti ti-door"></i> ' + pieces + '</span>' : '') +
         '</div>' +
+      '</div>' +
+      '<div class="m-home-listing-foot">' +
+        '<span class="m-home-listing-seller"><span class="m-home-listing-seller-avatar">' + initial + '</span>Publié par ' + prenom + '</span>' +
+        (when ? '<span class="m-home-listing-date"><i class="ti ti-clock"></i> ' + when + '</span>' : '') +
       '</div>' +
     '</div>';
   }).join('') + '<div style="width:1px;flex-shrink:0;margin-right:6px"></div>';
@@ -663,7 +694,7 @@ SA.init().then(function() {
   updateAuthUI(SA.getUser());
   renderListings(SA.getAllListings());
   if (SA.getAllPros) {
-    var pros = SA.getAllPros();
+    var pros = SA.getAllPros().slice().sort(function(a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
     if (pros && pros.length) { renderPros(pros); return; }
   }
   renderPros([]);
