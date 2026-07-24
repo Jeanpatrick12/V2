@@ -174,13 +174,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
         </div>
 
         <div class="avis-section">
-          <div class="avis-label">Vous êtes… <span>*</span></div>
+          <div class="avis-label">Vous êtes… (facultatif)</div>
           <div class="role-grid" id="roleGrid"></div>
-        </div>
-
-        <div class="avis-section">
-          <div class="avis-label">Titre de votre avis</div>
-          <input class="avis-input" id="avisTitre" type="text" placeholder="En quelques mots…" maxlength="100">
         </div>
 
         <div class="avis-section">
@@ -263,7 +258,6 @@ function submitAvis(e) {
   hideError();
 
   if(!selectedStar) { showError('Veuillez sélectionner une note.'); return; }
-  if(!selectedRole) { showError('Veuillez indiquer votre rôle.'); return; }
   var comment = document.getElementById('avisComment').value.trim();
   if(comment.length < 10) { showError('Votre commentaire doit faire au moins 10 caractères.'); return; }
 
@@ -275,8 +269,8 @@ function submitAvis(e) {
     type: reviewType,
     target_id: reviewId,
     note: selectedStar,
-    role: selectedRole,
-    titre: document.getElementById('avisTitre').value.trim() || null,
+    role: selectedRole || null,
+    titre: null,
     commentaire: comment,
     auteur: document.getElementById('avisNom').value.trim() || 'Anonyme',
     created_at: new Date().toISOString()

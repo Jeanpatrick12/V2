@@ -126,16 +126,10 @@
 
   <!-- Role -->
   <div class="avis-section" style="margin-top:24px">
-    <div class="avis-label">Vous êtes… <span style="color:var(--red)">*</span></div>
+    <div class="avis-label">Vous êtes… (facultatif)</div>
     <div class="role-grid" id="roleGrid">
       <!-- filled by JS based on type -->
     </div>
-  </div>
-
-  <!-- Titre -->
-  <div class="avis-section" style="margin-top:24px">
-    <div class="avis-label">Titre de votre avis</div>
-    <input class="avis-input" id="avisTitre" type="text" placeholder="En quelques mots…" maxlength="100">
   </div>
 
   <!-- Commentaire -->
@@ -247,7 +241,6 @@ function submitAvis(e) {
   hideError();
 
   if(!selectedStar) { showError('Veuillez sélectionner une note.'); return; }
-  if(!selectedRole) { showError('Veuillez indiquer votre rôle.'); return; }
   var comment = document.getElementById('avisComment').value.trim();
   if(comment.length < 10) { showError('Votre commentaire doit faire au moins 10 caractères.'); return; }
 
@@ -259,8 +252,8 @@ function submitAvis(e) {
     type: reviewType,
     target_id: reviewId,
     note: selectedStar,
-    role: selectedRole,
-    titre: document.getElementById('avisTitre').value.trim() || null,
+    role: selectedRole || null,
+    titre: null,
     commentaire: comment,
     auteur: document.getElementById('avisNom').value.trim() || 'Anonyme',
     created_at: new Date().toISOString()

@@ -280,9 +280,11 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 .sa-safety-banner-text{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5}
 .sa-safety-banner-text strong{color:white;font-weight:700}
 
-/* ── LISTINGS — mêmes cartes que la page Annonces ── */
-.sa-listings{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.sa-card{border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;cursor:pointer;transition:all .15s;background:white}
+/* ── LISTINGS — mêmes cartes que la page Annonces, en carrousel (comme les
+   professionnels) pour voir les 6 dernières annonces en glissant. ── */
+.sa-listings{display:flex;gap:18px;overflow-x:auto;padding:4px 0 6px;scroll-snap-type:x mandatory;cursor:grab;scrollbar-width:thin}
+.sa-listings.dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
+.sa-card{flex:0 0 auto;width:270px;scroll-snap-align:start;border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;background:white}
 .sa-card:hover{border-color:#E84533;box-shadow:0 8px 28px rgba(232,69,51,0.1);transform:translateY(-2px)}
 .sa-card-photos{position:relative;display:flex;gap:3px;flex-shrink:0;background:#eee;height:170px}
 .sa-card-photo-main{flex:1 1 66%;position:relative;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -322,7 +324,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 /* ── PROS PREVIEW ── */
 /* Carrousel (comme sur mobile) plutôt qu'une grille figée à 4 : on peut faire
    glisser pour voir les autres professionnels au lieu d'être limité à 4. */
-.sa-pros-grid{display:flex;gap:18px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;cursor:grab;scrollbar-width:thin}
+.sa-pros-grid{display:flex;gap:18px;overflow-x:auto;padding:4px 0 6px;scroll-snap-type:x mandatory;cursor:grab;scrollbar-width:thin}
 .sa-pros-grid.dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
 .sa-pro-card{flex:0 0 auto;width:240px;scroll-snap-align:start;border:1px solid #e8e8e8;border-radius:16px;padding:1.4rem 1.3rem;background:white;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;text-align:center}
 .sa-pro-card:hover{border-color:#E84533;box-shadow:0 6px 24px rgba(232,69,51,0.1);transform:translateY(-2px)}
@@ -748,42 +750,42 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
   <p class="sa-section-title">Besoin d'un professionnel ?</p>
   <p class="sa-section-sub">Notaires, diagnostiqueurs, artisans… des professionnels de confiance à portée de main, avec une réduction exclusive pour les utilisateurs de SansAgents.</p>
   <div class="sa-pros-grid">
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr1'">
       <div class="sa-pro-avatar" style="background:#2563eb"><i class="ti ti-stamp"></i></div>
       <div class="sa-pro-name">Maître Lefebvre</div>
       <div class="sa-pro-job">Notaire</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.9 (127 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Lyon</div>
     </div>
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr6'">
       <div class="sa-pro-avatar" style="background:#E84533"><i class="ti ti-bulb"></i></div>
       <div class="sa-pro-name">Karim Benali</div>
       <div class="sa-pro-job">Électricien</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.8 (84 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Bordeaux</div>
     </div>
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr3'">
       <div class="sa-pro-avatar" style="background:#1a8c4e"><i class="ti ti-ruler-2"></i></div>
       <div class="sa-pro-name">Julie Marchand</div>
       <div class="sa-pro-job">Diagnostiqueur DPE</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 5.0 (52 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Paris</div>
     </div>
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr7'">
       <div class="sa-pro-avatar" style="background:#9333ea"><i class="ti ti-brick"></i></div>
       <div class="sa-pro-name">Thomas Petit</div>
       <div class="sa-pro-job">Carreleur</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.7 (63 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Lille</div>
     </div>
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr5'">
       <div class="sa-pro-avatar" style="background:#7c3aed"><i class="ti ti-map-2"></i></div>
       <div class="sa-pro-name">Camille Faure</div>
       <div class="sa-pro-job">Géomètre</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.8 (45 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Toulouse</div>
     </div>
-    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr10'">
       <div class="sa-pro-avatar" style="background:#0d9488"><i class="ti ti-droplet"></i></div>
       <div class="sa-pro-name">Antoine Garcia</div>
       <div class="sa-pro-job">Plombier</div>
@@ -1035,7 +1037,7 @@ function renderHomeListings(listings) {
       const tb = b.createdAt || (b.created_at ? new Date(b.created_at).getTime() : 0) || 0;
       return tb - ta;
     })
-    .slice(0, 4);
+    .slice(0, 6);
   if (!recent.length) {
     el.innerHTML = '<p style="color:#999;font-size:14px;grid-column:1/-1;text-align:center;padding:2rem 0">Aucune annonce pour le moment.</p>';
     return;
@@ -1106,10 +1108,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// Glisser à la souris pour faire défiler le carrousel des professionnels
-// (le tactile défile déjà nativement grâce à overflow-x:auto).
-(function(){
-  var el = document.querySelector('.sa-pros-grid');
+// Glisser à la souris pour faire défiler un carrousel (annonces, professionnels…)
+// — le tactile défile déjà nativement grâce à overflow-x:auto.
+function enableDragScroll(selector){
+  var el = document.querySelector(selector);
   if(!el) return;
   var isDown = false, startX = 0, scrollStart = 0, moved = false;
   el.addEventListener('mousedown', function(e){
@@ -1124,9 +1126,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if(Math.abs(dx) > 4) moved = true;
     el.scrollLeft = scrollStart - dx;
   });
-  // Empêche l'ouverture de la fiche pro si on vient de faire glisser le carrousel.
+  // Empêche l'ouverture de la fiche si on vient de faire glisser le carrousel.
   el.addEventListener('click', function(e){ if(moved){ e.preventDefault(); e.stopPropagation(); } }, true);
-})();
+}
+enableDragScroll('.sa-pros-grid');
+enableDragScroll('.sa-listings');
 </script>
 </body>
 </html>
