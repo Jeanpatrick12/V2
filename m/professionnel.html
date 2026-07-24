@@ -120,7 +120,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=10"></script>
+<script src="../sa-shared.js?v=11"></script>
 <script>
 var COLORS = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2'];
 var currentPro = null;
@@ -262,15 +262,60 @@ function renderPro(p) {
     '</button>' +
   '</div>';
 
+  // ── Avis de la communauté ────────────────────────────────
+  html += '<div style="background:white;padding:20px var(--pad);border-top:1px solid var(--border)">' +
+    '<div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px"><i class="ti ti-messages" style="color:var(--red);margin-right:6px"></i>Avis de la communauté</div>' +
+    '<div id="avisSummary"></div>' +
+    '<div id="avisList"></div>' +
+  '</div>';
+
   // ── Signalement ─────────────────────────────────────────
   html += '<div style="background:white;padding:16px var(--pad);border-bottom:1px solid var(--border)">' +
-    '<button onclick="alert(\'Merci. Notre équipe examinera ce signalement.\')" style="background:none;border:none;font-size:12px;color:var(--text3);cursor:pointer;padding:0;font-family:inherit;display:flex;align-items:center;gap:6px">' +
-      '<i class="ti ti-flag" style="font-size:14px"></i> Profil suspect ou agence déguisée ? Signalez-le' +
+    '<button onclick="window.top.location=\'/aide-signaler?type=pro&target=' + p.id + '&name=' + encodeURIComponent(p.name || '') + '\'" style="width:100%;background:#fff5f4;border:1px solid #ffd8d3;border-radius:10px;padding:11px 12px;font-size:12.5px;font-weight:600;color:var(--red);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px">' +
+      '<i class="ti ti-flag"></i> Profil suspect ou agence déguisée ? Signalez-le' +
     '</button>' +
   '</div>';
 
   html += '<div style="height:90px"></div>';
   document.getElementById('pageContent').innerHTML = html;
+  loadAvisSection('pro', p.id);
+}
+
+function loadAvisSection(type, targetId) {
+  SA.getReviews(type, targetId).then(function(reviews) {
+    var summary = document.getElementById('avisSummary');
+    var list = document.getElementById('avisList');
+    if (!summary || !list) return;
+    if (!reviews.length) {
+      summary.innerHTML = '';
+      list.innerHTML = '<p style="font-size:12.5px;color:var(--text2);line-height:1.5">Aucun avis pour le moment. Soyez le premier à en laisser un !</p>';
+      return;
+    }
+    var avg = reviews.reduce(function(s, r) { return s + r.note; }, 0) / reviews.length;
+    var summaryStars = '';
+    for (var i = 1; i <= 5; i++) summaryStars += '<i class="ti ti-star-filled" style="color:' + (i <= Math.round(avg) ? '#f59e0b' : '#ddd') + '"></i>';
+    summary.innerHTML = '<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">' +
+      '<div style="font-size:28px;font-weight:800;color:var(--text)">' + avg.toFixed(1) + '</div>' +
+      '<div><div style="font-size:14px;letter-spacing:1px">' + summaryStars + '</div><div style="font-size:11.5px;color:var(--text2);margin-top:2px">' + reviews.length + ' avis</div></div>' +
+    '</div>';
+    list.innerHTML = reviews.map(function(r) {
+      var initial = (r.auteur || 'A').charAt(0).toUpperCase();
+      var stars = '';
+      for (var i = 1; i <= 5; i++) stars += '<i class="ti ti-star-filled" style="font-size:11px;color:' + (i <= r.note ? '#f59e0b' : '#ddd') + '"></i>';
+      var when = SA.timeAgo(r.created_at);
+      return '<div style="border-top:1px solid var(--border);padding:13px 0">' +
+        '<div style="display:flex;align-items:center;gap:9px;margin-bottom:6px">' +
+          '<div style="width:28px;height:28px;border-radius:50%;background:var(--red-light);color:var(--red);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">' + initial + '</div>' +
+          '<div style="flex:1;min-width:0">' +
+            '<div style="font-size:12.5px;font-weight:700;color:var(--text)">' + SA.escapeHtml(r.auteur || 'Anonyme') + (r.role ? ' <span style="font-weight:500;color:var(--text2);font-size:11px">· ' + SA.escapeHtml(r.role) + '</span>' : '') + '</div>' +
+            '<div style="font-size:10.5px;margin-top:1px">' + stars + '</div>' +
+          '</div>' +
+          (when ? '<div style="font-size:10.5px;color:var(--text3);flex-shrink:0">' + when + '</div>' : '') +
+        '</div>' +
+        '<p style="font-size:12.5px;color:var(--text2);line-height:1.55;margin:0">' + SA.escapeHtml(r.commentaire) + '</p>' +
+      '</div>';
+    }).join('');
+  });
 }
 
 function renderNotFound() {

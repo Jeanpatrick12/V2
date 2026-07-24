@@ -755,6 +755,48 @@
     if (error) throw error;
   }
 
+  async function getReviews(type, targetId) {
+    const { data, error } = await _sb.from("avis").select("*")
+      .eq("type", type).eq("target_id", targetId).eq("status", "approved")
+      .order("created_at", { ascending: false });
+    if (error) { console.error("getReviews error:", error); return []; }
+    return data || [];
+  }
+
+  async function getReviewsForListing(listingId) {
+    const { data, error } = await _sb.from("avis").select("*")
+      .eq("target_id", listingId).in("type", ["vendeur", "acheteur"]).eq("status", "approved")
+      .order("created_at", { ascending: false });
+    if (error) { console.error("getReviewsForListing error:", error); return []; }
+    return data || [];
+  }
+
+  function timeAgo(input) {
+    if (!input) return "";
+    var ts = typeof input === "number" ? input : new Date(input).getTime();
+    if (!ts) return "";
+    var day = 86400000;
+    var d = Math.floor((Date.now() - ts) / day);
+    if (d <= 0) return "Aujourd'hui";
+    if (d === 1) return "Hier";
+    if (d < 7) return "Il y a " + d + " jours";
+    if (d < 30) { var w = Math.floor(d / 7); return "Il y a " + w + " semaine" + (w > 1 ? "s" : ""); }
+    if (d < 365) { var m = Math.floor(d / 30); return "Il y a " + m + " mois"; }
+    var y = Math.floor(d / 365); return "Il y a " + y + " an" + (y > 1 ? "s" : "");
+  }
+
+  /* ── Signalements (agences déguisées, profils suspects) ─────────── */
+  async function submitReport(payload) {
+    const row = {
+      type:    payload.type || "annonce",
+      target:  payload.target || "",
+      raison:  payload.raison || "",
+      email:   payload.email || null
+    };
+    const { error } = await _sb.from("signalements").insert(row);
+    if (error) throw error;
+  }
+
   /* ── Authentification ───────────────────────────────────────────── */
   function getUser() { return _cache.user; }
 
@@ -1142,7 +1184,7 @@
     markConversationRead, deleteConversation, getUnreadMessageCount,
     getListingContact,
     // Pros
-    getAllPros, getProById, getUserPros, addPro, setProVerified, submitReview,
+    getAllPros, getProById, getUserPros, addPro, setProVerified, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport,
     // Documents
     saveDoc, getDocs, deleteDoc,
     // Auth

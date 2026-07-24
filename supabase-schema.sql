@@ -189,6 +189,20 @@ CREATE TABLE IF NOT EXISTS public.avis (
   created_at  timestamptz NOT NULL DEFAULT now()
 );
 
+-- ── 8. SIGNALEMENTS ─────────────────────────────────────────────
+-- Signalement d'une annonce ou d'un profil professionnel suspect
+-- (agence déguisée, etc.). Dépôt libre, traitement manuel via le
+-- dashboard Supabase (passer "status" de 'pending' à 'traite').
+CREATE TABLE IF NOT EXISTS public.signalements (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  type        text NOT NULL DEFAULT 'annonce' CHECK (type IN ('annonce','pro')),
+  target      text NOT NULL DEFAULT '',
+  raison      text NOT NULL,
+  email       text,
+  status      text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','traite')),
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+
 -- ═══════════════════════════════════════════════════════════════════
 -- SÉCURITÉ (Row Level Security)
 -- Ces règles garantissent que chaque utilisateur ne voit et ne
@@ -202,6 +216,7 @@ ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.favorites    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.avis         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.signalements ENABLE ROW LEVEL SECURITY;
 
 -- profiles : tout le monde peut lire, chacun modifie le sien
 DROP POLICY IF EXISTS "profiles_select" ON public.profiles;
@@ -286,6 +301,11 @@ DROP POLICY IF EXISTS "avis_select" ON public.avis;
 DROP POLICY IF EXISTS "avis_insert" ON public.avis;
 CREATE POLICY "avis_select" ON public.avis FOR SELECT USING (status = 'approved');
 CREATE POLICY "avis_insert" ON public.avis FOR INSERT WITH CHECK (true);
+
+-- signalements : dépôt libre, lecture réservée (aucune policy SELECT =
+-- personne ne peut lire via l'API publique, seul le dashboard Supabase y accède)
+DROP POLICY IF EXISTS "signalements_insert" ON public.signalements;
+CREATE POLICY "signalements_insert" ON public.signalements FOR INSERT WITH CHECK (true);
 
 -- ═══════════════════════════════════════════════════════════════════
 -- FONCTION SÉCURISÉE : coordonnées d'une annonce

@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=10"></script>
+<script src="sa-shared.js?v=11"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -282,9 +282,10 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 
 /* ── LISTINGS — mêmes cartes que la page Annonces, en carrousel (comme les
    professionnels) pour voir les 6 dernières annonces en glissant. ── */
-.sa-listings{display:flex;gap:18px;overflow-x:auto;padding:4px 0 6px;scroll-snap-type:x mandatory;cursor:grab;scrollbar-width:thin}
+.sa-listings{display:flex;gap:18px;overflow-x:auto;padding:4px 0 6px;scroll-snap-type:x mandatory;cursor:grab;scrollbar-width:none;-ms-overflow-style:none}
+.sa-listings::-webkit-scrollbar{display:none}
 .sa-listings.dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
-.sa-card{flex:0 0 auto;width:270px;scroll-snap-align:start;border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;background:white}
+.sa-card{flex:0 0 auto;width:330px;scroll-snap-align:start;border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;background:white}
 .sa-card:hover{border-color:#E84533;box-shadow:0 8px 28px rgba(232,69,51,0.1);transform:translateY(-2px)}
 .sa-card-photos{position:relative;display:flex;gap:3px;flex-shrink:0;background:#eee;height:170px}
 .sa-card-photo-main{flex:1 1 66%;position:relative;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -324,7 +325,8 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 /* ── PROS PREVIEW ── */
 /* Carrousel (comme sur mobile) plutôt qu'une grille figée à 4 : on peut faire
    glisser pour voir les autres professionnels au lieu d'être limité à 4. */
-.sa-pros-grid{display:flex;gap:18px;overflow-x:auto;padding:4px 0 6px;scroll-snap-type:x mandatory;cursor:grab;scrollbar-width:thin}
+.sa-pros-grid{display:flex;gap:18px;overflow-x:auto;padding:4px 0 6px;scroll-snap-type:x mandatory;cursor:grab;scrollbar-width:none;-ms-overflow-style:none}
+.sa-pros-grid::-webkit-scrollbar{display:none}
 .sa-pros-grid.dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
 .sa-pro-card{flex:0 0 auto;width:240px;scroll-snap-align:start;border:1px solid #e8e8e8;border-radius:16px;padding:1.4rem 1.3rem;background:white;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;text-align:center}
 .sa-pro-card:hover{border-color:#E84533;box-shadow:0 6px 24px rgba(232,69,51,0.1);transform:translateY(-2px)}
@@ -723,7 +725,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
     <div class="sa-safety-card"><i class="ti ti-user-check"></i><div class="sa-safety-card-title">Vérifiez l'identité</div><div class="sa-safety-card-desc">Demandez une pièce d'identité avant toute visite ou avant de communiquer des documents sensibles.</div></div>
     <div class="sa-safety-card"><i class="ti ti-building-bank"></i><div class="sa-safety-card-title">Le notaire reste garant</div><div class="sa-safety-card-desc">Pour une vente, l'acte est toujours signé chez un notaire, qui vérifie la légalité de la transaction.</div></div>
     <div class="sa-safety-card"><i class="ti ti-credit-card-off"></i><div class="sa-safety-card-title">Ne payez jamais avant la visite</div><div class="sa-safety-card-desc">Aucun virement, acompte ou dépôt de garantie avant d'avoir visité le bien en personne.</div></div>
-    <div class="sa-safety-card"><i class="ti ti-flag"></i><div class="sa-safety-card-title">Signalez les comportements suspects</div><div class="sa-safety-card-desc">Toute annonce ou contact suspect peut être signalé depuis votre espace.</div></div>
+    <div class="sa-safety-card" style="cursor:pointer;border-color:#ffd8d3" onclick="window.location.href='aide-signaler'"><i class="ti ti-flag" style="color:#E84533"></i><div class="sa-safety-card-title" style="color:#E84533">Signalez les comportements suspects <i class="ti ti-arrow-right" style="font-size:12px"></i></div><div class="sa-safety-card-desc">Toute annonce ou profil suspect peut être signalé en un clic.</div></div>
   </div>
 </div>
 
