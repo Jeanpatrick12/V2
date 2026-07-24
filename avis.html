@@ -1,7 +1,342 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Avis — SansAgents</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
-<script>(function(){if(window.innerWidth>768&&!localStorage.sa_force_desktop){location.replace("/");return;}document.addEventListener("DOMContentLoaded",function(){document.body.style.margin="0";document.body.style.overflow="hidden";var f=document.createElement("iframe");f.src="/m/avis.html"+location.search;f.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;border:0;background:#fff";f.onload=function(){try{document.title=f.contentDocument.title}catch(e){}};f.setAttribute("scrolling","yes");document.body.appendChild(f);});})();</script>
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="SansAgents — Achetez, vendez ou louez un bien immobilier directement entre particuliers, sans agence et sans commission exorbitante.">
+<meta property="og:site_name" content="SansAgents">
+<meta property="og:image" content="https://sansagents.fr/favicon.svg">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><!--sa_mloader--><script>(function(){if(window.innerWidth>768||localStorage.sa_force_desktop||/[?&]desktop=1/.test(location.search))return;document.documentElement.style.visibility="hidden";document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML="";document.body.style.margin="0";document.body.style.overflow="hidden";var f=document.createElement("iframe");f.src="/m/avis.html"+location.search;f.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;border:0;background:#fff";f.onload=function(){try{document.title=f.contentDocument.title}catch(e){}document.documentElement.style.visibility=""};f.setAttribute("scrolling","yes");document.body.appendChild(f);});})();</script>
+<title>Laisser un avis — SansAgents</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js?v=10"></script>
+<link rel="stylesheet" href="sa-mobile.css?v=4">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fafafa;min-height:100vh}
+
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:100}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+.sa-nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.sa-nav-link{font-size:13.5px;color:#555;padding:8px 14px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit}
+.sa-nav-link:hover{background:#f7f7f7;color:#111}
+.sa-nav-actions{display:flex;align-items:center;gap:4px;margin-left:16px}
+.sa-nav-cta{font-size:13.5px;color:white;background:#E84533;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;border:none;font-family:inherit;display:flex;align-items:center;gap:6px}
+.sa-nav-cta:hover{background:#c93a2a}
+.sa-nav-divider{width:1px;height:32px;background:#e5e5e5;margin:0 6px;flex-shrink:0}
+.sa-nav-icon-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:5px 9px;border-radius:8px;color:#444;font-family:inherit}
+.sa-nav-icon-btn i{font-size:19px}
+.sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
+.sa-nav-account-wrap{position:relative}
+.sa-nav-avatar{width:19px;height:19px;border-radius:50%;background:#E84533;color:white;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.sa-nav-badge{position:absolute;top:1px;right:3px;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px}
+.sa-account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);min-width:220px;padding:8px;z-index:200}
+.sa-account-dropdown.show{display:block}
+.sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px;word-break:break-all}
+.sa-account-dropdown-email i{color:#E84533;flex-shrink:0}
+.sa-account-dropdown-logout{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;color:#c0392b;padding:9px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.sa-account-dropdown-logout:hover{background:#fff0ee}
+
+/* Hero sombre : même langage visuel que les autres pages (guide, déposer) */
+.avis-hero{background:linear-gradient(135deg,#0c1622 0%,#152233 60%,#1c2e44 100%);padding:2.2rem 40px 3.2rem}
+.avis-hero-inner{max-width:680px;margin:0 auto}
+.avis-hero-back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;color:rgba(255,255,255,.75);cursor:pointer;font-family:inherit;margin-bottom:24px}
+.avis-hero-back:hover{background:rgba(255,255,255,.14);color:white}
+.avis-hero-eyebrow{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.avis-hero-target{display:flex;gap:16px;align-items:center}
+.avis-hero-avatar{width:60px;height:60px;border-radius:16px;background:#E84533;color:white;font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.avis-hero-name{font-size:21px;font-weight:800;color:white;letter-spacing:-.3px;margin-bottom:3px}
+.avis-hero-type{font-size:13px;color:rgba(255,255,255,.5)}
+
+.avis-wrap{max-width:680px;margin:-1.6rem auto 4rem;padding:0 40px}
+.avis-card{background:white;border:1px solid #e8e8e8;border-radius:20px;padding:2rem 2.2rem;box-shadow:0 20px 50px rgba(0,0,0,.06)}
+.avis-section{margin-bottom:24px}
+.avis-section:last-of-type{margin-bottom:0}
+.avis-label{font-size:13.5px;font-weight:700;color:#111;margin-bottom:12px}
+.avis-label span{color:#E84533}
+
+.star-picker{display:flex;gap:10px;margin-bottom:6px}
+.star-btn{font-size:34px;background:none;border:none;cursor:pointer;color:#ddd;padding:0;line-height:1;transition:color .15s,transform .1s;font-family:inherit}
+.star-btn.active{color:#f59e0b}
+.star-btn:hover{transform:scale(1.1)}
+.star-label{font-size:13px;color:#888;min-height:20px}
+
+.role-grid{display:flex;flex-wrap:wrap;gap:8px}
+.role-chip{padding:8px 15px;border-radius:999px;border:1.5px solid #e0e0e0;background:white;font-size:13px;font-weight:600;color:#666;cursor:pointer;font-family:inherit;transition:all .15s}
+.role-chip:hover{border-color:#E84533;color:#E84533}
+.role-chip.selected{border-color:#E84533;background:#fff5f4;color:#E84533}
+
+.avis-input,.avis-textarea{width:100%;box-sizing:border-box;border:1.5px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px;font-family:inherit;color:#111;outline:none;transition:border-color .15s}
+.avis-input:focus,.avis-textarea:focus{border-color:#E84533}
+.avis-textarea{resize:vertical;min-height:120px;line-height:1.55}
+.avis-charcount{font-size:11px;color:#aaa;margin-top:5px;text-align:right}
+.avis-hint{font-size:11.5px;color:#aaa;margin-top:7px;display:flex;align-items:center;gap:5px}
+
+.avis-error{display:none;margin-bottom:20px;background:#fff5f4;border:1px solid #ffc5bd;border-radius:10px;padding:12px 14px;font-size:13px;color:#E84533;align-items:center;gap:8px}
+
+.avis-submit{width:100%;background:#E84533;color:white;border:none;border-radius:12px;padding:15px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+.avis-submit:hover{background:#c93a2a}
+.avis-submit:disabled{opacity:.6;cursor:default}
+.avis-fineprint{text-align:center;font-size:11.5px;color:#aaa;margin-top:14px;line-height:1.5}
+
+.avis-success{display:none;text-align:center;padding:1rem 0 .5rem}
+.avis-success-icon{width:76px;height:76px;border-radius:50%;background:#ecfdf5;border:2px solid #6ee7b7;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:34px;color:#1a8c4e}
+.avis-success h2{font-size:21px;font-weight:800;color:#111;margin-bottom:10px}
+.avis-success p{font-size:14px;color:#777;line-height:1.6;margin-bottom:28px}
+.avis-success-actions{display:flex;gap:10px}
+.avis-success-actions button{flex:1;border-radius:12px;padding:13px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.avis-btn-primary{background:#E84533;color:white;border:none}
+.avis-btn-primary:hover{background:#c93a2a}
+.avis-btn-ghost{background:white;color:#111;border:1.5px solid #e0e0e0}
+.avis-btn-ghost:hover{border-color:#ccc}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:760px){
+  .sa-nav{padding:0 20px}
+  .sa-nav-icon-btn .sa-nav-icon-label{display:none}
+  .avis-hero{padding:1.6rem 20px 2.6rem}
+  .avis-wrap{padding:0 20px}
+  .avis-card{padding:1.5rem 1.4rem}
+}
+</style>
 </head>
-<body></body>
+<body>
+
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='./'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="sa-nav-links">
+      <button class="sa-nav-link" onclick="window.location.href='./'">Accueil</button>
+      <button class="sa-nav-link" onclick="window.location.href='guide'">Guide</button>
+      <button class="sa-nav-link" onclick="window.location.href='annonces'">Annonces</button>
+      <button class="sa-nav-link" onclick="window.open('professionnels','_blank')">Professionnels</button>
+    </div>
+    <div class="sa-nav-actions">
+      <button class="sa-nav-cta" onclick="window.location.href='deposer'"><i class="ti ti-plus"></i> Déposer une annonce</button>
+      <div class="sa-nav-divider"></div>
+      <div class="sa-nav-account-wrap" data-nav-account>
+        <button class="sa-nav-icon-btn"><i class="ti ti-user"></i><span class="sa-nav-icon-label">Se connecter</span></button>
+        <div class="sa-account-dropdown"></div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div id="mainContent">
+  <div class="avis-hero">
+    <div class="avis-hero-inner">
+      <button class="avis-hero-back" onclick="history.back()"><i class="ti ti-arrow-left"></i> Retour</button>
+      <div class="avis-hero-eyebrow">Votre avis</div>
+      <div class="avis-hero-target">
+        <div class="avis-hero-avatar" id="heroAvatar">?</div>
+        <div>
+          <div class="avis-hero-name" id="heroName">Chargement…</div>
+          <div class="avis-hero-type" id="heroType"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="avis-wrap">
+    <div class="avis-card">
+      <form id="avisForm" onsubmit="submitAvis(event)">
+
+        <div class="avis-section">
+          <div class="avis-label">Note globale <span>*</span></div>
+          <div class="star-picker" id="starPicker">
+            <button type="button" class="star-btn" data-v="1" onclick="setStar(1)"><i class="ti ti-star-filled"></i></button>
+            <button type="button" class="star-btn" data-v="2" onclick="setStar(2)"><i class="ti ti-star-filled"></i></button>
+            <button type="button" class="star-btn" data-v="3" onclick="setStar(3)"><i class="ti ti-star-filled"></i></button>
+            <button type="button" class="star-btn" data-v="4" onclick="setStar(4)"><i class="ti ti-star-filled"></i></button>
+            <button type="button" class="star-btn" data-v="5" onclick="setStar(5)"><i class="ti ti-star-filled"></i></button>
+          </div>
+          <div class="star-label" id="starLabel">Sélectionnez une note</div>
+        </div>
+
+        <div class="avis-section">
+          <div class="avis-label">Vous êtes… <span>*</span></div>
+          <div class="role-grid" id="roleGrid"></div>
+        </div>
+
+        <div class="avis-section">
+          <div class="avis-label">Titre de votre avis</div>
+          <input class="avis-input" id="avisTitre" type="text" placeholder="En quelques mots…" maxlength="100">
+        </div>
+
+        <div class="avis-section">
+          <div class="avis-label">Votre commentaire <span>*</span></div>
+          <textarea class="avis-textarea" id="avisComment" rows="5" placeholder="Décrivez votre expérience : réactivité, professionnalisme, rapport qualité/prix…" maxlength="1000"></textarea>
+          <div class="avis-charcount"><span id="charCount">0</span>/1000</div>
+        </div>
+
+        <div class="avis-section">
+          <div class="avis-label">Votre prénom (facultatif)</div>
+          <input class="avis-input" id="avisNom" type="text" placeholder="Prénom ou initiale — laissez vide pour rester anonyme" maxlength="50">
+          <div class="avis-hint"><i class="ti ti-lock"></i> Votre adresse e-mail n'est jamais publiée.</div>
+        </div>
+
+        <div class="avis-error" id="avisError"><i class="ti ti-alert-circle"></i> <span id="avisErrorMsg"></span></div>
+
+        <button type="submit" class="avis-submit" id="submitBtn"><i class="ti ti-send"></i> Publier mon avis</button>
+        <p class="avis-fineprint">Votre avis sera examiné avant publication. Tout avis diffamatoire sera supprimé.</p>
+      </form>
+
+      <div class="avis-success" id="successScreen">
+        <div class="avis-success-icon"><i class="ti ti-check"></i></div>
+        <h2>Merci pour votre avis !</h2>
+        <p>Il sera examiné et publié dans les 24h. Vos retours aident la communauté SansAgents à faire les bons choix.</p>
+        <div class="avis-success-actions">
+          <button class="avis-btn-ghost" onclick="history.back()"><i class="ti ti-arrow-left"></i> Retour</button>
+          <button class="avis-btn-primary" onclick="window.location='/'">Accueil</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var selectedStar = 0;
+var selectedRole = '';
+var reviewType = '';
+var reviewId = '';
+
+var STAR_LABELS = ['', 'Mauvais', 'Décevant', 'Correct', 'Bien', 'Excellent'];
+
+var ROLES_PRO = ['Client', 'Acheteur accompagné', 'Vendeur accompagné', 'Locataire accompagné', 'Autre'];
+var ROLES_VENDEUR = ['Acheteur', 'Locataire', 'Loueur', 'Vendeur', 'Autre'];
+var ROLES_ACHETEUR = ['Vendeur', 'Acheteur', 'Locataire', 'Loueur', 'Autre'];
+var ROLES_GENERAL = ['Acheteur', 'Vendeur', 'Locataire', 'Bailleur', 'Autre'];
+
+function setStar(n) {
+  selectedStar = n;
+  document.querySelectorAll('.star-btn').forEach(function(btn){
+    btn.classList.toggle('active', parseInt(btn.dataset.v) <= n);
+  });
+  document.getElementById('starLabel').textContent = STAR_LABELS[n] || '';
+}
+
+function setRole(r) {
+  selectedRole = r;
+  document.querySelectorAll('.role-chip').forEach(function(c){
+    c.classList.toggle('selected', c.dataset.role === r);
+  });
+}
+
+function buildRoleChips(roles) {
+  var grid = document.getElementById('roleGrid');
+  grid.innerHTML = roles.map(function(r){
+    return '<button type="button" class="role-chip" data-role="'+r+'" onclick="setRole(\''+r+'\')">'+r+'</button>';
+  }).join('');
+}
+
+function showError(msg) {
+  var el = document.getElementById('avisError');
+  el.style.display = 'flex';
+  document.getElementById('avisErrorMsg').textContent = msg;
+}
+function hideError() {
+  document.getElementById('avisError').style.display = 'none';
+}
+
+function submitAvis(e) {
+  e.preventDefault();
+  hideError();
+
+  if(!selectedStar) { showError('Veuillez sélectionner une note.'); return; }
+  if(!selectedRole) { showError('Veuillez indiquer votre rôle.'); return; }
+  var comment = document.getElementById('avisComment').value.trim();
+  if(comment.length < 10) { showError('Votre commentaire doit faire au moins 10 caractères.'); return; }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Envoi en cours…';
+
+  var payload = {
+    type: reviewType,
+    target_id: reviewId,
+    note: selectedStar,
+    role: selectedRole,
+    titre: document.getElementById('avisTitre').value.trim() || null,
+    commentaire: comment,
+    auteur: document.getElementById('avisNom').value.trim() || 'Anonyme',
+    created_at: new Date().toISOString()
+  };
+
+  SA.submitReview(payload).then(function(){
+    showSuccess();
+  }).catch(function(err){
+    console.error('submitReview error:', err);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> Publier mon avis';
+    showError("Erreur lors de l'envoi. Réessayez dans un instant.");
+  });
+}
+
+function showSuccess() {
+  document.getElementById('avisForm').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
+}
+
+SA.init().then(function(){
+  SA.mountNavAuth && SA.mountNavAuth();
+
+  var params = new URLSearchParams(window.location.search);
+  reviewType = params.get('type') || 'general';
+  reviewId   = params.get('id')   || '';
+
+  if(reviewType === 'pro') buildRoleChips(ROLES_PRO);
+  else if(reviewType === 'vendeur') buildRoleChips(ROLES_VENDEUR);
+  else if(reviewType === 'acheteur') buildRoleChips(ROLES_ACHETEUR);
+  else buildRoleChips(ROLES_GENERAL);
+
+  var name = params.get('name') || '';
+  var typeLabel = '';
+  if(reviewType === 'pro') {
+    typeLabel = 'Professionnel';
+    if(!name && reviewId && SA.getProById) {
+      var pro = SA.getProById(reviewId);
+      if(!pro && SA.DEMO_PROS) pro = SA.DEMO_PROS.find(function(p){ return p.id === reviewId; });
+      if(pro) {
+        name = pro.name || pro.nom || 'Professionnel';
+        var job = pro.metier || pro.profession || pro.job || pro.category || '';
+        if(job) typeLabel = job;
+      }
+    }
+  } else if(reviewType === 'vendeur') { typeLabel = 'Vendeur / Bailleur'; }
+  else if(reviewType === 'acheteur') { typeLabel = 'Acheteur / Locataire'; }
+  else { typeLabel = 'Avis général'; }
+
+  var displayName = name || 'Profil SansAgents';
+  document.getElementById('heroAvatar').textContent = displayName.charAt(0).toUpperCase();
+  document.getElementById('heroName').textContent = displayName;
+  document.getElementById('heroType').textContent = typeLabel;
+
+  document.title = 'Avis — ' + displayName + ' — SansAgents';
+});
+
+document.getElementById('avisComment').addEventListener('input', function(){
+  document.getElementById('charCount').textContent = this.value.length;
+});
+</script>
+</body>
 </html>

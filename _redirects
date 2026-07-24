@@ -30,3 +30,8 @@
 /m/messages         /m/messages.html         200
 /m/favoris          /m/favoris.html          200
 /m/mes-annonces     /m/mes-annonces.html     200
+
+# Doit rester en dernier : filet de sécurité pour toute URL non reconnue.
+# Cloudflare Pages sert déjà 404.html automatiquement pour ces cas, cette
+# règle explicite garantit le même résultat sur toute plateforme équivalente.
+/*                  /404.html                404

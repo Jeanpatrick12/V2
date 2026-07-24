@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=9"></script>
+<script src="sa-shared.js?v=10"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -235,6 +235,12 @@ function render() {
             <div class="sa-zone-card-text">SIRET <strong>${SA.escapeHtml(p.siret)}</strong><br><span style="font-size:11.5px;color:#999">Vous pouvez vérifier ce numéro sur annuaire-entreprises.data.gouv.fr</span></div>
           </div>
         </div>` : ''}
+
+        <div class="sa-section" style="border-top:1px solid #eee;padding-top:1.5rem">
+          <div class="sa-section-title"><i class="ti ti-star"></i> Vous avez travaillé avec ce professionnel ?</div>
+          <p style="font-size:13px;color:#888;line-height:1.5;margin-bottom:12px">Partagez votre expérience pour aider la communauté SansAgents.</p>
+          <button class="sa-quote-btn" onclick="window.location.href='avis?type=pro&id=${p.id}&name=${encodeURIComponent(p.name)}'"><i class="ti ti-star"></i> Laisser un avis</button>
+        </div>
       </div>
 
       <div class="sa-contact-card">

@@ -196,7 +196,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=9"></script>
+<script src="../sa-shared.js?v=10"></script>
 <script>
 var selectedStar = 0;
 var selectedRole = '';
@@ -266,17 +266,14 @@ function submitAvis(e) {
     created_at: new Date().toISOString()
   };
 
-  // Try Supabase insert if available
-  var sent = false;
-  if(window.SA && SA._supabase) {
-    SA._supabase.from('avis').insert([payload]).then(function(res){
-      if(!sent) { sent = true; showSuccess(); }
-    }).catch(function(){ if(!sent) { sent = true; showSuccess(); } });
-    // Fallback timeout
-    setTimeout(function(){ if(!sent) { sent = true; showSuccess(); } }, 3000);
-  } else {
-    setTimeout(function(){ showSuccess(); }, 800);
-  }
+  SA.submitReview(payload).then(function(){
+    showSuccess();
+  }).catch(function(err){
+    console.error('submitReview error:', err);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> Publier mon avis';
+    showError("Erreur lors de l'envoi. Réessayez dans un instant.");
+  });
 }
 
 function showSuccess() {

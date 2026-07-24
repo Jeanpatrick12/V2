@@ -740,6 +740,21 @@
     if (pro) pro.verified = !!verified;
   }
 
+  /* ── Avis (pro / vendeur / acheteur / général) ──────────────────── */
+  async function submitReview(payload) {
+    const row = {
+      type:        payload.type || "general",
+      target_id:   payload.target_id || "",
+      note:        payload.note,
+      role:        payload.role || "",
+      titre:       payload.titre || null,
+      commentaire: payload.commentaire || "",
+      auteur:      payload.auteur || "Anonyme"
+    };
+    const { error } = await _sb.from("avis").insert(row);
+    if (error) throw error;
+  }
+
   /* ── Authentification ───────────────────────────────────────────── */
   function getUser() { return _cache.user; }
 
@@ -1127,7 +1142,7 @@
     markConversationRead, deleteConversation, getUnreadMessageCount,
     getListingContact,
     // Pros
-    getAllPros, getProById, getUserPros, addPro, setProVerified,
+    getAllPros, getProById, getUserPros, addPro, setProVerified, submitReview,
     // Documents
     saveDoc, getDocs, deleteDoc,
     // Auth

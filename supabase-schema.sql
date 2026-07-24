@@ -170,6 +170,25 @@ CREATE TABLE IF NOT EXISTS public.favorites (
   PRIMARY KEY (user_id, item_id)
 );
 
+-- ── 7. AVIS ──────────────────────────────────────────────────────
+-- Avis laissés sur un professionnel, un vendeur/bailleur ou un
+-- acheteur/locataire. Soumission libre (même sans compte, "auteur"
+-- est un simple prénom déclaratif) ; modération manuelle via le
+-- dashboard Supabase en passant "status" de 'pending' à 'approved'
+-- (ou 'rejected') avant qu'un avis ne devienne public.
+CREATE TABLE IF NOT EXISTS public.avis (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  type        text NOT NULL CHECK (type IN ('pro','vendeur','acheteur','general')),
+  target_id   text NOT NULL DEFAULT '',
+  note        int  NOT NULL CHECK (note BETWEEN 1 AND 5),
+  role        text NOT NULL DEFAULT '',
+  titre       text,
+  commentaire text NOT NULL,
+  auteur      text NOT NULL DEFAULT 'Anonyme',
+  status      text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','rejected')),
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+
 -- ═══════════════════════════════════════════════════════════════════
 -- SÉCURITÉ (Row Level Security)
 -- Ces règles garantissent que chaque utilisateur ne voit et ne
@@ -182,6 +201,7 @@ ALTER TABLE public.pros         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.favorites    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.avis         ENABLE ROW LEVEL SECURITY;
 
 -- profiles : tout le monde peut lire, chacun modifie le sien
 DROP POLICY IF EXISTS "profiles_select" ON public.profiles;
@@ -260,6 +280,12 @@ CREATE POLICY "favorites_select" ON public.favorites FOR SELECT USING (user_id =
 CREATE POLICY "favorites_insert" ON public.favorites FOR INSERT
   WITH CHECK (auth.uid() IS NOT NULL AND user_id = auth.uid());
 CREATE POLICY "favorites_delete" ON public.favorites FOR DELETE USING (user_id = auth.uid());
+
+-- avis : dépôt libre (même sans compte), lecture publique limitée aux avis approuvés
+DROP POLICY IF EXISTS "avis_select" ON public.avis;
+DROP POLICY IF EXISTS "avis_insert" ON public.avis;
+CREATE POLICY "avis_select" ON public.avis FOR SELECT USING (status = 'approved');
+CREATE POLICY "avis_insert" ON public.avis FOR INSERT WITH CHECK (true);
 
 -- ═══════════════════════════════════════════════════════════════════
 -- FONCTION SÉCURISÉE : coordonnées d'une annonce

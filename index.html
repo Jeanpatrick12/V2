@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=9"></script>
+<script src="sa-shared.js?v=10"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -320,8 +320,11 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 .sa-listings-link:hover{background:#fff5f4}
 
 /* ── PROS PREVIEW ── */
-.sa-pros-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.sa-pro-card{border:1px solid #e8e8e8;border-radius:16px;padding:1.4rem 1.3rem;background:white;cursor:pointer;transition:all .15s;text-align:center}
+/* Carrousel (comme sur mobile) plutôt qu'une grille figée à 4 : on peut faire
+   glisser pour voir les autres professionnels au lieu d'être limité à 4. */
+.sa-pros-grid{display:flex;gap:18px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;cursor:grab;scrollbar-width:thin}
+.sa-pros-grid.dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
+.sa-pro-card{flex:0 0 auto;width:240px;scroll-snap-align:start;border:1px solid #e8e8e8;border-radius:16px;padding:1.4rem 1.3rem;background:white;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;text-align:center}
 .sa-pro-card:hover{border-color:#E84533;box-shadow:0 6px 24px rgba(232,69,51,0.1);transform:translateY(-2px)}
 .sa-pro-avatar{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:white}
 .sa-pro-name{font-size:13.5px;font-weight:600;color:#111;margin-bottom:2px}
@@ -392,7 +395,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
   .sa-savings-layout,.sa-howitworks-grid{grid-template-columns:1fr}
   .sa-listings{grid-template-columns:1fr 1fr}
   .sa-safety-grid{grid-template-columns:1fr 1fr}
-  .sa-pros-grid{grid-template-columns:1fr 1fr}
+  .sa-pro-card{width:210px}
   .sa-pros-banner{grid-template-columns:1fr;text-align:center}
   .sa-pros-discount{justify-content:center}
   .sa-faq{column-count:1}
@@ -401,7 +404,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 @media(max-width:640px){
   .sa-home{padding:0 16px}
   .sa-hero h1{font-size:28px}
-  .sa-cta-grid,.sa-compare,.sa-safety-grid,.sa-listings,.sa-pros-grid{grid-template-columns:1fr}
+  .sa-cta-grid,.sa-compare,.sa-safety-grid,.sa-listings{grid-template-columns:1fr}
   .sa-search-box{flex-direction:column}
   .sa-search-select-wrap{border-right:none;border-bottom:1px solid #ebebeb}
   .sa-search-btn{padding:12px;justify-content:center}
@@ -773,6 +776,20 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.7 (63 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Lille</div>
     </div>
+    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+      <div class="sa-pro-avatar" style="background:#7c3aed"><i class="ti ti-map-2"></i></div>
+      <div class="sa-pro-name">Camille Faure</div>
+      <div class="sa-pro-job">Géomètre</div>
+      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.8 (45 avis)</div>
+      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Toulouse</div>
+    </div>
+    <div class="sa-pro-card" onclick="window.open('professionnels','_blank')">
+      <div class="sa-pro-avatar" style="background:#0d9488"><i class="ti ti-droplet"></i></div>
+      <div class="sa-pro-name">Antoine Garcia</div>
+      <div class="sa-pro-job">Plombier</div>
+      <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.9 (96 avis)</div>
+      <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Toulouse</div>
+    </div>
   </div>
   <div class="sa-pros-banner">
     <div class="sa-pros-banner-text">
@@ -1088,6 +1105,28 @@ document.addEventListener('DOMContentLoaded', function() {
     },200);
   });
 });
+
+// Glisser à la souris pour faire défiler le carrousel des professionnels
+// (le tactile défile déjà nativement grâce à overflow-x:auto).
+(function(){
+  var el = document.querySelector('.sa-pros-grid');
+  if(!el) return;
+  var isDown = false, startX = 0, scrollStart = 0, moved = false;
+  el.addEventListener('mousedown', function(e){
+    isDown = true; moved = false;
+    startX = e.pageX; scrollStart = el.scrollLeft;
+    el.classList.add('dragging');
+  });
+  window.addEventListener('mouseup', function(){ isDown = false; el.classList.remove('dragging'); });
+  window.addEventListener('mousemove', function(e){
+    if(!isDown) return;
+    var dx = e.pageX - startX;
+    if(Math.abs(dx) > 4) moved = true;
+    el.scrollLeft = scrollStart - dx;
+  });
+  // Empêche l'ouverture de la fiche pro si on vient de faire glisser le carrousel.
+  el.addEventListener('click', function(e){ if(moved){ e.preventDefault(); e.stopPropagation(); } }, true);
+})();
 </script>
 </body>
 </html>
