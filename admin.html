@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=11"></script>
+<script src="sa-shared.js?v=13"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;background:#fafafa}
@@ -47,6 +47,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-admin-toggle{border:1.5px solid #ddd;background:#fff;color:#444;font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;font-family:inherit}
 .sa-admin-toggle.on{background:#1a8c4e;border-color:#1a8c4e;color:#fff}
 .sa-admin-toggle:hover{border-color:#E84533}
+.sa-admin-section{margin-top:2.6rem}
+.sa-admin-actions{display:flex;gap:6px;flex-wrap:wrap}
+.sa-admin-btn{border:1.5px solid #ddd;background:#fff;color:#444;font-size:11.5px;font-weight:600;padding:6px 11px;border-radius:7px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.sa-admin-btn:hover{border-color:#E84533;color:#E84533}
+.sa-admin-btn.approve{background:#1a8c4e;border-color:#1a8c4e;color:#fff}
+.sa-admin-btn.reject{background:#c0392b;border-color:#c0392b;color:#fff}
+.sa-admin-badge.pending{background:#fff4e5;color:#b7791f}
+.sa-admin-badge.approved{background:#e9f7ef;color:#1a8c4e}
+.sa-admin-badge.rejected{background:#fdeceb;color:#c0392b}
+.sa-admin-badge.traite{background:#e9f7ef;color:#1a8c4e}
+.sa-admin-empty{font-size:13px;color:#aaa;padding:1.2rem;text-align:center;background:#fff;border:1px solid #eee;border-radius:14px}
+.sa-admin-stars{color:#f59e0b;font-size:12px;white-space:nowrap}
+.sa-admin-comment{max-width:260px;font-size:12.5px;color:#555;line-height:1.5}
+.sa-admin-denied{font-size:13px;color:#a8392b;background:#fff8f7;border:1px solid #ffd9d2;border-radius:14px;padding:1.2rem;text-align:center}
 </style>
 <link rel="stylesheet" href="sa-mobile.css?v=4">
 </head>
@@ -67,6 +81,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
     <thead><tr><th>Professionnel</th><th>SIRET</th><th>Statut</th><th></th></tr></thead>
     <tbody id="proTbody"></tbody>
   </table>
+
+  <div class="sa-admin-section">
+    <h1>Avis à modérer</h1>
+    <p class="sa-admin-sub">Un avis approuvé devient visible publiquement sur la fiche du professionnel ou de l'annonce concernée.</p>
+    <div id="avisZone"></div>
+  </div>
+
+  <div class="sa-admin-section">
+    <h1>Signalements</h1>
+    <p class="sa-admin-sub">Annonces ou profils signalés par les visiteurs comme suspects ou provenant d'une agence.</p>
+    <div id="signalementsZone"></div>
+  </div>
 </div>
 
 <script>
@@ -87,7 +113,80 @@ async function toggleVerified(id, verified) {
   await SA.setProVerified(id, verified);
   render();
 }
-SA.init().then(render);
+
+const STATUS_LABELS = { pending: 'En attente', approved: 'Approuvé', rejected: 'Rejeté', traite: 'Traité' };
+
+function targetLabel(row) {
+  if (row.type === 'pro') {
+    const p = SA.getProById(row.target_id || row.target);
+    return p ? p.name : 'Professionnel supprimé';
+  }
+  const l = SA.getListingById(row.target_id || row.target);
+  const label = row.type === 'vendeur' ? 'Avis vendeur' : (row.type === 'acheteur' ? 'Avis acheteur' : 'Avis général');
+  return (l ? (l.title || l.titre || l.ville) : 'Annonce supprimée') + ' — ' + label;
+}
+
+async function renderAvis() {
+  const zone = document.getElementById('avisZone');
+  if (!SA.getUser()) {
+    zone.innerHTML = '<div class="sa-admin-denied"><i class="ti ti-lock"></i> Connectez-vous avec un compte administrateur pour voir et modérer les avis.</div>';
+    return;
+  }
+  const rows = await SA.getAllAvisAdmin();
+  if (!rows.length) { zone.innerHTML = '<div class="sa-admin-empty">Aucun avis pour le moment (ou votre compte n\'a pas le rôle administrateur).</div>'; return; }
+  zone.innerHTML = `<table class="sa-admin-table">
+    <thead><tr><th>Cible</th><th>Note</th><th>Auteur</th><th>Commentaire</th><th>Statut</th><th></th></tr></thead>
+    <tbody>${rows.map(r => `
+      <tr>
+        <td>${SA.escapeHtml(targetLabel(r))}</td>
+        <td class="sa-admin-stars">${'★'.repeat(r.note)}${'☆'.repeat(5 - r.note)}</td>
+        <td>${SA.escapeHtml(r.auteur || 'Anonyme')}${r.role ? `<div class="sa-admin-job">${SA.escapeHtml(r.role)}</div>` : ''}</td>
+        <td class="sa-admin-comment">${SA.escapeHtml(r.commentaire || '')}</td>
+        <td><span class="sa-admin-badge ${r.status}">${STATUS_LABELS[r.status] || r.status}</span></td>
+        <td><div class="sa-admin-actions">
+          ${r.status !== 'approved' ? `<button class="sa-admin-btn approve" onclick="moderateAvis('${r.id}','approved')">Approuver</button>` : ''}
+          ${r.status !== 'rejected' ? `<button class="sa-admin-btn reject" onclick="moderateAvis('${r.id}','rejected')">Rejeter</button>` : ''}
+        </div></td>
+      </tr>`).join('')}</tbody>
+  </table>`;
+}
+async function moderateAvis(id, status) {
+  await SA.updateAvisStatus(id, status);
+  renderAvis();
+}
+
+async function renderSignalements() {
+  const zone = document.getElementById('signalementsZone');
+  if (!SA.getUser()) {
+    zone.innerHTML = '<div class="sa-admin-denied"><i class="ti ti-lock"></i> Connectez-vous avec un compte administrateur pour voir et traiter les signalements.</div>';
+    return;
+  }
+  const rows = await SA.getAllSignalementsAdmin();
+  if (!rows.length) { zone.innerHTML = '<div class="sa-admin-empty">Aucun signalement pour le moment (ou votre compte n\'a pas le rôle administrateur).</div>'; return; }
+  zone.innerHTML = `<table class="sa-admin-table">
+    <thead><tr><th>Type</th><th>Cible / raison</th><th>E-mail</th><th>Statut</th><th></th></tr></thead>
+    <tbody>${rows.map(r => `
+      <tr>
+        <td>${r.type === 'pro' ? 'Professionnel' : 'Annonce'}</td>
+        <td class="sa-admin-comment">${SA.escapeHtml(r.raison || '')}</td>
+        <td>${r.email ? SA.escapeHtml(r.email) : '<span class="sa-admin-job">Non renseigné</span>'}</td>
+        <td><span class="sa-admin-badge ${r.status === 'traite' ? 'traite' : 'pending'}">${STATUS_LABELS[r.status] || r.status}</span></td>
+        <td><div class="sa-admin-actions">
+          ${r.status !== 'traite' ? `<button class="sa-admin-btn approve" onclick="moderateSignalement('${r.id}','traite')">Marquer traité</button>` : `<button class="sa-admin-btn" onclick="moderateSignalement('${r.id}','pending')">Rouvrir</button>`}
+        </div></td>
+      </tr>`).join('')}</tbody>
+  </table>`;
+}
+async function moderateSignalement(id, status) {
+  await SA.updateSignalementStatus(id, status);
+  renderSignalements();
+}
+
+SA.init().then(function(){
+  render();
+  renderAvis();
+  renderSignalements();
+});
 </script>
 </body>
 </html>

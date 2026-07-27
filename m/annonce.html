@@ -102,7 +102,7 @@
 <div class="m-gallery" id="gallery" style="padding-top:0">
   <div class="m-gallery-bg" id="galleryBg"></div>
   <div class="m-gallery-actions">
-    <div></div>
+    <div id="galleryDemoBadge"></div>
     <button class="m-fav-top" id="favBtn" onclick="toggleFav()"><i class="ti ti-heart"></i></button>
   </div>
   <span class="m-gallery-count" id="galleryCount" style="display:none"></span>
@@ -151,7 +151,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=11"></script>
+<script src="../sa-shared.js?v=13"></script>
 <script>
 var listingId = new URLSearchParams(window.location.search).get('id');
 var photos = [];
@@ -315,6 +315,7 @@ function render(l) {
   var sellerName = l.contactPrenom || (l.seller_name||l.owner_name||l.contact_name||'').split(' ')[0] || 'Particulier';
   var sellerInit = sellerName.charAt(0).toUpperCase();
   var safeId = String(l.id).replace(/'/g,'');
+  document.getElementById('galleryDemoBadge').innerHTML = SA.isDemoListing(l.id) ? '<span style="background:rgba(0,0,0,0.55);color:white;font-size:10px;font-weight:700;padding:4px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.03em">Démo</span>' : '';
 
   // ── Construire liste de caractéristiques (par catégorie) ──
   var factCats = [

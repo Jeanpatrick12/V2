@@ -428,6 +428,7 @@
   /* ── Annonces ──────────────────────────────────────────────────── */
   function getAllListings() { return DEMO_LISTINGS.concat(_cache.dbListings); }
   function getListingById(id) { return getAllListings().find((l) => l.id === id) || null; }
+  function isDemoListing(id) { return DEMO_LISTINGS.some((l) => l.id === id); }
   function getUserListings() { return _cache.dbListings.filter(l => _cache.user && l.owner_id === _cache.user.id); }
 
   async function addListing(data) {
@@ -702,6 +703,7 @@
   /* ── Annuaire professionnels ─────────────────────────────────────── */
   function getAllPros() { return DEMO_PROS.concat(_cache.dbPros); }
   function getProById(id) { return getAllPros().find(p => p.id === id) || null; }
+  function isDemoPro(id) { return DEMO_PROS.some((p) => p.id === id); }
   function getUserPros() { return _cache.dbPros.filter(p => _cache.user && p.owner_id === _cache.user.id); }
 
   async function addPro(data) {
@@ -794,6 +796,29 @@
       email:   payload.email || null
     };
     const { error } = await _sb.from("signalements").insert(row);
+    if (error) throw error;
+  }
+
+  /* ── Modération (réservé aux comptes profiles.role = 'admin') ────── */
+  async function getAllAvisAdmin() {
+    const { data, error } = await _sb.from("avis").select("*").order("created_at", { ascending: false });
+    if (error) { console.error("getAllAvisAdmin error:", error); return []; }
+    return data || [];
+  }
+
+  async function updateAvisStatus(id, status) {
+    const { error } = await _sb.from("avis").update({ status: status }).eq("id", id);
+    if (error) throw error;
+  }
+
+  async function getAllSignalementsAdmin() {
+    const { data, error } = await _sb.from("signalements").select("*").order("created_at", { ascending: false });
+    if (error) { console.error("getAllSignalementsAdmin error:", error); return []; }
+    return data || [];
+  }
+
+  async function updateSignalementStatus(id, status) {
+    const { error } = await _sb.from("signalements").update({ status: status }).eq("id", id);
     if (error) throw error;
   }
 
@@ -1184,7 +1209,8 @@
     markConversationRead, deleteConversation, getUnreadMessageCount,
     getListingContact,
     // Pros
-    getAllPros, getProById, getUserPros, addPro, setProVerified, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport,
+    getAllPros, getProById, getUserPros, addPro, setProVerified, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
+    getAllAvisAdmin, updateAvisStatus, getAllSignalementsAdmin, updateSignalementStatus,
     // Documents
     saveDoc, getDocs, deleteDoc,
     // Auth

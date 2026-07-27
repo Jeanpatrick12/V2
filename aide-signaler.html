@@ -16,11 +16,11 @@
 <meta property="og:image" content="https://sansagents.fr/favicon.svg">
 <meta name="theme-color" content="#E84533">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SansAgents — Signaler une agence</title>
+<title>SansAgents — Signaler un abus</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=11"></script>
+<script src="sa-shared.js?v=13"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;background:#fff;line-height:1.65}
@@ -64,8 +64,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   <h1 id="repTitle"><i class="ti ti-flag"></i> Signaler une agence</h1>
   <p class="sa-legal-sub" id="repSub">SansAgents est réservé aux particuliers. Si vous pensez qu'une annonce a été publiée par une agence ou un professionnel de l'immobilier, merci de nous le signaler — c'est ce qui permet de garder la plateforme 100 % entre particuliers.</p>
 
-  <h2>Comment repérer une agence déguisée ?</h2>
-  <ul>
+  <h2 id="repHintTitle">Comment repérer une agence déguisée ?</h2>
+  <ul id="repHintList">
     <li>Le texte de l'annonce contient un nom d'agence, un logo ou une signature commerciale.</li>
     <li>Le même numéro de téléphone revient sur plusieurs annonces de biens très différents.</li>
     <li>La personne contactée se présente comme « mandataire » ou « conseiller » plutôt que comme propriétaire.</li>
@@ -73,7 +73,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   </ul>
 
   <h2>Que se passe-t-il après votre signalement ?</h2>
-  <p>Notre équipe vérifie chaque signalement sous 48h. Si l'annonce est confirmée comme provenant d'un professionnel, elle est supprimée immédiatement et le compte concerné est suspendu, conformément à nos <a href="cgu" style="color:#E84533;font-weight:600">CGU</a>.</p>
+  <p>Notre équipe vérifie chaque signalement sous 48h. Si le signalement est confirmé, l'annonce ou le profil concerné est retiré immédiatement et le compte associé est suspendu, conformément à nos <a href="cgu" style="color:#E84533;font-weight:600">CGU</a>.</p>
 
   <div class="sa-report-form">
     <div class="field-group">
@@ -118,6 +118,12 @@ if (repType === 'pro') {
   document.getElementById('repSub').textContent = "Si vous pensez qu'un profil professionnel est frauduleux, usurpé ou ne respecte pas nos règles, merci de nous le signaler.";
   document.getElementById('repLinkLabel').textContent = 'Professionnel concerné';
   document.getElementById('repReasonLabel').textContent = "Pourquoi souhaitez-vous signaler ce profil ?";
+  document.getElementById('repHintTitle').textContent = 'Comment repérer un profil professionnel suspect ?';
+  document.getElementById('repHintList').innerHTML =
+    '<li>Le nom, le SIRET ou les coordonnées ne correspondent à aucun professionnel réel.</li>' +
+    '<li>Le profil se fait passer pour un autre professionnel déjà présent sur SansAgents.</li>' +
+    '<li>Pratiques commerciales trompeuses ou comportement non professionnel signalé par un client.</li>' +
+    '<li>Coordonnées de contact invalides ou frauduleuses.</li>';
 }
 if (repTarget) {
   document.getElementById('repLink').value = repName ? repName : repTarget;

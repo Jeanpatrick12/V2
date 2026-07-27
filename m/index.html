@@ -483,7 +483,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=11"></script>
+<script src="../sa-shared.js?v=13"></script>
 <script>
 // ── Navigation menu ──────────────────────────────────────────
 function toggleMenu() {
@@ -632,6 +632,7 @@ function renderListings(listings) {
       cardsOut.push('<div class="m-listing-card m-home-listing-card m-carousel-item" onclick="SA.openListing(\'' + l.id + '\')">' +
         '<div class="m-listing-img" style="' + photoStyle + '">' +
           '<span class="m-listing-badge ' + badge + '">' + badgeLabel + '</span>' +
+          (SA.isDemoListing(l.id) ? '<span class="m-demo-badge">Démo</span>' : '') +
         '</div>' +
         '<div class="m-listing-body">' +
           '<div class="m-listing-price" style="color:#111">' + price + (prixM2 ? '<span style="font-size:10px;font-weight:500;color:#999;margin-left:5px">' + prixM2 + '</span>' : '') + '</div>' +
@@ -670,7 +671,7 @@ function renderPros(pros) {
     var job = p.metier || p.profession || p.job || p.category || p.categorie || p.type || p.specialite || 'Professionnel';
     return '<div class="m-pro-card-home m-carousel-item" onclick="window.top.location=\'/pro?id=' + p.id + '\'">' +
       '<div class="m-pro-card-avatar" style="background:' + color + '">' + initials + '</div>' +
-      '<div class="m-pro-card-name">' + (p.name || p.nom || 'Professionnel') + '</div>' +
+      '<div class="m-pro-card-name">' + (p.name || p.nom || 'Professionnel') + (SA.isDemoPro(p.id) ? ' <span class="m-demo-badge-inline">Démo</span>' : '') + '</div>' +
       '<div class="m-pro-card-job">' + job + '</div>' +
       '<div class="m-pro-card-rating">' + starsHtml + '</div>' +
       (p.ville ? '<div class="m-pro-card-loc"><i class="ti ti-map-pin"></i> ' + p.ville + '</div>' : '') +
@@ -692,7 +693,7 @@ function renderStaticPros() {
       '<div style="width:44px;height:44px;border-radius:50%;margin:0 auto 8px;background:' + p.color + ';display:flex;align-items:center;justify-content:center">' +
         '<i class="ti ' + p.icon + '" style="color:white;font-size:18px"></i>' +
       '</div>' +
-      '<div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px">' + p.name + '</div>' +
+      '<div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px">' + p.name + (SA.isDemoPro(p.id) ? ' <span class="m-demo-badge-inline">Démo</span>' : '') + '</div>' +
       '<div style="font-size:11px;color:var(--red);font-weight:600;margin-bottom:6px">' + p.job + '</div>' +
       '<div style="font-size:11px;color:#888;display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:3px"><i class="ti ti-star-filled" style="color:#f5a623;font-size:12px"></i> ' + p.rating.toFixed(1) + '</div>' +
       '<div style="font-size:11px;color:#aaa;display:flex;align-items:center;justify-content:center;gap:3px"><i class="ti ti-map-pin" style="font-size:10px"></i> ' + p.city + '</div>' +

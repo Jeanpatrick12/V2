@@ -302,10 +302,26 @@ DROP POLICY IF EXISTS "avis_insert" ON public.avis;
 CREATE POLICY "avis_select" ON public.avis FOR SELECT USING (status = 'approved');
 CREATE POLICY "avis_insert" ON public.avis FOR INSERT WITH CHECK (true);
 
--- signalements : dépôt libre, lecture réservée (aucune policy SELECT =
--- personne ne peut lire via l'API publique, seul le dashboard Supabase y accède)
+-- avis : modération réservée aux comptes profiles.role = 'admin' (page admin.html)
+DROP POLICY IF EXISTS "avis_select_admin" ON public.avis;
+DROP POLICY IF EXISTS "avis_update_admin" ON public.avis;
+CREATE POLICY "avis_select_admin" ON public.avis FOR SELECT
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "avis_update_admin" ON public.avis FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+
+-- signalements : dépôt libre, lecture réservée (aucune policy SELECT publique =
+-- personne ne peut lire via l'API publique, seuls le dashboard Supabase et un
+-- compte admin via admin.html y accèdent)
 DROP POLICY IF EXISTS "signalements_insert" ON public.signalements;
 CREATE POLICY "signalements_insert" ON public.signalements FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "signalements_select_admin" ON public.signalements;
+DROP POLICY IF EXISTS "signalements_update_admin" ON public.signalements;
+CREATE POLICY "signalements_select_admin" ON public.signalements FOR SELECT
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "signalements_update_admin" ON public.signalements FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
 -- ═══════════════════════════════════════════════════════════════════
 -- FONCTION SÉCURISÉE : coordonnées d'une annonce

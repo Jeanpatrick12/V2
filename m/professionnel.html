@@ -120,7 +120,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=11"></script>
+<script src="../sa-shared.js?v=13"></script>
 <script>
 var COLORS = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2'];
 var currentPro = null;
@@ -186,6 +186,7 @@ function renderPro(p) {
         '<div style="font-size:13px;color:#ff7a68;font-weight:700;margin-bottom:6px">'+job+'</div>' +
         '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
           (p.verified ? '<span style="display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;color:#065f46;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px"><i class="ti ti-check" style="font-size:10px"></i> VÉRIFIÉ</span>' : '') +
+          (SA.isDemoPro(p.id) ? '<span style="background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.75);font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.03em">Démo</span>' : '') +
           (city ? '<span style="font-size:11px;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:3px"><i class="ti ti-map-pin"></i>'+city+'</span>' : '') +
         '</div>' +
       '</div>' +

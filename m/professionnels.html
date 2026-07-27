@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=11"></script>
+<script src="../sa-shared.js?v=13"></script>
 <script>
 var filters = { cat: '', ville: '', note: 0 };
 var allPros = [];
@@ -380,7 +380,7 @@ function renderPros(pros) {
       '<div class="m-pro-card-head">' +
         '<div class="m-pro-avatar" style="background:' + color + '">' + init + '</div>' +
         '<div class="m-pro-head-info">' +
-          '<div class="m-pro-name">' + (p.name || p.nom || 'Professionnel') + '</div>' +
+          '<div class="m-pro-name">' + (p.name || p.nom || 'Professionnel') + (SA.isDemoPro(p.id) ? ' <span class="m-demo-badge-inline">Démo</span>' : '') + '</div>' +
           '<div class="m-pro-job">' + job + '</div>' +
         '</div>' +
         '<div class="m-pro-head-right">' +
