@@ -65,15 +65,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 </div>
 
 <div class="sa-legal-wrap">
-  <h1 id="repTitle"><i class="ti ti-flag"></i> Signaler une agence</h1>
-  <p class="sa-legal-sub" id="repSub">SansAgents est réservé aux particuliers. Si vous pensez qu'une annonce a été publiée par une agence ou un professionnel de l'immobilier, merci de nous le signaler — c'est ce qui permet de garder la plateforme 100 % entre particuliers.</p>
+  <h1 id="repTitle"><i class="ti ti-flag"></i> Signaler un abus</h1>
+  <p class="sa-legal-sub" id="repSub">SansAgents est réservé aux particuliers. Si une annonce vous semble publiée par une agence, ou si un profil professionnel vous semble suspect, merci de nous le signaler — c'est ce qui permet de garder la plateforme fiable pour tout le monde.</p>
 
-  <h2 id="repHintTitle">Comment repérer une agence déguisée ?</h2>
+  <h2 id="repHintTitle">Comment repérer un abus ?</h2>
   <ul id="repHintList">
     <li>Le texte de l'annonce contient un nom d'agence, un logo ou une signature commerciale.</li>
-    <li>Le même numéro de téléphone revient sur plusieurs annonces de biens très différents.</li>
     <li>La personne contactée se présente comme « mandataire » ou « conseiller » plutôt que comme propriétaire.</li>
-    <li>Le ton de la description ressemble à une fiche d'agence plutôt qu'à un témoignage de propriétaire.</li>
+    <li>Un profil professionnel usurpe une identité, un SIRET ou des coordonnées qui ne lui appartiennent pas.</li>
+    <li>Coordonnées invalides, pratiques commerciales trompeuses ou comportement non professionnel signalé.</li>
   </ul>
 
   <h2>Que se passe-t-il après votre signalement ?</h2>
@@ -118,11 +118,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
 <script>
 var params = new URLSearchParams(window.location.search);
-var repType = params.get('type') === 'pro' ? 'pro' : 'annonce';
+var typeParam = params.get('type');
+var repType = typeParam === 'pro' ? 'pro' : 'annonce'; // valeur envoyée en base, toujours valide même sans contexte précis
 var repTarget = params.get('target') || '';
 var repName = params.get('name') || '';
 
-if (repType === 'pro') {
+if (typeParam === 'pro') {
   document.getElementById('repTitle').innerHTML = '<i class="ti ti-flag"></i> Signaler un professionnel';
   document.getElementById('repSub').textContent = "Si vous pensez qu'un profil professionnel est frauduleux, usurpé ou ne respecte pas nos règles, merci de nous le signaler.";
   document.getElementById('repLinkLabel').textContent = 'Professionnel concerné';
@@ -133,6 +134,15 @@ if (repType === 'pro') {
     '<li>Le profil se fait passer pour un autre professionnel déjà présent sur SansAgents.</li>' +
     '<li>Pratiques commerciales trompeuses ou comportement non professionnel signalé par un client.</li>' +
     '<li>Coordonnées de contact invalides ou frauduleuses.</li>';
+} else if (typeParam === 'annonce') {
+  document.getElementById('repTitle').innerHTML = '<i class="ti ti-flag"></i> Signaler une agence';
+  document.getElementById('repSub').textContent = "SansAgents est réservé aux particuliers. Si vous pensez qu'une annonce a été publiée par une agence ou un professionnel de l'immobilier, merci de nous le signaler.";
+  document.getElementById('repHintTitle').textContent = 'Comment repérer une agence déguisée ?';
+  document.getElementById('repHintList').innerHTML =
+    '<li>Le texte de l\'annonce contient un nom d\'agence, un logo ou une signature commerciale.</li>' +
+    '<li>Le même numéro de téléphone revient sur plusieurs annonces de biens très différents.</li>' +
+    '<li>La personne contactée se présente comme « mandataire » ou « conseiller » plutôt que comme propriétaire.</li>' +
+    '<li>Le ton de la description ressemble à une fiche d\'agence plutôt qu\'à un témoignage de propriétaire.</li>';
 }
 if (repTarget) {
   document.getElementById('repLink').value = repName ? repName : repTarget;
