@@ -83,8 +83,15 @@ CREATE TABLE IF NOT EXISTS public.listings (
   contact_email      text NOT NULL DEFAULT '',
   contact_tel        text NOT NULL DEFAULT '',
   status             text NOT NULL DEFAULT 'active' CHECK (status IN ('active','sold')),
+  is_demo            boolean NOT NULL DEFAULT false,
   created_at         timestamptz NOT NULL DEFAULT now()
 );
+
+-- Ajout de la colonne is_demo si la table existait deja avant son introduction
+-- (2026-07-27) : marque une annonce comme fictive/de test, affichee avec un
+-- badge "Démo" sur le site. Par defaut false, donc toute nouvelle annonce
+-- deposee par un vrai utilisateur n'est jamais marquee demo automatiquement.
+ALTER TABLE public.listings ADD COLUMN IF NOT EXISTS is_demo boolean NOT NULL DEFAULT false;
 
 -- ── 3. PROFESSIONNELS ────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.pros (

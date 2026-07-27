@@ -116,6 +116,7 @@
       contactEmail:      row.contact_email || "",
       contactTel:        row.contact_tel || "",
       status:            row.status || "active",
+      isDemo:            !!row.is_demo,
       createdAt:         row.created_at ? new Date(row.created_at).getTime() : Date.now(),
       isUserListing:     true
     };
@@ -253,7 +254,7 @@
         .or("buyer_id.eq." + userId + ",seller_id.eq." + userId)
         .order("created_at", { ascending: false }),
       _sb.from("listings")
-        .select("id,owner_id,type,transaction,title,ville,postal,adresse,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,contact_email,contact_tel,status,created_at")
+        .select("id,owner_id,type,transaction,title,ville,postal,adresse,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,contact_email,contact_tel,status,is_demo,created_at")
         .eq("owner_id", userId),
       _sb.from("user_documents").select("doc_type,doc_data,updated_at").eq("user_id", userId).order("updated_at", { ascending: false })
     ]);
@@ -315,7 +316,7 @@
     const [sessionRes, listingsRes, prosRes] = await Promise.all([
       _sb.auth.getSession(),
       _sb.from("listings")
-        .select("id,owner_id,type,transaction,title,ville,postal,adresse,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,status,created_at")
+        .select("id,owner_id,type,transaction,title,ville,postal,adresse,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,status,is_demo,created_at")
         .eq("status", "active")
         .order("created_at", { ascending: false }),
       _sb.from("pros")
@@ -428,7 +429,11 @@
   /* ── Annonces ──────────────────────────────────────────────────── */
   function getAllListings() { return DEMO_LISTINGS.concat(_cache.dbListings); }
   function getListingById(id) { return getAllListings().find((l) => l.id === id) || null; }
-  function isDemoListing(id) { return DEMO_LISTINGS.some((l) => l.id === id); }
+  function isDemoListing(id) {
+    if (DEMO_LISTINGS.some((l) => l.id === id)) return true;
+    const l = _cache.dbListings.find((x) => x.id === id);
+    return !!(l && l.isDemo);
+  }
   function getUserListings() { return _cache.dbListings.filter(l => _cache.user && l.owner_id === _cache.user.id); }
 
   async function addListing(data) {
@@ -824,6 +829,7 @@
 
   /* ── Authentification ───────────────────────────────────────────── */
   function getUser() { return _cache.user; }
+  function isAdmin() { return !!(_cache.user && _cache.user.role === "admin"); }
 
   async function login(email, password) {
     const { data, error } = await _sb.auth.signInWithPassword({ email, password });
@@ -1214,7 +1220,7 @@
     // Documents
     saveDoc, getDocs, deleteDoc,
     // Auth
-    getUser, login, signup, logout, updateUser, forgotPassword, updatePassword, getRecoverySession,
+    getUser, isAdmin, login, signup, logout, updateUser, forgotPassword, updatePassword, getRecoverySession,
     // UI
     toast, cardHTML, openListing, closeListing, toggleFavoriteModal,
     revealContact, mockContact, mountNavAuth, mountFavBadge, mountMsgBadge,

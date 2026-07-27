@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=13"></script>
+<script src="sa-shared.js?v=14"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -112,6 +112,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-detail-pricerow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .sa-detail-price{font-size:27px;font-weight:700;letter-spacing:-0.5px;color:#111}
 .sa-detail-pricem2{font-size:13.5px;color:#999;font-weight:500;background:#f5f5f5;padding:3px 10px;border-radius:7px}
+.sa-card-demo-tag{font-size:10px;font-weight:700;color:#888;background:#f0f0f0;padding:3px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.03em}
 .sa-detail-title{font-size:15px;color:#555;margin-top:3px}
 .sa-detail-negociable{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#888;background:#f5f5f5;padding:3px 9px;border-radius:6px;margin-top:6px}
 
@@ -494,10 +495,7 @@ function render() {
       <div>
         <!-- Galerie -->
         <div class="sa-gallery-hero" id="galleryHero" style="${photos.length ? '' : 'background:' + grad}">
-          <div style="position:absolute;top:14px;left:14px;z-index:2;display:flex;gap:6px">
-            <span class="sa-gallery-badge ${l.transaction === 'vente' ? 'vente' : 'location'}" style="position:static">${l.transaction === 'vente' ? 'Vente' : 'Location'}</span>
-            ${SA.isDemoListing(l.id) ? '<span class="sa-gallery-badge" style="position:static;background:#6b7280">Démo</span>' : ''}
-          </div>
+          <span class="sa-gallery-badge ${l.transaction === 'vente' ? 'vente' : 'location'}">${l.transaction === 'vente' ? 'Vente' : 'Location'}</span>
           <button class="sa-gallery-fav${fav ? ' active' : ''}" id="galFavBtn" onclick="toggleFav()"><i class="ti ti-heart${fav ? '-filled' : ''}"></i></button>
           ${photos.length ? `<img id="galleryImg" src="${photoUrl(photos[0])}">` : `<i class="ti ${icon} no-photo-icon"></i>`}
           ${photos.length > 1 ? `
@@ -522,6 +520,7 @@ function render() {
             <div class="sa-detail-pricerow">
               <span class="sa-detail-price">${SA.fmtPriceTransaction(l)}</span>
               ${m2 ? `<span class="sa-detail-pricem2">${SA.fmtPrice(m2)}/m²</span>` : ''}
+              ${SA.isDemoListing(l.id) ? '<span class="sa-card-demo-tag">Démo</span>' : ''}
             </div>
             <div class="sa-detail-title">${SA.escapeHtml(l.title)}</div>
             ${l.negociable === true ? `<div class="sa-detail-negociable"><i class="ti ti-tag"></i> Prix négociable</div>` : ''}

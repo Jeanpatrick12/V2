@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=13"></script>
+<script src="../sa-shared.js?v=14"></script>
 <script>
 var filters = { transaction: '', type: '', ville: '', budgetMin: '', budgetMax: '', piecesMin: '', piecesMax: '', chambresMin: '', chambresMax: '', surfaceMin: '', surfaceMax: '', dpe: [], ges: [], motsCles: '' };
 var sortBy = 'recent';
@@ -573,13 +573,12 @@ function renderListings(listings) {
         '<div class="m-an-card" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')">' +
           '<div class="m-an-card-img" style="' + photoStyle + '">' +
             '<span class="m-an-card-badge ' + badge + '">' + badgeLabel + '</span>' +
-            (SA.isDemoListing(safeId) ? '<span class="m-demo-badge" style="top:auto;bottom:8px">Démo</span>' : '') +
             '<button class="m-an-card-fav" onclick="event.stopPropagation();SA.toggleFavoriteUI(this,\'' + safeId + '\')" aria-label="Favori">' +
               '<i class="ti ti-heart"></i>' +
             '</button>' +
           '</div>' +
           '<div class="m-an-card-body">' +
-            '<div class="m-an-card-price">' + price + (priceM2 ? '<span class="m-an-card-price-m2">' + priceM2 + '</span>' : '') + '</div>' +
+            '<div class="m-an-card-price">' + price + (priceM2 ? '<span class="m-an-card-price-m2">' + priceM2 + '</span>' : '') + (SA.isDemoListing(safeId) ? ' <span class="m-demo-tag">Démo</span>' : '') + '</div>' +
             '<div class="m-an-card-title">' + title + '</div>' +
             '<div class="m-an-card-meta">' +
               (l.surface ? '<span><i class="ti ti-ruler-2"></i> ' + l.surface + ' m²</span>' : '') +

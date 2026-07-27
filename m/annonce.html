@@ -151,7 +151,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=13"></script>
+<script src="../sa-shared.js?v=14"></script>
 <script>
 var listingId = new URLSearchParams(window.location.search).get('id');
 var photos = [];
@@ -315,7 +315,6 @@ function render(l) {
   var sellerName = l.contactPrenom || (l.seller_name||l.owner_name||l.contact_name||'').split(' ')[0] || 'Particulier';
   var sellerInit = sellerName.charAt(0).toUpperCase();
   var safeId = String(l.id).replace(/'/g,'');
-  document.getElementById('galleryDemoBadge').innerHTML = SA.isDemoListing(l.id) ? '<span style="background:rgba(0,0,0,0.55);color:white;font-size:10px;font-weight:700;padding:4px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.03em">Démo</span>' : '';
 
   // ── Construire liste de caractéristiques (par catégorie) ──
   var factCats = [
@@ -386,6 +385,7 @@ function render(l) {
       '<div style="display:flex;align-items:baseline;gap:0;flex-wrap:wrap">' +
         '<span class="m-detail-price">' + priceStr + '</span>' +
         (priceM2 ? '<span class="m-detail-price-m2">' + priceM2 + '</span>' : '') +
+        (SA.isDemoListing(l.id) ? ' <span class="m-demo-tag">Démo</span>' : '') +
       '</div>' +
       '<div class="m-detail-title">' + (l.titre || l.title || ((l.type?l.type.charAt(0).toUpperCase()+l.type.slice(1):'Bien') + (l.ville?' — '+l.ville:''))) + '</div>' +
       '<div class="m-detail-loc"><i class="ti ti-map-pin" style="color:var(--red)"></i>' +

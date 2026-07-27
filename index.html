@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=13"></script>
+<script src="sa-shared.js?v=14"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -305,12 +305,12 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 .sa-card-chiprow{position:absolute;bottom:9px;left:9px;display:flex;gap:5px;z-index:2}
 .sa-card-chip{font-size:10px;font-weight:700;color:#fff;padding:3px 8px;border-radius:5px;display:flex;align-items:center;gap:3px}
 .sa-card-chip.new{background:#1a8c4e}
-.sa-card-chip.demo{background:#6b7280}
 .sa-card-count{position:absolute;bottom:9px;right:9px;background:rgba(15,20,25,0.62);color:#fff;font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:6px;display:flex;align-items:center;gap:4px;z-index:2}
 .sa-card-body{padding:13px 16px}
 .sa-card-pricerow{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .sa-card-price{font-size:17px;font-weight:700;color:#111;letter-spacing:-0.3px}
 .sa-card-pricem2{font-size:11.5px;color:#999;font-weight:500}
+.sa-card-demo-tag{font-size:10px;font-weight:700;color:#888;background:#f0f0f0;padding:2px 7px;border-radius:5px;text-transform:uppercase;letter-spacing:.03em}
 .sa-card-typeline{font-size:12.5px;color:#666;margin:3px 0 8px;font-weight:500}
 .sa-card-meta{display:flex;gap:11px;flex-wrap:wrap;font-size:12px;color:#555;margin-bottom:7px}
 .sa-card-meta span{display:flex;align-items:center;gap:4px}
@@ -1075,7 +1075,7 @@ function renderHomeListings(listings) {
           <span class="sa-card-badge ${l.transaction === 'vente' ? 'vente' : 'location'}">${l.transaction === 'vente' ? 'Vente' : 'Location'}</span>
           <button class="sa-card-fav${fav ? ' active' : ''}" onclick="event.stopPropagation();SA.toggleFavoriteUI(this,'${l.id}')"><i class="ti ti-heart${fav ? '-filled' : ''}"></i></button>
           <div class="sa-card-chiprow">
-            ${SA.isDemoListing(l.id) ? '<span class="sa-card-chip demo">Démo</span>' : (isNew ? '<span class="sa-card-chip new">Nouveau</span>' : '')}
+            ${isNew ? '<span class="sa-card-chip new">Nouveau</span>' : ''}
             ${l.dpe ? `<span class="sa-card-chip" style="background:${homeDpeColor(l.dpe)}">${l.dpe}</span>` : ''}
           </div>
         </div>
@@ -1083,6 +1083,7 @@ function renderHomeListings(listings) {
           <div class="sa-card-pricerow">
             <span class="sa-card-price">${SA.fmtPriceTransaction(l)}</span>
             ${m2 ? `<span class="sa-card-pricem2">${SA.fmtPrice(m2)}/m²</span>` : ''}
+            ${SA.isDemoListing(l.id) ? '<span class="sa-card-demo-tag">Démo</span>' : ''}
           </div>
           <div class="sa-card-typeline">${SA.TYPE_LABELS[l.type] || 'Bien'} ${l.transaction === 'vente' ? 'à vendre' : 'à louer'}</div>
           <div class="sa-card-meta">${metaParts.join('')}</div>

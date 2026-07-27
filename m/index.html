@@ -484,7 +484,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=13"></script>
+<script src="../sa-shared.js?v=14"></script>
 <script>
 // ── Navigation menu ──────────────────────────────────────────
 function toggleMenu() {
@@ -633,10 +633,9 @@ function renderListings(listings) {
       cardsOut.push('<div class="m-listing-card m-home-listing-card m-carousel-item" onclick="SA.openListing(\'' + l.id + '\')">' +
         '<div class="m-listing-img" style="' + photoStyle + '">' +
           '<span class="m-listing-badge ' + badge + '">' + badgeLabel + '</span>' +
-          (SA.isDemoListing(l.id) ? '<span class="m-demo-badge">Démo</span>' : '') +
         '</div>' +
         '<div class="m-listing-body">' +
-          '<div class="m-listing-price" style="color:#111">' + price + (prixM2 ? '<span style="font-size:10px;font-weight:500;color:#999;margin-left:5px">' + prixM2 + '</span>' : '') + '</div>' +
+          '<div class="m-listing-price" style="color:#111">' + price + (prixM2 ? '<span style="font-size:10px;font-weight:500;color:#999;margin-left:5px">' + prixM2 + '</span>' : '') + (SA.isDemoListing(l.id) ? ' <span class="m-demo-tag">Démo</span>' : '') + '</div>' +
           '<div class="m-listing-title">' + title + '</div>' +
           '<div class="m-listing-meta">' +
             (l.surface ? '<span><i class="ti ti-ruler-2"></i> ' + l.surface + ' m²</span>' : '') +

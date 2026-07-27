@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=13"></script>
+<script src="sa-shared.js?v=14"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;background:#fafafa}
@@ -98,16 +98,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
 <script>
 function render() {
+  const admin = SA.isAdmin();
   const pros = SA.getAllPros().sort((a, b) => a.name.localeCompare(b.name));
   document.getElementById('proTbody').innerHTML = pros.map(p => `
     <tr>
       <td><div class="sa-admin-name">${SA.escapeHtml(p.name)}</div><div class="sa-admin-job">${SA.escapeHtml(p.job)} · ${SA.escapeHtml(p.city)}</div></td>
       <td>${p.siret ? `<span class="sa-admin-siret">${SA.escapeHtml(p.siret)}</span>` : `<span class="sa-admin-siret missing">Non renseigné</span>`}</td>
       <td><span class="sa-admin-badge ${p.verified ? 'yes' : 'no'}">${p.verified ? 'Vérifié' : 'Non vérifié'}</span></td>
-      <td><button class="sa-admin-toggle${p.verified ? ' on' : ''}" onclick="toggleVerified('${p.id}', ${!p.verified})">${p.verified ? 'Retirer' : 'Vérifier'}</button></td>
+      <td>${admin ? `<button class="sa-admin-toggle${p.verified ? ' on' : ''}" onclick="toggleVerified('${p.id}', ${!p.verified})">${p.verified ? 'Retirer' : 'Vérifier'}</button>` : ''}</td>
     </tr>`).join('');
+  if (!admin) {
+    document.getElementById('proTable').insertAdjacentHTML('afterend', '<div class="sa-admin-denied" id="proDenied" style="margin-top:12px"><i class="ti ti-lock"></i> Connectez-vous avec un compte administrateur pour pouvoir modifier ces statuts.</div>');
+  } else {
+    const old = document.getElementById('proDenied');
+    if (old) old.remove();
+  }
 }
 async function toggleVerified(id, verified) {
+  if (!SA.isAdmin()) return;
   if (verified) {
     if (!confirm('Confirmez-vous avoir vérifié le SIRET de ce professionnel sur le registre officiel ?')) return;
   }

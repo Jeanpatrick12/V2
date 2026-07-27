@@ -236,16 +236,15 @@ input, select, textarea { font-family: inherit; font-size: 16px; }
 }
 .m-listing-badge.vente { background: var(--red); }
 .m-listing-badge.location { background: #2563eb; }
-.m-demo-badge {
-  position: absolute; top: 8px; right: 8px;
-  font-size: 10px; font-weight: 700; padding: 3px 8px;
-  border-radius: 5px; color: white; background: rgba(0,0,0,0.55);
-  text-transform: uppercase; letter-spacing: .03em;
-}
 .m-demo-badge-inline {
   font-size: 9px; font-weight: 700; color: #888; background: #f0f0f0;
   padding: 2px 6px; border-radius: 5px; text-transform: uppercase;
   letter-spacing: .03em; margin-left: 4px; vertical-align: middle;
+}
+.m-demo-tag {
+  font-size: 9px; font-weight: 700; color: #888; background: #f0f0f0;
+  padding: 2px 7px; border-radius: 5px; text-transform: uppercase;
+  letter-spacing: .03em; vertical-align: middle;
 }
 .m-listing-body { padding: 10px 12px 12px; }
 .m-listing-price { font-size: 15px; font-weight: 700; color: var(--red); margin-bottom: 3px; }
