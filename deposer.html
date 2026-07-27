@@ -881,16 +881,6 @@
     .sa-account-dropdown-logout:hover{background:#fff0ee}
 
     /* Hero */
-    .d-hero{background:linear-gradient(135deg,#0c1622 0%,#152233 60%,#1c2e44 100%);padding:56px 40px 64px;position:relative;overflow:hidden}
-    .d-hero::after{content:'';position:absolute;right:-100px;top:-80px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(232,69,51,.1) 0%,transparent 70%);pointer-events:none}
-    .d-hero-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:80px;align-items:center}
-    .d-hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,122,104,.12);border:1px solid rgba(255,122,104,.3);border-radius:999px;padding:6px 14px;font-size:11.5px;font-weight:700;color:#ff7a68;letter-spacing:.05em;margin-bottom:20px}
-    .d-hero h1{font-size:42px;font-weight:800;color:white;line-height:1.1;letter-spacing:-.8px;margin-bottom:14px}
-    .d-hero h1 em{color:#ff7a68;font-style:normal}
-    .d-hero-sub{font-size:15px;color:rgba(255,255,255,.5);line-height:1.75;margin-bottom:28px;max-width:440px}
-    .d-hero-steps{display:flex;flex-direction:column;gap:10px}
-    .d-hero-step{display:flex;align-items:center;gap:12px;font-size:13.5px;color:rgba(255,255,255,.65)}
-    .d-hero-step-ico{width:28px;height:28px;border-radius:50%;background:rgba(232,69,51,.2);border:1px solid rgba(232,69,51,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:800;color:#ff7a68}
     .d-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     /* Guide-first banner : contenu en flux normal (comme la page "Vous êtes prêt à
        commencer"), pas de position:fixed + overflow interne — c'est le BODY qui
@@ -900,12 +890,10 @@
     .d-gfb.open{display:block}
     .d-gfb-inner{max-width:620px;width:100%;margin:0 auto;text-align:center;padding:8px}
     body.gfb-open{overflow:visible}
-    body.gfb-open > .d-hero,
     body.gfb-open .m-bottom-nav,
     body.gfb-open .sa-bottom-nav,
     body.gfb-open .sa-nav-wrapper,
-    body.gfb-open #dGuideBanner ~ *,
-    body.deposer-skip > .d-hero{display:none!important}
+    body.gfb-open #dGuideBanner ~ *{display:none!important}
     /* Nav minimale pendant le tunnel "guide first" (avant le formulaire) :
        logo + bouton annuler seulement, comme deposer-gate.html - pas toute
        la nav du site, qui n'a pas sa place sur un écran de pré-formulaire. */
@@ -1066,14 +1054,11 @@
     .d-success-wrap{max-width:680px;margin:0 auto;padding:60px 40px}
 
     @media(max-width:1024px){
-      .d-hero-inner{grid-template-columns:1fr;gap:32px}
       .d-stats{grid-template-columns:repeat(2,1fr)}
       .d-layout{grid-template-columns:1fr;padding:24px}
       .d-sidebar{position:static}
     }
     @media(max-width:680px){
-      .d-hero{padding:36px 20px 44px}
-      .d-hero h1{font-size:28px}
       .d-pbar-inner{padding:0 16px}
       .step-panel.active{padding:20px}
       .d-success-wrap{padding:40px 20px}
@@ -1114,28 +1099,6 @@
         <button class="sa-nav-icon-btn"><i class="ti ti-user"></i><span class="sa-nav-icon-label">Se connecter</span></button>
         <div class="sa-account-dropdown"></div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ HERO ═══ -->
-<div class="d-hero">
-  <div class="d-hero-inner">
-    <div>
-      <div class="d-hero-badge"><i class="ti ti-shield-check"></i> Particuliers uniquement · Sans commission d'agence</div>
-      <h1>Publiez votre bien.<br><em>Gardez chaque euro.</em></h1>
-      <p class="d-hero-sub">Un guide complet, vos documents officiels, et votre annonce en ligne — le tout en un seul endroit. Sans agent, sans frais cachés.</p>
-      <div class="d-hero-steps">
-        <div class="d-hero-step"><div class="d-hero-step-ico">1</div> Décrivez votre bien en 7 étapes guidées</div>
-        <div class="d-hero-step"><div class="d-hero-step-ico">2</div> Accédez à vos documents de vente officiels</div>
-        <div class="d-hero-step"><div class="d-hero-step-ico">3</div> Publiez gratuitement — vendez en direct</div>
-      </div>
-    </div>
-    <div class="d-stats">
-      <div class="d-stat"><div class="d-stat-val">0 €</div><div class="d-stat-lbl">Frais de publication</div></div>
-      <div class="d-stat"><div class="d-stat-val">1%</div><div class="d-stat-lbl">Commission si vente conclue</div></div>
-      <div class="d-stat"><div class="d-stat-val">10k€</div><div class="d-stat-lbl">Économisés en moyenne vs agence</div></div>
-      <div class="d-stat"><div class="d-stat-val">6</div><div class="d-stat-lbl">Modèles de documents inclus</div></div>
     </div>
   </div>
 </div>
@@ -1212,12 +1175,7 @@ function gfbSetOpen(open){
   document.body.style.overflow = (open && window.innerWidth > 768) ? 'hidden' : '';
   window.scrollTo(0, 0);
 }
-var _depositSkipped = new URLSearchParams(window.location.search).get('skip') === '1';
-gfbSetOpen(!_depositSkipped);
-// Venir de deposer-gate (skip=1) signifie qu'on a deja vu le pitch marketing
-// (hero) sur une autre page - inutile de le remontrer ici, sinon il
-// s'affiche en double avec le formulaire juste en dessous.
-if (_depositSkipped) document.body.classList.add('deposer-skip');
+gfbSetOpen(new URLSearchParams(window.location.search).get('skip') !== '1');
 function gfbNextScreen(){
   document.getElementById('gfbS0').classList.remove('visible');
   document.getElementById('gfbS1').classList.add('visible');
