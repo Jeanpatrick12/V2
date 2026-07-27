@@ -851,7 +851,7 @@
     ═══════════════════════════════════════════ */
 
     /* Nav */
-    .sa-nav-wrapper{background:#0c1622;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;z-index:300}
+    .sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:300}
     .sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
     .sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
     .sa-logo{width:32px;height:32px;background:#E84533;border-radius:8px;display:flex;align-items:center;justify-content:center}
@@ -873,13 +873,6 @@
     .sa-nav-account-wrap{position:relative}
     .sa-nav-avatar{width:19px;height:19px;border-radius:50%;background:#E84533;color:white;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto}
     .sa-nav-badge{position:absolute;top:1px;right:3px;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:none;align-items:center;justify-content:center;padding:0 3px;line-height:1}
-    .sa-brand{color:white}
-    .sa-nav-link{color:rgba(255,255,255,.65)}
-    .sa-nav-link:hover{background:rgba(255,255,255,.08);color:white}
-    .sa-nav-link.active{color:#ff7a68;background:rgba(232,69,51,.15)}
-    .sa-nav-divider{background:rgba(255,255,255,.15)}
-    .sa-nav-icon-btn{color:rgba(255,255,255,.65)}
-    .sa-nav-icon-btn:hover{background:rgba(255,255,255,.08);color:white}
     .sa-account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);min-width:220px;padding:8px;z-index:400}
     .sa-account-dropdown.show{display:block}
     .sa-account-dropdown-email{font-size:12px;color:#888;padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #f0f0f0;margin-bottom:4px;word-break:break-all}
@@ -903,14 +896,28 @@
        commencer"), pas de position:fixed + overflow interne — c'est le BODY qui
        défile, ce qui est fiable partout sur mobile. Tout le reste de la page
        (hero, formulaire, barre de navigation basse) est masqué tant qu'elle est ouverte. */
-    .d-gfb{display:none;background:linear-gradient(145deg,#07080f 0%,#0f172a 60%,#16203a 100%);padding:40px 24px;min-height:100vh;box-sizing:border-box}
+    .d-gfb{display:none;background:#0c1622;padding:90px 24px 40px;min-height:100vh;box-sizing:border-box}
     .d-gfb.open{display:block}
     .d-gfb-inner{max-width:620px;width:100%;margin:0 auto;text-align:center;padding:8px}
     body.gfb-open{overflow:visible}
     body.gfb-open > .d-hero,
     body.gfb-open .m-bottom-nav,
     body.gfb-open .sa-bottom-nav,
-    body.gfb-open #dGuideBanner ~ *{display:none!important}
+    body.gfb-open .sa-nav-wrapper,
+    body.gfb-open #dGuideBanner ~ *,
+    body.deposer-skip > .d-hero{display:none!important}
+    /* Nav minimale pendant le tunnel "guide first" (avant le formulaire) :
+       logo + bouton annuler seulement, comme deposer-gate.html - pas toute
+       la nav du site, qui n'a pas sa place sur un écran de pré-formulaire. */
+    .d-gfb-nav{display:none;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;padding:16px 28px;z-index:10;background:#0c1622}
+    body.gfb-open .d-gfb-nav{display:flex}
+    .d-gfb-nav-logo{display:flex;align-items:center;gap:9px;cursor:pointer;text-decoration:none}
+    .d-gfb-nav-logo-icon{width:32px;height:32px;background:#E84533;border-radius:9px;display:flex;align-items:center;justify-content:center}
+    .d-gfb-nav-logo-icon i{color:white;font-size:15px}
+    .d-gfb-nav-brand{font-size:17px;font-weight:700;color:white}
+    .d-gfb-nav-brand span{color:#E84533}
+    .d-gfb-nav-cancel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit;transition:all .2s}
+    .d-gfb-nav-cancel:hover{background:rgba(255,255,255,.12);color:rgba(255,255,255,.75)}
     .d-gfb-ico{width:72px;height:72px;border-radius:50%;background:rgba(232,69,51,.12);border:2px solid rgba(232,69,51,.35);display:flex;align-items:center;justify-content:center;font-size:30px;color:#E84533;margin:0 auto 24px;animation:gfbPulse 2s ease-in-out infinite}
     @keyframes gfbPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,69,51,.3)}50%{box-shadow:0 0 0 14px rgba(232,69,51,0)}}
     .d-gfb-title{font-size:28px;font-weight:800;color:white;letter-spacing:-.5px;margin-bottom:12px;line-height:1.25}
@@ -936,9 +943,6 @@
     .d-gfb-btn-confirm:hover{background:#c73525;transform:translateY(-1px)}
     @media(max-width:600px){.d-gfb-title{font-size:22px}.d-gfb-checks{grid-template-columns:1fr}
       .d-gfb{padding:70px 16px calc(40px + env(safe-area-inset-bottom))}
-      /* Haut de page figé pendant que la bannière est ouverte, comme sur
-         "Vous êtes prêt à commencer" (nav en position:fixed, pas sticky). */
-      body.gfb-open .sa-nav-wrapper{position:fixed;top:0;left:0;right:0;z-index:1000}
     }
     .d-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 20px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
     .d-stat:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.18)}
@@ -1136,6 +1140,13 @@
 
 <!-- ═══ GUIDE-FIRST BANNER ═══ -->
 <div class="d-gfb" id="dGuideBanner">
+  <nav class="d-gfb-nav">
+    <a class="d-gfb-nav-logo" href="./">
+      <div class="d-gfb-nav-logo-icon"><i class="ti ti-key"></i></div>
+      <div class="d-gfb-nav-brand">Sans<span>Agents</span></div>
+    </a>
+    <button class="d-gfb-nav-cancel" onclick="window.location.href='./'"><i class="ti ti-x" style="font-size:13px"></i> Annuler</button>
+  </nav>
   <div class="d-gfb-inner">
 
     <!-- Dots de progression -->
@@ -1199,7 +1210,12 @@ function gfbSetOpen(open){
   document.body.style.overflow = (open && window.innerWidth > 768) ? 'hidden' : '';
   window.scrollTo(0, 0);
 }
-gfbSetOpen(new URLSearchParams(window.location.search).get('skip') !== '1');
+var _depositSkipped = new URLSearchParams(window.location.search).get('skip') === '1';
+gfbSetOpen(!_depositSkipped);
+// Venir de deposer-gate (skip=1) signifie qu'on a deja vu le pitch marketing
+// (hero) sur une autre page - inutile de le remontrer ici, sinon il
+// s'affiche en double avec le formulaire juste en dessous.
+if (_depositSkipped) document.body.classList.add('deposer-skip');
 function gfbNextScreen(){
   document.getElementById('gfbS0').classList.remove('visible');
   document.getElementById('gfbS1').classList.add('visible');
