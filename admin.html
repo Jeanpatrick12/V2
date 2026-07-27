@@ -69,6 +69,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   <i class="ti ti-shield-lock"></i>
   <span>SansAgents — Administration</span>
   <small>Accès réservé à l'équipe SansAgents</small>
+  <div id="authStatus" style="margin-left:auto;font-size:12.5px;color:rgba(255,255,255,0.7)"></div>
 </div>
 
 <div class="sa-admin-wrap">
@@ -126,10 +127,20 @@ function targetLabel(row) {
   return (l ? (l.title || l.titre || l.ville) : 'Annonce supprimée') + ' — ' + label;
 }
 
+const LOGIN_PROMPT = '<div class="sa-admin-denied"><i class="ti ti-lock"></i> Connectez-vous avec un compte administrateur pour voir cette section.<br><button class="sa-admin-btn approve" style="margin-top:10px" onclick="window.location.href=\'connexion?redirect=\' + encodeURIComponent(\'admin\')">Se connecter</button></div>';
+
+function renderAuthStatus() {
+  const el = document.getElementById('authStatus');
+  const u = SA.getUser();
+  el.innerHTML = u
+    ? 'Connecté : ' + SA.escapeHtml(u.email || u.id) + ' — <a href="#" onclick="SA.logout();location.reload();return false" style="color:#ff7a68">se déconnecter</a>'
+    : '<a href="#" onclick="window.location.href=\'connexion?redirect=\' + encodeURIComponent(\'admin\')" style="color:#fff;text-decoration:underline">Se connecter</a>';
+}
+
 async function renderAvis() {
   const zone = document.getElementById('avisZone');
   if (!SA.getUser()) {
-    zone.innerHTML = '<div class="sa-admin-denied"><i class="ti ti-lock"></i> Connectez-vous avec un compte administrateur pour voir et modérer les avis.</div>';
+    zone.innerHTML = LOGIN_PROMPT;
     return;
   }
   const rows = await SA.getAllAvisAdmin();
@@ -158,7 +169,7 @@ async function moderateAvis(id, status) {
 async function renderSignalements() {
   const zone = document.getElementById('signalementsZone');
   if (!SA.getUser()) {
-    zone.innerHTML = '<div class="sa-admin-denied"><i class="ti ti-lock"></i> Connectez-vous avec un compte administrateur pour voir et traiter les signalements.</div>';
+    zone.innerHTML = LOGIN_PROMPT;
     return;
   }
   const rows = await SA.getAllSignalementsAdmin();
@@ -183,6 +194,7 @@ async function moderateSignalement(id, status) {
 }
 
 SA.init().then(function(){
+  renderAuthStatus();
   render();
   renderAvis();
   renderSignalements();
