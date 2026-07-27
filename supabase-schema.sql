@@ -310,11 +310,12 @@ CREATE POLICY "avis_select_admin" ON public.avis FOR SELECT
 CREATE POLICY "avis_update_admin" ON public.avis FOR UPDATE
   USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
--- signalements : dépôt libre, lecture réservée (aucune policy SELECT publique =
--- personne ne peut lire via l'API publique, seuls le dashboard Supabase et un
--- compte admin via admin.html y accèdent)
+-- signalements : dépôt réservé aux comptes connectés (pour éviter les signalements
+-- abusifs anonymes), lecture réservée (aucune policy SELECT publique = personne
+-- ne peut lire via l'API publique, seuls le dashboard Supabase et un compte
+-- admin via admin.html y accèdent)
 DROP POLICY IF EXISTS "signalements_insert" ON public.signalements;
-CREATE POLICY "signalements_insert" ON public.signalements FOR INSERT WITH CHECK (true);
+CREATE POLICY "signalements_insert" ON public.signalements FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
 
 DROP POLICY IF EXISTS "signalements_select_admin" ON public.signalements;
 DROP POLICY IF EXISTS "signalements_update_admin" ON public.signalements;

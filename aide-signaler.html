@@ -49,6 +49,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-legal-foot{border-top:1px solid #efefef;padding:2rem 24px;text-align:center}
 .sa-legal-foot a{color:#888;font-size:12.5px;text-decoration:none;margin:0 10px;cursor:pointer}
 .sa-legal-foot a:hover{color:#E84533}
+.sa-report-login{border:1px solid #eee;border-radius:14px;padding:1.6rem;margin-top:1.5rem;background:#fafafa;text-align:center}
+.sa-report-login p{font-size:13.5px;color:#555;margin-bottom:14px}
+.sa-report-login button{background:#E84533;color:#fff;border:none;padding:11px 24px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.sa-report-login button:hover{background:#c93a2a}
 @media(max-width:600px){.sa-legal-top{padding:16px 20px}}
 </style>
 <link rel="stylesheet" href="sa-mobile.css?v=4">
@@ -75,7 +79,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   <h2>Que se passe-t-il après votre signalement ?</h2>
   <p>Notre équipe vérifie chaque signalement sous 48h. Si le signalement est confirmé, l'annonce ou le profil concerné est retiré immédiatement et le compte associé est suspendu, conformément à nos <a href="cgu" style="color:#E84533;font-weight:600">CGU</a>.</p>
 
-  <div class="sa-report-form">
+  <div class="sa-report-login" id="repLoginGate" style="display:none">
+    <p>Pour éviter les signalements abusifs anonymes, connectez-vous avant d'envoyer un signalement.</p>
+    <button onclick="window.location.href='connexion?redirect=' + encodeURIComponent(window.location.pathname + window.location.search)">Se connecter</button>
+  </div>
+
+  <div class="sa-report-form" id="repFormZone">
     <div class="field-group">
       <label id="repLinkLabel">Lien ou titre de l'annonce concernée</label>
       <input type="text" id="repLink" placeholder="Ex : https://sansagents.fr/... ou « Appartement 3 pièces — Lyon 7e »">
@@ -129,6 +138,13 @@ if (repTarget) {
   document.getElementById('repLink').value = repName ? repName : repTarget;
   document.getElementById('repLink').readOnly = !!repName;
 }
+
+SA.init().then(function(){
+  if (!SA.getUser()) {
+    document.getElementById('repFormZone').style.display = 'none';
+    document.getElementById('repLoginGate').style.display = 'block';
+  }
+});
 
 function showRepError(msg){
   var el = document.getElementById('repError');
