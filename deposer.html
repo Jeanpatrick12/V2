@@ -936,7 +936,9 @@
     .d-gfb-dot.done{background:#4ade80}
     .d-gfb-screen{display:none}.d-gfb-screen.visible{display:block}
     .d-gfb-tip{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px;margin-bottom:12px;text-align:left}
-    .d-gfb-tip i{color:#ff7a68;font-size:20px;flex-shrink:0;margin-top:1px}
+    .d-gfb-tip-ico{width:36px;height:36px;border-radius:10px;background:rgba(232,69,51,.15);display:flex;align-items:center;justify-content:center;font-size:16px;color:#ff7a68;flex-shrink:0}
+    .d-gfb-tip-ico.slate{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+    .d-gfb-tip-ico.green{background:rgba(74,222,128,.15);color:#4ade80}
     .d-gfb-tip-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6}
     .d-gfb-tip-text strong{color:white}
     .d-gfb-btn-confirm{display:inline-flex;align-items:center;gap:8px;padding:14px 36px;background:#E84533;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 8px 28px rgba(232,69,51,.35);transition:all .15s;margin-bottom:12px}
@@ -1179,15 +1181,15 @@
       <div class="d-gfb-sub">Avant de démarrer, quelques informations utiles pour que tout se passe bien.</div>
 
       <div class="d-gfb-tip">
-        <i class="ti ti-clock"></i>
+        <div class="d-gfb-tip-ico"><i class="ti ti-clock"></i></div>
         <div class="d-gfb-tip-text"><strong>8 à 12 minutes</strong> pour compléter le formulaire en entier. Ayez vos photos, votre prix estimé et l'adresse exacte sous la main avant de commencer.</div>
       </div>
       <div class="d-gfb-tip">
-        <i class="ti ti-layout-columns"></i>
+        <div class="d-gfb-tip-ico slate"><i class="ti ti-layout-columns"></i></div>
         <div class="d-gfb-tip-text"><strong>Astuce 2 fenêtres :</strong> ouvrez le guide vendeur dans un onglet et le formulaire dans un autre — vous pourrez consulter les checklists et générer vos documents en même temps.</div>
       </div>
       <div class="d-gfb-tip">
-        <i class="ti ti-device-floppy"></i>
+        <div class="d-gfb-tip-ico green"><i class="ti ti-device-floppy"></i></div>
         <div class="d-gfb-tip-text"><strong>Votre saisie est sauvegardée automatiquement</strong> à chaque étape. Vous pouvez quitter et revenir à tout moment sans perdre vos données.</div>
       </div>
 
