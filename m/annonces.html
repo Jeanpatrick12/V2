@@ -631,6 +631,7 @@ function setResultsMode(mode) {
 function initMapM() {
   if (saMapM) { markMapProgrammaticM(); setTimeout(function(){ markMapProgrammaticM(); saMapM.invalidateSize(); }, 0); return; }
   saMapM = L.map('saMapM', { zoomControl:false }).setView([46.6, 2.4], 6);
+  saMapM.attributionControl.setPrefix(false);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
     maxZoom: 19
@@ -734,6 +735,21 @@ function updateMapMarkers(results) {
   }
 }
 
+var OVERPASS_ENDPOINTS_M = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://overpass.openstreetmap.ru/api/interpreter'
+];
+function overpassFetchM(query, idx) {
+  idx = idx || 0;
+  if (idx >= OVERPASS_ENDPOINTS_M.length) return Promise.reject(new Error('overpass-unavailable'));
+  var ctrl = new AbortController();
+  var timer = setTimeout(function(){ ctrl.abort(); }, 7000);
+  return fetch(OVERPASS_ENDPOINTS_M[idx], { method: 'POST', body: query, signal: ctrl.signal })
+    .then(function(r){ clearTimeout(timer); if (!r.ok) throw new Error('bad-status'); return r.json(); })
+    .catch(function(){ clearTimeout(timer); return overpassFetchM(query, idx + 1); });
+}
+
 function togglePoiLayer(key, checked) {
   if (!saMapM) return;
   if (!checked) {
@@ -741,6 +757,10 @@ function togglePoiLayer(key, checked) {
     return;
   }
   poiLayersM[key] = L.layerGroup().addTo(saMapM);
+  if (saMapM.getZoom() < 13) {
+    markMapProgrammaticM();
+    saMapM.setView(saMapM.getCenter(), 13);
+  }
   fetchPOIM(key);
 }
 
@@ -748,15 +768,13 @@ function fetchPOIM(key) {
   if (!saMapM || !poiLayersM[key]) return;
   var cfg = poiConfigM[key];
   if (saMapM.getZoom() < 13) {
-    markMapProgrammaticM();
-    saMapM.setView(saMapM.getCenter(), 13);
+    poiLayersM[key].clearLayers();
     return;
   }
   var b = saMapM.getBounds();
   var bbox = b.getSouth() + ',' + b.getWest() + ',' + b.getNorth() + ',' + b.getEast();
   var q = '[out:json][timeout:15];(' + cfg.build(bbox) + ');out center 150;';
-  fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: q })
-    .then(function(r){ return r.json(); })
+  overpassFetchM(q)
     .then(function(data){
       if (!poiLayersM[key]) return;
       poiLayersM[key].clearLayers();

@@ -1051,6 +1051,7 @@ function initMap() {
   if (saMap) { markMapProgrammatic(); setTimeout(function(){ markMapProgrammatic(); saMap.invalidateSize(); }, 0); return; }
   saMap = L.map('saMap', { zoomControl:false, scrollWheelZoom:true }).setView([46.6, 2.4], 6);
   L.control.zoom({ position: 'bottomleft' }).addTo(saMap);
+  saMap.attributionControl.setPrefix(false);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
     maxZoom: 19
@@ -1154,6 +1155,21 @@ function locateMe() {
   }, function(){ SA.toast("Impossible d'obtenir votre position", 'ti-alert-circle'); }, { timeout: 8000 });
 }
 
+const OVERPASS_ENDPOINTS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://overpass.openstreetmap.ru/api/interpreter'
+];
+function overpassFetch(query, idx) {
+  idx = idx || 0;
+  if (idx >= OVERPASS_ENDPOINTS.length) return Promise.reject(new Error('overpass-unavailable'));
+  const ctrl = new AbortController();
+  const timer = setTimeout(function(){ ctrl.abort(); }, 7000);
+  return fetch(OVERPASS_ENDPOINTS[idx], { method: 'POST', body: query, signal: ctrl.signal })
+    .then(function(r){ clearTimeout(timer); if (!r.ok) throw new Error('bad-status'); return r.json(); })
+    .catch(function(){ clearTimeout(timer); return overpassFetch(query, idx + 1); });
+}
+
 function togglePoiLayer(key, checked) {
   if (!saMap) return;
   if (!checked) {
@@ -1161,6 +1177,10 @@ function togglePoiLayer(key, checked) {
     return;
   }
   poiLayers[key] = L.layerGroup().addTo(saMap);
+  if (saMap.getZoom() < 13) {
+    markMapProgrammatic();
+    saMap.setView(saMap.getCenter(), 13);
+  }
   fetchPOI(key);
 }
 
@@ -1168,15 +1188,13 @@ function fetchPOI(key) {
   if (!saMap || !poiLayers[key]) return;
   const cfg = poiConfig[key];
   if (saMap.getZoom() < 13) {
-    markMapProgrammatic();
-    saMap.setView(saMap.getCenter(), 13);
+    poiLayers[key].clearLayers();
     return;
   }
   const b = saMap.getBounds();
   const bbox = b.getSouth() + ',' + b.getWest() + ',' + b.getNorth() + ',' + b.getEast();
   const q = '[out:json][timeout:15];(' + cfg.build(bbox) + ');out center 150;';
-  fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: q })
-    .then(function(r){ return r.json(); })
+  overpassFetch(q)
     .then(function(data){
       if (!poiLayers[key]) return;
       poiLayers[key].clearLayers();
