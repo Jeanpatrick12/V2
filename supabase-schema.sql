@@ -51,6 +51,8 @@ CREATE TABLE IF NOT EXISTS public.listings (
   ville              text NOT NULL DEFAULT '',
   postal             text NOT NULL DEFAULT '',
   adresse            text NOT NULL DEFAULT '',
+  lat                numeric,
+  lng                numeric,
   price              numeric NOT NULL,
   charges            numeric NOT NULL DEFAULT 0,
   surface            numeric NOT NULL,
@@ -92,6 +94,13 @@ CREATE TABLE IF NOT EXISTS public.listings (
 -- badge "Démo" sur le site. Par defaut false, donc toute nouvelle annonce
 -- deposee par un vrai utilisateur n'est jamais marquee demo automatiquement.
 ALTER TABLE public.listings ADD COLUMN IF NOT EXISTS is_demo boolean NOT NULL DEFAULT false;
+
+-- Coordonnees GPS (2026-07-28) : necessaires pour la vue carte de la page
+-- annonces. Renseignees automatiquement (geocodage de l'adresse) au moment
+-- du depot d'une nouvelle annonce - les annonces existantes qui n'ont pas
+-- encore ces colonnes restent simplement absentes de la carte.
+ALTER TABLE public.listings ADD COLUMN IF NOT EXISTS lat numeric;
+ALTER TABLE public.listings ADD COLUMN IF NOT EXISTS lng numeric;
 
 -- ── 3. PROFESSIONNELS ────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.pros (

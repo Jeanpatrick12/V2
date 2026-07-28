@@ -18,9 +18,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><!--sa_mloader--><script>(function(){if(window.innerWidth>768||localStorage.sa_force_desktop||/[?&]desktop=1/.test(location.search))return;document.documentElement.style.visibility="hidden";document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML="";document.body.style.margin="0";document.body.style.overflow="hidden";var f=document.createElement("iframe");f.src="/m/annonces.html"+location.search;f.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;border:0;background:#fff";f.onload=function(){try{document.title=f.contentDocument.title}catch(e){}document.documentElement.style.visibility=""};f.setAttribute("scrolling","yes");document.body.appendChild(f);});})();</script>
 <title>SansAgents — Toutes les annonces</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=14"></script>
+<script src="sa-shared.js?v=15"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -219,6 +221,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-no-results{text-align:center;padding:3.5rem 1rem;color:#999}
 .sa-no-results i{font-size:32px;color:#ddd;margin-bottom:12px;display:block}
 .sa-no-results button{margin-top:14px;background:#E84533;color:white;border:none;padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+
+/* ── CARTE ── */
+.sa-map-toggle-btn{display:flex;align-items:center;gap:7px;border:1.5px solid #e7e7e7;border-radius:9px;padding:9px 15px;font-size:13px;font-weight:700;color:#333;cursor:pointer;background:#fff;white-space:nowrap;font-family:inherit;transition:all .12s}
+.sa-map-toggle-btn:hover{border-color:#E84533;color:#E84533}
+.sa-map-toggle-btn.active{background:#E84533;border-color:#E84533;color:#fff}
+.sa-map-view{position:relative;height:calc(100vh - 250px);min-height:540px;border-radius:18px;overflow:hidden;border:1px solid #e8e8e8;box-shadow:0 1px 3px rgba(15,20,25,0.04)}
+#saMap{width:100%;height:100%;background:#eef1f3;font-family:inherit}
+.sa-map-panel{position:absolute;top:16px;left:16px;z-index:1000;background:white;border-radius:14px;box-shadow:0 12px 32px rgba(15,20,25,0.16);padding:14px 16px;min-width:180px}
+.sa-map-panel-title{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.sa-map-panel-title i{color:#E84533;font-size:13px}
+.sa-poi-check{display:flex;align-items:center;gap:9px;padding:6px 0;font-size:13px;color:#333;cursor:pointer;font-weight:500}
+.sa-poi-check input{accent-color:#E84533;width:15px;height:15px;cursor:pointer;flex-shrink:0}
+.sa-poi-check .sa-poi-dotlabel{width:18px;height:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-poi-check .sa-poi-dotlabel i{color:#fff;font-size:10px}
+.sa-map-count-badge{position:absolute;top:16px;right:16px;z-index:1000;background:white;border-radius:999px;box-shadow:0 8px 24px rgba(15,20,25,0.14);padding:9px 16px;font-size:12.5px;font-weight:700;color:#111;display:flex;align-items:center;gap:7px}
+.sa-map-count-badge i{color:#E84533}
+.sa-map-nocoords{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:1000;background:rgba(17,17,17,0.88);color:#fff;font-size:12px;padding:9px 16px;border-radius:999px;display:none;align-items:center;gap:7px;white-space:nowrap}
+.sa-map-nocoords i{color:#ffb199}
+
+.sa-map-price-pill{background:#111;color:#fff;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,0.22);border:2px solid #fff;transform:translate(-50%,-100%);cursor:pointer;transition:transform .1s,background .1s}
+.sa-map-price-pill:hover, .sa-map-price-pill.sa-map-price-hover{background:#E84533;transform:translate(-50%,-100%) scale(1.08);z-index:1000!important}
+.sa-poi-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);transform:translate(-50%,-50%)}
+
+.sa-map-popup-card{width:220px;cursor:pointer;font-family:inherit;margin:-13px -20px -13px -20px}
+.sa-map-popup-photo{height:120px;background-size:cover;background-position:center;background-color:#eee}
+.sa-map-popup-body{padding:10px 13px 12px}
+.sa-map-popup-price{font-size:15px;font-weight:800;color:#111}
+.sa-map-popup-title{font-size:12px;color:#555;margin:2px 0 5px;line-height:1.4}
+.sa-map-popup-addr{font-size:11.5px;color:#999;display:flex;align-items:center;gap:4px}
+.sa-map-popup-addr i{color:#E84533;font-size:12px}
+.leaflet-popup-content-wrapper{border-radius:14px;padding:0;overflow:hidden}
+.leaflet-popup-content{margin:0;width:auto!important}
+.leaflet-popup-tip{box-shadow:0 3px 10px rgba(0,0,0,0.15)}
+@media(max-width:700px){
+  .sa-map-view{height:calc(100vh - 300px);min-height:420px;border-radius:14px}
+  .sa-map-panel{min-width:150px;padding:11px 13px}
+}
 
 @media(max-width:980px){
   .sa-nav{padding:0 24px}
@@ -574,11 +613,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
         <option value="prix-desc">Prix décroissant</option>
         <option value="surface-desc">Plus grande surface</option>
       </select>
-      <div class="sa-view-toggle">
+      <div class="sa-view-toggle" id="viewToggle">
         <button class="sa-view-btn active" id="viewListBtn" title="Une annonce par ligne" onclick="setView('list')"><i class="ti ti-list"></i></button>
         <button class="sa-view-btn" id="viewGrid2Btn" title="2 annonces par ligne" onclick="setView('grid2')"><i class="ti ti-layout-grid"></i></button>
         <button class="sa-view-btn" id="viewGrid3Btn" title="3 annonces par ligne" onclick="setView('grid3')"><i class="ti ti-grid-dots"></i></button>
       </div>
+      <button class="sa-map-toggle-btn" id="mapToggleBtn" onclick="setResultsMode(resultsMode==='map'?'list':'map')">
+        <i class="ti ti-map-2"></i> Voir sur la carte
+      </button>
     </div>
   </div>
   <div class="sa-listings view-list" id="listingsGrid"></div>
@@ -586,6 +628,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
     <i class="ti ti-mood-empty"></i>
     Aucune annonce ne correspond à ces critères. Essayez d'élargir votre recherche.
     <br><button onclick="resetFilters()">Réinitialiser les filtres</button>
+  </div>
+  <div class="sa-map-view" id="mapViewContainer" style="display:none">
+    <div class="sa-map-panel">
+      <div class="sa-map-panel-title"><i class="ti ti-map-pins"></i> Points d'intérêt</div>
+      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-ecoles" onchange="togglePoiLayer('ecoles',this.checked)"><span class="sa-poi-dotlabel" style="background:#1e6abf"><i class="ti ti-school"></i></span> Écoles</label>
+      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-universites" onchange="togglePoiLayer('universites',this.checked)"><span class="sa-poi-dotlabel" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>
+      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-commerces" onchange="togglePoiLayer('commerces',this.checked)"><span class="sa-poi-dotlabel" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>
+      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-parcs" onchange="togglePoiLayer('parcs',this.checked)"><span class="sa-poi-dotlabel" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>
+    </div>
+    <div class="sa-map-count-badge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce(s) localisée(s)</div>
+    <div class="sa-map-nocoords" id="mapNoCoords"><i class="ti ti-info-circle"></i> Certaines annonces ne sont pas encore localisées sur la carte.</div>
+    <div id="saMap"></div>
   </div>
 </div>
 
@@ -598,6 +652,8 @@ let activeDpe = [];
 let activeGes = [];
 let activeEtat = 'all';
 let qTags = [];
+let resultsMode = 'list';
+let lastResults = [];
 
 function renderQTags(){
   document.getElementById('qTagsRendered').innerHTML = qTags.map((t,i)=>`<span class="sa-qtag">${SA.escapeHtml(t)}<i class="ti ti-x" onclick="event.stopPropagation();removeQTag(${i})"></i></span>`).join('');
@@ -904,7 +960,13 @@ function applyFilters(scrollToResults) {
     return (b.createdAt || 0) - (a.createdAt || 0);
   });
 
-  renderResults(results);
+  lastResults = results;
+  if (resultsMode === 'map') {
+    document.getElementById('resultsCount').textContent = results.length;
+    updateMapMarkers(results);
+  } else {
+    renderResults(results);
+  }
   if (scrollToResults) {
     const header = document.querySelector('.sa-results-header');
     if (header) header.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -912,6 +974,138 @@ function applyFilters(scrollToResults) {
 }
 
 function runSearch() { applyFilters(true); }
+
+/* ───────────────── vue carte ───────────────── */
+let saMap = null;
+let mapMarkersLayer = null;
+let poiLayers = { ecoles:null, universites:null, commerces:null, parcs:null };
+const poiConfig = {
+  ecoles:      { query:'["amenity"="school"]',            color:'#1e6abf', icon:'ti-school',         label:'école' },
+  universites: { query:'["amenity"~"^(university|college)$"]', color:'#7c3aed', icon:'ti-building-bank', label:'université' },
+  commerces:   { query:'["shop"]',                          color:'#0a9e4f', icon:'ti-shopping-cart',  label:'commerce' },
+  parcs:       { query:'["leisure"="park"]',                color:'#2b9e6f', icon:'ti-trees',           label:'parc' }
+};
+
+function setResultsMode(mode) {
+  resultsMode = mode;
+  const grid = document.getElementById('listingsGrid');
+  const noRes = document.getElementById('noResults');
+  const mapC = document.getElementById('mapViewContainer');
+  const viewToggle = document.getElementById('viewToggle');
+  const mapBtn = document.getElementById('mapToggleBtn');
+  if (mode === 'map') {
+    grid.style.display = 'none';
+    noRes.style.display = 'none';
+    viewToggle.style.display = 'none';
+    mapC.style.display = 'block';
+    mapBtn.classList.add('active');
+    mapBtn.innerHTML = '<i class="ti ti-list"></i> Voir la liste';
+    initMap();
+    updateMapMarkers(lastResults);
+  } else {
+    grid.style.display = '';
+    mapC.style.display = 'none';
+    viewToggle.style.display = 'flex';
+    mapBtn.classList.remove('active');
+    mapBtn.innerHTML = '<i class="ti ti-map-2"></i> Voir sur la carte';
+    renderResults(lastResults);
+  }
+}
+
+function initMap() {
+  if (saMap) { setTimeout(function(){ saMap.invalidateSize(); }, 0); return; }
+  saMap = L.map('saMap', { zoomControl:true, scrollWheelZoom:true }).setView([46.6, 2.4], 6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    maxZoom: 19
+  }).addTo(saMap);
+  mapMarkersLayer = L.layerGroup().addTo(saMap);
+  saMap.on('moveend', function(){
+    Object.keys(poiLayers).forEach(function(k){ if (poiLayers[k]) fetchPOI(k); });
+  });
+  setTimeout(function(){ saMap.invalidateSize(); }, 60);
+}
+
+function mapPopupHTML(l) {
+  const photos = Array.isArray(l.photos) ? l.photos : [];
+  const main = photos[0] ? photoUrl(photos[0]) : null;
+  const grad = SA.IMG_GRADIENTS[l.img] || SA.IMG_GRADIENTS.p0;
+  return '<div class="sa-map-popup-card" onclick="SA.openListing(\'' + l.id + '\')">' +
+    '<div class="sa-map-popup-photo" style="' + (main ? "background-image:url('" + main + "')" : 'background:' + grad) + '"></div>' +
+    '<div class="sa-map-popup-body">' +
+      '<div class="sa-map-popup-price">' + SA.fmtPriceTransaction(l) + '</div>' +
+      '<div class="sa-map-popup-title">' + SA.escapeHtml(l.title || '') + '</div>' +
+      '<div class="sa-map-popup-addr"><i class="ti ti-map-pin"></i> ' + SA.escapeHtml(l.ville || '') + '</div>' +
+    '</div></div>';
+}
+
+function updateMapMarkers(results) {
+  if (!saMap || !mapMarkersLayer) return;
+  mapMarkersLayer.clearLayers();
+  const withCoords = results.filter(function(l){ return l.lat && l.lng; });
+  const bounds = [];
+  withCoords.forEach(function(l){
+    const icon = L.divIcon({
+      className: '',
+      html: '<div class="sa-map-price-pill" onmouseenter="this.classList.add(\'sa-map-price-hover\')" onmouseleave="this.classList.remove(\'sa-map-price-hover\')">' + SA.fmtPrice(l.price) + (l.transaction === 'location' ? '/mois' : '') + '</div>',
+      iconSize: null,
+      iconAnchor: [0, 0]
+    });
+    const marker = L.marker([l.lat, l.lng], { icon: icon });
+    marker.bindPopup(mapPopupHTML(l), { closeButton: true, maxWidth: 240, minWidth: 220, className: 'sa-map-popup' });
+    marker.addTo(mapMarkersLayer);
+    bounds.push([l.lat, l.lng]);
+  });
+  document.getElementById('mapResultsCount').textContent = withCoords.length;
+  document.getElementById('mapNoCoords').style.display = (results.length && withCoords.length < results.length) ? 'flex' : 'none';
+  if (bounds.length) {
+    saMap.fitBounds(bounds, { padding: [70, 70], maxZoom: 14 });
+  } else {
+    saMap.setView([46.6, 2.4], 6);
+  }
+}
+
+function togglePoiLayer(key, checked) {
+  if (!saMap) return;
+  if (!checked) {
+    if (poiLayers[key]) { saMap.removeLayer(poiLayers[key]); poiLayers[key] = null; }
+    return;
+  }
+  poiLayers[key] = L.layerGroup().addTo(saMap);
+  fetchPOI(key);
+}
+
+function fetchPOI(key) {
+  if (!saMap || !poiLayers[key]) return;
+  const cfg = poiConfig[key];
+  if (saMap.getZoom() < 13) {
+    SA.toast('Zoomez sur la carte pour afficher les ' + cfg.label + 's à proximité', 'ti-zoom-in');
+    return;
+  }
+  const b = saMap.getBounds();
+  const bbox = b.getSouth() + ',' + b.getWest() + ',' + b.getNorth() + ',' + b.getEast();
+  const q = '[out:json][timeout:15];(node' + cfg.query + '(' + bbox + ');way' + cfg.query + '(' + bbox + '););out center 150;';
+  fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: q })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (!poiLayers[key]) return;
+      poiLayers[key].clearLayers();
+      (data.elements || []).forEach(function(el){
+        const lat = el.lat || (el.center && el.center.lat);
+        const lng = el.lon || (el.center && el.center.lon);
+        if (!lat || !lng) return;
+        const name = (el.tags && el.tags.name) || (cfg.label.charAt(0).toUpperCase() + cfg.label.slice(1));
+        const icon = L.divIcon({
+          className: '',
+          html: '<div class="sa-poi-dot" style="background:' + cfg.color + '"><i class="ti ' + cfg.icon + '"></i></div>',
+          iconSize: [26, 26],
+          iconAnchor: [13, 13]
+        });
+        L.marker([lat, lng], { icon: icon }).bindTooltip(SA.escapeHtml(name), { direction: 'top', offset: [0, -16] }).addTo(poiLayers[key]);
+      });
+    })
+    .catch(function(){ SA.toast("Impossible de charger les points d'intérêt pour le moment", 'ti-alert-circle'); });
+}
 
 /* ───────────────── rendu des cartes ───────────────── */
 function relTime(ts){

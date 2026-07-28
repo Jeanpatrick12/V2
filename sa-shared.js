@@ -14,20 +14,20 @@
 
   /* ── Données de démonstration (restent côté client, non modifiables) ── */
   const DEMO_LISTINGS = [
-    { id:"d1",  type:"appartement", transaction:"vente",    title:"Appartement 3 pièces — Lyon 7e",        ville:"Lyon",       postal:"69007", price:245000, charges:0,   surface:68,  pieces:3, chambres:2, dpe:"C", meuble:null,    img:"lyon",     desc:"Bel appartement traversant, cuisine équipée, proche transports et commerces.", createdAt:1700000001, contactPrenom:"Élodie", contactNom:"Marchand", equipements:["Ascenseur","Cave","Digicode"] },
-    { id:"d2",  type:"maison",      transaction:"vente",    title:"Maison avec jardin — Bordeaux",          ville:"Bordeaux",   postal:"33000", price:385000, charges:0,   surface:120, pieces:5, chambres:4, dpe:"D", meuble:null,    img:"bordeaux", desc:"Maison familiale avec jardin clos, garage et belle exposition sud.", createdAt:1700000002, contactPrenom:"Nicolas", contactNom:"Berthier", equipements:["Jardin privatif","Garage individuel","Terrasse"] },
-    { id:"d3",  type:"studio",      transaction:"location", title:"Studio meublé — Paris 11e",              ville:"Paris",      postal:"75011", price:850,    charges:60,  surface:24,  pieces:1, chambres:0, dpe:"E", meuble:"meuble",img:"paris",    desc:"Studio meublé, lumineux, à deux pas du métro, idéal jeune actif.", createdAt:1700000003, contactPrenom:"Camille", contactNom:"Roy", equipements:["Ascenseur","Interphone"] },
-    { id:"d4",  type:"loft",        transaction:"vente",    title:"Loft atelier d'artiste — Lille",         ville:"Lille",      postal:"59000", price:310000, charges:0,   surface:95,  pieces:4, chambres:2, dpe:"D", meuble:null,    img:"lille",    desc:"Ancien atelier industriel reconverti, volumes exceptionnels, cachet préservé.", createdAt:1700000004, contactPrenom:"Hugo", contactNom:"Lambert", equipements:["Parking privé","Cave"] },
-    { id:"d5",  type:"appartement", transaction:"location", title:"Appartement 2 pièces — Marseille 6e",    ville:"Marseille",  postal:"13006", price:720,    charges:60,  surface:50,  pieces:2, chambres:1, dpe:"D", meuble:"vide",  img:"p4",       desc:"Appartement calme et lumineux, proche commerces et écoles.", createdAt:1700000005, contactPrenom:"Sarah", contactNom:"Benamar", equipements:["Balcon","Cave"] },
-    { id:"d6",  type:"maison",      transaction:"vente",    title:"Maison contemporaine — Nantes",          ville:"Nantes",     postal:"44000", price:295000, charges:0,   surface:110, pieces:4, chambres:3, dpe:"B", meuble:null,    img:"p5",       desc:"Maison récente basse consommation, belle terrasse, quartier recherché.", createdAt:1700000006, contactPrenom:"Julien", contactNom:"Faure", equipements:["Terrasse","Garage individuel","Point de recharge VE"] },
-    { id:"d7",  type:"studio",      transaction:"vente",    title:"Studio rénové — Toulouse centre",        ville:"Toulouse",   postal:"31000", price:98000,  charges:0,   surface:22,  pieces:1, chambres:0, dpe:"D", meuble:null,    img:"p6",       desc:"Studio entièrement rénové en plein centre-ville, idéal investissement.", createdAt:1700000007, contactPrenom:"Laura", contactNom:"Petit", equipements:["Digicode"] },
-    { id:"d8",  type:"appartement", transaction:"vente",    title:"Appartement avec balcon — Strasbourg",   ville:"Strasbourg", postal:"67000", price:215000, charges:0,   surface:75,  pieces:3, chambres:2, dpe:"C", meuble:null,    img:"p7",       desc:"Appartement avec balcon filant, double exposition, cave et parking.", createdAt:1700000008, contactPrenom:"Thomas", contactNom:"Weber", equipements:["Balcon","Cave","Parking extérieur"] },
-    { id:"d9",  type:"maison",      transaction:"location", title:"Villa avec vue mer — Nice",              ville:"Nice",       postal:"06000", price:1450,   charges:90,  surface:95,  pieces:4, chambres:3, dpe:"C", meuble:"meuble",img:"p1",       desc:"Villa meublée avec vue mer dégagée, terrasse et piscine partagée.", createdAt:1700000009, contactPrenom:"Anaïs", contactNom:"Giordano", equipements:["Terrasse","Piscine","Vue mer / lac / montagne"] },
-    { id:"d10", type:"loft",        transaction:"location", title:"Loft industriel — Paris 19e",            ville:"Paris",      postal:"75019", price:1600,   charges:0,   surface:80,  pieces:2, chambres:1, dpe:"E", meuble:"vide",  img:"p2",       desc:"Loft open space avec verrière, idéal télétravail, quartier en plein essor.", createdAt:1700000010, contactPrenom:"Maxime", contactNom:"Girard", equipements:["Cave"] },
-    { id:"d11", type:"appartement", transaction:"vente",    title:"Appartement lumineux — Rennes",          ville:"Rennes",     postal:"35000", price:178000, charges:0,   surface:58,  pieces:3, chambres:2, dpe:"B", meuble:null,    img:"p3",       desc:"Appartement refait à neuf, proche métro, faibles charges de copropriété.", createdAt:1700000011, contactPrenom:"Pauline", contactNom:"Morel", equipements:["Ascenseur","Local à vélos sécurisé"] },
-    { id:"d12", type:"maison",      transaction:"vente",    title:"Maison de ville — Lille",                ville:"Lille",      postal:"59000", price:340000, charges:0,   surface:130, pieces:5, chambres:4, dpe:"E", meuble:null,    img:"p0",       desc:"Maison de ville avec cour, proche centre, à rafraîchir partiellement.", createdAt:1700000012, contactPrenom:"Olivier", contactNom:"Renard", equipements:["Cave","Grenier / Combles aménageables"] },
-    { id:"d13", type:"studio",      transaction:"location", title:"Studio étudiant — Lyon 3e",              ville:"Lyon",       postal:"69003", price:580,    charges:40,  surface:20,  pieces:1, chambres:0, dpe:"D", meuble:"meuble",img:"p4",       desc:"Studio meublé idéal étudiant, proche universités et tramway.", createdAt:1700000013, contactPrenom:"Inès", contactNom:"Dubois", equipements:["Ascenseur","Digicode"] },
-    { id:"d14", type:"appartement", transaction:"location", title:"Appartement familial — Bordeaux",        ville:"Bordeaux",   postal:"33000", price:980,    charges:70,  surface:65,  pieces:3, chambres:2, dpe:"C", meuble:"vide",  img:"p5",       desc:"Appartement familial avec balcon, proche écoles et tramway.", createdAt:1700000014, contactPrenom:"Marie", contactNom:"Lefort", equipements:["Balcon","Parking en sous-sol"] }
+    { id:"d1",  type:"appartement", transaction:"vente",    title:"Appartement 3 pièces — Lyon 7e",        ville:"Lyon",       postal:"69007", lat:45.7485, lng:4.8467, price:245000, charges:0,   surface:68,  pieces:3, chambres:2, dpe:"C", meuble:null,    img:"lyon",     desc:"Bel appartement traversant, cuisine équipée, proche transports et commerces.", createdAt:1700000001, contactPrenom:"Élodie", contactNom:"Marchand", equipements:["Ascenseur","Cave","Digicode"] },
+    { id:"d2",  type:"maison",      transaction:"vente",    title:"Maison avec jardin — Bordeaux",          ville:"Bordeaux",   postal:"33000", lat:44.8412, lng:-0.5731, price:385000, charges:0,   surface:120, pieces:5, chambres:4, dpe:"D", meuble:null,    img:"bordeaux", desc:"Maison familiale avec jardin clos, garage et belle exposition sud.", createdAt:1700000002, contactPrenom:"Nicolas", contactNom:"Berthier", equipements:["Jardin privatif","Garage individuel","Terrasse"] },
+    { id:"d3",  type:"studio",      transaction:"location", title:"Studio meublé — Paris 11e",              ville:"Paris",      postal:"75011", lat:48.8631, lng:2.3708, price:850,    charges:60,  surface:24,  pieces:1, chambres:0, dpe:"E", meuble:"meuble",img:"paris",    desc:"Studio meublé, lumineux, à deux pas du métro, idéal jeune actif.", createdAt:1700000003, contactPrenom:"Camille", contactNom:"Roy", equipements:["Ascenseur","Interphone"] },
+    { id:"d4",  type:"loft",        transaction:"vente",    title:"Loft atelier d'artiste — Lille",         ville:"Lille",      postal:"59000", lat:50.6365, lng:3.0635, price:310000, charges:0,   surface:95,  pieces:4, chambres:2, dpe:"D", meuble:null,    img:"lille",    desc:"Ancien atelier industriel reconverti, volumes exceptionnels, cachet préservé.", createdAt:1700000004, contactPrenom:"Hugo", contactNom:"Lambert", equipements:["Parking privé","Cave"] },
+    { id:"d5",  type:"appartement", transaction:"location", title:"Appartement 2 pièces — Marseille 6e",    ville:"Marseille",  postal:"13006", lat:43.2932, lng:5.3811, price:720,    charges:60,  surface:50,  pieces:2, chambres:1, dpe:"D", meuble:"vide",  img:"p4",       desc:"Appartement calme et lumineux, proche commerces et écoles.", createdAt:1700000005, contactPrenom:"Sarah", contactNom:"Benamar", equipements:["Balcon","Cave"] },
+    { id:"d6",  type:"maison",      transaction:"vente",    title:"Maison contemporaine — Nantes",          ville:"Nantes",     postal:"44000", lat:47.2181, lng:-1.5528, price:295000, charges:0,   surface:110, pieces:4, chambres:3, dpe:"B", meuble:null,    img:"p5",       desc:"Maison récente basse consommation, belle terrasse, quartier recherché.", createdAt:1700000006, contactPrenom:"Julien", contactNom:"Faure", equipements:["Terrasse","Garage individuel","Point de recharge VE"] },
+    { id:"d7",  type:"studio",      transaction:"vente",    title:"Studio rénové — Toulouse centre",        ville:"Toulouse",   postal:"31000", lat:43.6045, lng:1.4442, price:98000,  charges:0,   surface:22,  pieces:1, chambres:0, dpe:"D", meuble:null,    img:"p6",       desc:"Studio entièrement rénové en plein centre-ville, idéal investissement.", createdAt:1700000007, contactPrenom:"Laura", contactNom:"Petit", equipements:["Digicode"] },
+    { id:"d8",  type:"appartement", transaction:"vente",    title:"Appartement avec balcon — Strasbourg",   ville:"Strasbourg", postal:"67000", lat:48.5833, lng:7.7458, price:215000, charges:0,   surface:75,  pieces:3, chambres:2, dpe:"C", meuble:null,    img:"p7",       desc:"Appartement avec balcon filant, double exposition, cave et parking.", createdAt:1700000008, contactPrenom:"Thomas", contactNom:"Weber", equipements:["Balcon","Cave","Parking extérieur"] },
+    { id:"d9",  type:"maison",      transaction:"location", title:"Villa avec vue mer — Nice",              ville:"Nice",       postal:"06000", lat:43.6959, lng:7.2716, price:1450,   charges:90,  surface:95,  pieces:4, chambres:3, dpe:"C", meuble:"meuble",img:"p1",       desc:"Villa meublée avec vue mer dégagée, terrasse et piscine partagée.", createdAt:1700000009, contactPrenom:"Anaïs", contactNom:"Giordano", equipements:["Terrasse","Piscine","Vue mer / lac / montagne"] },
+    { id:"d10", type:"loft",        transaction:"location", title:"Loft industriel — Paris 19e",            ville:"Paris",      postal:"75019", lat:48.8859, lng:2.3833, price:1600,   charges:0,   surface:80,  pieces:2, chambres:1, dpe:"E", meuble:"vide",  img:"p2",       desc:"Loft open space avec verrière, idéal télétravail, quartier en plein essor.", createdAt:1700000010, contactPrenom:"Maxime", contactNom:"Girard", equipements:["Cave"] },
+    { id:"d11", type:"appartement", transaction:"vente",    title:"Appartement lumineux — Rennes",          ville:"Rennes",     postal:"35000", lat:48.1147, lng:-1.6794, price:178000, charges:0,   surface:58,  pieces:3, chambres:2, dpe:"B", meuble:null,    img:"p3",       desc:"Appartement refait à neuf, proche métro, faibles charges de copropriété.", createdAt:1700000011, contactPrenom:"Pauline", contactNom:"Morel", equipements:["Ascenseur","Local à vélos sécurisé"] },
+    { id:"d12", type:"maison",      transaction:"vente",    title:"Maison de ville — Lille",                ville:"Lille",      postal:"59000", lat:50.6250, lng:3.0450, price:340000, charges:0,   surface:130, pieces:5, chambres:4, dpe:"E", meuble:null,    img:"p0",       desc:"Maison de ville avec cour, proche centre, à rafraîchir partiellement.", createdAt:1700000012, contactPrenom:"Olivier", contactNom:"Renard", equipements:["Cave","Grenier / Combles aménageables"] },
+    { id:"d13", type:"studio",      transaction:"location", title:"Studio étudiant — Lyon 3e",              ville:"Lyon",       postal:"69003", lat:45.7580, lng:4.8590, price:580,    charges:40,  surface:20,  pieces:1, chambres:0, dpe:"D", meuble:"meuble",img:"p4",       desc:"Studio meublé idéal étudiant, proche universités et tramway.", createdAt:1700000013, contactPrenom:"Inès", contactNom:"Dubois", equipements:["Ascenseur","Digicode"] },
+    { id:"d14", type:"appartement", transaction:"location", title:"Appartement familial — Bordeaux",        ville:"Bordeaux",   postal:"33000", lat:44.8280, lng:-0.5900, price:980,    charges:70,  surface:65,  pieces:3, chambres:2, dpe:"C", meuble:"vide",  img:"p5",       desc:"Appartement familial avec balcon, proche écoles et tramway.", createdAt:1700000014, contactPrenom:"Marie", contactNom:"Lefort", equipements:["Balcon","Parking en sous-sol"] }
   ];
 
   const DEMO_PROS = [
@@ -84,6 +84,8 @@
       ville:             row.ville || "",
       postal:            row.postal || "",
       adresse:           row.adresse || "",
+      lat:               row.lat != null ? parseFloat(row.lat) : null,
+      lng:               row.lng != null ? parseFloat(row.lng) : null,
       price:             parseFloat(row.price),
       charges:           parseFloat(row.charges || 0),
       surface:           parseFloat(row.surface),
@@ -254,7 +256,7 @@
         .or("buyer_id.eq." + userId + ",seller_id.eq." + userId)
         .order("created_at", { ascending: false }),
       _sb.from("listings")
-        .select("id,owner_id,type,transaction,title,ville,postal,adresse,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,contact_email,contact_tel,status,is_demo,created_at")
+        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,contact_email,contact_tel,status,is_demo,created_at")
         .eq("owner_id", userId),
       _sb.from("user_documents").select("doc_type,doc_data,updated_at").eq("user_id", userId).order("updated_at", { ascending: false })
     ]);
@@ -316,7 +318,7 @@
     const [sessionRes, listingsRes, prosRes] = await Promise.all([
       _sb.auth.getSession(),
       _sb.from("listings")
-        .select("id,owner_id,type,transaction,title,ville,postal,adresse,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,status,is_demo,created_at")
+        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,status,is_demo,created_at")
         .eq("status", "active")
         .order("created_at", { ascending: false }),
       _sb.from("pros")
@@ -370,6 +372,17 @@
     if (m) return { postal: m[1], ville: m[2].trim() };
     const parts = String(address).split(",");
     return { postal: "", ville: parts[parts.length - 1].trim() || address.trim() };
+  }
+  async function geocodeAddress(address) {
+    if (!address) return null;
+    try {
+      const url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=fr&q=" + encodeURIComponent(address);
+      const res = await fetch(url, { headers: { "Accept-Language": "fr" } });
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!data || !data[0]) return null;
+      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+    } catch (e) { return null; }
   }
   function piecesFromSelect(val) {
     if (!val) return null;
@@ -450,6 +463,7 @@
       }
     }
     const addr = parseAddress(data.adresse);
+    const coords = await geocodeAddress(data.adresse);
     const row = {
       owner_id:          _cache.user.id,
       type:              data.type,
@@ -458,6 +472,8 @@
       ville:             addr.ville,
       postal:            addr.postal,
       adresse:           data.adresse || "",
+      lat:               coords ? coords.lat : null,
+      lng:               coords ? coords.lng : null,
       price:             data.price,
       charges:           data.charges || 0,
       surface:           data.surface,

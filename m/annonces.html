@@ -7,6 +7,8 @@
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <meta name="theme-color" content="#E84533">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="m.css">
 <style>
 .m-an-header { background: linear-gradient(135deg,#0f1923,#1a2c3d); padding: 28px var(--pad) 24px; }
@@ -123,6 +125,31 @@
 .m-an-card-date i { font-size: 12px; }
 
 #listingsContainer { padding-top: 10px; }
+
+/* ── CARTE ── */
+.m-map-toggle-btn { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: var(--text2); padding: 6px 10px; border: 1.5px solid var(--border); border-radius: 8px; background: white; font-family: inherit; }
+.m-map-toggle-btn.active { background: var(--red); border-color: var(--red); color: white; }
+.m-map-view { display: none; position: relative; height: calc(100vh - 220px); min-height: 420px; }
+.m-map-view.show { display: block; }
+#saMapM { width: 100%; height: 100%; background: #eef1f3; }
+.m-map-panel { position: absolute; top: 12px; left: 12px; z-index: 1000; background: white; border-radius: 12px; box-shadow: 0 10px 26px rgba(15,20,25,0.16); padding: 11px 13px; min-width: 148px; }
+.m-map-panel-title { font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
+.m-poi-check { display: flex; align-items: center; gap: 7px; padding: 5px 0; font-size: 12px; color: #333; font-weight: 500; }
+.m-poi-check input { accent-color: var(--red); width: 14px; height: 14px; flex-shrink: 0; }
+.m-poi-check .m-poi-dotlabel { width: 16px; height: 16px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-poi-check .m-poi-dotlabel i { color: #fff; font-size: 9px; }
+.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 999px; box-shadow: 0 8px 22px rgba(15,20,25,0.14); padding: 7px 13px; font-size: 11.5px; font-weight: 700; color: #111; display: flex; align-items: center; gap: 5px; }
+.m-map-count-badge i { color: var(--red); }
+.m-map-price-pill { background: #111; color: #fff; font-size: 11.5px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; box-shadow: 0 3px 8px rgba(0,0,0,0.22); border: 2px solid #fff; transform: translate(-50%,-100%); }
+.sa-poi-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transform: translate(-50%,-50%); }
+.m-map-popup-card { width: 190px; margin: -13px -20px -13px -20px; }
+.m-map-popup-photo { height: 100px; background-size: cover; background-position: center; background-color: #eee; }
+.m-map-popup-body { padding: 9px 12px 11px; }
+.m-map-popup-price { font-size: 14px; font-weight: 800; color: #111; }
+.m-map-popup-title { font-size: 11.5px; color: #555; margin: 2px 0 4px; line-height: 1.4; }
+.m-map-popup-addr { font-size: 11px; color: #999; }
+.leaflet-popup-content-wrapper { border-radius: 13px; padding: 0; overflow: hidden; }
+.leaflet-popup-content { margin: 0; width: auto!important; }
 </style>
 </head>
 <body>
@@ -202,11 +229,27 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
 <!-- RESULTS BAR -->
 <div class="m-results-bar">
   <span class="m-results-count"><strong id="resultsCount">0</strong> annonce<span id="resultsPlural"></span></span>
-  <button class="m-sort-btn" onclick="openPanel('panelSort')"><i class="ti ti-arrows-sort"></i> Trier</button>
+  <div style="display:flex;gap:8px">
+    <button class="m-map-toggle-btn" id="mapToggleBtn" onclick="setResultsMode(resultsMode==='map'?'list':'map')"><i class="ti ti-map-2"></i> Carte</button>
+    <button class="m-sort-btn" onclick="openPanel('panelSort')"><i class="ti ti-arrows-sort"></i> Trier</button>
+  </div>
 </div>
 
 <!-- LISTE -->
 <div id="listingsContainer"></div>
+
+<!-- CARTE -->
+<div class="m-map-view" id="mapViewContainer">
+  <div class="m-map-panel">
+    <div class="m-map-panel-title">Points d'intérêt</div>
+    <label class="m-poi-check"><input type="checkbox" id="poiCheck-ecoles" onchange="togglePoiLayer('ecoles',this.checked)"><span class="m-poi-dotlabel" style="background:#1e6abf"><i class="ti ti-school"></i></span> Écoles</label>
+    <label class="m-poi-check"><input type="checkbox" id="poiCheck-universites" onchange="togglePoiLayer('universites',this.checked)"><span class="m-poi-dotlabel" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>
+    <label class="m-poi-check"><input type="checkbox" id="poiCheck-commerces" onchange="togglePoiLayer('commerces',this.checked)"><span class="m-poi-dotlabel" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>
+    <label class="m-poi-check"><input type="checkbox" id="poiCheck-parcs" onchange="togglePoiLayer('parcs',this.checked)"><span class="m-poi-dotlabel" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>
+  </div>
+  <div class="m-map-count-badge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> localisée(s)</div>
+  <div id="saMapM"></div>
+</div>
 
 <!-- BOTTOM NAV -->
 <nav class="m-bottom-nav sa-bottom-nav">
@@ -368,11 +411,13 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=14"></script>
+<script src="../sa-shared.js?v=15"></script>
 <script>
 var filters = { transaction: '', type: '', ville: '', budgetMin: '', budgetMax: '', piecesMin: '', piecesMax: '', chambresMin: '', chambresMax: '', surfaceMin: '', surfaceMax: '', dpe: [], ges: [], motsCles: '' };
 var sortBy = 'recent';
 var allListings = [];
+var resultsMode = 'list';
+var lastResults = [];
 
 function toggleMenu() {
   document.getElementById('hamburger').classList.toggle('open');
@@ -512,7 +557,141 @@ function applyFilters() {
   var cnt = res.length;
   document.getElementById('resultsCount').textContent = cnt;
   document.getElementById('resultsPlural').textContent = cnt > 1 ? 's' : '';
-  renderListings(res);
+  lastResults = res;
+  if (resultsMode === 'map') {
+    updateMapMarkers(res);
+  } else {
+    renderListings(res);
+  }
+}
+
+/* ───────────────── vue carte ───────────────── */
+var saMapM = null;
+var mapMarkersLayerM = null;
+var poiLayersM = { ecoles:null, universites:null, commerces:null, parcs:null };
+var poiConfigM = {
+  ecoles:      { query:'["amenity"="school"]',                 color:'#1e6abf', icon:'ti-school',        label:'école' },
+  universites: { query:'["amenity"~"^(university|college)$"]', color:'#7c3aed', icon:'ti-building-bank', label:'université' },
+  commerces:   { query:'["shop"]',                              color:'#0a9e4f', icon:'ti-shopping-cart', label:'commerce' },
+  parcs:       { query:'["leisure"="park"]',                    color:'#2b9e6f', icon:'ti-trees',          label:'parc' }
+};
+
+function setResultsMode(mode) {
+  resultsMode = mode;
+  var listCont = document.getElementById('listingsContainer');
+  var mapC = document.getElementById('mapViewContainer');
+  var filterBar = document.getElementById('filterBar');
+  var mapBtn = document.getElementById('mapToggleBtn');
+  if (mode === 'map') {
+    listCont.style.display = 'none';
+    filterBar.style.display = 'none';
+    mapC.classList.add('show');
+    mapBtn.classList.add('active');
+    mapBtn.innerHTML = '<i class="ti ti-list"></i> Liste';
+    initMapM();
+    updateMapMarkers(lastResults);
+  } else {
+    mapC.classList.remove('show');
+    listCont.style.display = '';
+    filterBar.style.display = '';
+    mapBtn.classList.remove('active');
+    mapBtn.innerHTML = '<i class="ti ti-map-2"></i> Carte';
+    renderListings(lastResults);
+  }
+}
+
+function initMapM() {
+  if (saMapM) { setTimeout(function(){ saMapM.invalidateSize(); }, 0); return; }
+  saMapM = L.map('saMapM', { zoomControl:false }).setView([46.6, 2.4], 6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    maxZoom: 19
+  }).addTo(saMapM);
+  mapMarkersLayerM = L.layerGroup().addTo(saMapM);
+  saMapM.on('moveend', function(){
+    Object.keys(poiLayersM).forEach(function(k){ if (poiLayersM[k]) fetchPOIM(k); });
+  });
+  setTimeout(function(){ saMapM.invalidateSize(); }, 60);
+}
+
+function mapPopupHTMLM(l) {
+  var photoUrl = getPhotoUrl(l);
+  var grad = IMG_GRADIENTS_FALLBACK[l.img] || IMG_GRADIENTS_FALLBACK[l.transaction] || 'linear-gradient(135deg,#8b5a5a,#b87070)';
+  var safeId = String(l.id).replace(/'/g,'');
+  var price = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (l.transaction==='location'?'/mois':'') : 'Prix sur demande';
+  var title = l.titre || l.title || '';
+  return '<div class="m-map-popup-card" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')">' +
+    '<div class="m-map-popup-photo" style="' + (photoUrl ? "background-image:url('" + photoUrl.replace(/['"]/g,'') + "')" : 'background:' + grad) + '"></div>' +
+    '<div class="m-map-popup-body">' +
+      '<div class="m-map-popup-price">' + price + '</div>' +
+      '<div class="m-map-popup-title">' + title + '</div>' +
+      '<div class="m-map-popup-addr"><i class="ti ti-map-pin"></i> ' + (l.ville||'') + '</div>' +
+    '</div></div>';
+}
+
+function updateMapMarkers(results) {
+  if (!saMapM || !mapMarkersLayerM) return;
+  mapMarkersLayerM.clearLayers();
+  var withCoords = results.filter(function(l){ return l.lat && l.lng; });
+  var bounds = [];
+  withCoords.forEach(function(l){
+    var price = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (l.transaction==='location'?'/mois':'') : '—';
+    var icon = L.divIcon({
+      className: '',
+      html: '<div class="m-map-price-pill">' + price + '</div>',
+      iconSize: null,
+      iconAnchor: [0, 0]
+    });
+    var marker = L.marker([l.lat, l.lng], { icon: icon });
+    marker.bindPopup(mapPopupHTMLM(l), { closeButton: true, maxWidth: 210, minWidth: 190 });
+    marker.addTo(mapMarkersLayerM);
+    bounds.push([l.lat, l.lng]);
+  });
+  document.getElementById('mapResultsCount').textContent = withCoords.length;
+  if (bounds.length) {
+    saMapM.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+  } else {
+    saMapM.setView([46.6, 2.4], 6);
+  }
+}
+
+function togglePoiLayer(key, checked) {
+  if (!saMapM) return;
+  if (!checked) {
+    if (poiLayersM[key]) { saMapM.removeLayer(poiLayersM[key]); poiLayersM[key] = null; }
+    return;
+  }
+  poiLayersM[key] = L.layerGroup().addTo(saMapM);
+  fetchPOIM(key);
+}
+
+function fetchPOIM(key) {
+  if (!saMapM || !poiLayersM[key]) return;
+  var cfg = poiConfigM[key];
+  if (saMapM.getZoom() < 13) { return; }
+  var b = saMapM.getBounds();
+  var bbox = b.getSouth() + ',' + b.getWest() + ',' + b.getNorth() + ',' + b.getEast();
+  var q = '[out:json][timeout:15];(node' + cfg.query + '(' + bbox + ');way' + cfg.query + '(' + bbox + '););out center 150;';
+  fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: q })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (!poiLayersM[key]) return;
+      poiLayersM[key].clearLayers();
+      (data.elements || []).forEach(function(el){
+        var lat = el.lat || (el.center && el.center.lat);
+        var lng = el.lon || (el.center && el.center.lon);
+        if (!lat || !lng) return;
+        var name = (el.tags && el.tags.name) || (cfg.label.charAt(0).toUpperCase() + cfg.label.slice(1));
+        var icon = L.divIcon({
+          className: '',
+          html: '<div class="sa-poi-dot" style="background:' + cfg.color + '"><i class="ti ' + cfg.icon + '"></i></div>',
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
+        });
+        L.marker([lat, lng], { icon: icon }).bindTooltip(name, { direction: 'top', offset: [0, -14] }).addTo(poiLayersM[key]);
+      });
+    })
+    .catch(function(){});
 }
 
 var IMG_GRADIENTS_FALLBACK = {
