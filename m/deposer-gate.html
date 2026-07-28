@@ -21,7 +21,9 @@ body { background: #0c1622; min-height: 100vh; display: flex; flex-direction: co
 
 .gate-body { flex: 1; display: flex; flex-direction: column; padding: 6px var(--pad) 24px; }
 
-.gate-title { font-size: 22px; font-weight: 800; color: white; line-height: 1.2; letter-spacing: -.4px; margin-bottom: 4px; text-align: center; margin-top: 8px; }
+.gate-check { width: 56px; height: 56px; border-radius: 50%; border: 2px solid rgba(74,222,128,.35); background: rgba(74,222,128,.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.gate-check i { font-size: 24px; color: #4ade80; }
+.gate-title { font-size: 22px; font-weight: 800; color: white; line-height: 1.2; letter-spacing: -.4px; margin-bottom: 4px; text-align: center; }
 .gate-sub { font-size: 12.5px; color: rgba(255,255,255,.4); line-height: 1.5; margin-bottom: 16px; text-align: center; }
 
 .gate-tips { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
@@ -49,6 +51,7 @@ body { background: #0c1622; min-height: 100vh; display: flex; flex-direction: co
 </nav>
 
 <div class="gate-body">
+  <div class="gate-check"><i class="ti ti-circle-check"></i></div>
   <div class="gate-title">Vous êtes prêt à commencer</div>
   <div class="gate-sub">Avant de démarrer, quelques informations utiles pour que tout se passe bien.</div>
 
