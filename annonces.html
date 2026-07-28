@@ -20,6 +20,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
 <script src="sa-shared.js?v=15"></script>
@@ -226,23 +229,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-map-toggle-btn{display:flex;align-items:center;gap:7px;border:1.5px solid #e7e7e7;border-radius:9px;padding:9px 15px;font-size:13px;font-weight:700;color:#333;cursor:pointer;background:#fff;white-space:nowrap;font-family:inherit;transition:all .12s}
 .sa-map-toggle-btn:hover{border-color:#E84533;color:#E84533}
 .sa-map-toggle-btn.active{background:#E84533;border-color:#E84533;color:#fff}
-.sa-map-view{position:relative;height:calc(100vh - 250px);min-height:540px;border-radius:18px;overflow:hidden;border:1px solid #e8e8e8;box-shadow:0 1px 3px rgba(15,20,25,0.04)}
+.sa-map-view{display:none;height:calc(100vh - 250px);min-height:560px;border-radius:18px;overflow:hidden;border:1px solid #e8e8e8;box-shadow:0 1px 3px rgba(15,20,25,0.04)}
+.sa-map-view.split{display:flex}
+.sa-map-split-list{width:380px;flex-shrink:0;height:100%;overflow-y:auto;background:#fafafa;border-right:1px solid #ececec;padding:14px;display:flex;flex-direction:column;gap:12px}
+.sa-map-split-list .sa-card{flex-shrink:0}
+.sa-map-split-list .sa-card.sa-map-card-active{border-color:#E84533;box-shadow:0 8px 24px rgba(232,69,51,0.18)}
+.sa-map-split-empty{text-align:center;padding:2.4rem 1rem;color:#aaa;font-size:12.5px}
+.sa-map-split-empty i{font-size:26px;color:#ddd;margin-bottom:8px;display:block}
+.sa-map-split-mapwrap{position:relative;flex:1;height:100%;min-width:0}
 #saMap{width:100%;height:100%;background:#eef1f3;font-family:inherit}
-.sa-map-panel{position:absolute;top:16px;left:16px;z-index:1000;background:white;border-radius:14px;box-shadow:0 12px 32px rgba(15,20,25,0.16);padding:14px 16px;min-width:180px}
+.sa-map-panel{position:absolute;top:16px;left:16px;z-index:1000;background:white;border-radius:14px;box-shadow:0 12px 32px rgba(15,20,25,0.16);padding:14px 16px;min-width:180px;max-height:calc(100% - 32px);overflow-y:auto}
 .sa-map-panel-title{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .sa-map-panel-title i{color:#E84533;font-size:13px}
 .sa-poi-check{display:flex;align-items:center;gap:9px;padding:6px 0;font-size:13px;color:#333;cursor:pointer;font-weight:500}
 .sa-poi-check input{accent-color:#E84533;width:15px;height:15px;cursor:pointer;flex-shrink:0}
 .sa-poi-check .sa-poi-dotlabel{width:18px;height:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .sa-poi-check .sa-poi-dotlabel i{color:#fff;font-size:10px}
-.sa-map-count-badge{position:absolute;top:16px;right:16px;z-index:1000;background:white;border-radius:999px;box-shadow:0 8px 24px rgba(15,20,25,0.14);padding:9px 16px;font-size:12.5px;font-weight:700;color:#111;display:flex;align-items:center;gap:7px}
+.sa-map-count-badge{position:absolute;top:16px;right:16px;z-index:1000;background:white;border-radius:999px;box-shadow:0 8px 24px rgba(15,20,25,0.14);padding:9px 16px;font-size:12.5px;font-weight:700;color:#111;display:flex;align-items:center;gap:7px;white-space:nowrap}
 .sa-map-count-badge i{color:#E84533}
+.sa-map-count-badge.filtered{background:#fff0ee;color:#E84533}
+.sa-map-count-badge .sa-map-clear-zone{margin-left:4px;color:#E84533;cursor:pointer;text-decoration:underline;font-weight:700}
 .sa-map-nocoords{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:1000;background:rgba(17,17,17,0.88);color:#fff;font-size:12px;padding:9px 16px;border-radius:999px;display:none;align-items:center;gap:7px;white-space:nowrap}
 .sa-map-nocoords i{color:#ffb199}
+.sa-map-searcharea-btn{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:1000;background:#111;color:#fff;border:none;border-radius:999px;padding:10px 18px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;display:none;align-items:center;gap:7px;box-shadow:0 8px 22px rgba(0,0,0,0.25)}
+.sa-map-searcharea-btn:hover{background:#E84533}
+.sa-map-searcharea-btn i{font-size:14px}
+.sa-map-locate-btn{position:absolute;bottom:16px;right:16px;z-index:1000;background:white;border:none;border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 22px rgba(15,20,25,0.18);color:#333;font-size:18px}
+.sa-map-locate-btn:hover{color:#E84533}
 
 .sa-map-price-pill{background:#111;color:#fff;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,0.22);border:2px solid #fff;transform:translate(-50%,-100%);cursor:pointer;transition:transform .1s,background .1s}
 .sa-map-price-pill:hover, .sa-map-price-pill.sa-map-price-hover{background:#E84533;transform:translate(-50%,-100%) scale(1.08);z-index:1000!important}
 .sa-poi-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);transform:translate(-50%,-50%)}
+.sa-map-cluster{width:42px;height:42px;border-radius:50%;background:#E84533;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;border:3px solid #fff;box-shadow:0 3px 12px rgba(0,0,0,0.28)}
+.sa-map-me-dot{width:16px;height:16px;border-radius:50%;background:#1e6abf;border:3px solid #fff;box-shadow:0 0 0 4px rgba(30,106,191,0.28),0 2px 6px rgba(0,0,0,0.3)}
 
 .sa-map-popup-card{width:220px;cursor:pointer;font-family:inherit;margin:-13px -20px -13px -20px}
 .sa-map-popup-photo{height:120px;background-size:cover;background-position:center;background-color:#eee}
@@ -254,8 +273,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .leaflet-popup-content-wrapper{border-radius:14px;padding:0;overflow:hidden}
 .leaflet-popup-content{margin:0;width:auto!important}
 .leaflet-popup-tip{box-shadow:0 3px 10px rgba(0,0,0,0.15)}
+@media(max-width:980px){
+  .sa-map-split-list{width:320px}
+}
 @media(max-width:700px){
   .sa-map-view{height:calc(100vh - 300px);min-height:420px;border-radius:14px}
+  .sa-map-view.split{flex-direction:column}
+  .sa-map-split-list{width:100%;height:38%;border-right:none;border-bottom:1px solid #ececec}
+  .sa-map-split-mapwrap{height:62%}
   .sa-map-panel{min-width:150px;padding:11px 13px}
 }
 
@@ -630,17 +655,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
     <br><button onclick="resetFilters()">Réinitialiser les filtres</button>
   </div>
   <div class="sa-map-view" id="mapViewContainer" style="display:none">
-    <div class="sa-map-panel">
-      <div class="sa-map-panel-title"><i class="ti ti-map-pins"></i> Points d'intérêt</div>
-      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-ecoles" onchange="togglePoiLayer('ecoles',this.checked)"><span class="sa-poi-dotlabel" style="background:#1e6abf"><i class="ti ti-school"></i></span> Écoles</label>
-      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-universites" onchange="togglePoiLayer('universites',this.checked)"><span class="sa-poi-dotlabel" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>
-      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-commerces" onchange="togglePoiLayer('commerces',this.checked)"><span class="sa-poi-dotlabel" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>
-      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-parcs" onchange="togglePoiLayer('parcs',this.checked)"><span class="sa-poi-dotlabel" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>
-      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-transports" onchange="togglePoiLayer('transports',this.checked)"><span class="sa-poi-dotlabel" style="background:#e8ab00"><i class="ti ti-train"></i></span> Transports</label>
+    <div class="sa-map-split-list" id="mapSplitList"></div>
+    <div class="sa-map-split-mapwrap">
+      <div class="sa-map-panel">
+        <div class="sa-map-panel-title"><i class="ti ti-map-pins"></i> Points d'intérêt</div>
+        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-ecoles" onchange="togglePoiLayer('ecoles',this.checked)"><span class="sa-poi-dotlabel" style="background:#1e6abf"><i class="ti ti-school"></i></span> Écoles</label>
+        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-universites" onchange="togglePoiLayer('universites',this.checked)"><span class="sa-poi-dotlabel" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>
+        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-commerces" onchange="togglePoiLayer('commerces',this.checked)"><span class="sa-poi-dotlabel" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>
+        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-parcs" onchange="togglePoiLayer('parcs',this.checked)"><span class="sa-poi-dotlabel" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>
+        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-transports" onchange="togglePoiLayer('transports',this.checked)"><span class="sa-poi-dotlabel" style="background:#e8ab00"><i class="ti ti-train"></i></span> Transports</label>
+        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-sante" onchange="togglePoiLayer('sante',this.checked)"><span class="sa-poi-dotlabel" style="background:#e0245e"><i class="ti ti-first-aid-kit"></i></span> Santé</label>
+      </div>
+      <button class="sa-map-searcharea-btn" id="searchAreaBtn" onclick="searchThisArea()"><i class="ti ti-refresh"></i> Rechercher dans cette zone</button>
+      <div class="sa-map-count-badge" id="mapCountBadge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce(s) localisée(s)</div>
+      <div class="sa-map-nocoords" id="mapNoCoords"><i class="ti ti-info-circle"></i> Certaines annonces ne sont pas encore localisées sur la carte.</div>
+      <button class="sa-map-locate-btn" onclick="locateMe()" title="Me localiser"><i class="ti ti-current-location"></i></button>
+      <div id="saMap"></div>
     </div>
-    <div class="sa-map-count-badge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce(s) localisée(s)</div>
-    <div class="sa-map-nocoords" id="mapNoCoords"><i class="ti ti-info-circle"></i> Certaines annonces ne sont pas encore localisées sur la carte.</div>
-    <div id="saMap"></div>
   </div>
 </div>
 
@@ -950,6 +981,7 @@ function applyFilters(scrollToResults) {
     if (c.ville && !l.ville.toLowerCase().includes(c.ville)) return false;
     if (c.qTags.length && !c.qTags.every(t => (l.title || '').toLowerCase().includes(t.toLowerCase()) || (l.desc || '').toLowerCase().includes(t.toLowerCase()))) return false;
     if (c.equip2.length && !c.equip2.every(e => Array.isArray(l.equipements) && l.equipements.includes(e))) return false;
+    if (mapBoundsFilter && (!l.lat || !l.lng || !mapBoundsFilter.contains([l.lat, l.lng]))) return false;
     return true;
   });
 
@@ -979,7 +1011,11 @@ function runSearch() { applyFilters(true); }
 /* ───────────────── vue carte ───────────────── */
 let saMap = null;
 let mapMarkersLayer = null;
-let poiLayers = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null };
+let mapBoundsFilter = null;
+let lastProgrammaticMapAt = 0;
+function markMapProgrammatic() { lastProgrammaticMapAt = Date.now(); }
+const mapMarkersById = {};
+let poiLayers = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null, sante:null };
 const poiConfig = {
   ecoles:      { color:'#1e6abf', icon:'ti-school',        label:'école',
                  build:function(bbox){ return 'node["amenity"="school"](' + bbox + ');way["amenity"="school"](' + bbox + ');'; } },
@@ -990,7 +1026,9 @@ const poiConfig = {
   parcs:       { color:'#2b9e6f', icon:'ti-trees',         label:'parc',
                  build:function(bbox){ return 'node["leisure"="park"](' + bbox + ');way["leisure"="park"](' + bbox + ');'; } },
   transports:  { color:'#e8ab00', icon:'ti-train',         label:'transport',
-                 build:function(bbox){ return 'node["highway"="bus_stop"](' + bbox + ');node["railway"~"^(station|halt|tram_stop)$"](' + bbox + ');node["station"="subway"](' + bbox + ');'; } }
+                 build:function(bbox){ return 'node["highway"="bus_stop"](' + bbox + ');node["railway"~"^(station|halt|tram_stop)$"](' + bbox + ');node["station"="subway"](' + bbox + ');'; } },
+  sante:       { color:'#e0245e', icon:'ti-first-aid-kit', label:'établissement de santé',
+                 build:function(bbox){ return 'node["amenity"~"^(pharmacy|hospital|clinic|doctors)$"](' + bbox + ');way["amenity"~"^(hospital|clinic)$"](' + bbox + ');'; } }
 };
 
 function setResultsMode(mode) {
@@ -1000,17 +1038,21 @@ function setResultsMode(mode) {
   const mapC = document.getElementById('mapViewContainer');
   const viewToggle = document.getElementById('viewToggle');
   const mapBtn = document.getElementById('mapToggleBtn');
+  mapBoundsFilter = null;
+  document.getElementById('searchAreaBtn').style.display = 'none';
   if (mode === 'map') {
     grid.style.display = 'none';
     noRes.style.display = 'none';
     viewToggle.style.display = 'none';
-    mapC.style.display = 'block';
+    mapC.classList.add('split');
+    mapC.style.display = 'flex';
     mapBtn.classList.add('active');
     mapBtn.innerHTML = '<i class="ti ti-list"></i> Voir la liste';
     initMap();
     updateMapMarkers(lastResults);
   } else {
     grid.style.display = '';
+    mapC.classList.remove('split');
     mapC.style.display = 'none';
     viewToggle.style.display = 'flex';
     mapBtn.classList.remove('active');
@@ -1020,17 +1062,27 @@ function setResultsMode(mode) {
 }
 
 function initMap() {
-  if (saMap) { setTimeout(function(){ saMap.invalidateSize(); }, 0); return; }
+  if (saMap) { markMapProgrammatic(); setTimeout(function(){ markMapProgrammatic(); saMap.invalidateSize(); }, 0); return; }
   saMap = L.map('saMap', { zoomControl:true, scrollWheelZoom:true }).setView([46.6, 2.4], 6);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
     maxZoom: 19
   }).addTo(saMap);
-  mapMarkersLayer = L.layerGroup().addTo(saMap);
+  mapMarkersLayer = L.markerClusterGroup({
+    maxClusterRadius: 55,
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    iconCreateFunction: function(cluster){
+      return L.divIcon({ html: '<div class="sa-map-cluster">' + cluster.getChildCount() + '</div>', className: '', iconSize: L.point(42, 42) });
+    }
+  }).addTo(saMap);
   saMap.on('moveend', function(){
     Object.keys(poiLayers).forEach(function(k){ if (poiLayers[k]) fetchPOI(k); });
+    if (Date.now() - lastProgrammaticMapAt < 600) return;
+    if (resultsMode === 'map' && !mapBoundsFilter) document.getElementById('searchAreaBtn').style.display = 'flex';
   });
-  setTimeout(function(){ saMap.invalidateSize(); }, 60);
+  markMapProgrammatic();
+  setTimeout(function(){ markMapProgrammatic(); saMap.invalidateSize(); }, 60);
 }
 
 function mapPopupHTML(l) {
@@ -1049,6 +1101,7 @@ function mapPopupHTML(l) {
 function updateMapMarkers(results) {
   if (!saMap || !mapMarkersLayer) return;
   mapMarkersLayer.clearLayers();
+  Object.keys(mapMarkersById).forEach(function(k){ delete mapMarkersById[k]; });
   const withCoords = results.filter(function(l){ return l.lat && l.lng; });
   const bounds = [];
   withCoords.forEach(function(l){
@@ -1060,16 +1113,87 @@ function updateMapMarkers(results) {
     });
     const marker = L.marker([l.lat, l.lng], { icon: icon });
     marker.bindPopup(mapPopupHTML(l), { closeButton: true, maxWidth: 240, minWidth: 220, className: 'sa-map-popup' });
+    marker.on('click', function(){ highlightSplitCard(l.id); });
     marker.addTo(mapMarkersLayer);
+    mapMarkersById[l.id] = marker;
     bounds.push([l.lat, l.lng]);
   });
-  document.getElementById('mapResultsCount').textContent = withCoords.length;
-  document.getElementById('mapNoCoords').style.display = (results.length && withCoords.length < results.length) ? 'flex' : 'none';
-  if (bounds.length) {
-    saMap.fitBounds(bounds, { padding: [70, 70], maxZoom: 14 });
-  } else {
-    saMap.setView([46.6, 2.4], 6);
+  updateMapCountBadge(withCoords.length);
+  document.getElementById('mapNoCoords').style.display = (results.length && withCoords.length < results.length && !mapBoundsFilter) ? 'flex' : 'none';
+  renderSplitList(withCoords);
+  if (!mapBoundsFilter) {
+    markMapProgrammatic();
+    if (bounds.length) {
+      saMap.fitBounds(bounds, { padding: [70, 70], maxZoom: 14 });
+    } else {
+      saMap.setView([46.6, 2.4], 6);
+    }
   }
+}
+
+function updateMapCountBadge(count) {
+  const badge = document.getElementById('mapCountBadge');
+  if (mapBoundsFilter) {
+    badge.classList.add('filtered');
+    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> ' + count + ' dans cette zone <span class="sa-map-clear-zone" onclick="clearAreaFilter()">Réinitialiser</span>';
+  } else {
+    badge.classList.remove('filtered');
+    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">' + count + '</span> annonce(s) localisée(s)';
+  }
+}
+
+function renderSplitList(withCoords) {
+  const list = document.getElementById('mapSplitList');
+  if (!withCoords.length) {
+    list.innerHTML = '<div class="sa-map-split-empty"><i class="ti ti-map-off"></i>Aucune annonce localisée' + (mapBoundsFilter ? ' dans cette zone' : '') + '.</div>';
+    return;
+  }
+  list.innerHTML = withCoords.map(function(l){ return cardHTML(l, 'grid'); }).join('');
+  list.querySelectorAll('.sa-card').forEach(function(card){
+    const id = card.getAttribute('data-id');
+    card.addEventListener('mouseenter', function(){ toggleMarkerFocus(id, true); });
+    card.addEventListener('mouseleave', function(){ toggleMarkerFocus(id, false); });
+  });
+}
+
+function toggleMarkerFocus(id, focused) {
+  const marker = mapMarkersById[id];
+  if (!marker || !marker.getElement) return;
+  const el = marker.getElement();
+  const pill = el && el.querySelector('.sa-map-price-pill');
+  if (pill) pill.classList.toggle('sa-map-price-hover', focused);
+}
+
+function highlightSplitCard(id) {
+  document.querySelectorAll('#mapSplitList .sa-card').forEach(function(c){
+    c.classList.toggle('sa-map-card-active', c.getAttribute('data-id') === id);
+  });
+  const active = document.querySelector('#mapSplitList .sa-card[data-id="' + id + '"]');
+  if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function searchThisArea() {
+  mapBoundsFilter = saMap.getBounds();
+  document.getElementById('searchAreaBtn').style.display = 'none';
+  applyFilters();
+}
+
+function clearAreaFilter() {
+  mapBoundsFilter = null;
+  document.getElementById('searchAreaBtn').style.display = 'none';
+  applyFilters();
+}
+
+function locateMe() {
+  if (!navigator.geolocation) { SA.toast('Géolocalisation non disponible sur cet appareil', 'ti-alert-circle'); return; }
+  SA.toast('Recherche de votre position…', 'ti-current-location');
+  navigator.geolocation.getCurrentPosition(function(pos){
+    const ll = [pos.coords.latitude, pos.coords.longitude];
+    if (window.__saMeMarker) saMap.removeLayer(window.__saMeMarker);
+    window.__saMeMarker = L.marker(ll, { icon: L.divIcon({ className: '', html: '<div class="sa-map-me-dot"></div>', iconSize: [16, 16], iconAnchor: [8, 8] }), zIndexOffset: 1000 }).addTo(saMap);
+    markMapProgrammatic();
+    saMap.setView(ll, 13);
+  }, function(){ SA.toast("Impossible d'obtenir votre position", 'ti-alert-circle'); }, { timeout: 8000 });
 }
 
 function togglePoiLayer(key, checked) {
