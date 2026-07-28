@@ -463,7 +463,7 @@
       }
     }
     const addr = parseAddress(data.adresse);
-    const coords = await geocodeAddress(data.adresse);
+    const coords = (await geocodeAddress(data.adresse)) || (addr.ville ? await geocodeAddress(addr.ville) : null);
     const row = {
       owner_id:          _cache.user.id,
       type:              data.type,

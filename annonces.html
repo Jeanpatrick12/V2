@@ -636,6 +636,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
       <label class="sa-poi-check"><input type="checkbox" id="poiCheck-universites" onchange="togglePoiLayer('universites',this.checked)"><span class="sa-poi-dotlabel" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>
       <label class="sa-poi-check"><input type="checkbox" id="poiCheck-commerces" onchange="togglePoiLayer('commerces',this.checked)"><span class="sa-poi-dotlabel" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>
       <label class="sa-poi-check"><input type="checkbox" id="poiCheck-parcs" onchange="togglePoiLayer('parcs',this.checked)"><span class="sa-poi-dotlabel" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>
+      <label class="sa-poi-check"><input type="checkbox" id="poiCheck-transports" onchange="togglePoiLayer('transports',this.checked)"><span class="sa-poi-dotlabel" style="background:#e8ab00"><i class="ti ti-train"></i></span> Transports</label>
     </div>
     <div class="sa-map-count-badge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce(s) localisée(s)</div>
     <div class="sa-map-nocoords" id="mapNoCoords"><i class="ti ti-info-circle"></i> Certaines annonces ne sont pas encore localisées sur la carte.</div>
@@ -978,12 +979,18 @@ function runSearch() { applyFilters(true); }
 /* ───────────────── vue carte ───────────────── */
 let saMap = null;
 let mapMarkersLayer = null;
-let poiLayers = { ecoles:null, universites:null, commerces:null, parcs:null };
+let poiLayers = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null };
 const poiConfig = {
-  ecoles:      { query:'["amenity"="school"]',            color:'#1e6abf', icon:'ti-school',         label:'école' },
-  universites: { query:'["amenity"~"^(university|college)$"]', color:'#7c3aed', icon:'ti-building-bank', label:'université' },
-  commerces:   { query:'["shop"]',                          color:'#0a9e4f', icon:'ti-shopping-cart',  label:'commerce' },
-  parcs:       { query:'["leisure"="park"]',                color:'#2b9e6f', icon:'ti-trees',           label:'parc' }
+  ecoles:      { color:'#1e6abf', icon:'ti-school',        label:'école',
+                 build:function(bbox){ return 'node["amenity"="school"](' + bbox + ');way["amenity"="school"](' + bbox + ');'; } },
+  universites: { color:'#7c3aed', icon:'ti-building-bank', label:'université',
+                 build:function(bbox){ return 'node["amenity"~"^(university|college)$"](' + bbox + ');way["amenity"~"^(university|college)$"](' + bbox + ');'; } },
+  commerces:   { color:'#0a9e4f', icon:'ti-shopping-cart', label:'commerce',
+                 build:function(bbox){ return 'node["shop"](' + bbox + ');'; } },
+  parcs:       { color:'#2b9e6f', icon:'ti-trees',         label:'parc',
+                 build:function(bbox){ return 'node["leisure"="park"](' + bbox + ');way["leisure"="park"](' + bbox + ');'; } },
+  transports:  { color:'#e8ab00', icon:'ti-train',         label:'transport',
+                 build:function(bbox){ return 'node["highway"="bus_stop"](' + bbox + ');node["railway"~"^(station|halt|tram_stop)$"](' + bbox + ');node["station"="subway"](' + bbox + ');'; } }
 };
 
 function setResultsMode(mode) {
@@ -1084,7 +1091,7 @@ function fetchPOI(key) {
   }
   const b = saMap.getBounds();
   const bbox = b.getSouth() + ',' + b.getWest() + ',' + b.getNorth() + ',' + b.getEast();
-  const q = '[out:json][timeout:15];(node' + cfg.query + '(' + bbox + ');way' + cfg.query + '(' + bbox + '););out center 150;';
+  const q = '[out:json][timeout:15];(' + cfg.build(bbox) + ');out center 150;';
   fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: q })
     .then(function(r){ return r.json(); })
     .then(function(data){

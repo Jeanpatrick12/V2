@@ -246,6 +246,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
     <label class="m-poi-check"><input type="checkbox" id="poiCheck-universites" onchange="togglePoiLayer('universites',this.checked)"><span class="m-poi-dotlabel" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>
     <label class="m-poi-check"><input type="checkbox" id="poiCheck-commerces" onchange="togglePoiLayer('commerces',this.checked)"><span class="m-poi-dotlabel" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>
     <label class="m-poi-check"><input type="checkbox" id="poiCheck-parcs" onchange="togglePoiLayer('parcs',this.checked)"><span class="m-poi-dotlabel" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>
+    <label class="m-poi-check"><input type="checkbox" id="poiCheck-transports" onchange="togglePoiLayer('transports',this.checked)"><span class="m-poi-dotlabel" style="background:#e8ab00"><i class="ti ti-train"></i></span> Transports</label>
   </div>
   <div class="m-map-count-badge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> localisée(s)</div>
   <div id="saMapM"></div>
@@ -568,12 +569,18 @@ function applyFilters() {
 /* ───────────────── vue carte ───────────────── */
 var saMapM = null;
 var mapMarkersLayerM = null;
-var poiLayersM = { ecoles:null, universites:null, commerces:null, parcs:null };
+var poiLayersM = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null };
 var poiConfigM = {
-  ecoles:      { query:'["amenity"="school"]',                 color:'#1e6abf', icon:'ti-school',        label:'école' },
-  universites: { query:'["amenity"~"^(university|college)$"]', color:'#7c3aed', icon:'ti-building-bank', label:'université' },
-  commerces:   { query:'["shop"]',                              color:'#0a9e4f', icon:'ti-shopping-cart', label:'commerce' },
-  parcs:       { query:'["leisure"="park"]',                    color:'#2b9e6f', icon:'ti-trees',          label:'parc' }
+  ecoles:      { color:'#1e6abf', icon:'ti-school',        label:'école',
+                 build:function(bbox){ return 'node["amenity"="school"](' + bbox + ');way["amenity"="school"](' + bbox + ');'; } },
+  universites: { color:'#7c3aed', icon:'ti-building-bank', label:'université',
+                 build:function(bbox){ return 'node["amenity"~"^(university|college)$"](' + bbox + ');way["amenity"~"^(university|college)$"](' + bbox + ');'; } },
+  commerces:   { color:'#0a9e4f', icon:'ti-shopping-cart', label:'commerce',
+                 build:function(bbox){ return 'node["shop"](' + bbox + ');'; } },
+  parcs:       { color:'#2b9e6f', icon:'ti-trees',         label:'parc',
+                 build:function(bbox){ return 'node["leisure"="park"](' + bbox + ');way["leisure"="park"](' + bbox + ');'; } },
+  transports:  { color:'#e8ab00', icon:'ti-train',         label:'transport',
+                 build:function(bbox){ return 'node["highway"="bus_stop"](' + bbox + ');node["railway"~"^(station|halt|tram_stop)$"](' + bbox + ');node["station"="subway"](' + bbox + ');'; } }
 };
 
 function setResultsMode(mode) {
@@ -671,7 +678,7 @@ function fetchPOIM(key) {
   if (saMapM.getZoom() < 13) { return; }
   var b = saMapM.getBounds();
   var bbox = b.getSouth() + ',' + b.getWest() + ',' + b.getNorth() + ',' + b.getEast();
-  var q = '[out:json][timeout:15];(node' + cfg.query + '(' + bbox + ');way' + cfg.query + '(' + bbox + '););out center 150;';
+  var q = '[out:json][timeout:15];(' + cfg.build(bbox) + ');out center 150;';
   fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: q })
     .then(function(r){ return r.json(); })
     .then(function(data){
