@@ -151,14 +151,16 @@
 .sa-poi-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transform: translate(-50%,-50%); }
 .m-map-cluster { width: 38px; height: 38px; border-radius: 50%; background: var(--red); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; border: 3px solid #fff; box-shadow: 0 3px 10px rgba(0,0,0,0.28); }
 .m-map-me-dot { width: 14px; height: 14px; border-radius: 50%; background: #1e6abf; border: 3px solid #fff; box-shadow: 0 0 0 4px rgba(30,106,191,0.28), 0 2px 6px rgba(0,0,0,0.3); }
-.m-map-popup-card { width: 190px; margin: -13px -20px -13px -20px; }
-.m-map-popup-photo { height: 100px; background-size: cover; background-position: center; background-color: #eee; }
-.m-map-popup-body { padding: 9px 12px 11px; }
-.m-map-popup-price { font-size: 14px; font-weight: 800; color: #111; }
-.m-map-popup-title { font-size: 11.5px; color: #555; margin: 2px 0 4px; line-height: 1.4; }
-.m-map-popup-addr { font-size: 11px; color: #999; }
-.leaflet-popup-content-wrapper { border-radius: 13px; padding: 0; overflow: hidden; }
-.leaflet-popup-content { margin: 0; width: auto!important; }
+.m-map-popup-card { width: 200px; }
+.m-map-popup-photo { height: 110px; background-size: cover; background-position: center; background-color: #eee; }
+.m-map-popup-body { padding: 11px 13px 13px; }
+.m-map-popup-price { font-size: 14.5px; font-weight: 800; color: #111; }
+.m-map-popup-title { font-size: 11.5px; color: #555; margin: 3px 0 7px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.m-map-popup-addr { font-size: 11px; color: #999; margin-bottom: 10px; }
+.m-map-popup-btn { display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; background: var(--red); color: #fff; font-size: 12px; font-weight: 700; padding: 8px; border-radius: 8px; border: none; font-family: inherit; }
+.leaflet-popup-content-wrapper { border-radius: 15px; padding: 0; overflow: hidden; box-shadow: 0 14px 32px rgba(0,0,0,0.22); }
+.leaflet-popup-content { margin: 0!important; }
+.leaflet-popup-close-button { top: 8px!important; right: 8px!important; width: 24px; height: 24px; border-radius: 50%!important; background: rgba(255,255,255,0.94); display: flex!important; align-items: center; justify-content: center; font-size: 15px!important; color: #333!important; box-shadow: 0 2px 8px rgba(0,0,0,0.3); line-height: 1!important; }
 </style>
 </head>
 <body>
@@ -679,12 +681,13 @@ function mapPopupHTMLM(l) {
   var safeId = String(l.id).replace(/'/g,'');
   var price = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (l.transaction==='location'?'/mois':'') : 'Prix sur demande';
   var title = l.titre || l.title || '';
-  return '<div class="m-map-popup-card" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')">' +
+  return '<div class="m-map-popup-card">' +
     '<div class="m-map-popup-photo" style="' + (photoUrl ? "background-image:url('" + photoUrl.replace(/['"]/g,'') + "')" : 'background:' + grad) + '"></div>' +
     '<div class="m-map-popup-body">' +
       '<div class="m-map-popup-price">' + price + '</div>' +
       '<div class="m-map-popup-title">' + title + '</div>' +
       '<div class="m-map-popup-addr"><i class="ti ti-map-pin"></i> ' + (l.ville||'') + '</div>' +
+      '<button class="m-map-popup-btn" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')">Voir l\'annonce <i class="ti ti-arrow-right"></i></button>' +
     '</div></div>';
 }
 
@@ -705,7 +708,11 @@ function updateMapMarkers(results) {
       iconAnchor: [0, 0]
     });
     var marker = L.marker([l.lat, l.lng], { icon: icon });
-    marker.bindPopup(mapPopupHTMLM(l), { closeButton: true, maxWidth: 210, minWidth: 190 });
+    marker.bindPopup(mapPopupHTMLM(l), { closeButton: true, maxWidth: 200, minWidth: 200 });
+    marker.on('click', function(){
+      markMapProgrammaticM();
+      saMapM.setView([l.lat, l.lng], Math.max(saMapM.getZoom(), 15), { animate: true });
+    });
     marker.addTo(mapMarkersLayerM);
     bounds.push([l.lat, l.lng]);
   });
@@ -740,7 +747,11 @@ function togglePoiLayer(key, checked) {
 function fetchPOIM(key) {
   if (!saMapM || !poiLayersM[key]) return;
   var cfg = poiConfigM[key];
-  if (saMapM.getZoom() < 13) { return; }
+  if (saMapM.getZoom() < 13) {
+    markMapProgrammaticM();
+    saMapM.setView(saMapM.getCenter(), 13);
+    return;
+  }
   var b = saMapM.getBounds();
   var bbox = b.getSouth() + ',' + b.getWest() + ',' + b.getNorth() + ',' + b.getEast();
   var q = '[out:json][timeout:15];(' + cfg.build(bbox) + ');out center 150;';
