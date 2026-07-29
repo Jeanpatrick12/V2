@@ -285,6 +285,12 @@ function markSold(id, transaction){
       <textarea class="em-textarea" id="emDesc" rows="5" placeholder="Décrivez votre bien..."></textarea>
     </div>
 
+    <!-- Adresse -->
+    <div class="em-card">
+      <div class="em-label"><i class="ti ti-map-pin"></i> Adresse</div>
+      <input class="em-input" type="text" id="emAdresse" placeholder="Numéro et nom de rue, ville">
+    </div>
+
     <!-- Prix -->
     <div class="em-card">
       <div class="em-label"><i class="ti ti-currency-euro"></i> Prix</div>
@@ -375,7 +381,7 @@ function markSold(id, transaction){
 
     <div class="em-footer">
       <button class="m-btn m-btn-secondary" style="flex:1" onclick="closeEditModal()">Annuler</button>
-      <button class="m-btn m-btn-primary" style="flex:2" onclick="saveEdit()"><i class="ti ti-check"></i> Enregistrer les modifications</button>
+      <button class="m-btn m-btn-primary" id="emSaveBtn" style="flex:2" onclick="saveEdit()"><i class="ti ti-check"></i> Enregistrer les modifications</button>
     </div>
   </div>
 </div>
@@ -384,6 +390,7 @@ var _editId=null;
 var _emDpe=null;
 var _emGes=null;
 var _emNewPhotos=[];
+var _emOriginalAdresse='';
 var _bottomNavEl=null;
 var _bottomNavPlaceholder=null;
 
@@ -508,6 +515,8 @@ function openEditModal(id){
   _emCurrentPhotos=(l.photos&&l.photos.length?l.photos:(l.photo?[l.photo]:[])).map(function(p){return (p&&p.url)?p.url:p;});
 
   document.getElementById('emDesc').value=l.description||l.desc||'';
+  _emOriginalAdresse=l.adresse||'';
+  document.getElementById('emAdresse').value=_emOriginalAdresse;
   document.getElementById('emPrix').value=l.prix||l.price||'';
   document.getElementById('emSurface').value=l.surface||'';
   document.getElementById('emPieces').value=l.pieces||'';
@@ -565,44 +574,41 @@ function _emFitViewport(){
 window.addEventListener('resize', _emFitViewport);
 if(window.visualViewport) window.visualViewport.addEventListener('resize', _emFitViewport);
 
-function saveEdit(){
+async function saveEdit(){
   if(!_editId)return;
+  var btn=document.getElementById('emSaveBtn');
+  if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2"></i> Enregistrement…';}
   try{
-    var key='sa_listings';
-    var saved=JSON.parse(localStorage.getItem(key)||'[]');
-    var idx=saved.findIndex(function(x){return x.id===_editId;});
-    if(idx!==-1){
-      var f=saved[idx];
-      var desc=document.getElementById('emDesc').value;
-      var prix=document.getElementById('emPrix').value;
-      var surf=document.getElementById('emSurface').value;
-      var pieces=document.getElementById('emPieces').value;
-      var chambres=document.getElementById('emChambres').value;
-      var sdb=document.getElementById('emSdb').value;
-      var sde=document.getElementById('emSde').value;
-      var annee=document.getElementById('emAnnee').value;
-      var facture=document.getElementById('emFacture').value;
-      var etat=document.getElementById('emEtat').value;
-      if(desc)f.description=desc;
-      if(prix)f.prix=parseFloat(prix);
-      if(surf)f.surface=parseFloat(surf);
-      if(pieces)f.pieces=parseInt(pieces);
-      if(chambres)f.chambres=parseInt(chambres);
-      if(sdb)f.sdb=parseInt(sdb);
-      if(sde)f.sde=parseInt(sde);
-      if(annee)f.annee=parseInt(annee);
-      if(facture)f.factureEnergie=parseFloat(facture);
-      if(etat)f.etatGeneral=etat;
-      if(_emDpe)f.dpe=_emDpe;
-      if(_emGes)f.ges=_emGes;
-      var equip=[];
-      document.querySelectorAll('#emFeatures input[type=checkbox]:checked').forEach(function(cb){equip.push(cb.value);});
-      f.equipements=equip;
-      var allPhotos=_emCurrentPhotos.concat(_emNewPhotos);
-      if(allPhotos.length){f.photos=allPhotos;f.photo=allPhotos[0];}
-      localStorage.setItem(key,JSON.stringify(saved));
+    var equip=[];
+    document.querySelectorAll('#emFeatures input[type=checkbox]:checked').forEach(function(cb){equip.push(cb.value);});
+    var allPhotos=_emCurrentPhotos.concat(_emNewPhotos);
+    var newAdresse=document.getElementById('emAdresse').value.trim();
+    var patch={
+      desc: document.getElementById('emDesc').value,
+      price: parseFloat(document.getElementById('emPrix').value) || 0,
+      surface: parseFloat(document.getElementById('emSurface').value) || 0,
+      pieces: document.getElementById('emPieces').value !== '' ? parseInt(document.getElementById('emPieces').value,10) : null,
+      chambres: document.getElementById('emChambres').value !== '' ? parseInt(document.getElementById('emChambres').value,10) : null,
+      sdb: document.getElementById('emSdb').value !== '' ? parseInt(document.getElementById('emSdb').value,10) : null,
+      sallesEau: document.getElementById('emSde').value !== '' ? parseInt(document.getElementById('emSde').value,10) : null,
+      anneeConstruction: document.getElementById('emAnnee').value !== '' ? parseInt(document.getElementById('emAnnee').value,10) : null,
+      factureEnergie: document.getElementById('emFacture').value !== '' ? parseFloat(document.getElementById('emFacture').value) : null,
+      etatGeneral: document.getElementById('emEtat').value || null,
+      dpe: _emDpe, ges: _emGes,
+      equipements: equip,
+      photos: allPhotos
+    };
+    if(newAdresse !== _emOriginalAdresse){
+      if(btn) btn.innerHTML='<i class="ti ti-loader-2"></i> Localisation de l\'adresse…';
+      patch.adresse=newAdresse;
     }
-  }catch(e){}
+    await SA.updateListing(_editId, patch);
+    if(SA.toast) SA.toast('Annonce mise à jour', 'ti-circle-check');
+  }catch(e){
+    if(SA.toast) SA.toast('Erreur : ' + (e && e.message || 'inconnue'), 'ti-alert-circle');
+    if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-check"></i> Enregistrer les modifications';}
+    return;
+  }
   closeEditModal();
   window.location.reload();
 }

@@ -534,6 +534,16 @@
     if (patch.dpe !== undefined)                dbPatch.dpe = patch.dpe;
     if (patch.ges !== undefined)                dbPatch.ges = patch.ges;
     if (patch.equipements !== undefined)        dbPatch.equipements = patch.equipements;
+    if (patch.adresse !== undefined) {
+      const addr = parseAddress(patch.adresse);
+      const coords = (await geocodeAddress(patch.adresse)) || (addr.ville ? await geocodeAddress(addr.ville) : null);
+      dbPatch.adresse = patch.adresse || "";
+      dbPatch.ville = addr.ville;
+      dbPatch.postal = addr.postal;
+      dbPatch.lat = coords ? coords.lat : null;
+      dbPatch.lng = coords ? coords.lng : null;
+      patch = Object.assign({}, patch, { ville: addr.ville, postal: addr.postal, lat: dbPatch.lat, lng: dbPatch.lng });
+    }
     // Photos : upload les nouvelles (base64) et conserver les URLs existantes
     if (patch.photos !== undefined) {
       const uploadedPhotos = [];

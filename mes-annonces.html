@@ -320,6 +320,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
       <div class="sa-edit-section-title"><i class="ti ti-align-left"></i> Description</div>
       <div class="sa-efield"><textarea id="eDesc"></textarea></div>
 
+      <div class="sa-edit-section-title"><i class="ti ti-map-pin"></i> Adresse</div>
+      <div class="sa-efield"><input type="text" id="eAdresse" placeholder="Numéro et nom de rue, ville"></div>
+
       <div class="sa-edit-section-title"><i class="ti ti-currency-euro"></i> Prix</div>
       <div class="sa-efield"><input type="number" id="ePrice"></div>
 
@@ -378,6 +381,7 @@ function photoUrl(p) { return p && (p.url || p); }
 let editingId = null;
 let ePhotos = [];
 let eDpe = null, eGes = null;
+let eOriginalAdresse = '';
 
 function renderStats() {
   const listings = SA.getUserListings();
@@ -633,6 +637,8 @@ function openEdit(id) {
   renderEPhotos();
 
   document.getElementById('eDesc').value = l.desc || '';
+  eOriginalAdresse = l.adresse || '';
+  document.getElementById('eAdresse').value = eOriginalAdresse;
   document.getElementById('ePrice').value = l.price || '';
   document.getElementById('eSurface').value = l.surface || '';
   document.getElementById('ePieces').value = l.pieces || '';
@@ -667,7 +673,8 @@ async function saveEdit() {
   btn.innerHTML = '<i class="ti ti-loader-2"></i> Enregistrement…';
   try {
     const equip = Array.from(document.querySelectorAll('#eEquip input:checked')).map(i => i.value);
-    await SA.updateListing(editingId, {
+    const newAdresse = document.getElementById('eAdresse').value.trim();
+    const patch = {
       desc: document.getElementById('eDesc').value,
       price: parseFloat(document.getElementById('ePrice').value) || 0,
       surface: parseFloat(document.getElementById('eSurface').value) || 0,
@@ -677,7 +684,12 @@ async function saveEdit() {
       dpe: eDpe, ges: eGes,
       equipements: equip,
       photos: ePhotos
-    });
+    };
+    if (newAdresse !== eOriginalAdresse) {
+      btn.innerHTML = '<i class="ti ti-loader-2"></i> Localisation de l\'adresse…';
+      patch.adresse = newAdresse;
+    }
+    await SA.updateListing(editingId, patch);
     SA.toast('Annonce mise à jour', 'ti-circle-check');
     closeEdit();
     renderStats();
