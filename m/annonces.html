@@ -588,18 +588,12 @@ var lastProgrammaticMapAtM = 0;
 function markMapProgrammaticM() { lastProgrammaticMapAtM = Date.now(); }
 var poiLayersM = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null, sante:null };
 var poiConfigM = {
-  ecoles:      { color:'#1e6abf', icon:'ti-school',        label:'école',
-                 build:function(bbox){ return 'node["amenity"="school"](' + bbox + ');way["amenity"="school"](' + bbox + ');'; } },
-  universites: { color:'#7c3aed', icon:'ti-building-bank', label:'université',
-                 build:function(bbox){ return 'node["amenity"~"^(university|college)$"](' + bbox + ');way["amenity"~"^(university|college)$"](' + bbox + ');'; } },
-  commerces:   { color:'#0a9e4f', icon:'ti-shopping-cart', label:'commerce',
-                 build:function(bbox){ return 'node["shop"](' + bbox + ');'; } },
-  parcs:       { color:'#2b9e6f', icon:'ti-trees',         label:'parc',
-                 build:function(bbox){ return 'node["leisure"="park"](' + bbox + ');way["leisure"="park"](' + bbox + ');'; } },
-  transports:  { color:'#e8ab00', icon:'ti-train',         label:'transport',
-                 build:function(bbox){ return 'node["highway"="bus_stop"](' + bbox + ');node["railway"~"^(station|halt|tram_stop)$"](' + bbox + ');node["station"="subway"](' + bbox + ');'; } },
-  sante:       { color:'#e0245e', icon:'ti-first-aid-kit', label:'établissement de santé',
-                 build:function(bbox){ return 'node["amenity"~"^(pharmacy|hospital|clinic|doctors)$"](' + bbox + ');way["amenity"~"^(hospital|clinic)$"](' + bbox + ');'; } }
+  ecoles:      { color:'#1e6abf', icon:'ti-school',        label:'école',        category:'education.school' },
+  universites: { color:'#7c3aed', icon:'ti-building-bank', label:'université',   category:'education.university' },
+  commerces:   { color:'#0a9e4f', icon:'ti-shopping-cart', label:'commerce',     category:'commercial' },
+  parcs:       { color:'#2b9e6f', icon:'ti-trees',         label:'parc',         category:'leisure.park' },
+  transports:  { color:'#e8ab00', icon:'ti-train',         label:'transport',    category:'public_transport' },
+  sante:       { color:'#e0245e', icon:'ti-first-aid-kit', label:'établissement de santé', category:'healthcare' }
 };
 
 function setResultsMode(mode) {
@@ -735,21 +729,6 @@ function updateMapMarkers(results) {
   }
 }
 
-var OVERPASS_ENDPOINTS_M = [
-  'https://overpass-api.de/api/interpreter',
-  'https://overpass.kumi.systems/api/interpreter',
-  'https://overpass.openstreetmap.ru/api/interpreter'
-];
-function overpassFetchM(query, idx) {
-  idx = idx || 0;
-  if (idx >= OVERPASS_ENDPOINTS_M.length) return Promise.reject(new Error('overpass-unavailable'));
-  var ctrl = new AbortController();
-  var timer = setTimeout(function(){ ctrl.abort(); }, 7000);
-  return fetch(OVERPASS_ENDPOINTS_M[idx], { method: 'POST', body: query, signal: ctrl.signal })
-    .then(function(r){ clearTimeout(timer); if (!r.ok) throw new Error('bad-status'); return r.json(); })
-    .catch(function(){ clearTimeout(timer); return overpassFetchM(query, idx + 1); });
-}
-
 function togglePoiLayer(key, checked) {
   if (!saMapM) return;
   if (!checked) {
@@ -772,17 +751,22 @@ function fetchPOIM(key) {
     return;
   }
   var b = saMapM.getBounds();
-  var bbox = b.getSouth() + ',' + b.getWest() + ',' + b.getNorth() + ',' + b.getEast();
-  var q = '[out:json][timeout:15];(' + cfg.build(bbox) + ');out center 150;';
-  overpassFetchM(q)
+  var rect = b.getWest() + ',' + b.getSouth() + ',' + b.getEast() + ',' + b.getNorth();
+  var url = 'https://api.geoapify.com/v2/places?categories=' + encodeURIComponent(cfg.category) +
+    '&filter=rect:' + rect + '&limit=100&apiKey=' + SA_CONFIG.geoapifyKey;
+  var ctrl = new AbortController();
+  var timer = setTimeout(function(){ ctrl.abort(); }, 15000);
+  fetch(url, { signal: ctrl.signal })
+    .then(function(r){ clearTimeout(timer); if (!r.ok) throw new Error('bad-status'); return r.json(); })
     .then(function(data){
       if (!poiLayersM[key]) return;
       poiLayersM[key].clearLayers();
-      (data.elements || []).forEach(function(el){
-        var lat = el.lat || (el.center && el.center.lat);
-        var lng = el.lon || (el.center && el.center.lon);
+      (data.features || []).forEach(function(f){
+        var coords = f.geometry && f.geometry.coordinates;
+        if (!coords) return;
+        var lng = coords[0], lat = coords[1];
         if (!lat || !lng) return;
-        var name = (el.tags && el.tags.name) || (cfg.label.charAt(0).toUpperCase() + cfg.label.slice(1));
+        var name = (f.properties && f.properties.name) || (cfg.label.charAt(0).toUpperCase() + cfg.label.slice(1));
         var icon = L.divIcon({
           className: '',
           html: '<div class="sa-poi-dot" style="background:' + cfg.color + '"><i class="ti ' + cfg.icon + '"></i></div>',
@@ -792,7 +776,7 @@ function fetchPOIM(key) {
         L.marker([lat, lng], { icon: icon }).bindTooltip(name, { direction: 'top', offset: [0, -14] }).addTo(poiLayersM[key]);
       });
     })
-    .catch(function(){});
+    .catch(function(){ clearTimeout(timer); });
 }
 
 var IMG_GRADIENTS_FALLBACK = {
