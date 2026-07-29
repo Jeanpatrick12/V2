@@ -11,8 +11,16 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="m.css">
 <style>
-#detailMapM { width: 100%; height: 190px; border-radius: 10px; overflow: hidden; margin-top: 12px; background: #eef1f3; }
+.m-detail-map-wrap { position: relative; margin-top: 12px; border-radius: 10px; overflow: hidden; }
+#detailMapM { width: 100%; height: 280px; background: #eef1f3; }
 .m-detail-map-pin { background: #111; color: #fff; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; box-shadow: 0 3px 8px rgba(0,0,0,0.22); border: 2px solid #fff; transform: translate(-50%,-100%); }
+.m-detail-poi-panel { position: absolute; top: 10px; left: 10px; z-index: 500; background: white; border-radius: 10px; box-shadow: 0 8px 20px rgba(15,20,25,0.16); padding: 8px 10px; max-width: 130px; }
+.m-detail-poi-title { font-size: 9px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; }
+.m-detail-poi-check { display: flex; align-items: center; gap: 6px; padding: 3px 0; font-size: 10.5px; color: #333; font-weight: 500; }
+.m-detail-poi-check input { accent-color: var(--red); width: 12px; height: 12px; flex-shrink: 0; }
+.m-detail-poi-dot { width: 13px; height: 13px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-detail-poi-dot i { color: #fff; font-size: 7px; }
+.sa-poi-dot { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transform: translate(-50%,-50%); }
 .m-gallery {
   position: relative; width: 100%; height: 260px;
   background: linear-gradient(135deg,#e8e8e8,#d0d0d0); overflow: hidden;
@@ -531,7 +539,20 @@ function render(l) {
           (!(l.adresse||l.adresseComplete||l.rue) ? '<div style="font-size:13px;color:var(--text2)">' + (l.ville||'') + (l.code_postal ? ' (' + l.code_postal + ')' : '') + '</div>' : (l.code_postal ? '<div style="font-size:12px;color:var(--text3)">' + l.code_postal + '</div>' : '')) +
         '</div>' +
       '</div>' +
-      (l.lat && l.lng ? '<div id="detailMapM"></div>' : '') +
+      (l.lat && l.lng ? (
+        '<div class="m-detail-map-wrap">' +
+          '<div class="m-detail-poi-panel">' +
+            '<div class="m-detail-poi-title">À proximité</div>' +
+            '<label class="m-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetailM(\'ecoles\',this.checked)"><span class="m-detail-poi-dot" style="background:#1e6abf"><i class="ti ti-school"></i></span> Écoles</label>' +
+            '<label class="m-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetailM(\'universites\',this.checked)"><span class="m-detail-poi-dot" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>' +
+            '<label class="m-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetailM(\'commerces\',this.checked)"><span class="m-detail-poi-dot" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>' +
+            '<label class="m-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetailM(\'parcs\',this.checked)"><span class="m-detail-poi-dot" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>' +
+            '<label class="m-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetailM(\'transports\',this.checked)"><span class="m-detail-poi-dot" style="background:#e8ab00"><i class="ti ti-train"></i></span> Transports</label>' +
+            '<label class="m-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetailM(\'sante\',this.checked)"><span class="m-detail-poi-dot" style="background:#e0245e"><i class="ti ti-first-aid-kit"></i></span> Santé</label>' +
+          '</div>' +
+          '<div id="detailMapM"></div>' +
+        '</div>'
+      ) : '') +
       '<button onclick="window.open(\'https://maps.google.com/?q=\'+encodeURIComponent(\'' + (l.adresse||l.ville||'') + '\'),\'_blank\')" style="width:100%;margin-top:12px;padding:18px 16px;background:var(--bg);border:1px solid var(--border);border-radius:12px;font-size:15px;font-weight:700;color:var(--text2);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-family:inherit"><i class="ti ti-map-2" style="color:var(--red)"></i> Voir sur Google Maps</button>' +
     '</div>' +
 
@@ -590,9 +611,21 @@ function render(l) {
   initDetailMapM(l);
 }
 
+var detailMapM = null;
+var poiLayersDetailM = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null, sante:null };
+var poiConfigDetailM = {
+  ecoles:      { color:'#1e6abf', icon:'ti-school',        label:'école',        category:'education.school' },
+  universites: { color:'#7c3aed', icon:'ti-building-bank', label:'université',   category:'education.university' },
+  commerces:   { color:'#0a9e4f', icon:'ti-shopping-cart', label:'commerce',     category:'commercial' },
+  parcs:       { color:'#2b9e6f', icon:'ti-trees',         label:'parc',         category:'leisure.park' },
+  transports:  { color:'#e8ab00', icon:'ti-train',         label:'transport',    category:'public_transport' },
+  sante:       { color:'#e0245e', icon:'ti-first-aid-kit', label:'établissement de santé', category:'healthcare' }
+};
+
 function initDetailMapM(l) {
   if (!l.lat || !l.lng || !document.getElementById('detailMapM')) return;
   var map = L.map('detailMapM', { zoomControl: false, scrollWheelZoom: false }).setView([l.lat, l.lng], 15);
+  detailMapM = map;
   map.attributionControl.setPrefix(false);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
@@ -605,7 +638,52 @@ function initDetailMapM(l) {
     iconAnchor: [0, 0]
   });
   L.marker([l.lat, l.lng], { icon: icon }).addTo(map);
+  map.on('moveend', function(){
+    Object.keys(poiLayersDetailM).forEach(function(k){ if (poiLayersDetailM[k]) fetchPOIDetailM(k); });
+  });
   setTimeout(function(){ map.invalidateSize(); }, 60);
+}
+
+function togglePoiLayerDetailM(key, checked) {
+  if (!detailMapM) return;
+  if (!checked) {
+    if (poiLayersDetailM[key]) { detailMapM.removeLayer(poiLayersDetailM[key]); poiLayersDetailM[key] = null; }
+    return;
+  }
+  poiLayersDetailM[key] = L.layerGroup().addTo(detailMapM);
+  fetchPOIDetailM(key);
+}
+
+function fetchPOIDetailM(key) {
+  if (!detailMapM || !poiLayersDetailM[key]) return;
+  var cfg = poiConfigDetailM[key];
+  var b = detailMapM.getBounds();
+  var rect = b.getWest() + ',' + b.getSouth() + ',' + b.getEast() + ',' + b.getNorth();
+  var url = 'https://api.geoapify.com/v2/places?categories=' + encodeURIComponent(cfg.category) +
+    '&filter=rect:' + rect + '&limit=60&apiKey=' + SA_CONFIG.geoapifyKey;
+  var ctrl = new AbortController();
+  var timer = setTimeout(function(){ ctrl.abort(); }, 15000);
+  fetch(url, { signal: ctrl.signal })
+    .then(function(r){ clearTimeout(timer); if (!r.ok) throw new Error('bad-status'); return r.json(); })
+    .then(function(data){
+      if (!poiLayersDetailM[key]) return;
+      poiLayersDetailM[key].clearLayers();
+      (data.features || []).forEach(function(f){
+        var coords = f.geometry && f.geometry.coordinates;
+        if (!coords) return;
+        var lng = coords[0], lat = coords[1];
+        if (!lat || !lng) return;
+        var name = (f.properties && f.properties.name) || (cfg.label.charAt(0).toUpperCase() + cfg.label.slice(1));
+        var icon = L.divIcon({
+          className: '',
+          html: '<div class="sa-poi-dot" style="background:' + cfg.color + '"><i class="ti ' + cfg.icon + '"></i></div>',
+          iconSize: [22, 22],
+          iconAnchor: [11, 11]
+        });
+        L.marker([lat, lng], { icon: icon }).bindTooltip(name, { direction: 'top', offset: [0, -13] }).addTo(poiLayersDetailM[key]);
+      });
+    })
+    .catch(function(){ clearTimeout(timer); });
 }
 
 function loadAvisSectionListing(listingId) {

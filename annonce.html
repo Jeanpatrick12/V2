@@ -221,9 +221,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-quartier-pin span{font-size:12.5px;font-weight:700;color:#333;background:white;padding:5px 12px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
 .sa-maps-btn{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:#111;color:#fff;border:none;padding:9px 16px;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;font-family:inherit;box-shadow:0 4px 10px rgba(0,0,0,0.18);z-index:500}
 .sa-maps-btn:hover{background:#E84533}
-.sa-detail-map-wrap{margin-top:14px;border-radius:16px;overflow:hidden;position:relative;height:230px;border:1px solid #efe6e3}
+.sa-detail-map-wrap{margin-top:14px;border-radius:16px;overflow:hidden;position:relative;height:340px;border:1px solid #efe6e3}
 #detailMap{width:100%;height:100%;background:#eef1f3;font-family:inherit}
 .sa-detail-map-pin{background:#111;color:#fff;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,0.22);border:2px solid #fff;transform:translate(-50%,-100%)}
+.sa-detail-poi-panel{position:absolute;top:12px;left:12px;z-index:500;background:white;border-radius:12px;box-shadow:0 8px 22px rgba(15,20,25,0.16);padding:10px 12px;max-width:150px}
+.sa-detail-poi-title{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.sa-detail-poi-check{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:11.5px;color:#333;cursor:pointer;font-weight:500}
+.sa-detail-poi-check input{accent-color:#E84533;width:13px;height:13px;cursor:pointer;flex-shrink:0}
+.sa-detail-poi-dot{width:15px;height:15px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-detail-poi-dot i{color:#fff;font-size:8px}
+.sa-poi-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);transform:translate(-50%,-50%)}
 .sa-similar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .sa-mini-card{border:1px solid #e8e8e8;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .15s;background:white}
 .sa-mini-card:hover{border-color:#E84533;box-shadow:0 8px 24px rgba(232,69,51,0.1);transform:translateY(-2px)}
@@ -682,6 +689,15 @@ function render() {
           </div>
           ${l.lat && l.lng ? `
           <div class="sa-detail-map-wrap">
+            <div class="sa-detail-poi-panel">
+              <div class="sa-detail-poi-title">À proximité</div>
+              <label class="sa-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetail('ecoles',this.checked)"><span class="sa-detail-poi-dot" style="background:#1e6abf"><i class="ti ti-school"></i></span> Écoles</label>
+              <label class="sa-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetail('universites',this.checked)"><span class="sa-detail-poi-dot" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>
+              <label class="sa-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetail('commerces',this.checked)"><span class="sa-detail-poi-dot" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>
+              <label class="sa-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetail('parcs',this.checked)"><span class="sa-detail-poi-dot" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>
+              <label class="sa-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetail('transports',this.checked)"><span class="sa-detail-poi-dot" style="background:#e8ab00"><i class="ti ti-train"></i></span> Transports</label>
+              <label class="sa-detail-poi-check"><input type="checkbox" onchange="togglePoiLayerDetail('sante',this.checked)"><span class="sa-detail-poi-dot" style="background:#e0245e"><i class="ti ti-first-aid-kit"></i></span> Santé</label>
+            </div>
             <div id="detailMap"></div>
             <button class="sa-maps-btn" onclick="openInMaps()"><i class="ti ti-external-link"></i> Ouvrir dans Google Maps</button>
           </div>` : `
@@ -743,9 +759,21 @@ function render() {
   window.__generalFactsCount = generalFacts.length;
 }
 
+let detailMap = null;
+const poiLayersDetail = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null, sante:null };
+const poiConfigDetail = {
+  ecoles:      { color:'#1e6abf', icon:'ti-school',        label:'école',        category:'education.school' },
+  universites: { color:'#7c3aed', icon:'ti-building-bank', label:'université',   category:'education.university' },
+  commerces:   { color:'#0a9e4f', icon:'ti-shopping-cart', label:'commerce',     category:'commercial' },
+  parcs:       { color:'#2b9e6f', icon:'ti-trees',         label:'parc',         category:'leisure.park' },
+  transports:  { color:'#e8ab00', icon:'ti-train',         label:'transport',    category:'public_transport' },
+  sante:       { color:'#e0245e', icon:'ti-first-aid-kit', label:'établissement de santé', category:'healthcare' }
+};
+
 function initDetailMap(l) {
   if (!l.lat || !l.lng || !document.getElementById('detailMap')) return;
   const map = L.map('detailMap', { zoomControl: true, scrollWheelZoom: false, dragging: true }).setView([l.lat, l.lng], 15);
+  detailMap = map;
   L.control.zoom({ position: 'topright' }).addTo(map);
   map.attributionControl.setPrefix(false);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -759,7 +787,52 @@ function initDetailMap(l) {
     iconAnchor: [0, 0]
   });
   L.marker([l.lat, l.lng], { icon: icon }).addTo(map);
+  map.on('moveend', function(){
+    Object.keys(poiLayersDetail).forEach(function(k){ if (poiLayersDetail[k]) fetchPOIDetail(k); });
+  });
   setTimeout(function(){ map.invalidateSize(); }, 60);
+}
+
+function togglePoiLayerDetail(key, checked) {
+  if (!detailMap) return;
+  if (!checked) {
+    if (poiLayersDetail[key]) { detailMap.removeLayer(poiLayersDetail[key]); poiLayersDetail[key] = null; }
+    return;
+  }
+  poiLayersDetail[key] = L.layerGroup().addTo(detailMap);
+  fetchPOIDetail(key);
+}
+
+function fetchPOIDetail(key) {
+  if (!detailMap || !poiLayersDetail[key]) return;
+  const cfg = poiConfigDetail[key];
+  const b = detailMap.getBounds();
+  const rect = b.getWest() + ',' + b.getSouth() + ',' + b.getEast() + ',' + b.getNorth();
+  const url = 'https://api.geoapify.com/v2/places?categories=' + encodeURIComponent(cfg.category) +
+    '&filter=rect:' + rect + '&limit=60&apiKey=' + SA_CONFIG.geoapifyKey;
+  const ctrl = new AbortController();
+  const timer = setTimeout(function(){ ctrl.abort(); }, 15000);
+  fetch(url, { signal: ctrl.signal })
+    .then(function(r){ clearTimeout(timer); if (!r.ok) throw new Error('bad-status'); return r.json(); })
+    .then(function(data){
+      if (!poiLayersDetail[key]) return;
+      poiLayersDetail[key].clearLayers();
+      (data.features || []).forEach(function(f){
+        const coords = f.geometry && f.geometry.coordinates;
+        if (!coords) return;
+        const lng = coords[0], lat = coords[1];
+        if (!lat || !lng) return;
+        const name = (f.properties && f.properties.name) || (cfg.label.charAt(0).toUpperCase() + cfg.label.slice(1));
+        const icon = L.divIcon({
+          className: '',
+          html: '<div class="sa-poi-dot" style="background:' + cfg.color + '"><i class="ti ' + cfg.icon + '"></i></div>',
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
+        });
+        L.marker([lat, lng], { icon: icon }).bindTooltip(SA.escapeHtml(name), { direction: 'top', offset: [0, -14] }).addTo(poiLayersDetail[key]);
+      });
+    })
+    .catch(function(){ clearTimeout(timer); });
 }
 
 function loadAvisSectionListing(listingId) {
@@ -940,7 +1013,6 @@ function renderContact(l) {
         <textarea id="msgInput">Bonjour, votre bien m'intéresse, serait-il possible d'organiser une visite ?</textarea>
         <button class="sa-contact-send" onclick="sendContactMessage('${l.id}')"><i class="ti ti-send"></i> Envoyer un message</button>
       </div>
-      <div class="sa-contact-privacy"><i class="ti ti-shield-lock"></i> Vos coordonnées restent privées. C'est l'annonceur qui décide, personne par personne, de partager les siennes.</div>
       <a href="aide-signaler?type=annonce&target=${l.id}" target="_blank" style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px;background:#fff5f4;border:1px solid #ffd8d3;border-radius:9px;padding:9px 12px;font-size:12px;font-weight:600;color:#E84533;text-decoration:none"><i class="ti ti-flag"></i> Cette annonce semble venir d'une agence ? Signalez-la</a>
       <div class="sa-contact-privacy" style="margin-top:6px"><i class="ti ti-files"></i><span>Préparez votre visite ou votre offre avec nos <a href="acheteur" target="_blank" style="color:#E84533;font-weight:600;text-decoration:none">documents acheteur gratuits</a>.</span></div>
       ${unlocked ? `
