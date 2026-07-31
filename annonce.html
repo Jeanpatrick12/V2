@@ -205,6 +205,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-market-link:hover{text-decoration:underline}
 @media(max-width:700px){.sa-market-grid{grid-template-columns:1fr}}
 
+/* ── Risques ── */
+.sa-risque-chips{display:flex;flex-wrap:wrap;gap:7px}
+.sa-risque-chip{display:inline-flex;align-items:center;gap:5px;background:#fff8ee;border:1px solid #ffe4b8;color:#a66a00;font-size:11.5px;font-weight:600;padding:6px 10px;border-radius:999px}
+.sa-risque-chip i{font-size:12px}
+.sa-risque-note{font-size:11.5px;color:#999;line-height:1.6;margin-top:10px}
+.sa-risque-link{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;font-weight:600;color:#E84533;text-decoration:none}
+.sa-risque-link:hover{text-decoration:underline}
+
 /* ── Localisation ── */
 .sa-loc-card{display:flex;align-items:center;gap:14px;border:1px solid #e8e8e8;border-radius:14px;padding:1rem 1.2rem;flex-wrap:wrap}
 .sa-loc-card-icon{width:42px;height:42px;border-radius:10px;background:#fff0ee;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
@@ -724,6 +732,12 @@ function render() {
           </div>`}
         </div>
 
+        <!-- Risques naturels et technologiques -->
+        <div class="sa-section" id="risquesSection" style="display:none">
+          <div class="sa-section-title"><i class="ti ti-alert-triangle"></i> Risques naturels et technologiques</div>
+          <div id="risquesContent"></div>
+        </div>
+
         <!-- Avis -->
         <div class="sa-section">
           <div style="font-size:15px;font-weight:700;color:#111;margin-bottom:4px">Vous avez visité ce bien ?</div>
@@ -756,6 +770,7 @@ function render() {
   loadAvisSectionListing(l.id);
   initDetailMap(l);
   injectStructuredData(l);
+  loadRisques(l);
   window.__currentListing = l;
   window.__allFacts = allFacts;
   window.__generalFactsCount = generalFacts.length;
@@ -796,6 +811,42 @@ function injectStructuredData(l) {
   script.id = 'ldjson-listing';
   script.textContent = JSON.stringify(data);
   document.head.appendChild(script);
+}
+
+function loadRisques(l) {
+  const section = document.getElementById('risquesSection');
+  const content = document.getElementById('risquesContent');
+  if (!l.lat || !l.lng) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  content.innerHTML = '<div style="font-size:12.5px;color:#999">Chargement des données de risques…</div>';
+  fetch('https://www.georisques.gouv.fr/api/v1/gaspar/risques?rayon=1000&latlon=' + l.lng + ',' + l.lat)
+    .then(r => r.json())
+    .then(data => {
+      const row = data.data && data.data[0];
+      if (!row) { content.innerHTML = '<div style="font-size:12.5px;color:#999">Aucune donnée de risque disponible pour cette localisation.</div>'; return; }
+      const majors = (row.risques_detail || []).filter(r => r.num_risque && String(r.num_risque).length <= 2);
+      const codeInsee = row.code_insee;
+      content.innerHTML =
+        '<div class="sa-risque-chips" id="risqueChips">' + majors.map(r => '<span class="sa-risque-chip"><i class="ti ti-alert-triangle"></i> ' + SA.escapeHtml(r.libelle_risque_long) + '</span>').join('') + '</div>' +
+        '<div class="sa-risque-note">Risques recensés pour la commune de ' + SA.escapeHtml(row.libelle_commune || '') + ' (source : Géorisques, données publiques). Ceci est informatif et ne remplace pas l\'État des Risques (ERP) officiel à fournir lors d\'une vente ou location.</div>' +
+        '<a class="sa-risque-link" href="https://www.georisques.gouv.fr/minformer-sur-un-risque" target="_blank"><i class="ti ti-file-text"></i> Consulter le dossier officiel sur Géorisques.gouv.fr</a>';
+      if (codeInsee) {
+        fetch('https://www.georisques.gouv.fr/api/v1/zonage_sismique?code_insee=' + codeInsee)
+          .then(r => r.json())
+          .then(sd => {
+            const szRow = sd.data && sd.data[0];
+            const chips = document.getElementById('risqueChips');
+            if (szRow && szRow.zone_sismicite && chips) {
+              const chip = document.createElement('span');
+              chip.className = 'sa-risque-chip';
+              chip.innerHTML = '<i class="ti ti-activity"></i> Sismicité : ' + SA.escapeHtml(szRow.zone_sismicite);
+              chips.appendChild(chip);
+            }
+          })
+          .catch(() => {});
+      }
+    })
+    .catch(() => { content.innerHTML = '<div style="font-size:12.5px;color:#999">Impossible de charger les données de risques pour le moment.</div>'; });
 }
 
 let detailMap = null;
