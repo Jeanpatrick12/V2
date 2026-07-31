@@ -81,6 +81,13 @@
   font-size: 12px; font-weight: 600; color: var(--text2);
   padding: 6px 10px; border: 1.5px solid var(--border); border-radius: 8px;
 }
+.m-save-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; flex-shrink: 0;
+  color: var(--text2); font-size: 15px;
+  padding: 0; border: 1.5px solid var(--border); border-radius: 8px;
+  background: white; font-family: inherit;
+}
 
 .m-empty { text-align: center; padding: 56px var(--pad); }
 .m-empty i { font-size: 44px; color: #ddd; display: block; margin-bottom: 14px; }
@@ -243,6 +250,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
   <div style="display:flex;gap:8px">
     <button class="m-map-toggle-btn" id="mapToggleBtn" onclick="setResultsMode(resultsMode==='map'?'list':'map')"><i class="ti ti-map-2"></i> Carte</button>
     <button class="m-sort-btn" onclick="openPanel('panelSort')"><i class="ti ti-arrows-sort"></i> Trier</button>
+    <button class="m-save-btn" onclick="saveCurrentSearchM()" title="Sauvegarder cette recherche"><i class="ti ti-bookmark-plus"></i></button>
   </div>
 </div>
 
@@ -529,6 +537,25 @@ function updateFilterPills() {
   var mk = filters.motsCles;
   document.getElementById('pillMotsClesLabel').textContent = mk ? '"'+mk+'"' : 'Mots-clés';
   document.getElementById('pillMotsCles').className = 'm-filter-pill' + (mk ? ' active' : '');
+}
+
+function saveCurrentSearchM() {
+  var criteria = {
+    transaction: filters.transaction || 'all',
+    types: filters.type ? [filters.type] : [],
+    ville: filters.ville || '',
+    prixMin: filters.budgetMin ? parseFloat(filters.budgetMin) : null,
+    prixMax: filters.budgetMax ? parseFloat(filters.budgetMax) : null,
+    surfMin: filters.surfaceMin ? parseFloat(filters.surfaceMin) : null,
+    surfMax: filters.surfaceMax ? parseFloat(filters.surfaceMax) : null,
+    piecesMin: filters.piecesMin ? parseFloat(filters.piecesMin) : null,
+    piecesMax: filters.piecesMax ? parseFloat(filters.piecesMax) : null
+  };
+  SA.addSavedSearch(criteria).then(function(){
+    SA.toast('Recherche enregistrée — vous serez alerté(e) par email des nouvelles annonces correspondantes', 'ti-bookmark-filled');
+  }).catch(function(){
+    SA.toast('Connectez-vous pour enregistrer une recherche', 'ti-alert-circle');
+  });
 }
 
 function applyFilters() {
