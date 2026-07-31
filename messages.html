@@ -231,7 +231,8 @@ function fmtTime(ts) {
 }
 
 function isUnread(c) {
-  return (c.messages || []).some(m => m.from === 'other' && m.createdAt > (c.lastReadAt || 0));
+  const lastRead = new Date(c.lastReadAt || 0).getTime();
+  return (c.messages || []).some(m => SA.isMessageFromOther(m, c) && m.createdAt > lastRead);
 }
 
 function render() {
@@ -395,6 +396,14 @@ async function sendThreadMessage() {
   input.value = '';
   render();
 }
+
+window.addEventListener('sa:newMessage', function(e){
+  if (e.detail && e.detail.conversationId === activeConvoId) {
+    SA.markConversationRead(activeConvoId).then(render);
+  } else {
+    render();
+  }
+});
 
 SA.init().then(function(){
   render();

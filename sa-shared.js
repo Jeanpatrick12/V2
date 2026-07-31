@@ -58,6 +58,7 @@
 
   let _sb = null;
   let _initPromise = null;
+  let _msgChannel = null;
 
   /* ── Utilitaires locaux ─────────────────────────────────────────── */
   function _readLocalJSON(key, fallback) {
@@ -346,7 +347,10 @@
         profile = created;
       }
       _cache.user = profile || null;
-      if (_cache.user) await _loadUserData(_cache.user.id);
+      if (_cache.user) {
+        await _loadUserData(_cache.user.id);
+        _subscribeRealtimeMessages();
+      }
     }
 
     _cache.initialized = true;
@@ -651,11 +655,39 @@
   function getConversation(id) { return _cache.conversations.find(c => c.id === id) || null; }
   function getConversationByListing(listingId) { return _cache.conversations.find(c => c.listingId === listingId) || null; }
   function hasConversation(listingId) { return !!getConversationByListing(listingId); }
+  function isMessageFromOther(m, convo) {
+    if (!m || m.from === "system") return false;
+    const myId = _cache.user && _cache.user.id;
+    if (m.senderId) return m.senderId !== myId;
+    const isBuyer = !!(myId && convo && convo.buyer_id === myId);
+    return isBuyer ? m.from !== "me" : m.from === "me";
+  }
   function getUnreadMessageCount() {
     return _cache.conversations.reduce((n, c) => {
-      const unread = (c.messages || []).some(m => m.from === "other" && m.createdAt > (new Date(c.lastReadAt || 0).getTime()));
+      const unread = (c.messages || []).some(m => isMessageFromOther(m, c) && m.createdAt > (new Date(c.lastReadAt || 0).getTime()));
       return n + (unread ? 1 : 0);
     }, 0);
+  }
+
+  // Ecoute en direct les nouveaux messages (Postgres Changes Supabase) pour
+  // que la messagerie se mette a jour sans recharger la page. Ignore tout
+  // message qui n'appartient pas a une conversation deja connue de cet
+  // utilisateur (protection cote client en plus des policies RLS).
+  function _subscribeRealtimeMessages() {
+    if (!_sb || !_cache.user || _msgChannel) return;
+    _msgChannel = _sb.channel("messages-" + _cache.user.id)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, (payload) => {
+        const row = payload.new;
+        const convo = _cache.conversations.find(c => c.id === row.conversation_id);
+        if (!convo) return;
+        if (convo.messages.some(m => m.id === row.id)) return;
+        const msg = _normMsg(row);
+        convo.messages.push(msg);
+        convo.lastMessageAt = msg.createdAt;
+        mountMsgBadge();
+        window.dispatchEvent(new CustomEvent("sa:newMessage", { detail: { conversationId: convo.id, message: msg } }));
+      })
+      .subscribe();
   }
 
   async function sendMessage(listingId, text) {
@@ -1260,7 +1292,7 @@
     // Messagerie
     getConversations, getConversation, getConversationByListing, hasConversation,
     sendMessage, setContactShared, setBuyerConfirmedSale,
-    markConversationRead, deleteConversation, getUnreadMessageCount,
+    markConversationRead, deleteConversation, getUnreadMessageCount, isMessageFromOther,
     getListingContact,
     // Pros
     getAllPros, getProById, getUserPros, addPro, setProVerified, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,

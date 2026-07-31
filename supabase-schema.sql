@@ -231,6 +231,19 @@ CREATE TRIGGER before_message_insert
   BEFORE INSERT ON public.messages
   FOR EACH ROW EXECUTE FUNCTION public.check_message_contact_info();
 
+-- Active Supabase Realtime sur la table messages (2026-07-30), necessaire
+-- pour que la messagerie affiche les nouveaux messages sans recharger la
+-- page. Idempotent : ne fait rien si deja active.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables
+    WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'messages'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.messages;
+  END IF;
+END $$;
+
 -- ── 6. FAVORIS ───────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.favorites (
   user_id    uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
