@@ -102,6 +102,60 @@ ALTER TABLE public.listings ADD COLUMN IF NOT EXISTS is_demo boolean NOT NULL DE
 ALTER TABLE public.listings ADD COLUMN IF NOT EXISTS lat numeric;
 ALTER TABLE public.listings ADD COLUMN IF NOT EXISTS lng numeric;
 
+-- ── Confiance pour les particuliers (2026-07-30) ──────────────────
+-- Email verifie : synchronise automatiquement depuis auth.users a chaque
+-- confirmation d'adresse email, affiche publiquement sur la fiche annonce
+-- comme signal de confiance pour un vendeur particulier (pas seulement les
+-- professionnels, qui avaient deja un badge "Verifie" base sur le SIRET).
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS email_verified boolean NOT NULL DEFAULT false;
+
+CREATE OR REPLACE FUNCTION public.sync_email_verified()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
+BEGIN
+  UPDATE public.profiles SET email_verified = (NEW.email_confirmed_at IS NOT NULL) WHERE id = NEW.id;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS on_auth_user_email_confirmed ON auth.users;
+CREATE TRIGGER on_auth_user_email_confirmed
+  AFTER UPDATE OF email_confirmed_at ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.sync_email_verified();
+
+-- Rattrapage pour les comptes deja existants au moment de cette migration
+UPDATE public.profiles p SET email_verified = (u.email_confirmed_at IS NOT NULL)
+FROM auth.users u WHERE u.id = p.id;
+
+-- Statistiques de reponse (taux de reponse + delai moyen), exposees via une
+-- fonction publique qui ne renvoie que des chiffres agreges, jamais le
+-- contenu des messages ni l'identite de l'acheteur.
+CREATE OR REPLACE FUNCTION public.get_response_stats(target_user_id uuid)
+RETURNS TABLE(response_rate numeric, avg_response_hours numeric, total_conversations bigint)
+LANGUAGE sql SECURITY DEFINER AS $$
+  WITH first_buyer_msg AS (
+    SELECT m.conversation_id, MIN(m.created_at) AS buyer_first
+    FROM public.messages m
+    JOIN public.conversations c ON c.id = m.conversation_id
+    WHERE c.seller_id = target_user_id AND m.sender_id IS DISTINCT FROM target_user_id AND m.sender_id IS NOT NULL
+    GROUP BY m.conversation_id
+  ),
+  first_seller_reply AS (
+    SELECT m.conversation_id, MIN(m.created_at) AS seller_first
+    FROM public.messages m
+    JOIN public.conversations c ON c.id = m.conversation_id
+    WHERE c.seller_id = target_user_id AND m.sender_id = target_user_id
+    GROUP BY m.conversation_id
+  )
+  SELECT
+    CASE WHEN COUNT(fbm.conversation_id) = 0 THEN NULL
+         ELSE ROUND(100.0 * COUNT(fsr.conversation_id) FILTER (WHERE fsr.seller_first > fbm.buyer_first) / COUNT(fbm.conversation_id), 0)
+    END AS response_rate,
+    ROUND(AVG(EXTRACT(EPOCH FROM (fsr.seller_first - fbm.buyer_first)) / 3600.0) FILTER (WHERE fsr.seller_first IS NOT NULL AND fsr.seller_first > fbm.buyer_first), 1) AS avg_response_hours,
+    COUNT(fbm.conversation_id) AS total_conversations
+  FROM first_buyer_msg fbm
+  LEFT JOIN first_seller_reply fsr ON fsr.conversation_id = fbm.conversation_id;
+$$;
+GRANT EXECUTE ON FUNCTION public.get_response_stats(uuid) TO anon, authenticated;
+
 -- ── 3. PROFESSIONNELS ────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.pros (
   id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),

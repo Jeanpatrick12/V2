@@ -258,6 +258,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-contact-avatar{width:44px;height:44px;border-radius:50%;background:#E84533;color:white;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .sa-contact-name{font-size:14px;font-weight:700;color:#111}
 .sa-contact-sub{font-size:12px;color:#999;margin-top:1px}
+.sa-contact-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.sa-trust-badge{display:inline-flex;align-items:center;gap:4px;background:#f7f7f7;color:#666;font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.sa-trust-badge i{font-size:11px;color:#1a8c4e}
 .sa-contact-form textarea{width:100%;border:1px solid #e0e0e0;border-radius:11px;padding:11px 13px;font-size:13px;font-family:inherit;outline:none;resize:none;height:84px;line-height:1.5}
 .sa-contact-form textarea:focus{border-color:#E84533}
 .sa-contact-send{width:100%;margin-top:10px;background:#E84533;color:white;border:none;padding:11px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px}
@@ -1125,11 +1128,38 @@ function renderContact(l) {
         <div>
           <div class="sa-contact-name">${SA.escapeHtml(contactName)}</div>
           <div class="sa-contact-sub">Particulier · sans agence</div>
+          <div class="sa-contact-badges" id="contactBadges"></div>
         </div>
       </div>
       ${body}
       <div class="sa-trust-row"><i class="ti ti-shield-check"></i> Échange direct et gratuit avec le propriétaire, sans intermédiaire.</div>
     </div>`;
+
+  loadSellerTrust(l);
+}
+
+function loadSellerTrust(l) {
+  const box = document.getElementById('contactBadges');
+  if (!box || !l.owner_id || SA.isDemoListing(l.id)) return;
+  SA.getSellerTrustInfo(l.owner_id).then(info => {
+    if (!info) return;
+    const parts = [];
+    if (info.memberSince) {
+      const label = info.memberSince.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+      parts.push('<span class="sa-trust-badge"><i class="ti ti-calendar"></i> Membre depuis ' + label + '</span>');
+    }
+    if (info.emailVerified) {
+      parts.push('<span class="sa-trust-badge"><i class="ti ti-rosette-discount-check"></i> Email vérifié</span>');
+    }
+    if (info.totalConversations >= 3 && info.responseRate != null) {
+      let responseLabel = 'Répond à ' + info.responseRate + '% des messages';
+      if (info.avgResponseHours != null) {
+        responseLabel += info.avgResponseHours < 1 ? ' en moins d\'1h' : (info.avgResponseHours < 24 ? ' en ~' + Math.round(info.avgResponseHours) + 'h' : ' en ~' + Math.round(info.avgResponseHours / 24) + 'j');
+      }
+      parts.push('<span class="sa-trust-badge"><i class="ti ti-message-check"></i> ' + responseLabel + '</span>');
+    }
+    box.innerHTML = parts.join('');
+  }).catch(() => {});
 }
 
 function requestDossier(id) {

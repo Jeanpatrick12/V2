@@ -626,6 +626,26 @@
     return bits.join(" · ");
   }
 
+  /* ── Confiance vendeur particulier ──────────────────────────────── */
+  async function getSellerTrustInfo(ownerId) {
+    if (!ownerId || !_sb) return null;
+    try {
+      const [{ data: profile }, { data: stats }] = await Promise.all([
+        _sb.from("profiles").select("created_at,email_verified").eq("id", ownerId).single(),
+        _sb.rpc("get_response_stats", { target_user_id: ownerId })
+      ]);
+      if (!profile) return null;
+      const s = Array.isArray(stats) ? stats[0] : stats;
+      return {
+        memberSince: profile.created_at ? new Date(profile.created_at) : null,
+        emailVerified: !!profile.email_verified,
+        responseRate: s && s.response_rate != null ? Math.round(s.response_rate) : null,
+        avgResponseHours: s && s.avg_response_hours != null ? parseFloat(s.avg_response_hours) : null,
+        totalConversations: s ? parseInt(s.total_conversations, 10) || 0 : 0
+      };
+    } catch (e) { return null; }
+  }
+
   /* ── Messagerie ─────────────────────────────────────────────────── */
   function getConversations() { return _cache.conversations.slice(); }
   function getConversation(id) { return _cache.conversations.find(c => c.id === id) || null; }
@@ -1235,6 +1255,8 @@
     getFavorites, getFavoritesData, isFavorite, toggleFavorite, toggleFavoriteUI,
     // Recherches
     getSavedSearches, addSavedSearch, removeSavedSearch,
+    // Confiance
+    getSellerTrustInfo,
     // Messagerie
     getConversations, getConversation, getConversationByListing, hasConversation,
     sendMessage, setContactShared, setBuyerConfirmedSale,

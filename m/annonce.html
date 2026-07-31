@@ -76,6 +76,9 @@
 .m-seller-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--red); color: white; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .m-seller-name { font-size: 14px; font-weight: 700; }
 .m-seller-badge { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
+.m-seller-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.m-trust-badge { display: inline-flex; align-items: center; gap: 4px; background: var(--bg); color: #666; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.m-trust-badge i { font-size: 10.5px; color: #1a8c4e; }
 .m-contact-msg { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; resize: none; min-height: 80px; box-sizing: border-box; }
 .m-contact-msg:focus { border-color: var(--red); }
 
@@ -586,6 +589,7 @@ function render(l) {
         '<div>' +
           '<div class="m-seller-name" style="font-weight:700">' + sellerName + '</div>' +
           '<div class="m-seller-badge"><i class="ti ti-users-group" style="font-size:11px"></i> Particulier · sans agence</div>' +
+          '<div class="m-seller-badges" id="mSellerBadges"></div>' +
         '</div>' +
       '</div>' +
       '<textarea class="m-contact-msg" id="contactMsg">Bonjour, je suis intéressé(e) par votre annonce. Seriez-vous disponible pour une visite ?</textarea>' +
@@ -625,6 +629,31 @@ function render(l) {
   initDetailMapM(l);
   injectStructuredDataM(l);
   loadRisquesM(l);
+  loadSellerTrustM(l);
+}
+
+function loadSellerTrustM(l) {
+  var box = document.getElementById('mSellerBadges');
+  if (!box || !l.owner_id || SA.isDemoListing(l.id)) return;
+  SA.getSellerTrustInfo(l.owner_id).then(function(info){
+    if (!info) return;
+    var parts = [];
+    if (info.memberSince) {
+      var label = info.memberSince.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+      parts.push('<span class="m-trust-badge"><i class="ti ti-calendar"></i> Membre depuis ' + label + '</span>');
+    }
+    if (info.emailVerified) {
+      parts.push('<span class="m-trust-badge"><i class="ti ti-rosette-discount-check"></i> Email vérifié</span>');
+    }
+    if (info.totalConversations >= 3 && info.responseRate != null) {
+      var responseLabel = 'Répond à ' + info.responseRate + '% des messages';
+      if (info.avgResponseHours != null) {
+        responseLabel += info.avgResponseHours < 1 ? ' en moins d\'1h' : (info.avgResponseHours < 24 ? ' en ~' + Math.round(info.avgResponseHours) + 'h' : ' en ~' + Math.round(info.avgResponseHours / 24) + 'j');
+      }
+      parts.push('<span class="m-trust-badge"><i class="ti ti-message-check"></i> ' + responseLabel + '</span>');
+    }
+    box.innerHTML = parts.join('');
+  }).catch(function(){});
 }
 
 function loadRisquesM(l) {
