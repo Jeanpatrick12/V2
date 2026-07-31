@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><!--sa_mguard--><script>if(window.self===window.top&&location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script><base target="_top">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mes recherches — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="m.css">
+<style>
+.m-search-card{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;background:white}
+.m-search-icon{width:40px;height:40px;border-radius:10px;background:#fff0ee;color:var(--red);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.m-search-info{flex:1;min-width:0}
+.m-search-label{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m-search-date{font-size:11px;color:var(--text3)}
+.m-search-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.m-search-actions button{font-family:inherit;cursor:pointer;border-radius:8px;font-size:11.5px;font-weight:700;padding:8px 10px;border:1.5px solid var(--red);background:none;color:var(--red);white-space:nowrap}
+.m-search-actions .m-search-del{border-color:var(--border);color:var(--text3);padding:8px}
+</style>
+</head>
+<body>
+
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.top.location='/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+  <button class="m-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div id="notLoggedIn" style="display:none;padding:60px var(--pad);text-align:center">
+  <i class="ti ti-search-off" style="font-size:40px;color:#ddd;display:block;margin-bottom:14px"></i>
+  <h2 style="font-size:18px;font-weight:700;margin-bottom:8px">Connectez-vous</h2>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Connectez-vous pour retrouver vos recherches enregistrées.</p>
+  <button class="m-btn m-btn-primary m-btn-full" onclick="window.top.location='/connexion?redirect=/recherches'">
+    <i class="ti ti-login"></i> Se connecter
+  </button>
+</div>
+
+<div id="searchContent" style="display:none;padding:14px var(--pad) 90px">
+  <div id="searchList"></div>
+  <div class="m-empty" id="searchEmpty" style="display:none;text-align:center;padding:56px var(--pad)">
+    <i class="ti ti-search" style="font-size:40px;color:#ddd;display:block;margin-bottom:14px"></i>
+    <h3 style="font-size:16px;font-weight:700;margin-bottom:6px">Aucune recherche enregistrée</h3>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:18px">Depuis la page Annonces, filtrez selon vos critères puis enregistrez la recherche.</p>
+    <button class="m-btn m-btn-primary" onclick="window.top.location='/annonces'"><i class="ti ti-building-estate"></i> Lancer une recherche</button>
+  </div>
+</div>
+
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.top.location='/'"><i class="ti ti-home-2"></i>Accueil</button>
+  <button class="m-tab active" onclick="window.top.location='/annonces'"><i class="ti ti-building-estate"></i>Annonces</button>
+  <button class="m-tab-cta" onclick="window.top.location='/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>Déposer
+  </button>
+  <button class="m-tab" onclick="window.top.location='/messages'"><i class="ti ti-message-circle"></i>Messages</button>
+  <button class="m-tab" onclick="window.top.location='/profil'"><i class="ti ti-user"></i>Profil</button>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js?v=15"></script>
+<script>
+function fmtDate(ts) {
+  return new Date(ts).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function buildQuery(criteria) {
+  var p = new URLSearchParams();
+  if (criteria.transaction && criteria.transaction !== 'all') p.set('transaction', criteria.transaction);
+  if (criteria.ville) p.set('ville', criteria.ville);
+  if (criteria.q) p.set('q', criteria.q);
+  if (criteria.types && criteria.types.length) p.set('types', criteria.types.join(','));
+  if (criteria.prixMin) p.set('prixMin', criteria.prixMin);
+  if (criteria.prixMax) p.set('prixMax', criteria.prixMax);
+  return p.toString();
+}
+
+function renderSearches() {
+  var list = SA.getSavedSearches();
+  var root = document.getElementById('searchList');
+  var empty = document.getElementById('searchEmpty');
+  if (!list.length) {
+    root.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  root.innerHTML = list.map(function(s) {
+    return '<div class="m-search-card">' +
+      '<div class="m-search-icon"><i class="ti ti-bookmark-filled"></i></div>' +
+      '<div class="m-search-info">' +
+        '<div class="m-search-label">' + SA.escapeHtml(s.label) + '</div>' +
+        '<div class="m-search-date">Enregistrée le ' + fmtDate(s.createdAt) + '</div>' +
+      '</div>' +
+      '<div class="m-search-actions">' +
+        '<button onclick="runSearch(\'' + s.id + '\')"><i class="ti ti-arrow-right" style="font-size:11px"></i> Voir</button>' +
+        '<button class="m-search-del" onclick="deleteSearch(\'' + s.id + '\')"><i class="ti ti-trash"></i></button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function runSearch(id) {
+  var s = SA.getSavedSearches().find(function(x){ return x.id === id; });
+  if (!s) return;
+  window.top.location = '/annonces?' + buildQuery(s.criteria);
+}
+
+function deleteSearch(id) {
+  SA.removeSavedSearch(id);
+  SA.toast('Recherche supprimée', 'ti-trash');
+  renderSearches();
+}
+
+SA.init().then(function(){
+  var u = SA.getUser();
+  if (!u) { document.getElementById('notLoggedIn').style.display = ''; return; }
+  document.getElementById('searchContent').style.display = '';
+  _updateMenuAuth();
+  renderSearches();
+});
+</script>
+
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/guide'"><i class="ti ti-book-2"></i> Guide</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/recherches'"><i class="ti ti-search"></i> Mes recherches</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.top.location='/profil';else window.top.location='/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+</body>
+</html>
