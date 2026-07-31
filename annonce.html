@@ -755,9 +755,47 @@ function render() {
   renderPriceBreakdown(l);
   loadAvisSectionListing(l.id);
   initDetailMap(l);
+  injectStructuredData(l);
   window.__currentListing = l;
   window.__allFacts = allFacts;
   window.__generalFactsCount = generalFacts.length;
+}
+
+function injectStructuredData(l) {
+  const existing = document.getElementById('ldjson-listing');
+  if (existing) existing.remove();
+  const photos = Array.isArray(l.photos) ? l.photos : [];
+  const images = photos.map(photoUrl).filter(Boolean);
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateListing",
+    "name": l.title,
+    "description": l.desc || undefined,
+    "url": window.location.href,
+    "image": images.length ? images : undefined,
+    "datePosted": l.createdAt ? new Date(l.createdAt).toISOString() : undefined,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": l.adresse || undefined,
+      "addressLocality": l.ville || undefined,
+      "postalCode": l.postal || undefined,
+      "addressCountry": "FR"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": l.price,
+      "priceCurrency": "EUR",
+      "availability": "https://schema.org/InStock"
+    }
+  };
+  if (l.lat && l.lng) data.geo = { "@type": "GeoCoordinates", "latitude": l.lat, "longitude": l.lng };
+  if (l.surface) data.floorSize = { "@type": "QuantitativeValue", "value": l.surface, "unitCode": "MTK" };
+  if (l.pieces) data.numberOfRooms = l.pieces;
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = 'ldjson-listing';
+  script.textContent = JSON.stringify(data);
+  document.head.appendChild(script);
 }
 
 let detailMap = null;
