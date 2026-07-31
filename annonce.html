@@ -22,7 +22,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=16"></script>
+<script src="sa-shared.js?v=17"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -206,12 +206,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 @media(max-width:700px){.sa-market-grid{grid-template-columns:1fr}}
 
 /* ── Risques ── */
-.sa-risque-chips{display:flex;flex-wrap:wrap;gap:7px}
-.sa-risque-chip{display:inline-flex;align-items:center;gap:5px;background:#fff8ee;border:1px solid #ffe4b8;color:#a66a00;font-size:11.5px;font-weight:600;padding:6px 10px;border-radius:999px}
-.sa-risque-chip i{font-size:12px}
+.sa-risque-summary{font-size:13.5px;color:#444;line-height:1.7;display:flex;gap:8px}
+.sa-risque-summary i{color:#c98a00;font-size:15px;flex-shrink:0;margin-top:2px}
+.sa-risque-summary b{color:#111;font-weight:700}
 .sa-risque-note{font-size:11.5px;color:#999;line-height:1.6;margin-top:10px}
-.sa-risque-link{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;font-weight:600;color:#E84533;text-decoration:none}
-.sa-risque-link:hover{text-decoration:underline}
+.sa-risque-link{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;font-size:13px;font-weight:700;color:#E84533;background:#fff5f4;border:1px solid #ffd8d3;text-decoration:none;padding:12px 16px;border-radius:11px;transition:background .15s}
+.sa-risque-link:hover{background:#ffe9e5}
 
 /* ── Localisation ── */
 .sa-loc-card{display:flex;align-items:center;gap:14px;border:1px solid #e8e8e8;border-radius:14px;padding:1rem 1.2rem;flex-wrap:wrap}
@@ -829,27 +829,38 @@ function loadRisques(l) {
       if (!row) { content.innerHTML = '<div style="font-size:12.5px;color:#999">Aucune donnée de risque disponible pour cette localisation.</div>'; return; }
       const majors = (row.risques_detail || []).filter(r => r.num_risque && String(r.num_risque).length <= 2);
       const codeInsee = row.code_insee;
-      content.innerHTML =
-        '<div class="sa-risque-chips" id="risqueChips">' + majors.map(r => '<span class="sa-risque-chip"><i class="ti ti-alert-triangle"></i> ' + SA.escapeHtml(r.libelle_risque_long) + '</span>').join('') + '</div>' +
-        '<div class="sa-risque-note">Risques recensés pour la commune de ' + SA.escapeHtml(row.libelle_commune || '') + ' (source : Géorisques, données publiques). Ceci est informatif et ne remplace pas l\'État des Risques (ERP) officiel à fournir lors d\'une vente ou location.</div>' +
-        '<a class="sa-risque-link" href="https://www.georisques.gouv.fr/minformer-sur-un-risque" target="_blank"><i class="ti ti-file-text"></i> Consulter le dossier officiel sur Géorisques.gouv.fr</a>';
+      function render(seismic) {
+        const names = majors.map(r => r.libelle_risque_long).concat(seismic ? ['Sismicité : ' + seismic] : []);
+        content.innerHTML =
+          '<div class="sa-risque-summary" id="risqueSummary"><i class="ti ti-alert-triangle"></i><span><b>' + names.length + ' risque' + (names.length > 1 ? 's' : '') + ' recensé' + (names.length > 1 ? 's' : '') + '</b> pour cette commune : ' + names.map(SA.escapeHtml).join(' · ') + '</span></div>' +
+          '<div class="sa-risque-note">Source : Géorisques (données publiques). Ceci est informatif et ne remplace pas l\'État des Risques (ERP) officiel à fournir lors d\'une vente ou location.</div>' +
+          '<a class="sa-risque-link" href="' + georisquesReportUrl(l, row) + '" target="_blank"><i class="ti ti-file-text"></i> Voir le rapport détaillé sur Géorisques.gouv.fr</a>';
+      }
+      render(null);
       if (codeInsee) {
         fetch('https://www.georisques.gouv.fr/api/v1/zonage_sismique?code_insee=' + codeInsee)
           .then(r => r.json())
           .then(sd => {
             const szRow = sd.data && sd.data[0];
-            const chips = document.getElementById('risqueChips');
-            if (szRow && szRow.zone_sismicite && chips) {
-              const chip = document.createElement('span');
-              chip.className = 'sa-risque-chip';
-              chip.innerHTML = '<i class="ti ti-activity"></i> Sismicité : ' + SA.escapeHtml(szRow.zone_sismicite);
-              chips.appendChild(chip);
-            }
+            if (szRow && szRow.zone_sismicite) render(szRow.zone_sismicite);
           })
           .catch(() => {});
       }
     })
     .catch(() => { content.innerHTML = '<div style="font-size:12.5px;color:#999">Impossible de charger les données de risques pour le moment.</div>'; });
+}
+
+function georisquesReportUrl(l, row) {
+  const params = new URLSearchParams({
+    'form-adresse': 'true', isCadastre: 'false',
+    city: (row && row.libelle_commune) || l.ville || '',
+    type: 'housenumber', typeForm: 'adresse',
+    codeInsee: (row && row.code_insee) || '',
+    lon: l.lng, lat: l.lat,
+    go_back: '/accueil-expert', propertiesType: 'housenumber',
+    adresse: l.adresse || l.ville || ''
+  });
+  return 'https://www.georisques.gouv.fr/mes-risques/connaitre-les-risques-pres-de-chez-moi/rapport2?' + params.toString();
 }
 
 let detailMap = null;

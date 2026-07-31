@@ -89,6 +89,9 @@
   background: white; font-family: inherit;
 }
 
+.m-rayon-pill { font-size: 12.5px; font-weight: 600; color: #222; background: #fff; border: 1.5px solid var(--border); padding: 8px 14px; border-radius: 999px; cursor: pointer; }
+.m-rayon-pill.active { background: var(--red); color: #fff; border-color: var(--red); }
+
 .m-empty { text-align: center; padding: 56px var(--pad); }
 .m-empty i { font-size: 44px; color: #ddd; display: block; margin-bottom: 14px; }
 .m-empty h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
@@ -192,6 +195,7 @@
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
   <div class="m-menu-divider"></div>
   <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/recherches'"><i class="ti ti-search"></i> Mes recherches</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/messages'"><i class="ti ti-message-circle"></i> Messages</button>
@@ -333,7 +337,9 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
   <input class="m-input" id="villeInput" type="text" placeholder="Paris, Lyon, Bordeaux…"
          style="margin-bottom:14px" oninput="filterVilles(this.value)">
   <div id="villeList"></div>
-  <button class="m-btn m-btn-primary m-btn-full" style="margin-top:10px" onclick="closeAllPanels()">Confirmer</button>
+  <div style="font-size:12px;font-weight:700;color:var(--text2);margin:16px 0 8px">Étendre la recherche autour de cette ville</div>
+  <div id="rayonOptions" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px"></div>
+  <button class="m-btn m-btn-primary m-btn-full" style="margin-top:10px" onclick="setFilter('ville',document.getElementById('villeInput').value.trim());closeAllPanels()">Confirmer</button>
 </div>
 
 <!-- Panel: Pièces -->
@@ -434,9 +440,11 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=16"></script>
+<script src="../sa-shared.js?v=17"></script>
 <script>
-var filters = { transaction: '', type: '', ville: '', budgetMin: '', budgetMax: '', piecesMin: '', piecesMax: '', chambresMin: '', chambresMax: '', surfaceMin: '', surfaceMax: '', dpe: [], ges: [], motsCles: '' };
+var filters = { transaction: '', type: '', ville: '', rayon: 0, budgetMin: '', budgetMax: '', piecesMin: '', piecesMax: '', chambresMin: '', chambresMax: '', surfaceMin: '', surfaceMax: '', dpe: [], ges: [], motsCles: '' };
+var villeCoordsCache = {};
+var RAYON_OPTIONS = [0, 10, 25, 50];
 var sortBy = 'recent';
 var allListings = [];
 var resultsMode = 'list';
@@ -463,7 +471,7 @@ function openPanel(id) {
   document.getElementById(id).classList.add('show');
   document.getElementById('panelOverlay').classList.add('show');
   updateChecks();
-  if (id === 'panelVille') filterVilles(document.getElementById('villeInput').value || '');
+  if (id === 'panelVille') { filterVilles(document.getElementById('villeInput').value || ''); renderRayonOptions(); }
 }
 function closeAllPanels() {
   ['panelType','panelBien','panelBudget','panelVille','panelPieces','panelSurface','panelDpe','panelMotsCles','panelSort'].forEach(function(id){
@@ -510,7 +518,36 @@ function clearDpe() {
 }
 
 // ── Filters ──
-function setFilter(key, val) { filters[key] = val; updateFilterPills(); applyFilters(); }
+function setFilter(key, val) {
+  filters[key] = val;
+  if (key === 'ville' && filters.rayon > 0 && val) ensureVilleCoords(val);
+  updateFilterPills(); applyFilters();
+}
+function renderRayonOptions() {
+  var box = document.getElementById('rayonOptions');
+  if (!box) return;
+  box.innerHTML = RAYON_OPTIONS.map(function(r){
+    var label = r === 0 ? 'Ville exacte' : '+' + r + ' km';
+    var active = (filters.rayon || 0) === r ? ' active' : '';
+    return '<div class="m-rayon-pill' + active + '" onclick="setRayon(' + r + ')">' + label + '</div>';
+  }).join('');
+}
+function setRayon(r) {
+  filters.rayon = r;
+  renderRayonOptions();
+  updateFilterPills();
+  if (r > 0 && filters.ville) ensureVilleCoords(filters.ville);
+  applyFilters();
+}
+function ensureVilleCoords(ville) {
+  var key = ville.toLowerCase();
+  if (!key || villeCoordsCache[key] !== undefined) return;
+  villeCoordsCache[key] = 'pending';
+  SA.geocodeAddress(ville + ', France').then(function(coords){
+    villeCoordsCache[key] = coords || null;
+    if (filters.rayon > 0 && filters.ville.toLowerCase() === key) applyFilters();
+  });
+}
 function setSort(s) { sortBy = s; applyFilters(); }
 function updateFilterPills() {
   document.getElementById('pillTypeLabel').textContent = {vente:'Acheter',location:'Louer','':'Transaction'}[filters.transaction]||'Transaction';
@@ -518,7 +555,7 @@ function updateFilterPills() {
   document.getElementById('pillBienLabel').textContent = filters.type ? filters.type.charAt(0).toUpperCase()+filters.type.slice(1) : 'Type de bien';
   document.getElementById('pillBien').className = 'm-filter-pill' + (filters.type ? ' active' : '');
   var v = filters.ville;
-  document.getElementById('pillVilleLabel').textContent = v || 'Ville';
+  document.getElementById('pillVilleLabel').textContent = v ? (v + (filters.rayon > 0 ? ' +' + filters.rayon + 'km' : '')) : 'Ville';
   document.getElementById('pillVille').className = 'm-filter-pill' + (v ? ' active' : '');
   var min = filters.budgetMin, max = filters.budgetMax;
   document.getElementById('pillBudgetLabel').textContent = (min||max) ? ((min?min+'€':'0')+' – '+(max?max+'€':'∞')) : 'Budget';
@@ -563,7 +600,14 @@ function applyFilters() {
     if(l.status === 'sold') return false;
     if(filters.transaction && l.transaction !== filters.transaction) return false;
     if(filters.type && l.type !== filters.type) return false;
-    if(filters.ville && l.ville && l.ville.toLowerCase().indexOf(filters.ville.toLowerCase()) === -1) return false;
+    if(filters.ville) {
+      var villeMatch = l.ville && l.ville.toLowerCase().indexOf(filters.ville.toLowerCase()) !== -1;
+      if (!villeMatch && filters.rayon > 0 && l.lat && l.lng) {
+        var cityCoords = villeCoordsCache[filters.ville.toLowerCase()];
+        if (cityCoords && cityCoords !== 'pending') villeMatch = SA.distanceKm(cityCoords.lat, cityCoords.lng, l.lat, l.lng) <= filters.rayon;
+      }
+      if (!villeMatch) return false;
+    }
     var min = parseInt(filters.budgetMin)||0, max = parseInt(filters.budgetMax)||0;
     if(min && l.price < min) return false;
     if(max && l.price > max) return false;

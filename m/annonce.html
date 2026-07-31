@@ -11,11 +11,11 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="m.css">
 <style>
-.m-risque-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-.m-risque-chip { display: inline-flex; align-items: center; gap: 5px; background: #fff8ee; border: 1px solid #ffe4b8; color: #a66a00; font-size: 11.5px; font-weight: 600; padding: 6px 10px; border-radius: 999px; }
-.m-risque-chip i { font-size: 12px; }
+.m-risque-summary { font-size: 13px; color: #444; line-height: 1.7; display: flex; gap: 8px; }
+.m-risque-summary i { color: #c98a00; font-size: 15px; flex-shrink: 0; margin-top: 2px; }
+.m-risque-summary b { color: #111; font-weight: 700; }
 .m-risque-note { font-size: 11.5px; color: #999; line-height: 1.6; margin-top: 10px; }
-.m-risque-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--red); text-decoration: none; }
+.m-risque-link { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--red); background: #fff5f4; border: 1px solid #ffd8d3; text-decoration: none; padding: 12px 16px; border-radius: 11px; }
 .m-detail-map-wrap { position: relative; margin-top: 12px; border-radius: 10px; overflow: hidden; }
 #detailMapM { width: 100%; height: 280px; background: #eef1f3; }
 .m-detail-map-pin { background: #111; color: #fff; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; box-shadow: 0 3px 8px rgba(0,0,0,0.22); border: 2px solid #fff; transform: translate(-50%,-100%); }
@@ -171,7 +171,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=16"></script>
+<script src="../sa-shared.js?v=17"></script>
 <script>
 var listingId = new URLSearchParams(window.location.search).get('id');
 var photos = [];
@@ -667,27 +667,39 @@ function loadRisquesM(l) {
       if (!row) { content.innerHTML = '<div style="font-size:12.5px;color:#999">Aucune donnée de risque disponible pour cette localisation.</div>'; return; }
       var majors = (row.risques_detail || []).filter(function(r){ return r.num_risque && String(r.num_risque).length <= 2; });
       var codeInsee = row.code_insee;
-      content.innerHTML =
-        '<div class="m-risque-chips" id="risqueChipsM">' + majors.map(function(r){ return '<span class="m-risque-chip"><i class="ti ti-alert-triangle"></i> ' + r.libelle_risque_long + '</span>'; }).join('') + '</div>' +
-        '<div class="m-risque-note">Risques recensés pour la commune de ' + (row.libelle_commune || '') + ' (source : Géorisques, données publiques). Ceci est informatif et ne remplace pas l\'État des Risques (ERP) officiel à fournir lors d\'une vente ou location.</div>' +
-        '<a class="m-risque-link" href="https://www.georisques.gouv.fr/minformer-sur-un-risque" target="_blank"><i class="ti ti-file-text"></i> Consulter le dossier officiel sur Géorisques.gouv.fr</a>';
+      function render(seismic) {
+        var names = majors.map(function(r){ return r.libelle_risque_long; });
+        if (seismic) names.push('Sismicité : ' + seismic);
+        content.innerHTML =
+          '<div class="m-risque-summary"><i class="ti ti-alert-triangle"></i><span><b>' + names.length + ' risque' + (names.length > 1 ? 's' : '') + ' recensé' + (names.length > 1 ? 's' : '') + '</b> pour cette commune : ' + names.join(' · ') + '</span></div>' +
+          '<div class="m-risque-note">Source : Géorisques (données publiques). Ceci est informatif et ne remplace pas l\'État des Risques (ERP) officiel à fournir lors d\'une vente ou location.</div>' +
+          '<a class="m-risque-link" href="' + georisquesReportUrlM(l, row) + '" target="_blank"><i class="ti ti-file-text"></i> Voir le rapport détaillé sur Géorisques.gouv.fr</a>';
+      }
+      render(null);
       if (codeInsee) {
         fetch('https://www.georisques.gouv.fr/api/v1/zonage_sismique?code_insee=' + codeInsee)
           .then(function(r){ return r.json(); })
           .then(function(sd){
             var szRow = sd.data && sd.data[0];
-            var chips = document.getElementById('risqueChipsM');
-            if (szRow && szRow.zone_sismicite && chips) {
-              var chip = document.createElement('span');
-              chip.className = 'm-risque-chip';
-              chip.innerHTML = '<i class="ti ti-activity"></i> Sismicité : ' + szRow.zone_sismicite;
-              chips.appendChild(chip);
-            }
+            if (szRow && szRow.zone_sismicite) render(szRow.zone_sismicite);
           })
           .catch(function(){});
       }
     })
     .catch(function(){ content.innerHTML = '<div style="font-size:12.5px;color:#999">Impossible de charger les données de risques pour le moment.</div>'; });
+}
+
+function georisquesReportUrlM(l, row) {
+  var params = new URLSearchParams({
+    'form-adresse': 'true', isCadastre: 'false',
+    city: (row && row.libelle_commune) || l.ville || '',
+    type: 'housenumber', typeForm: 'adresse',
+    codeInsee: (row && row.code_insee) || '',
+    lon: l.lng, lat: l.lat,
+    go_back: '/accueil-expert', propertiesType: 'housenumber',
+    adresse: l.adresse || l.ville || ''
+  });
+  return 'https://www.georisques.gouv.fr/mes-risques/connaitre-les-risques-pres-de-chez-moi/rapport2?' + params.toString();
 }
 
 function injectStructuredDataM(l) {
@@ -979,6 +991,7 @@ SA.init().then(function(){
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
   <div class="m-menu-divider"></div>
   <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/recherches'"><i class="ti ti-search"></i> Mes recherches</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/messages'"><i class="ti ti-message-circle"></i> Messages</button>

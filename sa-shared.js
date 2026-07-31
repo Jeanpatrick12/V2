@@ -398,6 +398,13 @@
       return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
     } catch (e) { return null; }
   }
+  function distanceKm(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
   function piecesFromSelect(val) {
     if (!val) return null;
     const m = String(val).match(/^(\d+)/);
@@ -1040,15 +1047,15 @@
     if (root) return root;
     root = document.createElement("div");
     root.id = "saToastRoot";
-    root.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none";
+    root.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:calc(100% - 32px);max-width:380px";
     document.body.appendChild(root);
     return root;
   }
   function toast(msg, icon) {
     const root = ensureToastRoot();
     const el = document.createElement("div");
-    el.style.cssText = "background:#111;color:white;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13.5px;padding:11px 18px;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,0.25);display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .2s, transform .2s;transform:translateY(8px)";
-    el.innerHTML = (icon ? '<i class="ti ' + icon + '" style="color:#ff7a68;font-size:15px"></i>' : "") + "<span>" + escapeHtml(msg) + "</span>";
+    el.style.cssText = "background:#111;color:white;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13.5px;line-height:1.45;padding:12px 16px;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,0.25);display:flex;align-items:flex-start;gap:9px;opacity:0;transition:opacity .2s, transform .2s;transform:translateY(8px);max-width:100%;box-sizing:border-box";
+    el.innerHTML = (icon ? '<i class="ti ' + icon + '" style="color:#ff7a68;font-size:15px;flex-shrink:0;margin-top:1px"></i>' : "") + "<span>" + escapeHtml(msg) + "</span>";
     root.appendChild(el);
     requestAnimationFrame(() => { el.style.opacity = "1"; el.style.transform = "translateY(0)"; });
     setTimeout(() => { el.style.opacity = "0"; el.style.transform = "translateY(8px)"; setTimeout(() => el.remove(), 250); }, 2400);
@@ -1156,6 +1163,7 @@
         dropdown.innerHTML =
           '<div class="sa-account-dropdown-email"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.email || "") + "</div>" +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'profil\'"><i class="ti ti-user-circle"></i> Mon profil</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'recherches\'"><i class="ti ti-search"></i> Mes recherches' + (getSavedSearches().length > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getSavedSearches().length + '</span>' : '') + '</button>' +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getUserListings().length + '</span>' : '') + '</button>' +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length; try { n += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + n + '</span>' : ''; })() + '</button>' +
           '<button class="sa-account-dropdown-logout" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>';
@@ -1189,6 +1197,7 @@
     var user = _cache.user;
     var msgN = getUnreadMessageCount();
     var favN = _cache.favorites.length;
+    var searchN = getSavedSearches().length;
     var path = window.location.pathname;
 
     function isActive(href) {
@@ -1238,7 +1247,7 @@
         '<div class="sa-mobile-menu-section">Mon espace</div>' +
         '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'favoris\'"><i class="ti ti-heart"></i> Favoris' + (favN > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + favN + '</span>' : '') + '</button>' +
         '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'messages\'"><i class="ti ti-message-2"></i> Messages' + (msgN > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + msgN + '</span>' : '') + '</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'recherches\'"><i class="ti ti-search"></i> Mes recherches</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'recherches\'"><i class="ti ti-search"></i> Mes recherches' + (searchN > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + searchN + '</span>' : '') + '</button>' +
         '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'mes-annonces\'"><i class="ti ti-home-edit"></i> Mes annonces</button>' +
         '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents</button>' +
         '<div class="sa-mobile-menu-divider"></div>' +
@@ -1299,6 +1308,7 @@
     TYPE_LABELS, TYPE_ICONS, DEMO_LISTINGS, DEMO_PROS, IMG_GRADIENTS,
     fmtPrice, fmtPriceTransaction, parseAddress, piecesFromSelect, dpeLetterFrom, escapeHtml, titleFor,
     compressImageFile, hasEquip, containsContactInfo,
+    geocodeAddress, distanceKm,
     init,
     // Annonces
     getAllListings, getListingById, getUserListings, addListing, updateListing,

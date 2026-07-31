@@ -193,7 +193,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=16"></script>
+<script src="../sa-shared.js?v=17"></script>
 <script>
 var ICONS={visite:'ti-door-enter',offre:'ti-file-euro',acceptation:'ti-circle-check',contre:'ti-arrows-exchange',refus:'ti-x',cles:'ti-key',plan:'ti-layout-list',prix:'ti-chart-line'};
 var COLORS={visite:'#ff7a68',offre:'#E84533',acceptation:'#16a34a',contre:'#d97706',refus:'#dc2626',cles:'#ca8a04',plan:'#E84533',prix:'#7c3aed'};
@@ -432,6 +432,7 @@ SA.init().then(function(){
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
   <div class="m-menu-divider"></div>
   <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/recherches'"><i class="ti ti-search"></i> Mes recherches</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/messages'"><i class="ti ti-message-circle"></i> Messages</button>

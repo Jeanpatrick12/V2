@@ -45,7 +45,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=16"></script>
+<script src="../sa-shared.js?v=17"></script>
 <script>
 function favHeart(id, btn){ event.stopPropagation(); SA.toggleFavorite(id,'listing'); btn.innerHTML='<i class="ti ti-heart" style="color:#ccc"></i>'; }
 
@@ -146,6 +146,7 @@ SA.init().then(function(){
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
   <div class="m-menu-divider"></div>
   <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/recherches'"><i class="ti ti-search"></i> Mes recherches</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/messages'"><i class="ti ti-message-circle"></i> Messages</button>

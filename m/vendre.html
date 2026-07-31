@@ -906,7 +906,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=16"></script>
+<script src="../sa-shared.js?v=17"></script>
 <script>
 var done = JSON.parse(localStorage.getItem('sa_vendre_done')||'[]');
 var openSteps = new Set([1]);
@@ -1224,6 +1224,7 @@ SA.init().then(function(){
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
   <div class="m-menu-divider"></div>
   <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/recherches'"><i class="ti ti-search"></i> Mes recherches</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
   <button class="m-menu-item" onclick="closeMenu();window.top.location='/messages'"><i class="ti ti-message-circle"></i> Messages</button>

@@ -25,7 +25,7 @@
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=16"></script>
+<script src="sa-shared.js?v=17"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -365,6 +365,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
       <div class="sa-pill-panel sa-pp-w300" id="panelLoc">
         <div class="sa-pp-label"><i class="ti ti-map-pin"></i> Suggestions</div>
         <div class="sa-loc-suggest" id="locSuggest"></div>
+        <div class="sa-pp-label" style="margin-top:14px">Étendre la recherche autour de cette ville</div>
+        <div class="sa-pp-radiogrp" id="rayonRadios">
+          <div class="sa-pp-radio active" data-rayon="0" onclick="selectRayon(this,0)">Ville exacte</div>
+          <div class="sa-pp-radio" data-rayon="10" onclick="selectRayon(this,10)">+10 km</div>
+          <div class="sa-pp-radio" data-rayon="25" onclick="selectRayon(this,25)">+25 km</div>
+          <div class="sa-pp-radio" data-rayon="50" onclick="selectRayon(this,50)">+50 km</div>
+        </div>
         <div class="sa-pp-foot">
           <button class="sa-pp-resetbtn" onclick="document.getElementById('villeInput').value='';onVilleInput();applyFilters()">Effacer</button>
           <button class="sa-pp-applybtn" onclick="closeAllPanels();applyFilters(true)">Rechercher</button>
@@ -666,6 +673,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
 <script>
 const TYPE_LABELS = {maison:'Maison', appartement:'Appartement', studio:'Studio', loft:'Loft / Atelier'};
+let activeRayon = 0;
+let villeCoordsCache = {};
 let activeTrans = 'all';
 let activeMeuble = 'all';
 let activeEtageFiltre = 'all';
@@ -750,6 +759,7 @@ function onVilleInput(){
   const box = document.getElementById('locSuggest');
   box.innerHTML = list.length ? list.map(v=>`<div class="sa-loc-suggest-item" onclick="pickVille('${v.replace(/'/g,"\\'")}')"><i class="ti ti-map-pin"></i> ${SA.escapeHtml(v)}</div>`).join('') : '<div class="sa-recap-empty" style="padding:6px 8px">Aucune ville correspondante</div>';
   document.getElementById('pillLoc').classList.toggle('has-value', !!document.getElementById('villeInput').value.trim());
+  if (activeRayon > 0 && val) ensureVilleCoords(val);
   applyFilters();
 }
 function pickVille(v){
@@ -757,6 +767,23 @@ function pickVille(v){
   onVilleInput();
   closeAllPanels();
   applyFilters(true);
+}
+
+/* ───────────────── rayon de recherche ───────────────── */
+function selectRayon(el, val){
+  document.querySelectorAll('#rayonRadios .sa-pp-radio').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  activeRayon = val;
+  if (val > 0) ensureVilleCoords(document.getElementById('villeInput').value.trim());
+  applyFilters();
+}
+async function ensureVilleCoords(ville){
+  const key = ville.toLowerCase();
+  if (!key || villeCoordsCache[key] !== undefined) return;
+  villeCoordsCache[key] = 'pending';
+  const coords = await SA.geocodeAddress(ville + ', France');
+  villeCoordsCache[key] = coords || null;
+  if (activeRayon > 0 && document.getElementById('villeInput').value.trim().toLowerCase() === key) applyFilters();
 }
 
 /* ───────────────── transaction + type ───────────────── */
@@ -874,6 +901,7 @@ function updateMoreCountAndRecap(){
   c.qTags.forEach((t,i) => addChip('« ' + t + ' »', () => { qTags.splice(i,1); renderQTags(); applyFilters(); }));
   c.dpe.forEach(d => addChip('DPE ' + d, () => { toggleDpe(document.querySelector('.sa-dpe-chip[data-dpe="'+d+'"]'), d); }));
   c.ges.forEach(d => addChip('GES ' + d, () => { toggleGes(document.querySelector('.sa-dpe-chip[data-ges="'+d+'"]'), d); }));
+  if (c.rayon > 0) addChip('Autour de ' + (document.getElementById('villeInput').value.trim() || 'la ville') + ' (+' + c.rayon + ' km)', () => { selectRayon(document.querySelector('#rayonRadios .sa-pp-radio[data-rayon="0"]'), 0); });
   if (c.etat !== 'all') addChip(c.etat, () => { selectEtat(document.querySelector('#etatRadios .sa-pp-radio[data-etat="all"]'), 'all'); });
   if (c.anneeMin || c.anneeMax) addChip('Construit ' + (c.anneeMin||'?') + '–' + (c.anneeMax||'?'), () => { document.getElementById('anneeMin').value=''; document.getElementById('anneeMax').value=''; applyFilters(); });
   if (c.terrainMin || c.terrainMax) addChip('Terrain ' + (c.terrainMin||'0') + '–' + (c.terrainMax||'∞') + ' m²', () => { document.getElementById('terrainMin').value=''; document.getElementById('terrainMax').value=''; applyFilters(); });
@@ -914,6 +942,7 @@ function currentCriteria() {
   return {
     qTags: qTags.slice(),
     ville: document.getElementById('villeInput').value.trim().toLowerCase(),
+    rayon: activeRayon,
     transaction: activeTrans,
     types: Array.from(document.querySelectorAll('.f-type:checked')).map(c => c.value),
     prixMin: parseFloat(document.getElementById('prixMin').value) || null,
@@ -967,7 +996,14 @@ function applyFilters(scrollToResults) {
     if (c.meuble !== 'all' && l.meuble !== c.meuble) return false;
     if (c.etageFiltre === 'rdc' && l.etage !== 0) return false;
     if (c.etageFiltre === 'sup' && (l.etage === null || l.etage === undefined || l.etage < 1)) return false;
-    if (c.ville && !l.ville.toLowerCase().includes(c.ville)) return false;
+    if (c.ville) {
+      let villeMatch = l.ville && l.ville.toLowerCase().includes(c.ville);
+      if (!villeMatch && c.rayon > 0 && l.lat && l.lng) {
+        const cityCoords = villeCoordsCache[c.ville];
+        if (cityCoords && cityCoords !== 'pending') villeMatch = SA.distanceKm(cityCoords.lat, cityCoords.lng, l.lat, l.lng) <= c.rayon;
+      }
+      if (!villeMatch) return false;
+    }
     if (c.qTags.length && !c.qTags.every(t => (l.title || '').toLowerCase().includes(t.toLowerCase()) || (l.desc || '').toLowerCase().includes(t.toLowerCase()))) return false;
     if (c.equip2.length && !c.equip2.every(e => Array.isArray(l.equipements) && l.equipements.includes(e))) return false;
     if (mapBoundsFilter && (!l.lat || !l.lng || !mapBoundsFilter.contains([l.lat, l.lng]))) return false;
@@ -1311,6 +1347,7 @@ function resetFilters() {
   document.querySelectorAll('#anneeRadios .sa-pp-radio').forEach(c=>c.classList.remove('active'));
   document.querySelector('#anneeRadios .sa-pp-radio').classList.add('active');
   document.getElementById('villeInput').value = '';
+  selectRayon(document.querySelector('#rayonRadios .sa-pp-radio[data-rayon="0"]'), 0);
   document.getElementById('prixMin').value = '';
   document.getElementById('prixMax').value = '';
   document.getElementById('surfMin').value = '';
