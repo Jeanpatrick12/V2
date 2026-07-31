@@ -89,8 +89,16 @@
   background: white; font-family: inherit;
 }
 
-.m-rayon-pill { font-size: 12.5px; font-weight: 600; color: #222; background: #fff; border: 1.5px solid var(--border); padding: 8px 14px; border-radius: 999px; cursor: pointer; }
-.m-rayon-pill.active { background: var(--red); color: #fff; border-color: var(--red); }
+.m-rayon-card { background: linear-gradient(135deg,#fafafa,#f5f5f5); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+.m-rayon-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.m-rayon-label { font-size: 12.5px; font-weight: 700; color: #444; display: flex; align-items: center; gap: 6px; }
+.m-rayon-label i { color: var(--red); font-size: 15px; }
+.m-rayon-value { font-size: 14px; font-weight: 800; color: var(--red); background: #fff; border: 1px solid #ffd8d3; padding: 3px 11px; border-radius: 999px; }
+.m-rayon-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 999px; outline: none; cursor: pointer; display: block; }
+.m-rayon-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 3px solid var(--red); box-shadow: 0 2px 8px rgba(232,69,51,.35); cursor: pointer; }
+.m-rayon-slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 3px solid var(--red); box-shadow: 0 2px 8px rgba(232,69,51,.35); cursor: pointer; }
+.m-rayon-slider::-moz-range-track { height: 6px; border-radius: 999px; background: #e5e5e5; }
+.m-rayon-ticks { display: flex; justify-content: space-between; margin-top: 9px; font-size: 10.5px; color: #aaa; font-weight: 600; }
 
 .m-empty { text-align: center; padding: 56px var(--pad); }
 .m-empty i { font-size: 44px; color: #ddd; display: block; margin-bottom: 14px; }
@@ -337,9 +345,15 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
   <input class="m-input" id="villeInput" type="text" placeholder="Paris, Lyon, Bordeaux…"
          style="margin-bottom:14px" oninput="filterVilles(this.value)">
   <div id="villeList"></div>
-  <div style="font-size:12px;font-weight:700;color:var(--text2);margin:16px 0 8px">Étendre la recherche autour de cette ville</div>
-  <div id="rayonOptions" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px"></div>
-  <button class="m-btn m-btn-primary m-btn-full" style="margin-top:10px" onclick="setFilter('ville',document.getElementById('villeInput').value.trim());closeAllPanels()">Confirmer</button>
+  <div class="m-rayon-card" style="margin-top:6px">
+    <div class="m-rayon-head">
+      <span class="m-rayon-label"><i class="ti ti-adjustments-horizontal"></i> Étendre la recherche</span>
+      <span class="m-rayon-value" id="rayonValueM">Ville exacte</span>
+    </div>
+    <input type="range" class="m-rayon-slider" id="rayonSliderM" min="0" max="50" step="5" value="0" oninput="onRayonSlideM(this.value)">
+    <div class="m-rayon-ticks"><span>Ville exacte</span><span>50 km</span></div>
+  </div>
+  <button class="m-btn m-btn-primary m-btn-full" style="margin-top:14px" onclick="setFilter('ville',document.getElementById('villeInput').value.trim());closeAllPanels()">Confirmer</button>
 </div>
 
 <!-- Panel: Pièces -->
@@ -440,11 +454,10 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=17"></script>
+<script src="../sa-shared.js?v=18"></script>
 <script>
 var filters = { transaction: '', type: '', ville: '', rayon: 0, budgetMin: '', budgetMax: '', piecesMin: '', piecesMax: '', chambresMin: '', chambresMax: '', surfaceMin: '', surfaceMax: '', dpe: [], ges: [], motsCles: '' };
 var villeCoordsCache = {};
-var RAYON_OPTIONS = [0, 10, 25, 50];
 var sortBy = 'recent';
 var allListings = [];
 var resultsMode = 'list';
@@ -471,7 +484,7 @@ function openPanel(id) {
   document.getElementById(id).classList.add('show');
   document.getElementById('panelOverlay').classList.add('show');
   updateChecks();
-  if (id === 'panelVille') { filterVilles(document.getElementById('villeInput').value || ''); renderRayonOptions(); }
+  if (id === 'panelVille') { filterVilles(document.getElementById('villeInput').value || ''); syncRayonSliderUI(); }
 }
 function closeAllPanels() {
   ['panelType','panelBien','panelBudget','panelVille','panelPieces','panelSurface','panelDpe','panelMotsCles','panelSort'].forEach(function(id){
@@ -523,20 +536,25 @@ function setFilter(key, val) {
   if (key === 'ville' && filters.rayon > 0 && val) ensureVilleCoords(val);
   updateFilterPills(); applyFilters();
 }
-function renderRayonOptions() {
-  var box = document.getElementById('rayonOptions');
-  if (!box) return;
-  box.innerHTML = RAYON_OPTIONS.map(function(r){
-    var label = r === 0 ? 'Ville exacte' : '+' + r + ' km';
-    var active = (filters.rayon || 0) === r ? ' active' : '';
-    return '<div class="m-rayon-pill' + active + '" onclick="setRayon(' + r + ')">' + label + '</div>';
-  }).join('');
+function syncRayonSliderUI() {
+  var slider = document.getElementById('rayonSliderM');
+  if (!slider) return;
+  var r = filters.rayon || 0;
+  slider.value = r;
+  document.getElementById('rayonValueM').textContent = r === 0 ? 'Ville exacte' : '+' + r + ' km';
+  updateRayonSliderFillM(slider);
 }
-function setRayon(r) {
-  filters.rayon = r;
-  renderRayonOptions();
+function updateRayonSliderFillM(el) {
+  var min = +el.min, max = +el.max, val = +el.value;
+  var pct = max > min ? (val - min) / (max - min) * 100 : 0;
+  el.style.background = 'linear-gradient(to right, var(--red) 0%, var(--red) ' + pct + '%, #e5e5e5 ' + pct + '%, #e5e5e5 100%)';
+}
+function onRayonSlideM(val) {
+  val = parseInt(val, 10);
+  filters.rayon = val;
+  syncRayonSliderUI();
   updateFilterPills();
-  if (r > 0 && filters.ville) ensureVilleCoords(filters.ville);
+  if (val > 0 && filters.ville) ensureVilleCoords(filters.ville);
   applyFilters();
 }
 function ensureVilleCoords(ville) {

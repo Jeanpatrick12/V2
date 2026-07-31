@@ -340,7 +340,7 @@ button{font-family:inherit;cursor:pointer}
     <div class="sa-nav-actions">
       <button class="sa-nav-cta" onclick="window.location.href='deposer'"><i class="ti ti-plus"></i> Déposer une annonce</button>
       <div class="sa-nav-divider"></div>
-      <button class="sa-nav-icon-btn" onclick="window.location.href='recherches'"><i class="ti ti-search"></i><span class="sa-nav-icon-label">Mes recherches</span></button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='recherches'"><i class="ti ti-search"></i><span class="sa-nav-badge" data-nav-search-badge></span><span class="sa-nav-icon-label">Mes recherches</span></button>
       <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'"><i class="ti ti-heart"></i><span class="sa-nav-badge" data-nav-fav-badge></span><span class="sa-nav-icon-label">Favoris</span></button>
       <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='messages'"><i class="ti ti-message-2"></i><span class="sa-nav-badge" data-nav-msg-badge></span><span class="sa-nav-icon-label">Messages</span></button>
       <div class="sa-nav-account-wrap" data-nav-account>
@@ -1094,7 +1094,7 @@ button{font-family:inherit;cursor:pointer}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=17"></script>
+<script src="sa-shared.js?v=18"></script>
 <script>
 // ── State ──
 var done = JSON.parse(localStorage.getItem('sa_vendre_done')||'[]');
