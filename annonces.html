@@ -1295,8 +1295,11 @@ function renderResults(results) {
 
 function saveCurrentSearch() {
   const c = currentCriteria();
-  SA.addSavedSearch(c);
-  SA.toast('Recherche enregistrée — retrouvez-la dans "Mes recherches"', 'ti-bookmark-filled');
+  SA.addSavedSearch(c).then(function(){
+    SA.toast('Recherche enregistrée — vous serez alerté(e) par email des nouvelles annonces correspondantes', 'ti-bookmark-filled');
+  }).catch(function(){
+    SA.toast('Connectez-vous pour enregistrer une recherche', 'ti-alert-circle');
+  });
 }
 
 function refreshGrid() { applyFilters(); }

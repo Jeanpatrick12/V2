@@ -14,6 +14,8 @@
 .m-search-info{flex:1;min-width:0}
 .m-search-label{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .m-search-date{font-size:11px;color:var(--text3)}
+.m-search-alert{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:#666;cursor:pointer;font-weight:500}
+.m-search-alert input{accent-color:var(--red);width:13px;height:13px;cursor:pointer}
 .m-search-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
 .m-search-actions button{font-family:inherit;cursor:pointer;border-radius:8px;font-size:11.5px;font-weight:700;padding:8px 10px;border:1.5px solid var(--red);background:none;color:var(--red);white-space:nowrap}
 .m-search-actions .m-search-del{border-color:var(--border);color:var(--text3);padding:8px}
@@ -93,6 +95,10 @@ function renderSearches() {
       '<div class="m-search-info">' +
         '<div class="m-search-label">' + SA.escapeHtml(s.label) + '</div>' +
         '<div class="m-search-date">Enregistrée le ' + fmtDate(s.createdAt) + '</div>' +
+        '<label class="m-search-alert">' +
+          '<input type="checkbox" ' + (s.emailAlerts ? 'checked' : '') + ' onchange="SA.toggleSearchAlerts(\'' + s.id + '\', this.checked); SA.toast(this.checked ? \'Alertes email activées\' : \'Alertes email désactivées\', this.checked ? \'ti-bell\' : \'ti-bell-off\')">' +
+          'Alertes email' +
+        '</label>' +
       '</div>' +
       '<div class="m-search-actions">' +
         '<button onclick="runSearch(\'' + s.id + '\')"><i class="ti ti-arrow-right" style="font-size:11px"></i> Voir</button>' +

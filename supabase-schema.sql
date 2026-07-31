@@ -433,6 +433,29 @@ BEGIN
 END;
 $$;
 
+-- ── RECHERCHES SAUVEGARDEES + ALERTES EMAIL (2026-07-30) ──────────
+-- Remplace le stockage localStorage des recherches sauvegardees : il
+-- fallait une vraie table cote serveur pour qu'une fonction planifiee
+-- puisse comparer les nouvelles annonces aux recherches de chaque
+-- utilisateur et envoyer un email quand une correspondance apparait.
+CREATE TABLE IF NOT EXISTS public.saved_searches (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id      uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  label        text NOT NULL DEFAULT '',
+  criteria     jsonb NOT NULL DEFAULT '{}'::jsonb,
+  email_alerts boolean NOT NULL DEFAULT true,
+  created_at   timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.saved_searches ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "saved_searches_select" ON public.saved_searches;
+DROP POLICY IF EXISTS "saved_searches_insert" ON public.saved_searches;
+DROP POLICY IF EXISTS "saved_searches_update" ON public.saved_searches;
+DROP POLICY IF EXISTS "saved_searches_delete" ON public.saved_searches;
+CREATE POLICY "saved_searches_select" ON public.saved_searches FOR SELECT USING (user_id = auth.uid());
+CREATE POLICY "saved_searches_insert" ON public.saved_searches FOR INSERT WITH CHECK (user_id = auth.uid());
+CREATE POLICY "saved_searches_update" ON public.saved_searches FOR UPDATE USING (user_id = auth.uid());
+CREATE POLICY "saved_searches_delete" ON public.saved_searches FOR DELETE USING (user_id = auth.uid());
+
 -- ═══════════════════════════════════════════════════════════════════
 -- BUCKET STORAGE — à créer MANUELLEMENT dans Supabase
 --

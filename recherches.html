@@ -66,6 +66,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-search-info{flex:1;min-width:0}
 .sa-search-label{font-size:14px;font-weight:600;color:#111;margin-bottom:3px}
 .sa-search-date{font-size:11.5px;color:#aaa}
+.sa-search-alert{display:flex;align-items:center;gap:6px;margin-top:7px;font-size:11.5px;color:#666;cursor:pointer;font-weight:500}
+.sa-search-alert input{accent-color:#E84533;width:13px;height:13px;cursor:pointer}
 .sa-search-actions{display:flex;gap:8px;flex-shrink:0}
 .sa-search-actions button{font-family:inherit;cursor:pointer;border-radius:8px;font-size:12.5px;font-weight:600;padding:9px 16px;border:1.5px solid #E84533;background:none;color:#E84533}
 .sa-search-actions button:hover{background:#fff0ee}
@@ -183,6 +185,10 @@ function render() {
       <div class="sa-search-info">
         <div class="sa-search-label">${SA.escapeHtml(s.label)}</div>
         <div class="sa-search-date">Enregistrée le ${fmtDate(s.createdAt)}</div>
+        <label class="sa-search-alert">
+          <input type="checkbox" ${s.emailAlerts ? 'checked' : ''} onchange="SA.toggleSearchAlerts('${s.id}', this.checked); SA.toast(this.checked ? 'Alertes email activées' : 'Alertes email désactivées', this.checked ? 'ti-bell' : 'ti-bell-off')">
+          Alertes email pour les nouvelles annonces
+        </label>
       </div>
       <div class="sa-search-actions">
         <button onclick="runSearch('${s.id}')"><i class="ti ti-arrow-right" style="font-size:12px"></i> Voir les résultats</button>

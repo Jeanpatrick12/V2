@@ -166,6 +166,15 @@
       messages:           Array.isArray(row.messages) ? row.messages.map(_normMsg).sort((a,b) => a.createdAt - b.createdAt) : []
     };
   }
+  function _normSearch(row) {
+    return {
+      id:          row.id,
+      label:       row.label,
+      criteria:    row.criteria || {},
+      emailAlerts: row.email_alerts !== false,
+      createdAt:   row.created_at ? new Date(row.created_at).getTime() : Date.now()
+    };
+  }
   function _normMsg(row) {
     return {
       id:        row.id,
@@ -250,7 +259,7 @@
 
   /* ── Chargement des données utilisateur (après login) ──────────── */
   async function _loadUserData(userId) {
-    const [favRes, convoRes, soldRes, docsRes] = await Promise.all([
+    const [favRes, convoRes, soldRes, docsRes, searchesRes] = await Promise.all([
       _sb.from("favorites").select("item_id,item_type").eq("user_id", userId),
       _sb.from("conversations")
         .select("id,listing_id,listing_title,contact_name,contact_shared,buyer_confirmed_sale,buyer_confirmed_at,buyer_id,seller_id,last_message_at,last_read_at,created_at,messages(id,from_role,sender_id,text,created_at)")
@@ -259,12 +268,13 @@
       _sb.from("listings")
         .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,contact_email,contact_tel,status,is_demo,created_at")
         .eq("owner_id", userId),
-      _sb.from("user_documents").select("doc_type,doc_data,updated_at").eq("user_id", userId).order("updated_at", { ascending: false })
+      _sb.from("user_documents").select("doc_type,doc_data,updated_at").eq("user_id", userId).order("updated_at", { ascending: false }),
+      _sb.from("saved_searches").select("id,label,criteria,email_alerts,created_at").eq("user_id", userId).order("created_at", { ascending: false })
     ]);
     _cache.favorites     = (favRes.data || []).map(f => f.item_id);
     _cache.favoritesData = (favRes.data || []);
+    _cache.searches       = (searchesRes.data || []).map(_normSearch);
     _cache.conversations = (convoRes.data || []).map(_normConvo);
-    _cache.searches      = _readLocalJSON("sa_searches_v1_" + userId, []);
     // Pour les conversations où je suis vendeur, récupérer le prénom/nom de l'acheteur
     const sellerConvos = _cache.conversations.filter(c => c.seller_id === userId && c.buyer_id);
     if (sellerConvos.length > 0) {
@@ -604,18 +614,27 @@
     toast(nowFav ? "Ajouté à vos favoris" : "Retiré de vos favoris", nowFav ? "ti-heart-filled" : "ti-heart");
   }
 
-  /* ── Recherches enregistrées (par utilisateur) ───────────────────── */
-  function _searchesKey() { return _cache.user ? "sa_searches_v1_" + _cache.user.id : "sa_searches_v1_guest"; }
+  /* ── Recherches enregistrées (par utilisateur, avec alertes email) ── */
   function getSavedSearches() { return _cache.searches.slice(); }
-  function addSavedSearch(criteria) {
-    const search = { id: uid(), label: _labelForSearch(criteria), criteria: criteria, createdAt: Date.now() };
+  async function addSavedSearch(criteria) {
+    if (!_cache.user) throw new Error("auth-required");
+    const label = _labelForSearch(criteria);
+    const { data, error } = await _sb.from("saved_searches")
+      .insert({ user_id: _cache.user.id, label: label, criteria: criteria })
+      .select("id,label,criteria,email_alerts,created_at").single();
+    if (error) throw error;
+    const search = _normSearch(data);
     _cache.searches.unshift(search);
-    _writeLocalJSON(_searchesKey(), _cache.searches);
     return search;
   }
   function removeSavedSearch(id) {
     _cache.searches = _cache.searches.filter(s => s.id !== id);
-    _writeLocalJSON(_searchesKey(), _cache.searches);
+    if (_sb) _sb.from("saved_searches").delete().eq("id", id).then(() => {});
+  }
+  function toggleSearchAlerts(id, enabled) {
+    const search = _cache.searches.find(s => s.id === id);
+    if (search) search.emailAlerts = !!enabled;
+    if (_sb) _sb.from("saved_searches").update({ email_alerts: !!enabled }).eq("id", id).then(() => {});
   }
   function _labelForSearch(c) {
     const bits = [];
@@ -1286,7 +1305,7 @@
     // Favoris
     getFavorites, getFavoritesData, isFavorite, toggleFavorite, toggleFavoriteUI,
     // Recherches
-    getSavedSearches, addSavedSearch, removeSavedSearch,
+    getSavedSearches, addSavedSearch, removeSavedSearch, toggleSearchAlerts,
     // Confiance
     getSellerTrustInfo,
     // Messagerie
