@@ -241,12 +241,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-map-toggle-btn.active{background:#E84533;border-color:#E84533;color:#fff}
 .sa-map-view{display:none;height:calc(100vh - 250px);min-height:560px;border-radius:18px;overflow:hidden;border:1px solid #e8e8e8;box-shadow:0 1px 3px rgba(15,20,25,0.04)}
 .sa-map-view.show{display:flex}
-.sa-map-listcol{width:400px;flex-shrink:0;overflow-y:auto;background:#fafafa;border-right:1px solid #eee}
-.sa-map-listcol-title{position:sticky;top:0;background:#fff;padding:16px 18px;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;border-bottom:1px solid #f2f2f2;z-index:1}
+.sa-map-listcol{width:480px;flex-shrink:0;overflow-y:auto;background:#fafafa;border-right:1px solid #eee}
+.sa-map-listcol-title{position:sticky;top:0;background:#fff;padding:16px 20px;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;border-bottom:1px solid #f2f2f2;z-index:1}
 .sa-map-listcol-title i{color:#E84533;font-size:13px}
-.sa-map-listcol-body{padding:14px;display:flex;flex-direction:column;gap:14px}
+.sa-map-listcol-body{padding:18px;display:flex;flex-direction:column;gap:20px}
 .sa-map-listcol-body .sa-card{box-shadow:0 1px 3px rgba(15,20,25,0.05)}
-.sa-map-listcol-body .sa-card:hover{box-shadow:0 10px 26px rgba(15,20,25,0.12);transform:translateY(-2px)}
+.sa-map-listcol-body .sa-card:hover{box-shadow:0 12px 30px rgba(15,20,25,0.14);transform:translateY(-2px)}
+.sa-map-listcol-body .sa-card-photos{height:250px}
+.sa-map-listcol-body .sa-card-body{padding:16px 18px}
+.sa-map-listcol-body .sa-card-price{font-size:21px}
+.sa-map-listcol-body .sa-card-pricem2{font-size:13px}
+.sa-map-listcol-body .sa-card-typeline{font-size:14px;margin:4px 0 10px}
+.sa-map-listcol-body .sa-card-meta{font-size:13.5px;gap:14px;margin-bottom:9px}
+.sa-map-listcol-body .sa-card-meta i{font-size:15px}
+.sa-map-listcol-body .sa-card-address{font-size:13px}
+.sa-map-listcol-body .sa-card-noimg{font-size:38px}
+.sa-map-listcol-body .sa-card-desc{display:block;font-size:12.5px;color:#777;line-height:1.55;margin-top:9px}
+.sa-map-listcol-body .sa-card-foot{margin-top:12px;padding-top:11px}
 .sa-map-listcol-empty{padding:32px 16px;text-align:center;color:#999;font-size:12.5px;line-height:1.6}
 .sa-map-listcol-empty i{font-size:26px;color:#ddd;display:block;margin-bottom:8px}
 .sa-map-mapcol{position:relative;flex:1;min-width:0}
