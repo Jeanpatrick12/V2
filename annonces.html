@@ -241,24 +241,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-map-toggle-btn.active{background:#E84533;border-color:#E84533;color:#fff}
 .sa-map-view{display:none;height:calc(100vh - 250px);min-height:560px;border-radius:18px;overflow:hidden;border:1px solid #e8e8e8;box-shadow:0 1px 3px rgba(15,20,25,0.04)}
 .sa-map-view.show{display:flex}
-.sa-map-listcol{width:360px;flex-shrink:0;overflow-y:auto;background:#fff;border-right:1px solid #eee}
-.sa-map-listcol-title{position:sticky;top:0;background:#fff;padding:16px 16px 10px;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;border-bottom:1px solid #f2f2f2;z-index:1}
+.sa-map-listcol{width:400px;flex-shrink:0;overflow-y:auto;background:#fafafa;border-right:1px solid #eee}
+.sa-map-listcol-title{position:sticky;top:0;background:#fff;padding:16px 18px;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;border-bottom:1px solid #f2f2f2;z-index:1}
 .sa-map-listcol-title i{color:#E84533;font-size:13px}
-.sa-map-listcol-body{padding:8px 10px 16px;display:flex;flex-direction:column;gap:6px}
+.sa-map-listcol-body{padding:14px;display:flex;flex-direction:column;gap:14px}
+.sa-map-listcol-body .sa-card{box-shadow:0 1px 3px rgba(15,20,25,0.05)}
+.sa-map-listcol-body .sa-card:hover{box-shadow:0 10px 26px rgba(15,20,25,0.12);transform:translateY(-2px)}
 .sa-map-listcol-empty{padding:32px 16px;text-align:center;color:#999;font-size:12.5px;line-height:1.6}
 .sa-map-listcol-empty i{font-size:26px;color:#ddd;display:block;margin-bottom:8px}
-.sa-maplist-card{display:flex;gap:10px;padding:8px;border-radius:12px;cursor:pointer;transition:background .12s}
-.sa-maplist-card:hover{background:#f7f7f7}
-.sa-maplist-photo{width:84px;height:64px;flex-shrink:0;border-radius:9px;background-size:cover;background-position:center;background-color:#eee}
-.sa-maplist-body{min-width:0;flex:1}
-.sa-maplist-price{font-size:13.5px;font-weight:800;color:#111}
-.sa-maplist-title{font-size:12px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:2px 0}
-.sa-maplist-meta{font-size:11px;color:#999;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sa-map-mapcol{position:relative;flex:1;min-width:0}
 #saMap{width:100%;height:100%;background:#eef1f3;font-family:inherit}
 .sa-map-panel{position:absolute;top:16px;left:16px;z-index:1000;background:white;border-radius:14px;box-shadow:0 12px 32px rgba(15,20,25,0.16);padding:14px 16px;min-width:180px;max-height:calc(100% - 32px);overflow-y:auto}
-.sa-map-panel-title{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.sa-map-panel-title i{color:#E84533;font-size:13px}
+.sa-map-panel-title{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+.sa-map-panel-title i:first-child{color:#E84533;font-size:13px}
+.sa-map-panel-caret{margin-left:auto;font-size:13px;color:#999;transition:transform .15s}
+.sa-map-panel-body{margin-top:10px}
+.sa-map-panel.collapsed .sa-map-panel-body{display:none}
+.sa-map-panel.collapsed .sa-map-panel-caret{transform:rotate(180deg)}
 .sa-poi-check{display:flex;align-items:center;gap:9px;padding:6px 0;font-size:13px;color:#333;cursor:pointer;font-weight:500}
 .sa-poi-check input{accent-color:#E84533;width:15px;height:15px;cursor:pointer;flex-shrink:0}
 .sa-poi-check .sa-poi-dotlabel{width:18px;height:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -688,14 +687,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
       <div class="sa-map-listcol-body" id="mapListColBody"></div>
     </div>
     <div class="sa-map-mapcol">
-      <div class="sa-map-panel">
-        <div class="sa-map-panel-title"><i class="ti ti-map-pins"></i> Points d'intérêt</div>
-        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-ecoles" onchange="togglePoiLayer('ecoles',this.checked)"><span class="sa-poi-dotlabel" style="background:#1e6abf"><i class="ti ti-school"></i></span> Écoles</label>
-        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-universites" onchange="togglePoiLayer('universites',this.checked)"><span class="sa-poi-dotlabel" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>
-        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-commerces" onchange="togglePoiLayer('commerces',this.checked)"><span class="sa-poi-dotlabel" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>
-        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-parcs" onchange="togglePoiLayer('parcs',this.checked)"><span class="sa-poi-dotlabel" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>
-        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-transports" onchange="togglePoiLayer('transports',this.checked)"><span class="sa-poi-dotlabel" style="background:#e8ab00"><i class="ti ti-train"></i></span> Transports</label>
-        <label class="sa-poi-check"><input type="checkbox" id="poiCheck-sante" onchange="togglePoiLayer('sante',this.checked)"><span class="sa-poi-dotlabel" style="background:#e0245e"><i class="ti ti-first-aid-kit"></i></span> Santé</label>
+      <div class="sa-map-panel" id="poiPanel">
+        <div class="sa-map-panel-title" onclick="togglePoiPanel()"><i class="ti ti-map-pins"></i> Points d'intérêt <i class="ti ti-chevron-up sa-map-panel-caret" id="poiPanelCaret"></i></div>
+        <div class="sa-map-panel-body" id="poiPanelBody">
+          <label class="sa-poi-check"><input type="checkbox" id="poiCheck-ecoles" onchange="togglePoiLayer('ecoles',this.checked)"><span class="sa-poi-dotlabel" style="background:#1e6abf"><i class="ti ti-school"></i></span> Écoles</label>
+          <label class="sa-poi-check"><input type="checkbox" id="poiCheck-universites" onchange="togglePoiLayer('universites',this.checked)"><span class="sa-poi-dotlabel" style="background:#7c3aed"><i class="ti ti-building-bank"></i></span> Universités</label>
+          <label class="sa-poi-check"><input type="checkbox" id="poiCheck-commerces" onchange="togglePoiLayer('commerces',this.checked)"><span class="sa-poi-dotlabel" style="background:#0a9e4f"><i class="ti ti-shopping-cart"></i></span> Commerces</label>
+          <label class="sa-poi-check"><input type="checkbox" id="poiCheck-parcs" onchange="togglePoiLayer('parcs',this.checked)"><span class="sa-poi-dotlabel" style="background:#2b9e6f"><i class="ti ti-trees"></i></span> Parcs</label>
+          <label class="sa-poi-check"><input type="checkbox" id="poiCheck-transports" onchange="togglePoiLayer('transports',this.checked)"><span class="sa-poi-dotlabel" style="background:#e8ab00"><i class="ti ti-train"></i></span> Transports</label>
+          <label class="sa-poi-check"><input type="checkbox" id="poiCheck-sante" onchange="togglePoiLayer('sante',this.checked)"><span class="sa-poi-dotlabel" style="background:#e0245e"><i class="ti ti-first-aid-kit"></i></span> Santé</label>
+        </div>
       </div>
       <button class="sa-map-searcharea-btn" id="searchAreaBtn" onclick="searchThisArea()"><i class="ti ti-refresh"></i> Rechercher dans cette zone</button>
       <div class="sa-map-count-badge" id="mapCountBadge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce(s) localisée(s)</div>
@@ -1201,19 +1202,6 @@ function updateMapMarkers(results) {
   updateMapListCol();
 }
 
-function mapListCardHTML(l) {
-  const photos = Array.isArray(l.photos) ? l.photos : [];
-  const grad = SA.IMG_GRADIENTS[l.img] || SA.IMG_GRADIENTS.p0;
-  const main = photos[0] ? photoUrl(photos[0]) : null;
-  return '<div class="sa-maplist-card" data-id="' + l.id + '" onclick="SA.openListing(\'' + l.id + '\')">' +
-    '<div class="sa-maplist-photo" style="' + (main ? "background-image:url('" + main + "')" : 'background:' + grad) + '"></div>' +
-    '<div class="sa-maplist-body">' +
-      '<div class="sa-maplist-price">' + SA.fmtPriceTransaction(l) + '</div>' +
-      '<div class="sa-maplist-title">' + SA.escapeHtml(l.title || '') + '</div>' +
-      '<div class="sa-maplist-meta"><i class="ti ti-ruler-2"></i> ' + l.surface + ' m² · ' + SA.escapeHtml(l.ville || '') + '</div>' +
-    '</div></div>';
-}
-
 function updateMapListCol() {
   const body = document.getElementById('mapListColBody');
   if (!saMap || !body) return;
@@ -1221,7 +1209,7 @@ function updateMapListCol() {
   const items = lastResults.filter(function(l){ return l.lat && l.lng && b.contains([l.lat, l.lng]); });
   document.getElementById('mapListColCount').textContent = items.length;
   body.innerHTML = items.length
-    ? items.map(mapListCardHTML).join('')
+    ? items.map(l => cardHTML(l, 'grid')).join('')
     : '<div class="sa-map-listcol-empty"><i class="ti ti-map-search"></i>Aucune annonce dans cette zone de la carte.<br>Déplacez ou dézoomez la carte.</div>';
 }
 
@@ -1258,6 +1246,10 @@ function locateMe() {
     markMapProgrammatic();
     saMap.setView(ll, 13);
   }, function(){ SA.toast("Impossible d'obtenir votre position", 'ti-alert-circle'); }, { timeout: 8000 });
+}
+
+function togglePoiPanel() {
+  document.getElementById('poiPanel').classList.toggle('collapsed');
 }
 
 function togglePoiLayer(key, checked) {
