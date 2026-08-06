@@ -160,6 +160,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
 /* ── LAYOUT RESULTATS ── */
 .sa-an-body{max-width:1240px;margin:0 auto;padding:1.8rem 40px 4rem}
+body.sa-map-active .sa-an-body{padding-bottom:0}
 .sa-results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;gap:16px;flex-wrap:wrap}
 .sa-results-count{font-size:14px;color:#666}
 .sa-results-count strong{color:#111}
@@ -1121,9 +1122,11 @@ function setResultsMode(mode) {
     mapC.classList.add('show');
     mapBtn.classList.add('active');
     mapBtn.innerHTML = '<i class="ti ti-list"></i> Voir la liste';
+    document.body.classList.add('sa-map-active');
     initMap();
     updateMapMarkers(lastResults);
   } else {
+    document.body.classList.remove('sa-map-active');
     grid.style.display = '';
     document.getElementById('scrollSentinel').style.display = '';
     mapC.classList.remove('show');
