@@ -174,7 +174,12 @@
 .m-map-cluster { width: 38px; height: 38px; border-radius: 50%; background: var(--red); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; border: 3px solid #fff; box-shadow: 0 3px 10px rgba(0,0,0,0.28); }
 .m-map-me-dot { width: 14px; height: 14px; border-radius: 50%; background: #1e6abf; border: 3px solid #fff; box-shadow: 0 0 0 4px rgba(30,106,191,0.28), 0 2px 6px rgba(0,0,0,0.3); }
 .m-map-popup-card { width: 252px; }
-.m-map-popup-photo { height: 135px; background-size: cover; background-position: center; background-color: #eee; }
+.m-map-popup-photo-wrap { position: relative; height: 135px; background-color: #eee; }
+.m-map-popup-photo { width: 100%; height: 100%; background-size: cover; background-position: center; }
+.m-map-popup-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; display: flex; align-items: center; justify-content: center; z-index: 3; color: #333; font-size: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+.m-map-popup-nav.prev { left: 8px; }
+.m-map-popup-nav.next { right: 8px; }
+.m-map-popup-counter { position: absolute; bottom: 8px; right: 8px; background: rgba(15,20,25,0.65); color: #fff; font-size: 10.5px; font-weight: 600; padding: 3px 7px; border-radius: 6px; z-index: 3; }
 .m-map-popup-body { padding: 12px 14px 14px; }
 .m-map-popup-price { font-size: 16px; font-weight: 800; color: #111; }
 .m-map-popup-title { font-size: 12.5px; color: #555; margin: 3px 0 6px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -767,10 +772,23 @@ function locateMe() {
   }, function(){}, { timeout: 8000 });
 }
 
+var mapPopupPhotoStateM = {};
+function mapCardPhotoNavM(id, dir) {
+  var state = mapPopupPhotoStateM[id];
+  if (!state || state.photos.length < 2) return;
+  state.idx = (state.idx + dir + state.photos.length) % state.photos.length;
+  var photoEl = document.getElementById('mph-' + id);
+  if (photoEl) photoEl.style.backgroundImage = "url('" + state.photos[state.idx] + "')";
+  var counterEl = document.getElementById('mcount-' + id);
+  if (counterEl) counterEl.textContent = (state.idx + 1) + '/' + state.photos.length;
+}
+
 function mapPopupHTMLM(l) {
-  var photoUrl = getPhotoUrl(l);
+  var photosArr = (Array.isArray(l.photos) ? l.photos : []).map(function(p){ return (typeof p === 'object' && p !== null && p.url) ? p.url : String(p); });
+  var photoUrl = photosArr[0] || null;
   var grad = IMG_GRADIENTS_FALLBACK[l.img] || IMG_GRADIENTS_FALLBACK[l.transaction] || 'linear-gradient(135deg,#8b5a5a,#b87070)';
   var safeId = String(l.id).replace(/'/g,'');
+  mapPopupPhotoStateM[safeId] = { photos: photosArr, idx: 0 };
   var price = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (l.transaction==='location'?'/mois':'') : 'Prix sur demande';
   var title = l.titre || l.title || '';
   var metaParts = [];
@@ -778,8 +796,16 @@ function mapPopupHTMLM(l) {
   if (l.pieces) metaParts.push('<span><i class="ti ti-door"></i> ' + l.pieces + ' p.</span>');
   if (l.chambres) metaParts.push('<span><i class="ti ti-bed"></i> ' + l.chambres + ' ch.</span>');
   var metaHtml = metaParts.length ? '<div class="m-map-popup-meta">' + metaParts.join('') + '</div>' : '';
+  var navHtml = photosArr.length > 1
+    ? '<button class="m-map-popup-nav prev" onclick="mapCardPhotoNavM(\'' + safeId + '\',-1)"><i class="ti ti-chevron-left"></i></button>' +
+      '<button class="m-map-popup-nav next" onclick="mapCardPhotoNavM(\'' + safeId + '\',1)"><i class="ti ti-chevron-right"></i></button>' +
+      '<span class="m-map-popup-counter" id="mcount-' + safeId + '">1/' + photosArr.length + '</span>'
+    : '';
   return '<div class="m-map-popup-card">' +
-    '<div class="m-map-popup-photo" style="' + (photoUrl ? "background-image:url('" + photoUrl.replace(/['"]/g,'') + "')" : 'background:' + grad) + '"></div>' +
+    '<div class="m-map-popup-photo-wrap">' +
+      '<div class="m-map-popup-photo" id="mph-' + safeId + '" style="' + (photoUrl ? "background-image:url('" + photoUrl.replace(/['"]/g,'') + "')" : 'background:' + grad) + '"></div>' +
+      navHtml +
+    '</div>' +
     '<div class="m-map-popup-body">' +
       '<div class="m-map-popup-price">' + price + '</div>' +
       '<div class="m-map-popup-title">' + title + '</div>' +
