@@ -242,20 +242,39 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
 .sa-map-toggle-btn.active{background:#E84533;border-color:#E84533;color:#fff}
 .sa-map-view{display:none;height:calc(100vh - 250px);min-height:560px;border-radius:18px;overflow:hidden;border:1px solid #e8e8e8;box-shadow:0 1px 3px rgba(15,20,25,0.04)}
 .sa-map-view.show{display:flex;width:100vw;margin-left:calc(50% - 50vw)}
-.sa-map-listcol{width:360px;flex-shrink:0;overflow-y:auto;background:#fafafa;border-right:1px solid #eee}
+.sa-map-listcol{width:400px;flex-shrink:0;overflow-y:auto;background:#fafafa;border-right:1px solid #eee}
 .sa-map-listcol-title-wrap{position:sticky;top:0;background:#fafafa;padding:14px 14px 4px;z-index:1;display:flex;justify-content:center}
 .sa-map-listcol-title{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#111;border:1px solid #f0f0f0;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:700;box-shadow:0 8px 22px rgba(15,20,25,0.12)}
 .sa-map-listcol-title i{color:#E84533;font-size:15px}
 .sa-map-listcol-title #mapListColCount{color:#E84533}
-.sa-map-listcol-body{padding:14px;display:flex;flex-direction:column;gap:14px}
-.sa-map-listcol-body .sa-card-meta{font-size:12.5px;gap:12px}
-.sa-map-listcol-body .sa-card-meta i{font-size:13.5px}
-.sa-map-listcol-body .sa-card-address{font-size:12.5px}
-.sa-map-listcol-body .sa-card{box-shadow:0 1px 3px rgba(15,20,25,0.05)}
-.sa-map-listcol-body .sa-card-badge,.sa-map-listcol-body .sa-card-fav,.sa-map-listcol-body .sa-card-chiprow,.sa-map-listcol-body .sa-card-count{z-index:0}
-.sa-map-listcol-body .sa-card:hover{box-shadow:0 10px 24px rgba(15,20,25,0.12);transform:translateY(-2px)}
+.sa-map-listcol-body{padding:14px;display:flex;flex-direction:column;gap:16px}
 .sa-map-listcol-empty{padding:32px 16px;text-align:center;color:#999;font-size:12.5px;line-height:1.6}
 .sa-map-listcol-empty i{font-size:26px;color:#ddd;display:block;margin-bottom:8px}
+.sa-maplist-card{background:#fff;border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .15s;box-shadow:0 1px 3px rgba(15,20,25,0.05)}
+.sa-maplist-card:hover{box-shadow:0 10px 26px rgba(15,20,25,0.12);transform:translateY(-2px)}
+.sa-maplist-photo-wrap{position:relative;height:230px;background:#eee}
+.sa-maplist-photo{width:100%;height:100%;background-size:cover;background-position:center}
+.sa-maplist-badge{position:absolute;top:9px;left:9px;color:#fff;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:6px;z-index:2}
+.sa-maplist-badge.vente{background:#E84533}
+.sa-maplist-badge.location{background:#1e6abf}
+.sa-maplist-fav{position:absolute;top:9px;right:9px;background:rgba(255,255,255,0.92);border:none;border-radius:50%;width:31px;height:31px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,0.15)}
+.sa-maplist-fav i{color:#666;font-size:15px}
+.sa-maplist-fav.active i{color:#E84533}
+.sa-maplist-nav{position:absolute;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.85);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;opacity:0;transition:opacity .15s,background .15s;color:#333;font-size:14px}
+.sa-maplist-photo-wrap:hover .sa-maplist-nav{opacity:1}
+.sa-maplist-nav:hover{background:#fff}
+.sa-maplist-nav.prev{left:8px}
+.sa-maplist-nav.next{right:8px}
+.sa-maplist-counter{position:absolute;bottom:9px;right:9px;background:rgba(15,20,25,0.65);color:#fff;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;z-index:2}
+.sa-maplist-chip{position:absolute;bottom:9px;left:9px;background:#111;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;z-index:2}
+.sa-maplist-body{padding:14px 16px}
+.sa-maplist-pricerow{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.sa-maplist-price{font-size:18px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-maplist-pricem2{font-size:12px;color:#999;font-weight:500}
+.sa-maplist-typeline{font-size:12.5px;color:#666;margin:3px 0 8px;font-weight:500}
+.sa-maplist-meta{display:flex;gap:11px;flex-wrap:wrap;font-size:12.5px;color:#555;margin-bottom:7px}
+.sa-maplist-meta i{color:#bbb;font-size:13px}
+.sa-maplist-address{font-size:12.5px;color:#888;display:flex;align-items:center;gap:5px}
 .sa-map-mapcol{position:relative;flex:1;min-width:0}
 #saMap{width:100%;height:100%;background:#eef1f3;font-family:inherit}
 .sa-map-panel{position:absolute;top:16px;left:16px;z-index:1000;background:white;border-radius:14px;box-shadow:0 12px 32px rgba(15,20,25,0.16);padding:14px 16px;min-width:180px;max-height:calc(100% - 32px);overflow-y:auto}
@@ -1248,6 +1267,57 @@ function updateMapMarkers(results) {
   updateMapListCol();
 }
 
+let mapCardPhotoState = {};
+function mapCardPhotoNav(id, dir) {
+  const state = mapCardPhotoState[id];
+  if (!state || state.photos.length < 2) return;
+  state.idx = (state.idx + dir + state.photos.length) % state.photos.length;
+  const photoEl = document.getElementById('mlph-' + id);
+  if (photoEl) photoEl.style.backgroundImage = "url('" + state.photos[state.idx] + "')";
+  const counterEl = document.getElementById('mlcount-' + id);
+  if (counterEl) counterEl.textContent = (state.idx + 1) + '/' + state.photos.length;
+}
+
+function mapListCardHTML(l) {
+  const photos = (Array.isArray(l.photos) ? l.photos : []).map(photoUrl);
+  const grad = SA.IMG_GRADIENTS[l.img] || SA.IMG_GRADIENTS.p0;
+  const icon = SA.TYPE_ICONS[l.type] || 'ti-home';
+  const fav = SA.isFavorite(l.id);
+  const isNew = l.createdAt && (Date.now() - l.createdAt) < 7*86400000;
+  const m2 = l.surface ? Math.round(l.price / l.surface) : null;
+  mapCardPhotoState[l.id] = { photos, idx: 0 };
+
+  let metaParts = [`<span><i class="ti ti-ruler-2"></i> ${l.surface} m²</span>`];
+  if (l.pieces) metaParts.push(`<span><i class="ti ti-door"></i> ${l.pieces} pièce${l.pieces>1?'s':''}</span>`);
+  if (l.chambres) metaParts.push(`<span><i class="ti ti-bed"></i> ${l.chambres} ch.</span>`);
+
+  return `
+  <div class="sa-maplist-card" data-id="${l.id}" onclick="SA.openListing('${l.id}')">
+    <div class="sa-maplist-photo-wrap">
+      <div class="sa-maplist-photo" id="mlph-${l.id}" style="${photos[0] ? "background-image:url('" + photos[0] + "')" : 'background:' + grad}">
+        ${!photos[0] ? `<i class="ti ${icon}" style="color:rgba(255,255,255,.55);font-size:30px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)"></i>` : ''}
+      </div>
+      <span class="sa-maplist-badge ${l.transaction === 'vente' ? 'vente' : 'location'}">${l.transaction === 'vente' ? 'Vente' : 'Location'}</span>
+      <button class="sa-maplist-fav${fav ? ' active' : ''}" onclick="event.stopPropagation();toggleCardFav('${l.id}',this)"><i class="ti ti-heart${fav ? '-filled' : ''}"></i></button>
+      ${photos.length > 1 ? `
+        <button class="sa-maplist-nav prev" onclick="event.stopPropagation();mapCardPhotoNav('${l.id}',-1)"><i class="ti ti-chevron-left"></i></button>
+        <button class="sa-maplist-nav next" onclick="event.stopPropagation();mapCardPhotoNav('${l.id}',1)"><i class="ti ti-chevron-right"></i></button>
+        <span class="sa-maplist-counter" id="mlcount-${l.id}">1/${photos.length}</span>
+      ` : ''}
+      ${isNew ? '<span class="sa-maplist-chip">Nouveau</span>' : ''}
+    </div>
+    <div class="sa-maplist-body">
+      <div class="sa-maplist-pricerow">
+        <span class="sa-maplist-price">${SA.fmtPriceTransaction(l)}</span>
+        ${m2 ? `<span class="sa-maplist-pricem2">${SA.fmtPrice(m2)}/m²</span>` : ''}
+      </div>
+      <div class="sa-maplist-typeline">${TYPE_LABELS[l.type] || 'Bien'} ${l.transaction === 'vente' ? 'à vendre' : 'à louer'}</div>
+      <div class="sa-maplist-meta">${metaParts.join('')}</div>
+      <div class="sa-maplist-address"><i class="ti ti-map-pin"></i> ${SA.escapeHtml(l.ville || '')}${l.postal ? ' (' + l.postal + ')' : ''}</div>
+    </div>
+  </div>`;
+}
+
 function updateMapListCol() {
   const body = document.getElementById('mapListColBody');
   if (!saMap || !body) return;
@@ -1255,7 +1325,7 @@ function updateMapListCol() {
   const items = lastResults.filter(function(l){ return l.lat && l.lng && b.contains([l.lat, l.lng]); });
   document.getElementById('mapListColCount').textContent = items.length;
   body.innerHTML = items.length
-    ? items.map(l => cardHTML(l, 'grid')).join('')
+    ? items.map(mapListCardHTML).join('')
     : '<div class="sa-map-listcol-empty"><i class="ti ti-map-search"></i>Aucune annonce dans cette zone de la carte.<br>Déplacez ou dézoomez la carte.</div>';
 }
 
