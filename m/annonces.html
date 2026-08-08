@@ -163,8 +163,8 @@
 .m-poi-check input { accent-color: var(--red); width: 14px; height: 14px; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel { width: 16px; height: 16px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel i { color: #fff; font-size: 9px; }
-.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 999px; box-shadow: 0 8px 22px rgba(15,20,25,0.14); padding: 7px 13px; font-size: 11.5px; font-weight: 700; color: #111; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
-.m-map-count-badge i { color: var(--red); }
+.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 999px; box-shadow: 0 8px 22px rgba(15,20,25,0.16); padding: 9px 15px; font-size: 12.5px; font-weight: 700; color: #111; display: flex; align-items: center; gap: 6px; white-space: nowrap; max-width: calc(100vw - 90px); }
+.m-map-count-badge i { color: var(--red); font-size: 14px; }
 .m-map-count-badge.filtered { background: #fff0ee; color: var(--red); }
 .m-map-count-badge .m-map-clear-zone { margin-left: 4px; color: var(--red); text-decoration: underline; font-weight: 700; }
 .m-map-searcharea-btn { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 1000; background: #111; color: #fff; border: none; border-radius: 999px; padding: 8px 14px; font-size: 11.5px; font-weight: 700; font-family: inherit; display: none; align-items: center; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
@@ -174,13 +174,12 @@
 .m-map-cluster { width: 38px; height: 38px; border-radius: 50%; background: var(--red); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; border: 3px solid #fff; box-shadow: 0 3px 10px rgba(0,0,0,0.28); }
 .m-map-me-dot { width: 14px; height: 14px; border-radius: 50%; background: #1e6abf; border: 3px solid #fff; box-shadow: 0 0 0 4px rgba(30,106,191,0.28), 0 2px 6px rgba(0,0,0,0.3); }
 .m-map-popup-card { width: 252px; }
-.m-map-popup-photo { height: 150px; background-size: cover; background-position: center; background-color: #eee; }
+.m-map-popup-photo { height: 135px; background-size: cover; background-position: center; background-color: #eee; }
 .m-map-popup-body { padding: 12px 14px 14px; }
 .m-map-popup-price { font-size: 16px; font-weight: 800; color: #111; }
 .m-map-popup-title { font-size: 12.5px; color: #555; margin: 3px 0 6px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .m-map-popup-meta { display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; color: #555; font-weight: 600; margin-bottom: 7px; }
 .m-map-popup-meta i { color: #aaa; font-size: 13px; margin-right: 2px; }
-.m-map-popup-desc { font-size: 11.5px; color: #888; line-height: 1.5; margin-bottom: 9px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .m-map-popup-addr { font-size: 11.5px; color: #999; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
 .m-map-popup-btn { display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; background: var(--red); color: #fff; font-size: 12px; font-weight: 700; padding: 8px; border-radius: 8px; border: none; font-family: inherit; }
 .leaflet-popup-content-wrapper { border-radius: 15px; padding: 0; overflow: hidden; box-shadow: 0 14px 32px rgba(0,0,0,0.22); }
@@ -290,7 +289,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
     </div>
   </div>
   <button class="m-map-searcharea-btn" id="searchAreaBtn" onclick="searchThisArea()"><i class="ti ti-refresh"></i> Rechercher ici</button>
-  <div class="m-map-count-badge" id="mapCountBadge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> localisée(s)</div>
+  <div class="m-map-count-badge" id="mapCountBadge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce(s) dans cette zone</div>
   <button class="m-map-locate-btn" onclick="locateMe()"><i class="ti ti-current-location"></i></button>
   <div id="saMapM"></div>
 </div>
@@ -779,14 +778,12 @@ function mapPopupHTMLM(l) {
   if (l.pieces) metaParts.push('<span><i class="ti ti-door"></i> ' + l.pieces + ' p.</span>');
   if (l.chambres) metaParts.push('<span><i class="ti ti-bed"></i> ' + l.chambres + ' ch.</span>');
   var metaHtml = metaParts.length ? '<div class="m-map-popup-meta">' + metaParts.join('') + '</div>' : '';
-  var descHtml = l.desc ? '<div class="m-map-popup-desc">' + l.desc + '</div>' : '';
   return '<div class="m-map-popup-card">' +
     '<div class="m-map-popup-photo" style="' + (photoUrl ? "background-image:url('" + photoUrl.replace(/['"]/g,'') + "')" : 'background:' + grad) + '"></div>' +
     '<div class="m-map-popup-body">' +
       '<div class="m-map-popup-price">' + price + '</div>' +
       '<div class="m-map-popup-title">' + title + '</div>' +
       metaHtml +
-      descHtml +
       '<div class="m-map-popup-addr"><i class="ti ti-map-pin"></i> ' + (l.ville||'') + '</div>' +
       '<button class="m-map-popup-btn" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')">Voir l\'annonce <i class="ti ti-arrow-right"></i></button>' +
     '</div></div>';
@@ -820,10 +817,10 @@ function updateMapMarkers(results) {
   var badge = document.getElementById('mapCountBadge');
   if (mapBoundsFilterM) {
     badge.classList.add('filtered');
-    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> ' + withCoords.length + ' dans cette zone <span class="m-map-clear-zone" onclick="clearAreaFilterM()">Réinitialiser</span>';
+    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> ' + withCoords.length + ' annonce(s) dans cette zone <span class="m-map-clear-zone" onclick="clearAreaFilterM()">Réinitialiser</span>';
   } else {
     badge.classList.remove('filtered');
-    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">' + withCoords.length + '</span> localisée(s)';
+    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">' + withCoords.length + '</span> annonce(s) dans cette zone';
   }
   if (!mapBoundsFilterM) {
     markMapProgrammaticM();
