@@ -380,12 +380,16 @@
   function fmtPriceTransaction(listing) {
     return listing.transaction === "vente" ? fmtPrice(listing.price) : fmtPrice(listing.price) + "/mois";
   }
+  function capitalizeVille(v) {
+    if (!v) return v;
+    return v.toLowerCase().replace(/(^|[\s'-])(\p{L})/gu, (_, sep, letter) => sep + letter.toUpperCase());
+  }
   function parseAddress(address) {
     if (!address) return { ville: "—", postal: "" };
     const m = String(address).match(/(\d{5})\s*,?\s*([^,]+)$/);
-    if (m) return { postal: m[1], ville: m[2].trim() };
+    if (m) return { postal: m[1], ville: capitalizeVille(m[2].trim()) };
     const parts = String(address).split(",");
-    return { postal: "", ville: parts[parts.length - 1].trim() || address.trim() };
+    return { postal: "", ville: capitalizeVille(parts[parts.length - 1].trim() || address.trim()) };
   }
   async function geocodeAddress(address) {
     if (!address) return null;
@@ -1313,7 +1317,7 @@
   /* ── API publique ────────────────────────────────────────────────── */
   window.SA = {
     TYPE_LABELS, TYPE_ICONS, DEMO_LISTINGS, DEMO_PROS, IMG_GRADIENTS,
-    fmtPrice, fmtPriceTransaction, parseAddress, piecesFromSelect, dpeLetterFrom, escapeHtml, titleFor,
+    fmtPrice, fmtPriceTransaction, parseAddress, capitalizeVille, piecesFromSelect, dpeLetterFrom, escapeHtml, titleFor,
     compressImageFile, hasEquip, containsContactInfo,
     geocodeAddress, distanceKm,
     init,

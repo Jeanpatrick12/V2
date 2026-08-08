@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=18"></script>
+<script src="sa-shared.js?v=19"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2587,7 +2587,7 @@ function gfbPrevScreen(){
     var etat=document.getElementById('etatGeneral').value||'';
     var dpe=selectedDpe||'';
     var adr=document.getElementById('adresse').value||'';
-    var ville=adr.split(',').pop().trim().replace(/^\d{5}\s*/,'').replace(/\d{5}\s*/,'').trim();
+    var ville=SA.capitalizeVille(adr.split(',').pop().trim().replace(/^\d{5}\s*/,'').replace(/\d{5}\s*/,'').trim());
     var equips=[];
     document.querySelectorAll('.equip-grid input[type=checkbox]:checked').forEach(function(cb){
       var lbl=cb.closest('label');if(lbl)equips.push(lbl.textContent.trim());
