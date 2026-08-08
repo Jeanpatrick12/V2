@@ -827,6 +827,7 @@ function onVilleInput(){
   box.innerHTML = list.length ? list.map(v=>`<div class="sa-loc-suggest-item" onclick="pickVille('${v.replace(/'/g,"\\'")}')"><i class="ti ti-map-pin"></i> ${SA.escapeHtml(v)}</div>`).join('') : '<div class="sa-recap-empty" style="padding:6px 8px">Aucune ville correspondante</div>';
   document.getElementById('pillLoc').classList.toggle('has-value', !!document.getElementById('villeInput').value.trim());
   if (activeRayon > 0 && val) ensureVilleCoords(val);
+  updateRayonCircle();
   applyFilters();
 }
 function pickVille(v){
@@ -848,6 +849,7 @@ function onRayonSlide(val){
   document.getElementById('rayonValue').textContent = val === 0 ? 'Ville exacte' : '+' + val + ' km';
   updateRayonSliderFill(document.getElementById('rayonSlider'));
   if (val > 0) ensureVilleCoords(document.getElementById('villeInput').value.trim());
+  updateRayonCircle();
   applyFilters();
 }
 function resetRayon(){
@@ -861,7 +863,7 @@ async function ensureVilleCoords(ville){
   villeCoordsCache[key] = 'pending';
   const coords = await SA.geocodeAddress(ville + ', France');
   villeCoordsCache[key] = coords || null;
-  if (activeRayon > 0 && document.getElementById('villeInput').value.trim().toLowerCase() === key) applyFilters();
+  if (activeRayon > 0 && document.getElementById('villeInput').value.trim().toLowerCase() === key) { updateRayonCircle(); applyFilters(); }
 }
 
 /* ───────────────── transaction + type ───────────────── */
@@ -1115,6 +1117,7 @@ function runSearch() { applyFilters(true); }
 let saMap = null;
 let mapMarkersLayer = null;
 let mapBoundsFilter = null;
+let rayonCircle = null;
 let lastProgrammaticMapAt = 0;
 function markMapProgrammatic() { lastProgrammaticMapAt = Date.now(); }
 let poiLayers = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null, sante:null };
@@ -1184,6 +1187,34 @@ function initMap() {
   });
   markMapProgrammatic();
   setTimeout(function(){ markMapProgrammatic(); saMap.invalidateSize(); }, 60);
+  updateRayonCircle();
+}
+
+function updateRayonCircle(){
+  if (!saMap) return;
+  const ville = document.getElementById('villeInput').value.trim().toLowerCase();
+  const coords = ville ? villeCoordsCache[ville] : null;
+  if (activeRayon > 0 && coords && coords !== 'pending') {
+    const latlng = [coords.lat, coords.lng];
+    const radiusM = activeRayon * 1000;
+    if (rayonCircle) {
+      rayonCircle.setLatLng(latlng).setRadius(radiusM);
+    } else {
+      rayonCircle = L.circle(latlng, {
+        radius: radiusM,
+        color: '#E84533',
+        weight: 2,
+        opacity: 0.6,
+        dashArray: '6,6',
+        fillColor: '#E84533',
+        fillOpacity: 0.07,
+        interactive: false
+      }).addTo(saMap);
+    }
+  } else if (rayonCircle) {
+    saMap.removeLayer(rayonCircle);
+    rayonCircle = null;
+  }
 }
 
 function mapPopupHTML(l) {
