@@ -1250,6 +1250,7 @@ function bindPopupHover(popupEl) {
   if (!popupEl) return;
   popupEl.addEventListener('mouseenter', function(){ clearTimeout(mapHoverCloseTimer); });
   popupEl.addEventListener('mouseleave', function(){
+    if (popupPersistent) return;
     mapHoverCloseTimer = setTimeout(function(){ saMap.closePopup(); }, 200);
   });
 }
