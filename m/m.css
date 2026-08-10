@@ -117,11 +117,9 @@ input, select, textarea { font-family: inherit; font-size: 16px; }
   font-size: 10px;
   font-weight: 700;
   min-width: 16px;
-  height: 16px;
-  line-height: 16px;
+  padding: 3px 5px 4px;
   text-align: center;
-  border-radius: 8px;
-  padding: 0 4px;
+  border-radius: 99px;
   box-sizing: border-box;
   flex-shrink: 0;
 }
