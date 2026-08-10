@@ -690,7 +690,7 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
 <!-- ── BODY ── -->
 <div class="sa-an-body">
   <div class="sa-results-header">
-    <div class="sa-results-count"><strong id="resultsCount">0</strong> annonce(s) trouvée(s)</div>
+    <div class="sa-results-count"><strong id="resultsCount">0</strong> <span id="resultsCountLabel">annonce trouvée</span></div>
     <div class="sa-results-right">
       <button class="sa-map-toggle-btn" id="mapToggleBtn" onclick="setResultsMode(resultsMode==='map'?'list':'map')">
         <i class="ti ti-map-2"></i> Voir sur la carte
@@ -718,7 +718,7 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
   <div class="sa-map-view" id="mapViewContainer">
     <div class="sa-map-listcol" id="mapListCol">
       <div class="sa-map-listcol-title-wrap">
-        <div class="sa-map-listcol-title"><i class="ti ti-list"></i> <span id="mapListColCount">0</span> annonce(s) dans cette zone</div>
+        <div class="sa-map-listcol-title"><i class="ti ti-list"></i> <span id="mapListColCount">0</span> <span id="mapListColLabel">annonce dans cette zone</span></div>
       </div>
       <div class="sa-map-listcol-body" id="mapListColBody"></div>
     </div>
@@ -735,7 +735,7 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
         </div>
       </div>
       <button class="sa-map-searcharea-btn" id="searchAreaBtn" onclick="searchThisArea()"><i class="ti ti-refresh"></i> Rechercher dans cette zone</button>
-      <div class="sa-map-count-badge" id="mapCountBadge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce(s) localisée(s)</div>
+      <div class="sa-map-count-badge" id="mapCountBadge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce localisée</div>
       <div class="sa-map-nocoords" id="mapNoCoords"><i class="ti ti-info-circle"></i> Certaines annonces ne sont pas encore localisées sur la carte.</div>
       <button class="sa-map-locate-btn" onclick="locateMe()" title="Me localiser"><i class="ti ti-current-location"></i></button>
       <div id="saMap"></div>
@@ -1107,6 +1107,7 @@ function applyFilters(scrollToResults) {
   lastResults = results;
   if (resultsMode === 'map') {
     document.getElementById('resultsCount').textContent = results.length;
+    document.getElementById('resultsCountLabel').textContent = pluralWord(results.length, 'annonce') + ' ' + pluralWord(results.length, 'trouvée');
     updateMapMarkers(results);
   } else {
     renderResults(results);
@@ -1375,6 +1376,7 @@ function updateMapListCol(scrollToTop) {
     if (idx > 0) { const sel = items.splice(idx, 1)[0]; items.unshift(sel); }
   }
   document.getElementById('mapListColCount').textContent = items.length;
+  document.getElementById('mapListColLabel').textContent = pluralWord(items.length, 'annonce') + ' dans cette zone';
   body.innerHTML = items.length
     ? items.map(mapListCardHTML).join('')
     : '<div class="sa-map-listcol-empty"><i class="ti ti-map-search"></i>Aucune annonce dans cette zone de la carte.<br>Déplacez ou dézoomez la carte.</div>';
@@ -1389,7 +1391,7 @@ function updateMapCountBadge(count) {
     badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> ' + count + ' dans cette zone <span class="sa-map-clear-zone" onclick="clearAreaFilter()">Réinitialiser</span>';
   } else {
     badge.classList.remove('filtered');
-    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">' + count + '</span> annonce(s) localisée(s)';
+    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">' + count + '</span> ' + pluralWord(count, 'annonce') + ' ' + pluralWord(count, 'localisée');
   }
 }
 
@@ -1472,6 +1474,7 @@ function fetchPOI(key) {
 }
 
 /* ───────────────── rendu des cartes ───────────────── */
+function pluralWord(n, word){ return word + (n === 1 ? '' : 's'); }
 function relTime(ts){
   if (!ts) return '';
   const day = 86400000;
@@ -1565,6 +1568,7 @@ function renderResults(results) {
   const grid = document.getElementById('listingsGrid');
   const noResults = document.getElementById('noResults');
   document.getElementById('resultsCount').textContent = results.length;
+  document.getElementById('resultsCountLabel').textContent = pluralWord(results.length, 'annonce') + ' ' + pluralWord(results.length, 'trouvée');
   grid.innerHTML = '';
   renderState = { results, rendered: 0 };
   if (!results.length) {

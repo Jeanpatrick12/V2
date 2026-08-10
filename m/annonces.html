@@ -168,8 +168,8 @@
 .m-poi-check input { accent-color: var(--red); width: 14px; height: 14px; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel { width: 16px; height: 16px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel i { color: #fff; font-size: 9px; }
-.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 14px; box-shadow: 0 8px 22px rgba(15,20,25,0.16); padding: 8px 13px; display: flex; align-items: center; gap: 9px; max-width: min(190px, calc(100vw - 180px)); }
-.m-map-count-num { font-size: 20px; font-weight: 800; color: var(--red); line-height: 1; flex-shrink: 0; }
+.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 12px; box-shadow: 0 8px 22px rgba(15,20,25,0.16); padding: 7px 11px; display: flex; align-items: center; gap: 7px; max-width: min(180px, calc(100vw - 175px)); }
+.m-map-count-num { font-size: 15px; font-weight: 800; color: var(--red); line-height: 1; flex-shrink: 0; }
 .m-map-count-label { font-size: 10.5px; font-weight: 600; color: #777; line-height: 1.3; }
 .m-map-count-badge.filtered .m-map-count-num { color: var(--red); }
 .m-map-count-badge .m-map-clear-zone { display: block; color: var(--red); font-weight: 700; margin-top: 1px; }
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
     </div>
   </div>
   <button class="m-map-searcharea-btn" id="searchAreaBtn" onclick="searchThisArea()"><i class="ti ti-refresh"></i> Rechercher ici</button>
-  <div class="m-map-count-badge" id="mapCountBadge"><span class="m-map-count-num" id="mapResultsCount">0</span><span class="m-map-count-label">annonce(s)<br>dans cette zone</span></div>
+  <div class="m-map-count-badge" id="mapCountBadge"><span class="m-map-count-num" id="mapResultsCount">0</span><span class="m-map-count-label">annonce<br>dans cette zone</span></div>
   <button class="m-map-locate-btn" onclick="locateMe()"><i class="ti ti-current-location"></i></button>
   <div id="saMapM"></div>
 </div>
@@ -874,7 +874,7 @@ function updateMapCountBadgeM(){
     badge.innerHTML = '<span class="m-map-count-num">' + items.length + '</span><span class="m-map-count-label">dans cette zone<span class="m-map-clear-zone" onclick="clearAreaFilterM()">Réinitialiser</span></span>';
   } else {
     badge.classList.remove('filtered');
-    badge.innerHTML = '<span class="m-map-count-num" id="mapResultsCount">' + items.length + '</span><span class="m-map-count-label">annonce(s)<br>dans cette zone</span>';
+    badge.innerHTML = '<span class="m-map-count-num" id="mapResultsCount">' + items.length + '</span><span class="m-map-count-label">' + pluralWord(items.length, 'annonce') + '<br>dans cette zone</span>';
   }
 }
 
@@ -943,6 +943,7 @@ var IMG_GRADIENTS_FALLBACK = {
   p6:'linear-gradient(135deg,#7a5a8b,#a378b8)',p7:'linear-gradient(135deg,#8b7a4f,#c4ab78)'
 };
 
+function pluralWord(n, word) { return word + (n === 1 ? '' : 's'); }
 function relTime(ts) {
   if(!ts) return '';
   var day = 86400000;

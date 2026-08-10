@@ -150,7 +150,7 @@ body.em-open .m-bottom-nav{display:none!important}
     </div>
   </div>
   <div style="padding:16px var(--pad) 0;font-size:13px;color:var(--text2)">
-    <strong id="myCount" style="color:var(--text)">0</strong> annonce(s) publiée(s)
+    <strong id="myCount" style="color:var(--text)">0</strong> <span id="myCountLabel">annonce publiée</span>
   </div>
   <div id="myList" style="margin-top:10px"></div>
 </div>
@@ -180,6 +180,7 @@ SA.init().then(function(){
   var sold = mine.filter(function(l){return l.status==='sold';});
   var totalValue = active.reduce(function(s,l){return s+(l.price||0);},0);
   document.getElementById('myCount').textContent = mine.length;
+  document.getElementById('myCountLabel').textContent = 'annonce' + (mine.length === 1 ? '' : 's') + ' publiée' + (mine.length === 1 ? '' : 's');
   document.getElementById('statActive').textContent = active.length;
   document.getElementById('statSold').textContent = sold.length;
   document.getElementById('statValue').textContent = SA.fmtPrice ? SA.fmtPrice(totalValue) : totalValue.toLocaleString('fr-FR')+' €';
