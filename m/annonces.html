@@ -131,6 +131,11 @@
   font-size: 16px; color: #bbb; cursor: pointer; backdrop-filter: blur(4px);
 }
 .m-an-card-fav.active { color: var(--red); }
+.m-an-card-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(17,17,17,0.5); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); border: none; display: flex; align-items: center; justify-content: center; z-index: 2; color: #fff; font-size: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: background .15s, transform .1s; }
+.m-an-card-nav:active { background: rgba(232,69,51,0.9); transform: translateY(-50%) scale(0.94); }
+.m-an-card-nav.prev { left: 10px; }
+.m-an-card-nav.next { right: 10px; }
+.m-an-card-counter { position: absolute; bottom: 10px; right: 10px; background: rgba(15,20,25,0.65); color: #fff; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 6px; z-index: 2; }
 .m-an-card-body { padding: 12px 14px 14px; }
 .m-an-card-price { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 2px; letter-spacing: -0.3px; display: flex; align-items: baseline; gap: 8px; }
 .m-an-card-price-m2 { font-size: 12px; font-weight: 500; color: #999; }
@@ -947,6 +952,17 @@ function getPhotoUrl(l) {
   return (typeof ph === 'object' && ph !== null && ph.url) ? ph.url : String(ph);
 }
 
+var listCardPhotoState = {};
+function listCardPhotoNav(id, dir) {
+  var state = listCardPhotoState[id];
+  if (!state || state.photos.length < 2) return;
+  state.idx = (state.idx + dir + state.photos.length) % state.photos.length;
+  var photoEl = document.getElementById('lph-' + id);
+  if (photoEl) photoEl.style.backgroundImage = "url('" + state.photos[state.idx] + "')";
+  var counterEl = document.getElementById('lcount-' + id);
+  if (counterEl) counterEl.textContent = (state.idx + 1) + '/' + state.photos.length;
+}
+
 function renderListings(listings) {
   var el = document.getElementById('listingsContainer');
   if(!listings.length){
@@ -957,7 +973,10 @@ function renderListings(listings) {
   for(var i=0; i<listings.length; i++) {
     try {
       var l = listings[i];
-      var photoUrl = getPhotoUrl(l);
+      var safeId = String(l.id).replace(/'/g,'');
+      var photosArr = (Array.isArray(l.photos) ? l.photos : []).map(function(p){ return (typeof p === 'object' && p !== null && p.url) ? p.url : String(p); });
+      listCardPhotoState[safeId] = { photos: photosArr, idx: 0 };
+      var photoUrl = photosArr[0] || null;
       var photoStyle = photoUrl
         ? 'background-image:url(' + photoUrl.replace(/['"]/g, '') + ');background-size:cover;background-position:center'
         : 'background:' + (IMG_GRADIENTS_FALLBACK[l.img] || IMG_GRADIENTS_FALLBACK[l.transaction] || 'linear-gradient(135deg,#8b5a5a,#b87070)');
@@ -969,14 +988,19 @@ function renderListings(listings) {
       var title = l.titre || l.title || (typeCapital + (l.ville ? ' — ' + l.ville : ''));
       var pieces = l.pieces ? l.pieces + ' pièce' + (parseInt(l.pieces) > 1 ? 's' : '') : '';
       var dpeHtml = l.dpe ? '<span><i class="ti ti-leaf"></i> DPE ' + l.dpe.toUpperCase() + '</span>' : '';
-      var safeId = String(l.id).replace(/'/g,'');
+      var navHtml = photosArr.length > 1
+        ? '<button class="m-an-card-nav prev" onclick="event.stopPropagation();listCardPhotoNav(\'' + safeId + '\',-1)"><i class="ti ti-chevron-left"></i></button>' +
+          '<button class="m-an-card-nav next" onclick="event.stopPropagation();listCardPhotoNav(\'' + safeId + '\',1)"><i class="ti ti-chevron-right"></i></button>' +
+          '<span class="m-an-card-counter" id="lcount-' + safeId + '">1/' + photosArr.length + '</span>'
+        : '';
       cards.push(
         '<div class="m-an-card" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')">' +
-          '<div class="m-an-card-img" style="' + photoStyle + '">' +
+          '<div class="m-an-card-img" id="lph-' + safeId + '" style="' + photoStyle + '">' +
             '<span class="m-an-card-badge ' + badge + '">' + badgeLabel + '</span>' +
             '<button class="m-an-card-fav" onclick="event.stopPropagation();SA.toggleFavoriteUI(this,\'' + safeId + '\')" aria-label="Favori">' +
               '<i class="ti ti-heart"></i>' +
             '</button>' +
+            navHtml +
           '</div>' +
           '<div class="m-an-card-body">' +
             '<div class="m-an-card-price">' + price + (priceM2 ? '<span class="m-an-card-price-m2">' + priceM2 + '</span>' : '') + (SA.isDemoListing(safeId) ? ' <span class="m-demo-tag">Démo</span>' : '') + '</div>' +
