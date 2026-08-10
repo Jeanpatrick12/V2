@@ -185,6 +185,8 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
 .sa-card-photos{position:relative;display:flex;gap:3px;flex-shrink:0;background:#eee}
 .sa-card-photo-main{flex:1 1 66%;position:relative;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .sa-card-photo-side{flex:1 1 34%;display:flex;flex-direction:column;gap:3px}
+.sa-card-photos.single .sa-card-photo-side{display:none}
+.sa-card-photos.single .sa-card-photo-main{flex:1 1 100%}
 .sa-card-photo-side .thumb{flex:1;background-size:cover;background-position:center;background-color:#dfdfdf;min-height:0}
 .sa-card-noimg{font-size:30px;color:rgba(255,255,255,0.42)}
 .sa-card-badge{position:absolute;top:9px;left:9px;color:#fff;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:6px;z-index:2}
@@ -1500,6 +1502,8 @@ function cardPhotoNav(id, dir) {
   if (photoEl) photoEl.style.backgroundImage = "url('" + state.photos[state.idx] + "')";
   const counterEl = document.getElementById('ccount-' + id);
   if (counterEl) counterEl.textContent = (state.idx + 1) + '/' + state.photos.length;
+  const photosWrap = photoEl ? photoEl.closest('.sa-card-photos') : null;
+  if (photosWrap) photosWrap.classList.add('single');
 }
 
 function cardHTML(l, mode) {
