@@ -163,7 +163,7 @@
 .m-poi-check input { accent-color: var(--red); width: 14px; height: 14px; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel { width: 16px; height: 16px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel i { color: #fff; font-size: 9px; }
-.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 999px; box-shadow: 0 8px 22px rgba(15,20,25,0.16); padding: 9px 15px; font-size: 12.5px; font-weight: 700; color: #111; display: flex; align-items: center; gap: 6px; white-space: nowrap; max-width: calc(100vw - 90px); }
+.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 16px; box-shadow: 0 8px 22px rgba(15,20,25,0.16); padding: 9px 15px; font-size: 12.5px; font-weight: 700; color: #111; display: flex; align-items: center; gap: 6px; text-align: right; max-width: min(200px, calc(100vw - 195px)); }
 .m-map-count-badge i { color: var(--red); font-size: 14px; }
 .m-map-count-badge.filtered { background: #fff0ee; color: var(--red); }
 .m-map-count-badge .m-map-clear-zone { margin-left: 4px; color: var(--red); text-decoration: underline; font-weight: 700; }
@@ -832,9 +832,12 @@ function updateMapMarkers(results) {
       iconAnchor: [0, 0]
     });
     var marker = L.marker([l.lat, l.lng], { icon: icon });
-    marker.bindPopup(mapPopupHTMLM(l), { closeButton: true, maxWidth: 252, minWidth: 252, autoPanPadding: L.point(16, 70) });
+    var popup = L.popup({ closeButton: true, maxWidth: 252, minWidth: 252, autoPanPadding: L.point(16, 70) })
+      .setLatLng([l.lat, l.lng])
+      .setContent(mapPopupHTMLM(l));
     marker.on('click', function(){
       markMapProgrammaticM();
+      saMapM.once('moveend', function(){ popup.openOn(saMapM); });
       saMapM.setView([l.lat, l.lng], Math.max(saMapM.getZoom(), 15), { animate: true });
     });
     marker.addTo(mapMarkersLayerM);
