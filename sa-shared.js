@@ -1137,21 +1137,49 @@
     document.querySelectorAll("[data-nav-fav-badge]").forEach(b => {
       const n = _cache.favorites.length;
       b.textContent = n > 9 ? "9+" : String(n);
-      b.style.display = n > 0 ? "flex" : "none";
+      b.style.display = n > 0 ? "block" : "none";
     });
+    mountMobileMenuBadges();
   }
   function mountMsgBadge() {
     document.querySelectorAll("[data-nav-msg-badge]").forEach(b => {
       const n = getUnreadMessageCount();
       b.textContent = n > 9 ? "9+" : String(n);
-      b.style.display = n > 0 ? "flex" : "none";
+      b.style.display = n > 0 ? "block" : "none";
     });
+    mountMobileMenuBadges();
   }
   function mountSearchBadge() {
     document.querySelectorAll("[data-nav-search-badge]").forEach(b => {
       const n = getSavedSearches().length;
       b.textContent = n > 9 ? "9+" : String(n);
-      b.style.display = n > 0 ? "flex" : "none";
+      b.style.display = n > 0 ? "block" : "none";
+    });
+    mountMobileMenuBadges();
+  }
+  function mountMobileMenuBadges() {
+    const user = _cache.user;
+    let docsN = getDocs().length;
+    if (user) { try { docsN += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch (e) {} }
+    const counts = {
+      "/recherches": getSavedSearches().length,
+      "/favoris": _cache.favorites.length,
+      "/mes-annonces": getUserListings().length,
+      "/messages": getUnreadMessageCount(),
+      "/documents": docsN,
+    };
+    document.querySelectorAll(".m-menu-item").forEach(btn => {
+      const oc = btn.getAttribute("onclick") || "";
+      const path = Object.keys(counts).find(p => oc.indexOf("'" + p + "'") !== -1 || oc.indexOf('"' + p + '"') !== -1);
+      const existing = btn.querySelector(".m-menu-badge");
+      if (existing) existing.remove();
+      const n = path ? counts[path] : 0;
+      if (n > 0) {
+        const span = document.createElement("span");
+        span.className = "m-menu-badge";
+        span.textContent = n > 9 ? "9+" : String(n);
+        btn.appendChild(span);
+      }
     });
   }
   function mountNavAuth() {
