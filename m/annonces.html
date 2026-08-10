@@ -168,10 +168,11 @@
 .m-poi-check input { accent-color: var(--red); width: 14px; height: 14px; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel { width: 16px; height: 16px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel i { color: #fff; font-size: 9px; }
-.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 16px; box-shadow: 0 8px 22px rgba(15,20,25,0.16); padding: 9px 15px; font-size: 12.5px; font-weight: 700; color: #111; display: flex; align-items: center; gap: 6px; text-align: right; max-width: min(200px, calc(100vw - 195px)); }
-.m-map-count-badge i { color: var(--red); font-size: 14px; }
-.m-map-count-badge.filtered { background: #fff0ee; color: var(--red); }
-.m-map-count-badge .m-map-clear-zone { margin-left: 4px; color: var(--red); text-decoration: underline; font-weight: 700; }
+.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 14px; box-shadow: 0 8px 22px rgba(15,20,25,0.16); padding: 8px 13px; display: flex; align-items: center; gap: 9px; max-width: min(190px, calc(100vw - 180px)); }
+.m-map-count-num { font-size: 20px; font-weight: 800; color: var(--red); line-height: 1; flex-shrink: 0; }
+.m-map-count-label { font-size: 10.5px; font-weight: 600; color: #777; line-height: 1.3; }
+.m-map-count-badge.filtered .m-map-count-num { color: var(--red); }
+.m-map-count-badge .m-map-clear-zone { display: block; color: var(--red); font-weight: 700; margin-top: 1px; }
 .m-map-searcharea-btn { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 1000; background: #111; color: #fff; border: none; border-radius: 999px; padding: 8px 14px; font-size: 11.5px; font-weight: 700; font-family: inherit; display: none; align-items: center; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
 .m-map-locate-btn { position: absolute; bottom: 14px; right: 14px; z-index: 1000; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(15,20,25,0.18); color: #333; font-size: 17px; }
 .m-map-price-pill { background: #111; color: #fff; font-size: 11.5px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; box-shadow: 0 3px 8px rgba(0,0,0,0.22); border: 2px solid #fff; transform: translate(-50%,-100%); }
@@ -300,7 +301,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
     </div>
   </div>
   <button class="m-map-searcharea-btn" id="searchAreaBtn" onclick="searchThisArea()"><i class="ti ti-refresh"></i> Rechercher ici</button>
-  <div class="m-map-count-badge" id="mapCountBadge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce(s) dans cette zone</div>
+  <div class="m-map-count-badge" id="mapCountBadge"><span class="m-map-count-num" id="mapResultsCount">0</span><span class="m-map-count-label">annonce(s)<br>dans cette zone</span></div>
   <button class="m-map-locate-btn" onclick="locateMe()"><i class="ti ti-current-location"></i></button>
   <div id="saMapM"></div>
 </div>
@@ -852,10 +853,10 @@ function updateMapMarkers(results) {
   var badge = document.getElementById('mapCountBadge');
   if (mapBoundsFilterM) {
     badge.classList.add('filtered');
-    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> ' + withCoords.length + ' annonce(s) dans cette zone <span class="m-map-clear-zone" onclick="clearAreaFilterM()">Réinitialiser</span>';
+    badge.innerHTML = '<span class="m-map-count-num">' + withCoords.length + '</span><span class="m-map-count-label">dans cette zone<span class="m-map-clear-zone" onclick="clearAreaFilterM()">Réinitialiser</span></span>';
   } else {
     badge.classList.remove('filtered');
-    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">' + withCoords.length + '</span> annonce(s) dans cette zone';
+    badge.innerHTML = '<span class="m-map-count-num" id="mapResultsCount">' + withCoords.length + '</span><span class="m-map-count-label">annonce(s)<br>dans cette zone</span>';
   }
   if (!mapBoundsFilterM) {
     markMapProgrammaticM();
