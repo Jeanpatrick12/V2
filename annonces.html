@@ -257,6 +257,7 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
 .sa-map-listcol-empty i{font-size:26px;color:#ddd;display:block;margin-bottom:8px}
 .sa-maplist-card{background:#fff;border:1px solid #e8e8e8;border-radius:16px;overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .15s;box-shadow:0 1px 3px rgba(15,20,25,0.05)}
 .sa-maplist-card:hover{box-shadow:0 10px 26px rgba(15,20,25,0.12);transform:translateY(-2px)}
+.sa-maplist-card.selected{border-color:#E84533;box-shadow:0 0 0 2px rgba(232,69,51,0.22),0 10px 26px rgba(15,20,25,0.12)}
 .sa-maplist-photo-wrap{position:relative;height:230px;background:#eee}
 .sa-maplist-photo{width:100%;height:100%;background-size:cover;background-position:center}
 .sa-maplist-badge{position:absolute;top:9px;left:9px;color:#fff;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:6px;z-index:2}
@@ -1190,6 +1191,7 @@ function initMap() {
     if (Date.now() - lastProgrammaticMapAt < 600) return;
     if (resultsMode === 'map' && !mapBoundsFilter) document.getElementById('searchAreaBtn').style.display = 'flex';
   });
+  saMap.on('popupclose', function(){ popupPersistent = false; });
   markMapProgrammatic();
   setTimeout(function(){ markMapProgrammatic(); saMap.invalidateSize(); }, 60);
   updateRayonCircle();
@@ -1242,6 +1244,8 @@ function mapPopupHTML(l) {
 }
 
 let mapHoverCloseTimer = null;
+let popupPersistent = false;
+let selectedListingId = null;
 function bindPopupHover(popupEl) {
   if (!popupEl) return;
   popupEl.addEventListener('mouseenter', function(){ clearTimeout(mapHoverCloseTimer); });
@@ -1268,19 +1272,26 @@ function updateMapMarkers(results) {
       .setContent(mapPopupHTML(l));
     marker.on('mouseover', function(){
       clearTimeout(mapHoverCloseTimer);
+      popupPersistent = false;
       popup.openOn(saMap);
       bindPopupHover(popup.getElement());
       const el = marker.getElement();
       if (el) el.classList.add('sa-map-price-hover');
+      selectedListingId = l.id;
+      updateMapListCol(true);
     });
     marker.on('mouseout', function(){
       const el = marker.getElement();
       if (el) el.classList.remove('sa-map-price-hover');
+      if (popupPersistent) return;
       mapHoverCloseTimer = setTimeout(function(){ saMap.closePopup(popup); }, 200);
     });
     marker.on('click', function(){
       markMapProgrammatic();
       clearTimeout(mapHoverCloseTimer);
+      popupPersistent = true;
+      selectedListingId = l.id;
+      updateMapListCol(true);
       saMap.once('moveend', function(){
         popup.openOn(saMap);
         bindPopupHover(popup.getElement());
@@ -1328,7 +1339,7 @@ function mapListCardHTML(l) {
   if (l.chambres) metaParts.push(`<span><i class="ti ti-bed"></i> ${l.chambres} ch.</span>`);
 
   return `
-  <div class="sa-maplist-card" data-id="${l.id}" onclick="SA.openListing('${l.id}')">
+  <div class="sa-maplist-card${l.id === selectedListingId ? ' selected' : ''}" data-id="${l.id}" onclick="SA.openListing('${l.id}')">
     <div class="sa-maplist-photo-wrap">
       <div class="sa-maplist-photo" id="mlph-${l.id}" style="${photos[0] ? "background-image:url('" + photos[0] + "')" : 'background:' + grad}">
         ${!photos[0] ? `<i class="ti ${icon}" style="color:rgba(255,255,255,.55);font-size:30px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)"></i>` : ''}
@@ -1354,15 +1365,20 @@ function mapListCardHTML(l) {
   </div>`;
 }
 
-function updateMapListCol() {
+function updateMapListCol(scrollToTop) {
   const body = document.getElementById('mapListColBody');
   if (!saMap || !body) return;
   const b = saMap.getBounds();
   const items = lastResults.filter(function(l){ return l.lat && l.lng && b.contains([l.lat, l.lng]); });
+  if (selectedListingId) {
+    const idx = items.findIndex(function(l){ return l.id === selectedListingId; });
+    if (idx > 0) { const sel = items.splice(idx, 1)[0]; items.unshift(sel); }
+  }
   document.getElementById('mapListColCount').textContent = items.length;
   body.innerHTML = items.length
     ? items.map(mapListCardHTML).join('')
     : '<div class="sa-map-listcol-empty"><i class="ti ti-map-search"></i>Aucune annonce dans cette zone de la carte.<br>Déplacez ou dézoomez la carte.</div>';
+  if (scrollToTop) body.scrollTop = 0;
 }
 
 function updateMapCountBadge(count) {
