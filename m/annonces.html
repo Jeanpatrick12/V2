@@ -176,9 +176,10 @@
 .m-map-popup-card { width: 252px; }
 .m-map-popup-photo-wrap { position: relative; height: 135px; background-color: #eee; }
 .m-map-popup-photo { width: 100%; height: 100%; background-size: cover; background-position: center; }
-.m-map-popup-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; display: flex; align-items: center; justify-content: center; z-index: 3; color: #333; font-size: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-.m-map-popup-nav.prev { left: 8px; }
-.m-map-popup-nav.next { right: 8px; }
+.m-map-popup-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; background: rgba(17,17,17,0.5); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); border: none; display: flex; align-items: center; justify-content: center; z-index: 3; color: #fff; font-size: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: background .15s, transform .1s; }
+.m-map-popup-nav:active { background: rgba(232,69,51,0.9); transform: translateY(-50%) scale(0.94); }
+.m-map-popup-nav.prev { left: 9px; }
+.m-map-popup-nav.next { right: 9px; }
 .m-map-popup-counter { position: absolute; bottom: 8px; right: 8px; background: rgba(15,20,25,0.65); color: #fff; font-size: 10.5px; font-weight: 600; padding: 3px 7px; border-radius: 6px; z-index: 3; }
 .m-map-popup-body { padding: 12px 14px 14px; }
 .m-map-popup-price { font-size: 16px; font-weight: 800; color: #111; }
