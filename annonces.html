@@ -1302,7 +1302,6 @@ function updateMapMarkers(results) {
     marker.addTo(mapMarkersLayer);
     bounds.push([l.lat, l.lng]);
   });
-  updateMapCountBadge(withCoords.length);
   document.getElementById('mapNoCoords').style.display = (results.length && withCoords.length < results.length && !mapBoundsFilter) ? 'flex' : 'none';
   if (!mapBoundsFilter) {
     markMapProgrammatic();
@@ -1380,6 +1379,7 @@ function updateMapListCol(scrollToTop) {
     ? items.map(mapListCardHTML).join('')
     : '<div class="sa-map-listcol-empty"><i class="ti ti-map-search"></i>Aucune annonce dans cette zone de la carte.<br>Déplacez ou dézoomez la carte.</div>';
   if (scrollToTop) body.scrollTop = 0;
+  updateMapCountBadge(items.length);
 }
 
 function updateMapCountBadge(count) {

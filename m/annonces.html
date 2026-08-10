@@ -749,6 +749,7 @@ function initMapM() {
   }).addTo(saMapM);
   saMapM.on('moveend', function(){
     Object.keys(poiLayersM).forEach(function(k){ if (poiLayersM[k]) fetchPOIM(k); });
+    updateMapCountBadgeM();
     if (Date.now() - lastProgrammaticMapAtM < 600) return;
     if (resultsMode === 'map' && !mapBoundsFilterM) document.getElementById('searchAreaBtn').style.display = 'flex';
   });
@@ -850,14 +851,7 @@ function updateMapMarkers(results) {
     marker.addTo(mapMarkersLayerM);
     bounds.push([l.lat, l.lng]);
   });
-  var badge = document.getElementById('mapCountBadge');
-  if (mapBoundsFilterM) {
-    badge.classList.add('filtered');
-    badge.innerHTML = '<span class="m-map-count-num">' + withCoords.length + '</span><span class="m-map-count-label">dans cette zone<span class="m-map-clear-zone" onclick="clearAreaFilterM()">Réinitialiser</span></span>';
-  } else {
-    badge.classList.remove('filtered');
-    badge.innerHTML = '<span class="m-map-count-num" id="mapResultsCount">' + withCoords.length + '</span><span class="m-map-count-label">annonce(s)<br>dans cette zone</span>';
-  }
+  updateMapCountBadgeM();
   if (!mapBoundsFilterM) {
     markMapProgrammaticM();
     if (bounds.length) {
@@ -865,6 +859,22 @@ function updateMapMarkers(results) {
     } else {
       saMapM.setView([46.6, 2.4], 6);
     }
+  }
+}
+
+function updateMapCountBadgeM(){
+  if (!saMapM) return;
+  var badge = document.getElementById('mapCountBadge');
+  if (!badge) return;
+  var b = saMapM.getBounds();
+  var items = lastResults.filter(function(l){ return l.lat && l.lng && b.contains([l.lat, l.lng]); });
+  if (mapBoundsFilterM) {
+    items = items.filter(function(l){ return mapBoundsFilterM.contains([l.lat, l.lng]); });
+    badge.classList.add('filtered');
+    badge.innerHTML = '<span class="m-map-count-num">' + items.length + '</span><span class="m-map-count-label">dans cette zone<span class="m-map-clear-zone" onclick="clearAreaFilterM()">Réinitialiser</span></span>';
+  } else {
+    badge.classList.remove('filtered');
+    badge.innerHTML = '<span class="m-map-count-num" id="mapResultsCount">' + items.length + '</span><span class="m-map-count-label">annonce(s)<br>dans cette zone</span>';
   }
 }
 
