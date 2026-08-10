@@ -79,9 +79,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-gallery-fav.active{color:#E84533}
 .sa-gallery-allphotos{position:absolute;bottom:14px;right:14px;background:rgba(17,17,17,0.55);backdrop-filter:blur(2px);color:#fff;font-size:12px;font-weight:700;padding:7px 14px;border-radius:9px;display:flex;align-items:center;gap:7px;z-index:2;cursor:pointer;border:1.5px solid rgba(255,255,255,0.55);font-family:inherit}
 .sa-gallery-allphotos:hover{background:rgba(232,69,51,0.85);border-color:#E84533}
-.sa-gallery-nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#333;z-index:2;font-size:15px}
-.sa-gallery-nav-btn:hover{background:white}
-.sa-gallery-nav-btn.prev{left:12px}.sa-gallery-nav-btn.next{right:12px}
+.sa-gallery-nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(17,17,17,0.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);border:none;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;z-index:2;font-size:17px;box-shadow:0 2px 10px rgba(0,0,0,0.2);transition:background .15s,transform .15s}
+.sa-gallery-nav-btn:hover{background:rgba(232,69,51,0.9);transform:translateY(-50%) scale(1.06)}
+.sa-gallery-nav-btn.prev{left:14px}.sa-gallery-nav-btn.next{right:14px}
+.sa-gallery-hero{cursor:grab}
+.sa-gallery-hero.dragging{cursor:grabbing}
 .sa-thumb-row{display:flex;gap:8px;margin-top:9px;overflow-x:auto;padding-bottom:2px}
 .sa-thumb{width:84px;height:60px;border-radius:9px;flex-shrink:0;object-fit:cover;cursor:pointer;border:2px solid transparent;opacity:.7}
 .sa-thumb:hover{opacity:1}
@@ -775,9 +777,32 @@ function render() {
   initDetailMap(l);
   injectStructuredData(l);
   loadRisques(l);
+  initGallerySwipe();
   window.__currentListing = l;
   window.__allFacts = allFacts;
   window.__generalFactsCount = generalFacts.length;
+}
+
+/* ───────── glisser pour changer de photo (souris + tactile) ───────── */
+function initGallerySwipe() {
+  const hero = document.getElementById('galleryHero');
+  if (!hero) return;
+  let startX = 0, dragging = false;
+  hero.addEventListener('pointerdown', function(e){
+    if (e.target.closest('.sa-gallery-nav-btn, .sa-gallery-fav, .sa-gallery-allphotos')) return;
+    dragging = true;
+    startX = e.clientX;
+    hero.classList.add('dragging');
+    hero.setPointerCapture(e.pointerId);
+  });
+  hero.addEventListener('pointerup', function(e){
+    if (!dragging) return;
+    dragging = false;
+    hero.classList.remove('dragging');
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 40) galleryStep(dx < 0 ? 1 : -1);
+  });
+  hero.addEventListener('pointercancel', function(){ dragging = false; hero.classList.remove('dragging'); });
 }
 
 function injectStructuredData(l) {
