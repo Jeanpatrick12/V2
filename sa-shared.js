@@ -496,7 +496,7 @@
       title:             titleFor(data.type, data.pieces, addr.ville, data.meuble),
       ville:             addr.ville,
       postal:            addr.postal,
-      adresse:           data.adresse || "",
+      adresse:           capitalizeVille(data.adresse) || "",
       lat:               coords ? coords.lat : null,
       lng:               coords ? coords.lng : null,
       price:             data.price,
@@ -562,7 +562,7 @@
     if (patch.adresse !== undefined) {
       const addr = parseAddress(patch.adresse);
       const coords = (await geocodeAddress(patch.adresse)) || (addr.ville ? await geocodeAddress(addr.ville) : null);
-      dbPatch.adresse = patch.adresse || "";
+      dbPatch.adresse = capitalizeVille(patch.adresse) || "";
       dbPatch.ville = addr.ville;
       dbPatch.postal = addr.postal;
       dbPatch.lat = coords ? coords.lat : null;
@@ -1110,7 +1110,7 @@
     return parts.join("-");
   }
   function openListing(id) {
-    window.top.location.href = "annonce?id=" + encodeURIComponent(id);
+    window.top.location.href = "/annonce?id=" + encodeURIComponent(id);
   }
   function closeListing() {
     const root = document.getElementById("saListingModalRoot");
@@ -1137,7 +1137,7 @@
     document.querySelectorAll("[data-nav-fav-badge]").forEach(b => {
       const n = _cache.favorites.length;
       b.textContent = n > 9 ? "9+" : String(n);
-      b.style.display = n > 0 ? "block" : "none";
+      b.style.display = n > 0 ? "flex" : "none";
     });
     mountMobileMenuBadges();
   }
@@ -1145,7 +1145,7 @@
     document.querySelectorAll("[data-nav-msg-badge]").forEach(b => {
       const n = getUnreadMessageCount();
       b.textContent = n > 9 ? "9+" : String(n);
-      b.style.display = n > 0 ? "block" : "none";
+      b.style.display = n > 0 ? "flex" : "none";
     });
     mountMobileMenuBadges();
   }
@@ -1153,7 +1153,7 @@
     document.querySelectorAll("[data-nav-search-badge]").forEach(b => {
       const n = getSavedSearches().length;
       b.textContent = n > 9 ? "9+" : String(n);
-      b.style.display = n > 0 ? "block" : "none";
+      b.style.display = n > 0 ? "flex" : "none";
     });
     mountMobileMenuBadges();
   }
@@ -1202,12 +1202,12 @@
         dropdown.innerHTML =
           '<div class="sa-account-dropdown-email"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.email || "") + "</div>" +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'profil\'"><i class="ti ti-user-circle"></i> Mon profil</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + getUserListings().length + '</span>' : '') + '</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length; try { n += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + n + '</span>' : ''; })() + '</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;vertical-align:middle;display:inline-flex;align-items:center;justify-content:center;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;box-sizing:border-box;padding:1px 4px 2px">' + getUserListings().length + '</span>' : '') + '</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length; try { n += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;vertical-align:middle;display:inline-flex;align-items:center;justify-content:center;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;box-sizing:border-box;padding:1px 4px 2px">' + n + '</span>' : ''; })() + '</button>' +
           '<button class="sa-account-dropdown-logout" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>';
       } else {
         btn.onclick = function() {
-          window.top.location.href = "connexion?redirect=" + encodeURIComponent(window.location.pathname.split("/").pop() || "./");
+          window.top.location.href = "/connexion?redirect=" + encodeURIComponent(window.location.pathname.split("/").pop() || "./");
         };
       }
     });

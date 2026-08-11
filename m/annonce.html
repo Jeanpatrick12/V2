@@ -172,7 +172,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=20"></script>
+<script src="../sa-shared.js?v=21"></script>
 <script>
 var listingId = new URLSearchParams(window.location.search).get('id');
 var photos = [];
@@ -855,18 +855,37 @@ function renderSimilar(l) {
   var el = document.getElementById('similarCarousel');
   if(!el) return;
   var all = SA.getAllListings();
-  var similar = all.filter(function(x){
-    return x.status !== 'sold' && x.id !== l.id &&
-      (x.type === l.type || x.ville === l.ville) &&
+  var candidates = all.filter(function(x){
+    return x.status !== 'sold' && x.id !== l.id && !SA.isDemoListing(x.id) &&
       x.transaction === l.transaction;
-  }).slice(0, 5);
+  });
+  function score(x) {
+    var s = 0;
+    if (x.ville && l.ville && x.ville.toLowerCase() === l.ville.toLowerCase()) {
+      s += 100;
+    } else if (l.lat && l.lng && x.lat && x.lng) {
+      var d = SA.distanceKm(l.lat, l.lng, x.lat, x.lng);
+      if (d <= 50) s += Math.max(0, 60 - d);
+    }
+    if (x.type === l.type) s += 20;
+    if (l.price && x.price) {
+      var ratio = Math.abs(x.price - l.price) / l.price;
+      if (ratio <= 0.3) s += 10 - ratio * 20;
+    }
+    return s;
+  }
+  var similar = candidates.map(function(x){ return {x:x, s:score(x)}; })
+    .filter(function(o){ return o.s > 0; })
+    .sort(function(a,b){ return b.s - a.s; })
+    .slice(0, 8)
+    .map(function(o){ return o.x; });
   if(!similar.length) { el.parentElement.style.display='none'; return; }
   var GRAD = {vente:'linear-gradient(135deg,#4f6d9e,#7890b8)',location:'linear-gradient(135deg,#4a7c6b,#6aaa90)'};
   el.innerHTML = similar.map(function(x) {
     var xph = x.photos && x.photos[0];
     var xphUrl = xph ? ((typeof xph === 'object' && xph.url) ? xph.url : String(xph)) : null;
     var imgStyle = xphUrl
-      ? 'background-image:url("' + xphUrl.replace(/"/g,'%22') + '");background-size:cover;background-position:center'
+      ? "background-image:url('" + xphUrl.replace(/'/g,"%27") + "');background-size:cover;background-position:center"
       : 'background:' + (GRAD[x.transaction] || '#e8e8e8');
     var xprice = x.price ? x.price.toLocaleString('fr-FR') + ' €' + (x.transaction==='location'?'/mois':'') : '';
     return '<div class="m-similar-card m-carousel-item" onclick="SA.openListing(\'' + x.id + '\')">' +
