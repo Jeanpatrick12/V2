@@ -854,11 +854,12 @@ function loadAvisSectionListing(listingId) {
 function renderSimilar(l) {
   var el = document.getElementById('similarCarousel');
   if(!el) return;
-  var all = SA.getAllListings();
-  var candidates = all.filter(function(x){
-    return x.status !== 'sold' && x.id !== l.id && !SA.isDemoListing(x.id) &&
-      x.transaction === l.transaction;
+  try {
+  var active = SA.getAllListings().filter(function(x){
+    return x.status !== 'sold' && x.id !== l.id && x.transaction === l.transaction;
   });
+  var real = active.filter(function(x){ return !SA.isDemoListing(x.id); });
+  var candidates = real.length >= 3 ? real : active;
   function score(x) {
     var s = 0;
     if (x.ville && l.ville && x.ville.toLowerCase() === l.ville.toLowerCase()) {
@@ -875,7 +876,6 @@ function renderSimilar(l) {
     return s;
   }
   var similar = candidates.map(function(x){ return {x:x, s:score(x)}; })
-    .filter(function(o){ return o.s > 0; })
     .sort(function(a,b){ return b.s - a.s; })
     .slice(0, 8)
     .map(function(o){ return o.x; });
@@ -900,6 +900,7 @@ function renderSimilar(l) {
       '</div>' +
     '</div>';
   }).join('') + '<div style="width:1px;flex-shrink:0;margin-right:6px"></div>';
+  } catch (e) { el.parentElement.style.display='none'; }
 }
 
 function requestDossierM() {

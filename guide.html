@@ -35,7 +35,7 @@ button{font-family:inherit;cursor:pointer}
 .sa-nav-icon-btn:hover{background:#f5f5f5;color:#111}
 .sa-nav-icon-btn i{font-size:19px}
 .sa-nav-icon-label{font-size:10.5px;font-weight:500;white-space:nowrap}
-.sa-nav-badge{position:absolute;top:2px;right:2px;background:#E84533;color:white;font-size:8.5px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:1px 4px 2px}
+.sa-nav-icon-wrap{position:relative;display:inline-flex}.sa-nav-badge{position:absolute;top:-5px;right:-6px;background:#E84533;color:white;font-size:8.5px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:1px 4px 2px}
 
 /* ── Hero ── */
 .v-hero{background:linear-gradient(135deg,#0c1622 0%,#152233 60%,#1c2e44 100%);padding:72px 40px 80px;position:relative;overflow:hidden}
@@ -340,9 +340,9 @@ button{font-family:inherit;cursor:pointer}
     <div class="sa-nav-actions">
       <button class="sa-nav-cta" onclick="window.location.href='deposer'"><i class="ti ti-plus"></i> Déposer une annonce</button>
       <div class="sa-nav-divider"></div>
-      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='recherches'"><i class="ti ti-search"></i><span class="sa-nav-badge" data-nav-search-badge></span><span class="sa-nav-icon-label">Mes recherches</span></button>
-      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'"><i class="ti ti-heart"></i><span class="sa-nav-badge" data-nav-fav-badge></span><span class="sa-nav-icon-label">Favoris</span></button>
-      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='messages'"><i class="ti ti-message-2"></i><span class="sa-nav-badge" data-nav-msg-badge></span><span class="sa-nav-icon-label">Messages</span></button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='recherches'"><span class="sa-nav-icon-wrap"><i class="ti ti-search"></i><span class="sa-nav-badge" data-nav-search-badge></span></span><span class="sa-nav-icon-label">Mes recherches</span></button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='favoris'"><span class="sa-nav-icon-wrap"><i class="ti ti-heart"></i><span class="sa-nav-badge" data-nav-fav-badge></span></span><span class="sa-nav-icon-label">Favoris</span></button>
+      <button class="sa-nav-icon-btn" style="position:relative" onclick="window.location.href='messages'"><span class="sa-nav-icon-wrap"><i class="ti ti-message-2"></i><span class="sa-nav-badge" data-nav-msg-badge></span></span><span class="sa-nav-icon-label">Messages</span></button>
       <div class="sa-nav-account-wrap" data-nav-account>
         <button class="sa-nav-icon-btn"><i class="ti ti-user"></i><span class="sa-nav-icon-label">Se connecter</span></button>
         <div class="sa-account-dropdown"></div>
