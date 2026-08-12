@@ -228,6 +228,7 @@
     docs.unshift(doc);
     if (docs.length > 20) docs = docs.slice(0, 20);
     _setLocalDocs(docs, uid);
+    mountNavAuth();
     if (user && _sb) {
       try {
         await _sb.from("user_documents").upsert(
@@ -244,6 +245,7 @@
     var docs = _getLocalDocs(uid);
     docs = docs.filter(function(d) { return d.type !== docType; });
     _setLocalDocs(docs, uid);
+    mountNavAuth();
     if (user && _sb) {
       try {
         await _sb.from("user_documents").delete().eq("user_id", user.id).eq("doc_type", docType);
@@ -629,6 +631,10 @@
   function getSavedSearches() { return _cache.searches.slice(); }
   async function addSavedSearch(criteria) {
     if (!_cache.user) throw new Error("auth-required");
+    const critStr = JSON.stringify(criteria);
+    if (_cache.searches.some(s => JSON.stringify(s.criteria) === critStr)) {
+      throw new Error("duplicate-search");
+    }
     const label = _labelForSearch(criteria);
     const { data, error } = await _sb.from("saved_searches")
       .insert({ user_id: _cache.user.id, label: label, criteria: criteria })
@@ -1202,8 +1208,8 @@
         dropdown.innerHTML =
           '<div class="sa-account-dropdown-email"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.email || "") + "</div>" +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'profil\'"><i class="ti ti-user-circle"></i> Mon profil</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:16px;max-width:16px;min-height:16px;max-height:16px;border-radius:8px;box-sizing:border-box;padding:0;line-height:16px;text-align:center">' + getUserListings().length + '</span>' : '') + '</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length; try { n += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:16px;max-width:16px;min-height:16px;max-height:16px;border-radius:8px;box-sizing:border-box;padding:0;line-height:16px;text-align:center">' + n + '</span>' : ''; })() + '</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:16px;max-width:16px;min-height:16px;max-height:16px;border-radius:8px;box-sizing:border-box;padding:1px 0 2px">' + getUserListings().length + '</span>' : '') + '</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length; try { n += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:16px;max-width:16px;min-height:16px;max-height:16px;border-radius:8px;box-sizing:border-box;padding:1px 0 2px">' + n + '</span>' : ''; })() + '</button>' +
           '<button class="sa-account-dropdown-logout" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>';
       } else {
         btn.onclick = function() {

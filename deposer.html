@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=22"></script>
+<script src="sa-shared.js?v=23"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2745,7 +2745,7 @@ function gfbPrevScreen(){
   function closeDocModal(id){document.getElementById(id).style.display='none';document.body.style.overflow='';}
 
   function fmtND(v){return v?parseInt(v).toLocaleString('fr-FR'):'__________';}
-  function fmtDD(s){if(!s)return '__________';var x=new Date(s);return isNaN(x)?s:x.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
+  function fmtDD(s){if(!s)return '__________';var x=new Date(/^\d{4}-\d{2}-\d{2}$/.test(s)?s+'T00:00:00':s);return isNaN(x)?s:x.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
   function todayFRD(){return new Date().toLocaleDateString('fr-FR');}
   function refIDD(p){return p+'-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'-'+Math.floor(Math.random()*9000+1000);}
   function dHead(title,ref,ico,color,sub){return '<div class="doc-header"><div class="doc-header-top"><div class="doc-logo"><div class="doc-logo-badge">SA</div>SansAgents.fr</div><div class="doc-meta">Réf. '+ref+'<br>'+todayFRD()+'</div></div><div class="doc-title-band"><div class="doc-title-ico" style="background:rgba(255,255,255,.1);color:'+color+'"><i class="ti '+ico+'"></i></div><div><div class="doc-title">'+title+'</div><div class="doc-subtitle">'+sub+'</div></div></div></div><div class="doc-body">';}

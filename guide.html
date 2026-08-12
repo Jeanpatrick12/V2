@@ -1094,7 +1094,7 @@ button{font-family:inherit;cursor:pointer}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=22"></script>
+<script src="sa-shared.js?v=23"></script>
 <script>
 // ── State ──
 var done = JSON.parse(localStorage.getItem('sa_vendre_done')||'[]');
@@ -1199,7 +1199,7 @@ function closeModal(id){document.getElementById(id).style.display='none';documen
 
 // ── Helpers ──
 function fmtN(v){return v?parseInt(v).toLocaleString('fr-FR'):'__________';}
-function fmtD(s){if(!s)return '__________';var x=new Date(s);return isNaN(x)?s:x.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
+function fmtD(s){if(!s)return '__________';var x=new Date(/^\d{4}-\d{2}-\d{2}$/.test(s)?s+'T00:00:00':s);return isNaN(x)?s:x.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
 function todayFR(){return new Date().toLocaleDateString('fr-FR');}
 function refID(prefix){return prefix+'-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'-'+Math.floor(Math.random()*9000+1000);}
 function docHead(title,ref,ico,color,subtitle){

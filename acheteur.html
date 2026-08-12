@@ -125,7 +125,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div data-nav-account style="display:none"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=22"></script>
+<script src="sa-shared.js?v=23"></script>
 
 <div class="page-header">
   <div class="page-header-inner">
@@ -424,7 +424,7 @@ function editDoc(idx){
   openModal(d.type);
 }
 
-function fmtDate(s){if(!s)return'—';var d=new Date(s);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
+function fmtDate(s){if(!s)return'—';var d=new Date(/^\d{4}-\d{2}-\d{2}$/.test(s)?s+'T00:00:00':s);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
 function now(){return new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
 function val(id){return(document.getElementById(id)||{}).value||'';}
 
@@ -458,6 +458,7 @@ function generateDoc(type){
   var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
   if(editingIdx!==null&&docs[editingIdx]){docs[editingIdx]=doc;}else{docs.unshift(doc);}
   localStorage.setItem(docsKey(),JSON.stringify(docs));
+  if (SA.mountNavAuth) SA.mountNavAuth();
   closeModalId(type);
   loadDocs();
   SA.toast('Document sauvegardé !','ti-circle-check');
@@ -665,6 +666,7 @@ function deleteDoc(idx){
   setTimeout(function(){
     docs.splice(idx,1);
     localStorage.setItem(docsKey(),JSON.stringify(docs));
+    if (SA.mountNavAuth) SA.mountNavAuth();
     loadDocs();
   },300);
 }

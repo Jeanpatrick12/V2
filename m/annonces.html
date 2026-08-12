@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=22"></script>
+<script src="../sa-shared.js?v=23"></script>
 <script>
 var filters = { transaction: '', type: '', ville: '', rayon: 0, budgetMin: '', budgetMax: '', piecesMin: '', piecesMax: '', chambresMin: '', chambresMax: '', surfaceMin: '', surfaceMax: '', dpe: [], ges: [], motsCles: '' };
 var villeCoordsCache = {};
@@ -623,8 +623,12 @@ function saveCurrentSearchM() {
   };
   SA.addSavedSearch(criteria).then(function(){
     SA.toast('Recherche enregistrée — vous serez alerté(e) par email des nouvelles annonces correspondantes', 'ti-bookmark-filled');
-  }).catch(function(){
-    SA.toast('Connectez-vous pour enregistrer une recherche', 'ti-alert-circle');
+  }).catch(function(err){
+    if (err && err.message === 'duplicate-search') {
+      SA.toast('Cette recherche est déjà enregistrée', 'ti-info-circle');
+    } else {
+      SA.toast('Connectez-vous pour enregistrer une recherche', 'ti-alert-circle');
+    }
   });
 }
 
