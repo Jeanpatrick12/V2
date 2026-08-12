@@ -134,7 +134,7 @@ input, select, textarea { font-family: inherit; font-size: 16px; }
   border-top: 1px solid var(--border);
   display: flex;
   align-items: stretch;
-  z-index: 500;
+  z-index: 1500;
   box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
   overflow: hidden;
 }
