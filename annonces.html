@@ -248,10 +248,6 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
 .sa-map-view{display:none;height:calc(100vh - 250px);min-height:560px;border-radius:18px;overflow:hidden;border:1px solid #e8e8e8;box-shadow:0 1px 3px rgba(15,20,25,0.04)}
 .sa-map-view.show{display:flex;width:100vw;margin-left:calc(50% - 50vw)}
 .sa-map-listcol{width:400px;flex-shrink:0;overflow-y:auto;background:#fafafa;border-right:1px solid #eee}
-.sa-map-listcol-title-wrap{position:sticky;top:0;background:#fafafa;padding:14px 14px 4px;z-index:1;display:flex;justify-content:center}
-.sa-map-listcol-title{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#111;border:1px solid #f0f0f0;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:700;box-shadow:0 8px 22px rgba(15,20,25,0.12)}
-.sa-map-listcol-title i{color:#E84533;font-size:15px}
-.sa-map-listcol-title #mapListColCount{color:#E84533}
 .sa-map-listcol-body{padding:14px;display:flex;flex-direction:column;gap:16px}
 .sa-map-listcol-empty{padding:32px 16px;text-align:center;color:#999;font-size:12.5px;line-height:1.6}
 .sa-map-listcol-empty i{font-size:26px;color:#ddd;display:block;margin-bottom:8px}
@@ -296,13 +292,8 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
 .sa-poi-check .sa-poi-dotlabel i{color:#fff;font-size:10px}
 .sa-map-count-badge{position:absolute;top:16px;right:16px;z-index:1000;background:white;border-radius:999px;box-shadow:0 8px 24px rgba(15,20,25,0.14);padding:9px 16px;font-size:12.5px;font-weight:700;color:#111;display:flex;align-items:center;gap:7px;white-space:nowrap}
 .sa-map-count-badge i{color:#E84533}
-.sa-map-count-badge.filtered{background:#fff0ee;color:#E84533}
-.sa-map-count-badge .sa-map-clear-zone{margin-left:4px;color:#E84533;cursor:pointer;text-decoration:underline;font-weight:700}
 .sa-map-nocoords{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:1000;background:rgba(17,17,17,0.88);color:#fff;font-size:12px;padding:9px 16px;border-radius:999px;display:none;align-items:center;gap:7px;white-space:nowrap}
 .sa-map-nocoords i{color:#ffb199}
-.sa-map-searcharea-btn{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:1000;background:#111;color:#fff;border:none;border-radius:999px;padding:10px 18px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;display:none;align-items:center;gap:7px;box-shadow:0 8px 22px rgba(0,0,0,0.25)}
-.sa-map-searcharea-btn:hover{background:#E84533}
-.sa-map-searcharea-btn i{font-size:14px}
 .sa-map-locate-btn{position:absolute;bottom:16px;right:16px;z-index:1000;background:white;border:none;border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 22px rgba(15,20,25,0.18);color:#333;font-size:18px}
 .sa-map-locate-btn:hover{color:#E84533}
 .leaflet-bottom.leaflet-left .leaflet-control{margin-bottom:16px;margin-left:16px}
@@ -714,9 +705,6 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
   </div>
   <div class="sa-map-view" id="mapViewContainer">
     <div class="sa-map-listcol" id="mapListCol">
-      <div class="sa-map-listcol-title-wrap">
-        <div class="sa-map-listcol-title"><i class="ti ti-list"></i> <span id="mapListColCount">0</span> <span id="mapListColLabel">annonce dans cette zone</span></div>
-      </div>
       <div class="sa-map-listcol-body" id="mapListColBody"></div>
     </div>
     <div class="sa-map-mapcol">
@@ -731,7 +719,6 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
           <label class="sa-poi-check"><input type="checkbox" id="poiCheck-sante" onchange="togglePoiLayer('sante',this.checked)"><span class="sa-poi-dotlabel" style="background:#e0245e"><i class="ti ti-first-aid-kit"></i></span> Santé</label>
         </div>
       </div>
-      <button class="sa-map-searcharea-btn" id="searchAreaBtn" onclick="searchThisArea()"><i class="ti ti-refresh"></i> Rechercher dans cette zone</button>
       <div class="sa-map-count-badge" id="mapCountBadge"><i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">0</span> annonce localisée</div>
       <div class="sa-map-nocoords" id="mapNoCoords"><i class="ti ti-info-circle"></i> Certaines annonces ne sont pas encore localisées sur la carte.</div>
       <button class="sa-map-locate-btn" onclick="locateMe()" title="Me localiser"><i class="ti ti-current-location"></i></button>
@@ -1089,7 +1076,6 @@ function applyFilters(scrollToResults) {
     }
     if (c.qTags.length && !c.qTags.every(t => (l.title || '').toLowerCase().includes(t.toLowerCase()) || (l.desc || '').toLowerCase().includes(t.toLowerCase()))) return false;
     if (c.equip2.length && !c.equip2.every(e => Array.isArray(l.equipements) && l.equipements.includes(e))) return false;
-    if (mapBoundsFilter && (!l.lat || !l.lng || !mapBoundsFilter.contains([l.lat, l.lng]))) return false;
     return true;
   });
 
@@ -1120,7 +1106,6 @@ function runSearch() { applyFilters(true); }
 /* ───────────────── vue carte ───────────────── */
 let saMap = null;
 let mapMarkersLayer = null;
-let mapBoundsFilter = null;
 let rayonCircle = null;
 let lastProgrammaticMapAt = 0;
 function markMapProgrammatic() { lastProgrammaticMapAt = Date.now(); }
@@ -1141,8 +1126,6 @@ function setResultsMode(mode) {
   const mapC = document.getElementById('mapViewContainer');
   const viewToggle = document.getElementById('viewToggle');
   const mapBtn = document.getElementById('mapToggleBtn');
-  mapBoundsFilter = null;
-  document.getElementById('searchAreaBtn').style.display = 'none';
   if (mode === 'map') {
     grid.style.display = 'none';
     document.getElementById('scrollSentinel').style.display = 'none';
@@ -1186,11 +1169,8 @@ function initMap() {
   saMap.on('moveend', function(){
     Object.keys(poiLayers).forEach(function(k){ if (poiLayers[k]) fetchPOI(k); });
     updateMapListCol();
-    if (Date.now() - lastProgrammaticMapAt < 600) return;
-    if (resultsMode === 'map' && !mapBoundsFilter) document.getElementById('searchAreaBtn').style.display = 'flex';
   });
-  saMap.on('popupclose', function(){ popupPersistent = false; });
-  saMap.on('click', function(){ popupPersistent = false; saMap.closePopup(); });
+  saMap.on('click', function(){ saMap.closePopup(); });
   markMapProgrammatic();
   setTimeout(function(){ markMapProgrammatic(); saMap.invalidateSize(); }, 60);
   updateRayonCircle();
@@ -1242,18 +1222,7 @@ function mapPopupHTML(l) {
     '</div></div>';
 }
 
-let mapHoverCloseTimer = null;
-let popupPersistent = false;
 let selectedListingId = null;
-function bindPopupHover(popupEl) {
-  if (!popupEl) return;
-  popupEl.addEventListener('mouseenter', function(){ clearTimeout(mapHoverCloseTimer); });
-  popupEl.addEventListener('mouseleave', function(){
-    if (popupPersistent) return;
-    mapHoverCloseTimer = setTimeout(function(){ saMap.closePopup(); }, 200);
-  });
-}
-
 let mapMarkersById = {};
 function highlightMarker(id, on) {
   const marker = mapMarkersById[id];
@@ -1279,11 +1248,6 @@ function updateMapMarkers(results) {
       .setLatLng([l.lat, l.lng])
       .setContent(mapPopupHTML(l));
     marker.on('mouseover', function(){
-      if (popupPersistent) return;
-      clearTimeout(mapHoverCloseTimer);
-      saMap.closePopup();
-      popup.openOn(saMap);
-      bindPopupHover(popup.getElement());
       const el = marker.getElement();
       if (el) el.classList.add('sa-map-price-hover');
       selectedListingId = l.id;
@@ -1292,33 +1256,26 @@ function updateMapMarkers(results) {
     marker.on('mouseout', function(){
       const el = marker.getElement();
       if (el) el.classList.remove('sa-map-price-hover');
-      if (popupPersistent) return;
-      mapHoverCloseTimer = setTimeout(function(){ saMap.closePopup(popup); }, 200);
     });
     marker.on('click', function(){
       markMapProgrammatic();
-      clearTimeout(mapHoverCloseTimer);
       saMap.closePopup();
-      popupPersistent = true;
       selectedListingId = l.id;
       updateMapListCol(true);
       saMap.once('moveend', function(){
         popup.openOn(saMap);
-        bindPopupHover(popup.getElement());
       });
       saMap.setView([l.lat, l.lng], Math.min(Math.max(saMap.getZoom() + 1, 15), 18), { animate: true });
     });
     marker.addTo(mapMarkersLayer);
     bounds.push([l.lat, l.lng]);
   });
-  document.getElementById('mapNoCoords').style.display = (results.length && withCoords.length < results.length && !mapBoundsFilter) ? 'flex' : 'none';
-  if (!mapBoundsFilter) {
-    markMapProgrammatic();
-    if (bounds.length) {
-      saMap.fitBounds(bounds, { padding: [70, 70], maxZoom: 14 });
-    } else {
-      saMap.setView([46.6, 2.4], 6);
-    }
+  document.getElementById('mapNoCoords').style.display = (results.length && withCoords.length < results.length) ? 'flex' : 'none';
+  markMapProgrammatic();
+  if (bounds.length) {
+    saMap.fitBounds(bounds, { padding: [70, 70], maxZoom: 14 });
+  } else {
+    saMap.setView([46.6, 2.4], 6);
   }
   updateMapListCol();
 }
@@ -1383,8 +1340,6 @@ function updateMapListCol(scrollToTop) {
     const idx = items.findIndex(function(l){ return l.id === selectedListingId; });
     if (idx > 0) { const sel = items.splice(idx, 1)[0]; items.unshift(sel); }
   }
-  document.getElementById('mapListColCount').textContent = items.length;
-  document.getElementById('mapListColLabel').textContent = pluralWord(items.length, 'annonce') + ' dans cette zone';
   body.innerHTML = items.length
     ? items.map(mapListCardHTML).join('')
     : '<div class="sa-map-listcol-empty"><i class="ti ti-map-search"></i>Aucune annonce dans cette zone de la carte.<br>Déplacez ou dézoomez la carte.</div>';
@@ -1394,25 +1349,7 @@ function updateMapListCol(scrollToTop) {
 
 function updateMapCountBadge(count) {
   const badge = document.getElementById('mapCountBadge');
-  if (mapBoundsFilter) {
-    badge.classList.add('filtered');
-    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> ' + count + ' dans cette zone <span class="sa-map-clear-zone" onclick="clearAreaFilter()">Réinitialiser</span>';
-  } else {
-    badge.classList.remove('filtered');
-    badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">' + count + '</span> ' + pluralWord(count, 'annonce') + ' ' + pluralWord(count, 'localisée');
-  }
-}
-
-function searchThisArea() {
-  mapBoundsFilter = saMap.getBounds();
-  document.getElementById('searchAreaBtn').style.display = 'none';
-  applyFilters();
-}
-
-function clearAreaFilter() {
-  mapBoundsFilter = null;
-  document.getElementById('searchAreaBtn').style.display = 'none';
-  applyFilters();
+  badge.innerHTML = '<i class="ti ti-map-pin-filled"></i> <span id="mapResultsCount">' + count + '</span> ' + pluralWord(count, 'annonce') + ' ' + pluralWord(count, 'localisée');
 }
 
 function locateMe() {

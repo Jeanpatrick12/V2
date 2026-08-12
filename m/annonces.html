@@ -168,12 +168,9 @@
 .m-poi-check input { accent-color: var(--red); width: 14px; height: 14px; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel { width: 16px; height: 16px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .m-poi-check .m-poi-dotlabel i { color: #fff; font-size: 9px; }
-.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 12px; box-shadow: 0 8px 22px rgba(15,20,25,0.16); padding: 7px 11px; display: flex; align-items: center; gap: 7px; max-width: min(180px, calc(100vw - 175px)); }
-.m-map-count-num { font-size: 15px; font-weight: 800; color: var(--red); line-height: 1; flex-shrink: 0; }
-.m-map-count-label { font-size: 10.5px; font-weight: 600; color: #777; line-height: 1.3; }
-.m-map-count-badge.filtered .m-map-count-num { color: var(--red); }
-.m-map-count-badge .m-map-clear-zone { display: block; color: var(--red); font-weight: 700; margin-top: 1px; }
-.m-map-searcharea-btn { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 1000; background: #111; color: #fff; border: none; border-radius: 999px; padding: 8px 14px; font-size: 11.5px; font-weight: 700; font-family: inherit; display: none; align-items: center; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+.m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 12px; box-shadow: 0 8px 22px rgba(15,20,25,0.16); padding: 8px 12px; display: flex; flex-direction: column; align-items: center; gap: 1px; max-width: min(180px, calc(100vw - 175px)); text-align: center; }
+.m-map-count-num { font-size: 16px; font-weight: 800; color: var(--red); line-height: 1.15; }
+.m-map-count-label { font-size: 10px; font-weight: 600; color: #777; line-height: 1.25; }
 .m-map-locate-btn { position: absolute; bottom: 14px; right: 14px; z-index: 1000; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(15,20,25,0.18); color: #333; font-size: 17px; }
 .m-map-price-pill { background: #111; color: #fff; font-size: 11.5px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; box-shadow: 0 3px 8px rgba(0,0,0,0.22); border: 2px solid #fff; transform: translate(-50%,-100%); }
 .sa-poi-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transform: translate(-50%,-50%); }
@@ -300,7 +297,6 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
       <label class="m-poi-check"><input type="checkbox" id="poiCheck-sante" onchange="togglePoiLayer('sante',this.checked)"><span class="m-poi-dotlabel" style="background:#e0245e"><i class="ti ti-first-aid-kit"></i></span> Santé</label>
     </div>
   </div>
-  <button class="m-map-searcharea-btn" id="searchAreaBtn" onclick="searchThisArea()"><i class="ti ti-refresh"></i> Rechercher ici</button>
   <div class="m-map-count-badge" id="mapCountBadge"><span class="m-map-count-num" id="mapResultsCount">0</span><span class="m-map-count-label">annonce<br>dans cette zone</span></div>
   <button class="m-map-locate-btn" onclick="locateMe()"><i class="ti ti-current-location"></i></button>
   <div id="saMapM"></div>
@@ -692,7 +688,6 @@ function applyFilters() {
 /* ───────────────── vue carte ───────────────── */
 var saMapM = null;
 var mapMarkersLayerM = null;
-var mapBoundsFilterM = null;
 var lastProgrammaticMapAtM = 0;
 function markMapProgrammaticM() { lastProgrammaticMapAtM = Date.now(); }
 var poiLayersM = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null, sante:null };
@@ -709,13 +704,9 @@ function setResultsMode(mode) {
   resultsMode = mode;
   var listCont = document.getElementById('listingsContainer');
   var mapC = document.getElementById('mapViewContainer');
-  var filterBar = document.getElementById('filterBar');
   var mapBtn = document.getElementById('mapToggleBtn');
-  mapBoundsFilterM = null;
-  document.getElementById('searchAreaBtn').style.display = 'none';
   if (mode === 'map') {
     listCont.style.display = 'none';
-    filterBar.style.display = 'none';
     mapC.classList.add('show');
     mapBtn.classList.add('active');
     mapBtn.innerHTML = '<i class="ti ti-list"></i> Liste';
@@ -724,7 +715,6 @@ function setResultsMode(mode) {
   } else {
     mapC.classList.remove('show');
     listCont.style.display = '';
-    filterBar.style.display = '';
     mapBtn.classList.remove('active');
     mapBtn.innerHTML = '<i class="ti ti-map-2"></i> Carte';
     renderListings(lastResults);
@@ -750,23 +740,9 @@ function initMapM() {
   saMapM.on('moveend', function(){
     Object.keys(poiLayersM).forEach(function(k){ if (poiLayersM[k]) fetchPOIM(k); });
     updateMapCountBadgeM();
-    if (Date.now() - lastProgrammaticMapAtM < 600) return;
-    if (resultsMode === 'map' && !mapBoundsFilterM) document.getElementById('searchAreaBtn').style.display = 'flex';
   });
   markMapProgrammaticM();
   setTimeout(function(){ markMapProgrammaticM(); saMapM.invalidateSize(); }, 60);
-}
-
-function searchThisArea() {
-  mapBoundsFilterM = saMapM.getBounds();
-  document.getElementById('searchAreaBtn').style.display = 'none';
-  applyFilters();
-}
-
-function clearAreaFilterM() {
-  mapBoundsFilterM = null;
-  document.getElementById('searchAreaBtn').style.display = 'none';
-  applyFilters();
 }
 
 function locateMe() {
@@ -827,9 +803,6 @@ function updateMapMarkers(results) {
   if (!saMapM || !mapMarkersLayerM) return;
   mapMarkersLayerM.clearLayers();
   var withCoords = results.filter(function(l){ return l.lat && l.lng; });
-  if (mapBoundsFilterM) {
-    withCoords = withCoords.filter(function(l){ return mapBoundsFilterM.contains([l.lat, l.lng]); });
-  }
   var bounds = [];
   withCoords.forEach(function(l){
     var price = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (l.transaction==='location'?'/mois':'') : '—';
@@ -846,19 +819,17 @@ function updateMapMarkers(results) {
     marker.on('click', function(){
       markMapProgrammaticM();
       saMapM.once('moveend', function(){ popup.openOn(saMapM); });
-      saMapM.setView([l.lat, l.lng], Math.max(saMapM.getZoom(), 15), { animate: true });
+      saMapM.setView([l.lat, l.lng], Math.min(Math.max(saMapM.getZoom() + 1, 15), 18), { animate: true });
     });
     marker.addTo(mapMarkersLayerM);
     bounds.push([l.lat, l.lng]);
   });
   updateMapCountBadgeM();
-  if (!mapBoundsFilterM) {
-    markMapProgrammaticM();
-    if (bounds.length) {
-      saMapM.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
-    } else {
-      saMapM.setView([46.6, 2.4], 6);
-    }
+  markMapProgrammaticM();
+  if (bounds.length) {
+    saMapM.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+  } else {
+    saMapM.setView([46.6, 2.4], 6);
   }
 }
 
@@ -868,14 +839,7 @@ function updateMapCountBadgeM(){
   if (!badge) return;
   var b = saMapM.getBounds();
   var items = lastResults.filter(function(l){ return l.lat && l.lng && b.contains([l.lat, l.lng]); });
-  if (mapBoundsFilterM) {
-    items = items.filter(function(l){ return mapBoundsFilterM.contains([l.lat, l.lng]); });
-    badge.classList.add('filtered');
-    badge.innerHTML = '<span class="m-map-count-num">' + items.length + '</span><span class="m-map-count-label">dans cette zone<span class="m-map-clear-zone" onclick="clearAreaFilterM()">Réinitialiser</span></span>';
-  } else {
-    badge.classList.remove('filtered');
-    badge.innerHTML = '<span class="m-map-count-num" id="mapResultsCount">' + items.length + '</span><span class="m-map-count-label">' + pluralWord(items.length, 'annonce') + '<br>dans cette zone</span>';
-  }
+  badge.innerHTML = '<span class="m-map-count-num" id="mapResultsCount">' + items.length + '</span><span class="m-map-count-label">' + pluralWord(items.length, 'annonce') + '<br>dans cette zone</span>';
 }
 
 function togglePoiPanelM() {
