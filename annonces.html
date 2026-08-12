@@ -300,28 +300,12 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
 .sa-map-reset-btn:hover{color:#E84533}
 .leaflet-bottom.leaflet-left .leaflet-control{margin-bottom:16px;margin-left:16px}
 
-.sa-map-price-pill{background:#fff;color:#111;font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px rgba(15,20,25,0.2);transform:translate(-50%,-100%);cursor:pointer;transition:transform .1s,background .1s,color .1s}
-.sa-map-price-pill:hover, .sa-map-price-pill.sa-map-price-hover{background:#E84533;color:#fff;transform:translate(-50%,-100%) scale(1.08);z-index:1000!important}
+.sa-map-pin{width:16px;height:16px;border-radius:50%;background:#E84533;border:2.5px solid #fff;box-sizing:border-box;box-shadow:0 2px 8px rgba(15,20,25,0.35);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.sa-map-pin:hover, .sa-map-pin.sa-map-price-hover{transform:scale(1.45);box-shadow:0 4px 14px rgba(15,20,25,0.45);z-index:1000!important}
 .sa-poi-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);transform:translate(-50%,-50%)}
 .sa-map-cluster{width:42px;height:42px;border-radius:50%;background:#E84533;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;border:3px solid #fff;box-shadow:0 3px 12px rgba(0,0,0,0.28)}
 .sa-map-me-dot{width:16px;height:16px;border-radius:50%;background:#1e6abf;border:3px solid #fff;box-shadow:0 0 0 4px rgba(30,106,191,0.28),0 2px 6px rgba(0,0,0,0.3)}
 
-.leaflet-popup-content-wrapper{border-radius:16px;padding:0;overflow:hidden;box-shadow:0 14px 36px rgba(0,0,0,0.2)}
-.leaflet-popup-content{margin:0!important}
-.leaflet-popup-tip{box-shadow:0 3px 10px rgba(0,0,0,0.15)}
-.leaflet-popup-close-button{top:9px!important;right:9px!important;width:26px;height:26px;border-radius:50%!important;background:rgba(255,255,255,0.94);display:flex!important;align-items:center;justify-content:center;font-size:16px!important;color:#333!important;box-shadow:0 2px 8px rgba(0,0,0,0.3);line-height:1!important}
-.leaflet-popup-close-button:hover{background:#fff;color:#E84533!important}
-.sa-map-popup-card{width:230px;font-family:inherit}
-.sa-map-popup-photo{height:130px;background-size:cover;background-position:center;background-color:#eee}
-.sa-map-popup-body{padding:12px 14px 14px}
-.sa-map-popup-price{font-size:16px;font-weight:800;color:#111}
-.sa-map-popup-title{font-size:12.5px;color:#555;margin:3px 0 6px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.sa-map-popup-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#555;font-weight:600;margin-bottom:7px}
-.sa-map-popup-meta i{color:#aaa;font-size:13.5px;margin-right:2px}
-.sa-map-popup-addr{font-size:11.5px;color:#999;display:flex;align-items:center;gap:4px;margin-bottom:11px}
-.sa-map-popup-addr i{color:#E84533;font-size:12px}
-.sa-map-popup-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;background:#E84533;color:#fff;font-size:12.5px;font-weight:700;padding:9px;border-radius:9px;text-decoration:none;cursor:pointer;border:none;font-family:inherit}
-.sa-map-popup-btn:hover{background:#c93a2a}
 @media(max-width:700px){
   .sa-map-view{height:calc(100vh - 300px);min-height:420px;border-radius:14px}
   .sa-map-panel{min-width:150px;padding:11px 13px}
@@ -1173,7 +1157,9 @@ function initMap() {
     Object.keys(poiLayers).forEach(function(k){ if (poiLayers[k]) fetchPOI(k); });
     updateMapListCol();
   });
-  saMap.on('click', function(){ saMap.closePopup(); });
+  saMap.on('click', function(){
+    if (selectedListingId) { selectedListingId = null; updateMapListCol(); }
+  });
   markMapProgrammatic();
   setTimeout(function(){ markMapProgrammatic(); saMap.invalidateSize(); }, 60);
   updateRayonCircle();
@@ -1206,31 +1192,15 @@ function updateRayonCircle(){
   }
 }
 
-function mapPopupHTML(l) {
-  const photos = Array.isArray(l.photos) ? l.photos : [];
-  const main = photos[0] ? photoUrl(photos[0]) : null;
-  const grad = SA.IMG_GRADIENTS[l.img] || SA.IMG_GRADIENTS.p0;
-  let metaParts = [];
-  if (l.surface) metaParts.push('<span><i class="ti ti-ruler-2"></i> ' + l.surface + ' m²</span>');
-  if (l.pieces) metaParts.push('<span><i class="ti ti-door"></i> ' + l.pieces + ' p.</span>');
-  if (l.chambres) metaParts.push('<span><i class="ti ti-bed"></i> ' + l.chambres + ' ch.</span>');
-  return '<div class="sa-map-popup-card">' +
-    '<div class="sa-map-popup-photo" style="' + (main ? "background-image:url('" + main + "')" : 'background:' + grad) + '"></div>' +
-    '<div class="sa-map-popup-body">' +
-      '<div class="sa-map-popup-price">' + SA.fmtPriceTransaction(l) + '</div>' +
-      '<div class="sa-map-popup-title">' + SA.escapeHtml(l.title || '') + '</div>' +
-      (metaParts.length ? '<div class="sa-map-popup-meta">' + metaParts.join('') + '</div>' : '') +
-      '<div class="sa-map-popup-addr"><i class="ti ti-map-pin"></i> ' + SA.escapeHtml(l.ville || '') + '</div>' +
-      '<button class="sa-map-popup-btn" onclick="SA.openListing(\'' + l.id + '\')">Voir l\'annonce <i class="ti ti-arrow-right"></i></button>' +
-    '</div></div>';
-}
-
 let selectedListingId = null;
 let mapMarkersById = {};
 function highlightMarker(id, on) {
   const marker = mapMarkersById[id];
   const el = marker && marker.getElement();
   if (el) el.classList.toggle('sa-map-price-hover', on);
+}
+function syncMarkerHighlight() {
+  Object.keys(mapMarkersById).forEach(function(id){ highlightMarker(id, id === selectedListingId); });
 }
 function updateMapMarkers(results) {
   if (!saMap || !mapMarkersLayer) return;
@@ -1240,34 +1210,21 @@ function updateMapMarkers(results) {
   const bounds = [];
   withCoords.forEach(function(l){
     const icon = L.divIcon({
-      className: '',
-      html: '<div class="sa-map-price-pill">' + SA.fmtPrice(l.price) + (l.transaction === 'location' ? '/mois' : '') + '</div>',
-      iconSize: null,
-      iconAnchor: [0, 0]
+      className: 'sa-map-pin',
+      html: '',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8]
     });
     const marker = L.marker([l.lat, l.lng], { icon: icon });
     mapMarkersById[l.id] = marker;
-    const popup = L.popup({ closeButton: true, maxWidth: 230, minWidth: 230, className: 'sa-map-popup', autoPanPadding: L.point(24, 90), autoClose: false, closeOnClick: false })
-      .setLatLng([l.lat, l.lng])
-      .setContent(mapPopupHTML(l));
     marker.on('mouseover', function(){
-      const el = marker.getElement();
-      if (el) el.classList.add('sa-map-price-hover');
       selectedListingId = l.id;
       updateMapListCol(true);
-    });
-    marker.on('mouseout', function(){
-      const el = marker.getElement();
-      if (el) el.classList.remove('sa-map-price-hover');
     });
     marker.on('click', function(){
       markMapProgrammatic();
-      saMap.closePopup();
       selectedListingId = l.id;
       updateMapListCol(true);
-      saMap.once('moveend', function(){
-        popup.openOn(saMap);
-      });
       saMap.setView([l.lat, l.lng], Math.min(Math.max(saMap.getZoom() + 1, 15), 18), { animate: true });
     });
     marker.addTo(mapMarkersLayer);
@@ -1348,6 +1305,7 @@ function updateMapListCol(scrollToTop) {
     : '<div class="sa-map-listcol-empty"><i class="ti ti-map-search"></i>Aucune annonce dans cette zone de la carte.<br>Déplacez ou dézoomez la carte.</div>';
   if (scrollToTop) body.scrollTop = 0;
   updateMapCountBadge(items.length);
+  syncMarkerHighlight();
 }
 
 function updateMapCountBadge(count) {

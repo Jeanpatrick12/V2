@@ -171,7 +171,7 @@
 .m-map-count-badge { position: absolute; top: 12px; right: 12px; z-index: 1000; background: white; border-radius: 999px; box-shadow: 0 8px 20px rgba(15,20,25,0.16); padding: 8px 13px; display: flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; color: #111; white-space: nowrap; }
 .m-map-count-badge i { color: var(--red); font-size: 12px; }
 .m-map-locate-btn { position: absolute; bottom: 14px; right: 14px; z-index: 1000; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(15,20,25,0.18); color: #333; font-size: 17px; }
-.m-map-price-pill { background: #111; color: #fff; font-size: 11.5px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; box-shadow: 0 3px 8px rgba(0,0,0,0.22); border: 2px solid #fff; transform: translate(-50%,-100%); }
+.m-map-pin { width: 15px; height: 15px; border-radius: 50%; background: #E84533; border: 2.5px solid #fff; box-sizing: border-box; box-shadow: 0 2px 7px rgba(15,20,25,0.35); cursor: pointer; }
 .sa-poi-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transform: translate(-50%,-50%); }
 .m-map-cluster { width: 38px; height: 38px; border-radius: 50%; background: var(--red); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; border: 3px solid #fff; box-shadow: 0 3px 10px rgba(0,0,0,0.28); }
 .m-map-me-dot { width: 14px; height: 14px; border-radius: 50%; background: #1e6abf; border: 3px solid #fff; box-shadow: 0 0 0 4px rgba(30,106,191,0.28), 0 2px 6px rgba(0,0,0,0.3); }
@@ -808,12 +808,11 @@ function updateMapMarkers(results) {
   var withCoords = results.filter(function(l){ return l.lat && l.lng; });
   var bounds = [];
   withCoords.forEach(function(l){
-    var price = l.price ? l.price.toLocaleString('fr-FR') + ' €' + (l.transaction==='location'?'/mois':'') : '—';
     var icon = L.divIcon({
-      className: '',
-      html: '<div class="m-map-price-pill">' + price + '</div>',
-      iconSize: null,
-      iconAnchor: [0, 0]
+      className: 'm-map-pin',
+      html: '',
+      iconSize: [15, 15],
+      iconAnchor: [7.5, 7.5]
     });
     var marker = L.marker([l.lat, l.lng], { icon: icon });
     var popup = L.popup({ closeButton: true, maxWidth: 252, minWidth: 252, autoPanPadding: L.point(16, 70) })
