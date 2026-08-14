@@ -31,7 +31,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Estimer le prix de son bien soi-même, gratuitement",
+  "headline": "Le prix juste, ni trop haut ni trop bas",
   "description": "La méthode complète pour estimer gratuitement le prix de vente de votre bien immobilier vous-même, avec les 5 outils officiels et gratuits utilisés par les notaires et l'État.",
   "author": { "@type": "Organization", "name": "SansAgents", "url": "https://sansagents.fr/" },
   "publisher": { "@type": "Organization", "name": "SansAgents", "url": "https://sansagents.fr/" },
@@ -45,7 +45,7 @@
   "@type": "BreadcrumbList",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://sansagents.fr/" },
-    { "@type": "ListItem", "position": 2, "name": "Guide", "item": "https://sansagents.fr/guide" },
+    { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://sansagents.fr/guides" },
     { "@type": "ListItem", "position": 3, "name": "Estimer son bien", "item": "https://sansagents.fr/estimer-son-bien" }
   ]
 }
@@ -97,11 +97,11 @@ button{font-family:inherit;cursor:pointer}
 /* ── Hero (même style que le guide) ── */
 .v-hero{background:linear-gradient(135deg,#0c1622 0%,#152233 60%,#1c2e44 100%);padding:72px 40px 80px;position:relative;overflow:hidden}
 .v-hero::after{content:'';position:absolute;right:-120px;top:-80px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(232,69,51,.12) 0%,transparent 70%);pointer-events:none}
-.v-hero-inner{max-width:900px;margin:0 auto;position:relative}
+.v-hero-inner{max-width:1000px;margin:0 auto;position:relative;display:grid;grid-template-columns:1fr 300px;gap:50px;align-items:center}
 .v-hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,122,104,.12);border:1px solid rgba(255,122,104,.3);border-radius:999px;padding:6px 14px;font-size:11.5px;font-weight:700;color:#ff7a68;letter-spacing:.05em;margin-bottom:22px}
-.v-hero h1{font-size:38px;font-weight:700;color:white;line-height:1.15;letter-spacing:-.6px;margin-bottom:16px;max-width:640px}
+.v-hero h1{font-size:38px;font-weight:700;color:white;line-height:1.15;letter-spacing:-.6px;margin-bottom:16px}
 .v-hero h1 em{color:#ff7a68;font-style:normal}
-.v-hero-sub{font-size:15.5px;color:rgba(255,255,255,.55);line-height:1.75;margin-bottom:14px;max-width:600px}
+.v-hero-sub{font-size:15.5px;color:rgba(255,255,255,.55);line-height:1.75;margin-bottom:14px;max-width:520px}
 .v-byline{font-size:11.5px;color:rgba(255,255,255,.4);margin-bottom:26px}
 .v-hero-cta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .v-hero-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:10px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s}
@@ -109,6 +109,11 @@ button{font-family:inherit;cursor:pointer}
 .v-hero-btn-primary:hover{background:#c93a2a;transform:translateY(-1px)}
 .v-hero-btn-secondary{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15)}
 .v-hero-btn-secondary:hover{background:rgba(255,255,255,.13)}
+.v-stats-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.v-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden}
+.v-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#E84533}
+.v-stat-val{font-size:24px;font-weight:900;letter-spacing:-.4px;color:#ff9082}
+.v-stat-lbl{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px;line-height:1.4}
 
 /* ── Content ── */
 .v-content{max-width:900px;margin:0 auto;padding:44px 40px 0}
@@ -117,6 +122,17 @@ button{font-family:inherit;cursor:pointer}
 .v-crumb{font-size:12.5px;color:#999;margin-bottom:10px}
 .v-crumb a{color:#E84533;font-weight:600}
 
+/* ── Compare cards ── */
+.v-compare2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 32px}
+@media(max-width:640px){.v-compare2{grid-template-columns:1fr}}
+.v-ccard{border-radius:14px;padding:20px 22px;border:1.5px solid #ebebeb}
+.v-ccard.bad{background:#fff5f4;border-color:#ffd8d3}
+.v-ccard.good{background:#f0fdf4;border-color:#bbf7d0}
+.v-ccard-label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.v-ccard.bad .v-ccard-label{color:#c0392b}
+.v-ccard.good .v-ccard-label{color:#166534}
+.v-ccard p{font-size:13.5px;line-height:1.65;color:#444;margin:0}
+
 /* ── Method steps ── */
 .v-method{display:flex;flex-direction:column;gap:14px;margin-bottom:12px}
 .v-method-step{display:flex;gap:16px;background:white;border:1.5px solid #ebebeb;border-radius:14px;padding:18px 20px}
@@ -124,11 +140,15 @@ button{font-family:inherit;cursor:pointer}
 .v-method-title{font-size:14.5px;font-weight:700;margin-bottom:4px}
 .v-method-desc{font-size:13px;color:#666;line-height:1.65}
 
-/* ── Tools panel (repris du guide) ── */
-.v-tools-panel{background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:14px;margin:0 0 32px;overflow:hidden}
-.v-tools-head{display:flex;align-items:center;gap:8px;padding:13px 18px;background:#f0f1f5;border-bottom:1px solid #e4e5ea;font-size:12.5px;font-weight:700;color:#555;letter-spacing:.02em}
-.v-tools-head i{color:#E84533;font-size:15px}
-.v-tool-row{display:flex;align-items:center;gap:14px;padding:13px 18px;border-bottom:1px solid #eeeff2;transition:background .12s}
+/* ── Tools panel (repris du guide, mis en valeur) ── */
+.v-tools-intro{background:linear-gradient(135deg,#0c1622,#1c2e44);border-radius:16px;padding:22px 26px;margin:16px 0 22px;display:flex;align-items:center;gap:16px}
+.v-tools-intro i{font-size:28px;color:#ff7a68;flex-shrink:0}
+.v-tools-intro-text{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6}
+.v-tools-intro-text strong{color:white}
+.v-tools-group-label{font-size:11px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin:22px 0 10px}
+.v-tools-panel{background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:14px;overflow:hidden}
+.v-tools-panel.official{border-color:#a7f3d0}
+.v-tool-row{display:flex;align-items:center;gap:14px;padding:15px 18px;border-bottom:1px solid #eeeff2;transition:background .12s}
 .v-tool-row:last-child{border-bottom:none}
 .v-tool-row:hover{background:#f2f3f7}
 .v-tool-info{flex:1;min-width:0}
@@ -151,11 +171,19 @@ button{font-family:inherit;cursor:pointer}
 .v-cta-inner h2{font-size:28px;font-weight:800;color:white;margin-bottom:12px}
 .v-cta-inner p{font-size:14.5px;color:rgba(255,255,255,.5);margin-bottom:26px}
 
+@media(max-width:900px){
+  .v-hero-inner{grid-template-columns:1fr}
+  .v-stats-grid{grid-template-columns:repeat(3,1fr)}
+}
 @media(max-width:700px){
   .v-hero{padding:40px 20px 40px}
   .v-hero h1{font-size:28px}
+  .v-stats-grid{grid-template-columns:repeat(3,1fr)}
   .v-content{padding:32px 20px 0}
   .v-cta-section{padding:40px 20px}
+}
+@media(max-width:480px){
+  .v-stats-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 <link rel="stylesheet" href="sa-mobile.css?v=4">
@@ -171,7 +199,7 @@ button{font-family:inherit;cursor:pointer}
     </div>
     <div class="sa-nav-links">
       <button class="sa-nav-link" onclick="window.location.href='/'">Accueil</button>
-      <button class="sa-nav-link" onclick="window.location.href='guide'">Guide</button>
+      <button class="sa-nav-link" onclick="window.location.href='guides'">Guides</button>
       <button class="sa-nav-link" onclick="window.location.href='annonces'">Annonces</button>
       <button class="sa-nav-link pro-highlight" onclick="window.open('professionnels','_blank')">Professionnels</button>
     </div>
@@ -192,59 +220,81 @@ button{font-family:inherit;cursor:pointer}
 <!-- HERO -->
 <div class="v-hero">
   <div class="v-hero-inner">
-    <div class="v-hero-badge"><i class="ti ti-calculator"></i> Outil gratuit — 5 minutes</div>
-    <h1>Estimez le prix de votre bien <em>vous-même</em>, gratuitement</h1>
-    <p class="v-hero-sub">Pas besoin d'agence pour connaître la valeur de votre bien : les mêmes données que les professionnels sont accessibles gratuitement. Voici la méthode et les outils officiels pour arriver à un prix juste.</p>
-    <p class="v-byline">Rédigé par l'équipe SansAgents · Mis à jour le 14 août 2026</p>
-    <div class="v-hero-cta">
-      <button class="v-hero-btn v-hero-btn-primary" onclick="document.getElementById('outils').scrollIntoView({behavior:'smooth'})"><i class="ti ti-tools"></i> Voir les outils</button>
-      <button class="v-hero-btn v-hero-btn-secondary" onclick="window.location.href='guide'"><i class="ti ti-book-2"></i> Retour au guide complet</button>
+    <div>
+      <div class="v-hero-badge"><i class="ti ti-calculator"></i> Outil gratuit — 15 minutes</div>
+      <h1>Le prix juste, <em>ni trop haut ni trop bas</em></h1>
+      <p class="v-hero-sub">Un bien surestimé reste des mois sans offre. Un bien sous-estimé vous coûte cher dès la signature. Voici comment trouver le juste prix vous-même, avec les mêmes données que les professionnels.</p>
+      <p class="v-byline">Rédigé par l'équipe SansAgents · Mis à jour le 14 août 2026</p>
+      <div class="v-hero-cta">
+        <button class="v-hero-btn v-hero-btn-primary" onclick="document.getElementById('outils').scrollIntoView({behavior:'smooth'})"><i class="ti ti-tools"></i> Voir les 5 outils</button>
+        <button class="v-hero-btn v-hero-btn-secondary" onclick="window.location.href='guide'"><i class="ti ti-book-2"></i> Revenir au guide complet</button>
+      </div>
+    </div>
+    <div class="v-stats-grid">
+      <div class="v-stat"><div class="v-stat-val">5</div><div class="v-stat-lbl">outils gratuits</div></div>
+      <div class="v-stat"><div class="v-stat-val">100%</div><div class="v-stat-lbl">sources officielles</div></div>
+      <div class="v-stat"><div class="v-stat-val">15 min</div><div class="v-stat-lbl">pour un prix fiable</div></div>
     </div>
   </div>
 </div>
 
 <div class="v-content">
-  <p class="v-crumb"><a href="guide">Guide</a> › Estimer son bien</p>
+  <p class="v-crumb"><a href="guides">Guides</a> › Estimer son bien</p>
 
-  <h2>Pourquoi le prix change tout</h2>
-  <p class="v-lead">Un bien surestimé peut rester des mois sans offre sérieuse, et perd de la valeur perçue avec le temps passé en ligne. Un bien sous-estimé vous fait perdre de l'argent dès la signature. L'objectif n'est pas de deviner un prix, mais de le construire à partir de données réelles.</p>
+  <h2>Pourquoi le prix est la décision qui pèse le plus</h2>
+  <p class="v-lead">Toutes les autres étapes de la vente sont réversibles : une photo se change, une annonce se corrige. Le prix, lui, marque les esprits dès la première visite — le corriger après coup revient toujours plus cher que de le fixer juste dès le départ.</p>
+
+  <div class="v-compare2">
+    <div class="v-ccard bad">
+      <div class="v-ccard-label"><i class="ti ti-trending-down"></i> Bien surestimé</div>
+      <p>Les acheteurs sérieux passent leur chemin. Le bien s'use en ligne, les visites se raréfient, et vous finissez par baisser le prix — en position de faiblesse, après des mois perdus.</p>
+    </div>
+    <div class="v-ccard good">
+      <div class="v-ccard-label"><i class="ti ti-trending-up"></i> Bien au juste prix</div>
+      <p>Il attire l'attention dès sa publication, se compare favorablement aux autres annonces, et se négocie depuis une position confortable — avec une vraie marge, pas une correction forcée.</p>
+    </div>
+  </div>
 
   <h2>La méthode en 4 étapes</h2>
   <div class="v-method">
     <div class="v-method-step">
       <div class="v-method-num">1</div>
       <div>
-        <div class="v-method-title">Rassembler les ventes récentes au m² dans votre rue et votre quartier</div>
-        <div class="v-method-desc">Utilisez les outils officiels ci-dessous : ils donnent le prix réel des ventes déjà conclues, pas des estimations théoriques.</div>
+        <div class="v-method-title">Rassembler les ventes réelles de votre secteur</div>
+        <div class="v-method-desc">Les outils officiels ci-dessous donnent le prix réellement payé lors des ventes déjà conclues dans votre rue et votre quartier — pas une estimation théorique.</div>
       </div>
     </div>
     <div class="v-method-step">
       <div class="v-method-num">2</div>
       <div>
-        <div class="v-method-title">Comparer 3 à 5 biens similaires vendus récemment</div>
-        <div class="v-method-desc">Même type de bien, surface proche, même secteur. Plus l'échantillon est comparable, plus votre fourchette de prix sera fiable.</div>
+        <div class="v-method-title">Comparer 3 à 5 biens similaires</div>
+        <div class="v-method-desc">Même type de bien, surface proche, même secteur. Plus l'échantillon est comparable, plus la fourchette de prix obtenue sera fiable.</div>
       </div>
     </div>
     <div class="v-method-step">
       <div class="v-method-num">3</div>
       <div>
-        <div class="v-method-title">Ajuster selon les critères propres à votre bien</div>
-        <div class="v-method-desc">État général, étage, exposition, vue, travaux récents, DPE : chacun de ces critères fait varier le prix au m² à la hausse ou à la baisse.</div>
+        <div class="v-method-title">Ajuster selon les critères du bien</div>
+        <div class="v-method-desc">État général, étage, exposition, vue, travaux récents, DPE : chaque critère fait varier le prix au m² à la hausse ou à la baisse.</div>
       </div>
     </div>
     <div class="v-method-step">
       <div class="v-method-num">4</div>
       <div>
         <div class="v-method-title">Fixer un prix de vente et un prix plancher</div>
-        <div class="v-method-desc">Le prix de vente inclut une marge de négociation raisonnable (environ 3 à 5%). Le prix plancher est le seuil en dessous duquel vous refusez de vendre — fixez-le avant de recevoir des offres, pas pendant.</div>
+        <div class="v-method-desc">Le prix de vente inclut une marge de négociation raisonnable (3 à 5 %). Le prix plancher se fixe avant de recevoir des offres — jamais pendant.</div>
       </div>
     </div>
   </div>
 
   <h2 id="outils">Les 5 outils gratuits pour estimer votre bien</h2>
-  <p class="v-lead">Deux sont des bases de données officielles (gratuites, sans inscription) ; les trois autres croisent ces données avec des annonces actives pour affiner l'estimation.</p>
-  <div class="v-tools-panel">
-    <div class="v-tools-head"><i class="ti ti-chart-bar"></i> Outils recommandés</div>
+  <div class="v-tools-intro">
+    <i class="ti ti-chart-bar"></i>
+    <div class="v-tools-intro-text"><strong>Deux bases de données publiques et gratuites</strong>, sans inscription. <strong>Trois comparateurs</strong> qui croisent ces données avec les annonces actives pour affiner l'estimation. Utilisez au moins un outil de chaque catégorie.</div>
+  </div>
+
+  <div class="v-tools-group-label">Sources officielles</div>
+  <div class="v-tools-panel official">
     <div class="v-tool-row">
       <div class="v-tool-info">
         <div class="v-tool-name">DVF Étalab <span class="v-badge-official">OFFICIEL</span></div>
@@ -259,6 +309,10 @@ button{font-family:inherit;cursor:pointer}
       </div>
       <a href="https://www.immobilier.notaires.fr/fr/prix-immobilier" target="_blank" rel="noopener" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
     </div>
+  </div>
+
+  <div class="v-tools-group-label">Comparateurs</div>
+  <div class="v-tools-panel">
     <div class="v-tool-row">
       <div class="v-tool-info">
         <div class="v-tool-name">Castorus</div>
@@ -282,10 +336,17 @@ button{font-family:inherit;cursor:pointer}
     </div>
   </div>
 
-  <h2>Erreurs fréquentes à éviter</h2>
-  <div class="v-tip v-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Se baser sur le prix affiché d'annonces en cours, pas sur des ventes conclues.</strong> Le prix d'une annonce active n'est qu'une demande — parfois surestimée depuis des mois. DVF et les notaires donnent le prix réellement payé.</span></div>
-  <div class="v-tip v-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Ignorer l'état réel du bien par attachement personnel.</strong> Un défaut que vous ne voyez plus après des années d'usage sautera aux yeux d'un acheteur — et se négociera à la baisse, mieux vaut l'anticiper dans le prix.</span></div>
-  <div class="v-tip v-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Recouper au moins 2 sources avant de fixer un prix.</strong> DVF seul peut manquer des ventes récentes non encore publiées ; un estimateur automatique seul peut manquer les particularités de votre bien. Combinez les deux.</span></div>
+  <h2 style="margin-top:36px">Ce qui fausse le plus souvent une estimation</h2>
+  <div class="v-compare2">
+    <div class="v-ccard bad">
+      <div class="v-ccard-label"><i class="ti ti-alert-triangle"></i> À éviter</div>
+      <p><strong>Se fier aux annonces en cours.</strong> Un prix affiché n'est qu'une demande — parfois surestimée depuis des mois. DVF et les notaires donnent le prix réellement payé.<br><br><strong>Ignorer les défauts par habitude.</strong> Ce que vous ne voyez plus après des années sautera aux yeux d'un acheteur, et se négociera à la baisse.</p>
+    </div>
+    <div class="v-ccard good">
+      <div class="v-ccard-label"><i class="ti ti-circle-check"></i> À faire</div>
+      <p><strong>Recouper au moins 2 sources.</strong> DVF seul peut manquer des ventes récentes ; un estimateur automatique seul peut manquer les particularités de votre bien.<br><br><strong>Anticiper les défauts dans le prix.</strong> Mieux vaut un prix qui les intègre dès le départ qu'une négociation surprise en visite.</p>
+    </div>
+  </div>
 </div>
 
 <!-- CTA BOTTOM -->
