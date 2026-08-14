@@ -2,6 +2,12 @@
 # À relancer périodiquement (ex: une fois par semaine) pour que les nouvelles
 # annonces soient soumises à Google. Nécessite PowerShell (Windows).
 #
+# Le lastmod des pages statiques est fixe (date de dernière modification réelle du
+# contenu) : ne pas le régénérer automatiquement à chaque exécution, cela enverrait
+# un faux signal de fraîcheur à Google. Mettez-le à jour à la main dans ce script
+# le jour où vous modifiez réellement le contenu d'une page. Le lastmod des annonces,
+# lui, est calculé automatiquement depuis la base à chaque exécution.
+#
 # Usage : powershell -File scripts\update-sitemap.ps1
 
 $SupabaseUrl = "https://hnbxkiazozknxfhcplaw.supabase.co"
@@ -10,24 +16,26 @@ $RepoRoot = Split-Path -Parent $PSScriptRoot
 $OutFile = Join-Path $RepoRoot "sitemap.xml"
 
 $staticUrls = @(
-  @{ loc = "https://sansagents.fr/"; changefreq = "daily"; priority = "1.0" }
-  @{ loc = "https://sansagents.fr/annonces"; changefreq = "hourly"; priority = "0.9" }
-  @{ loc = "https://sansagents.fr/guide"; changefreq = "monthly"; priority = "0.8" }
-  @{ loc = "https://sansagents.fr/deposer"; changefreq = "monthly"; priority = "0.8" }
-  @{ loc = "https://sansagents.fr/professionnels"; changefreq = "weekly"; priority = "0.7" }
-  @{ loc = "https://sansagents.fr/inscription-pro"; changefreq = "monthly"; priority = "0.6" }
-  @{ loc = "https://sansagents.fr/accord"; changefreq = "monthly"; priority = "0.6" }
-  @{ loc = "https://sansagents.fr/aide-documents"; changefreq = "monthly"; priority = "0.6" }
-  @{ loc = "https://sansagents.fr/contact"; changefreq = "monthly"; priority = "0.5" }
-  @{ loc = "https://sansagents.fr/aide-signaler"; changefreq = "monthly"; priority = "0.4" }
-  @{ loc = "https://sansagents.fr/cgu"; changefreq = "yearly"; priority = "0.3" }
-  @{ loc = "https://sansagents.fr/mentions-legales"; changefreq = "yearly"; priority = "0.3" }
-  @{ loc = "https://sansagents.fr/confidentialite"; changefreq = "yearly"; priority = "0.3" }
-  @{ loc = "https://sansagents.fr/cookies"; changefreq = "yearly"; priority = "0.3" }
+  @{ loc = "https://sansagents.fr/"; lastmod = "2026-08-14"; changefreq = "daily"; priority = "1.0" }
+  @{ loc = "https://sansagents.fr/annonces"; lastmod = "2026-08-14"; changefreq = "hourly"; priority = "0.9" }
+  @{ loc = "https://sansagents.fr/guide"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.8" }
+  @{ loc = "https://sansagents.fr/estimer-son-bien"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.7" }
+  @{ loc = "https://sansagents.fr/deposer"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.8" }
+  @{ loc = "https://sansagents.fr/professionnels"; lastmod = "2026-08-14"; changefreq = "weekly"; priority = "0.7" }
+  @{ loc = "https://sansagents.fr/a-propos"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.5" }
+  @{ loc = "https://sansagents.fr/inscription-pro"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.6" }
+  @{ loc = "https://sansagents.fr/accord"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.6" }
+  @{ loc = "https://sansagents.fr/aide-documents"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.6" }
+  @{ loc = "https://sansagents.fr/contact"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.5" }
+  @{ loc = "https://sansagents.fr/aide-signaler"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.4" }
+  @{ loc = "https://sansagents.fr/cgu"; lastmod = "2026-08-14"; changefreq = "yearly"; priority = "0.3" }
+  @{ loc = "https://sansagents.fr/mentions-legales"; lastmod = "2026-08-14"; changefreq = "yearly"; priority = "0.3" }
+  @{ loc = "https://sansagents.fr/confidentialite"; lastmod = "2026-08-14"; changefreq = "yearly"; priority = "0.3" }
+  @{ loc = "https://sansagents.fr/cookies"; lastmod = "2026-08-14"; changefreq = "yearly"; priority = "0.3" }
 )
 
 $headers = @{ apikey = $AnonKey; Authorization = "Bearer $AnonKey" }
-$query = "$SupabaseUrl/rest/v1/listings?select=id,created_at&status=eq.active&is_demo=eq.false&order=created_at.desc"
+$query = "$SupabaseUrl/rest/v1/listings?select=id,created_at,updated_at&status=eq.active&is_demo=eq.false&order=created_at.desc"
 $listings = @()
 try {
   $listings = Invoke-RestMethod -Uri $query -Headers $headers -Method Get
@@ -39,11 +47,14 @@ $sb = New-Object System.Text.StringBuilder
 [void]$sb.AppendLine('<?xml version="1.0" encoding="UTF-8"?>')
 [void]$sb.AppendLine('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
 foreach ($u in $staticUrls) {
-  [void]$sb.AppendLine("  <url><loc>$($u.loc)</loc><changefreq>$($u.changefreq)</changefreq><priority>$($u.priority)</priority></url>")
+  [void]$sb.AppendLine("  <url><loc>$($u.loc)</loc><lastmod>$($u.lastmod)</lastmod><changefreq>$($u.changefreq)</changefreq><priority>$($u.priority)</priority></url>")
 }
 foreach ($l in $listings) {
   $loc = "https://sansagents.fr/annonce?id=$($l.id)"
-  [void]$sb.AppendLine("  <url><loc>$loc</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>")
+  $rawDate = if ($l.updated_at) { $l.updated_at } else { $l.created_at }
+  $lastmod = if ($rawDate) { ([datetime]$rawDate).ToString("yyyy-MM-dd") } else { $null }
+  $lastmodTag = if ($lastmod) { "<lastmod>$lastmod</lastmod>" } else { "" }
+  [void]$sb.AppendLine("  <url><loc>$loc</loc>$lastmodTag<changefreq>weekly</changefreq><priority>0.7</priority></url>")
 }
 [void]$sb.AppendLine('</urlset>')
 
