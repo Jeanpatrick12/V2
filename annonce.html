@@ -546,7 +546,7 @@ function render() {
           <div class="sa-thumb-row" id="thumbRow">
             ${photos.map((p, i) => `<img class="sa-thumb${i === 0 ? ' active' : ''}" data-i="${i}" src="${photoUrl(p)}" onclick="setGallery(${i})">`).join('')}
           </div>` : ''}
-        ${!photos.length ? `<p style="font-size:11.5px;color:#bbb;margin-top:8px"><i class="ti ti-info-circle"></i> Annonce de démonstration — aucune photo n'a été déposée par l'annonceur.</p>` : ''}
+        ${!photos.length ? `<p style="font-size:11.5px;color:#bbb;margin-top:8px"><i class="ti ti-info-circle"></i> Aucune photo n'a encore été ajoutée par l'annonceur.</p>` : ''}
 
         <!-- En-tête -->
         <div class="sa-detail-head">
