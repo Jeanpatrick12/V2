@@ -18,7 +18,10 @@ $OutFile = Join-Path $RepoRoot "sitemap.xml"
 $staticUrls = @(
   @{ loc = "https://sansagents.fr/"; lastmod = "2026-08-14"; changefreq = "daily"; priority = "1.0" }
   @{ loc = "https://sansagents.fr/annonces"; lastmod = "2026-08-14"; changefreq = "hourly"; priority = "0.9" }
-  @{ loc = "https://sansagents.fr/guide"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.8" }
+  @{ loc = "https://sansagents.fr/guides"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.8" }
+  @{ loc = "https://sansagents.fr/guide-vendeur"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.8" }
+  @{ loc = "https://sansagents.fr/guide-acheteur"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.7" }
+  @{ loc = "https://sansagents.fr/guide-loueur"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.7" }
   @{ loc = "https://sansagents.fr/estimer-son-bien"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.7" }
   @{ loc = "https://sansagents.fr/deposer"; lastmod = "2026-08-14"; changefreq = "monthly"; priority = "0.8" }
   @{ loc = "https://sansagents.fr/professionnels"; lastmod = "2026-08-14"; changefreq = "weekly"; priority = "0.7" }
