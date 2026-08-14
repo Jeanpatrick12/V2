@@ -31,7 +31,7 @@
 <!-- Leaflet est chargé à la demande (voir loadLeaflet()) uniquement quand la vue carte est ouverte -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=24"></script>
+<script src="sa-shared.js?v=25"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff;overflow-x:hidden}
@@ -1081,6 +1081,7 @@ function applyFilters(scrollToResults) {
   });
 
   lastResults = results;
+  injectItemListSchema(results);
   if (resultsMode === 'map') {
     document.getElementById('resultsCount').textContent = results.length;
     document.getElementById('resultsCountLabel').textContent = pluralWord(results.length, 'annonce') + ' ' + pluralWord(results.length, 'trouvée');
@@ -1095,6 +1096,28 @@ function applyFilters(scrollToResults) {
 }
 
 function runSearch() { applyFilters(true); }
+
+function injectItemListSchema(results) {
+  const existing = document.getElementById('ldjson-itemlist');
+  if (existing) existing.remove();
+  if (!results.length) return;
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": results.slice(0, 20).map(function(l, i){
+      return {
+        "@type": "ListItem",
+        "position": i + 1,
+        "url": "https://sansagents.fr/annonce?id=" + encodeURIComponent(l.id) + (SA.listingSlug(l) ? "&s=" + encodeURIComponent(SA.listingSlug(l)) : "")
+      };
+    })
+  };
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = 'ldjson-itemlist';
+  script.textContent = JSON.stringify(data);
+  document.head.appendChild(script);
+}
 
 /* ───────────────── vue carte ───────────────── */
 let leafletLoadPromise = null;

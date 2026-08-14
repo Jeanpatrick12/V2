@@ -1196,6 +1196,7 @@
       if (wrap.dataset.saDefault === undefined) wrap.dataset.saDefault = wrap.innerHTML;
       wrap.innerHTML = wrap.dataset.saDefault;
       const btn      = wrap.querySelector(".sa-nav-icon-btn");
+      if (!btn) return;
       const icon     = btn.querySelector("i");
       const label    = btn.querySelector(".sa-nav-icon-label");
       const dropdown = wrap.querySelector(".sa-account-dropdown");
