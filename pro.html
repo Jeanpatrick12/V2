@@ -270,11 +270,46 @@ function render() {
   loadAvisSection('pro', p.id);
 }
 
+function injectReviewSchema(p, reviews) {
+  var existing = document.getElementById('ldjson-reviews');
+  if (existing) existing.remove();
+  if (!reviews || !reviews.length) return;
+  var avg = reviews.reduce(function(s, r) { return s + r.note; }, 0) / reviews.length;
+  var url = 'https://sansagents.fr/pro?id=' + encodeURIComponent(p.id);
+  var data = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": p.name,
+    "url": url,
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": avg.toFixed(1),
+      "reviewCount": reviews.length,
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": reviews.slice(0, 10).map(function(r) {
+      return {
+        "@type": "Review",
+        "author": { "@type": "Person", "name": r.auteur || "Anonyme" },
+        "reviewRating": { "@type": "Rating", "ratingValue": r.note, "bestRating": "5", "worstRating": "1" },
+        "reviewBody": r.commentaire
+      };
+    })
+  };
+  var script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = 'ldjson-reviews';
+  script.textContent = JSON.stringify(data);
+  document.head.appendChild(script);
+}
+
 function loadAvisSection(type, targetId) {
   SA.getReviews(type, targetId).then(function(reviews) {
     var summary = document.getElementById('avisSummary');
     var list = document.getElementById('avisList');
     if (!summary || !list) return;
+    if (type === 'pro') injectReviewSchema(SA.getProById(targetId), reviews);
     if (!reviews.length) {
       summary.innerHTML = '';
       list.innerHTML = '<p style="font-size:13px;color:#888;line-height:1.5">Aucun avis pour le moment. Soyez le premier à en laisser un !</p>';
