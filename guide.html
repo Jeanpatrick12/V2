@@ -1182,7 +1182,7 @@ button{font-family:inherit;cursor:pointer}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=25"></script>
+<script src="sa-shared.js?v=27"></script>
 <script>
 // ── State ──
 var done = JSON.parse(localStorage.getItem('sa_vendre_done')||'[]');
@@ -1562,16 +1562,7 @@ function copyDesc(){
   for(var i=1;i<=9;i++){var el=document.getElementById('ts'+i);if(el)observer.observe(el);}
 })();
 
-SA.init().then(function(){
-  setTimeout(function(){
-    var dropdown=document.querySelector('.sa-account-dropdown');
-    if(!dropdown||!SA.getUser())return;
-    var docs=[];try{docs=JSON.parse(localStorage.getItem(saDocsKey())||'[]');}catch(e){}
-    if(!docs.length)return;
-    var existing=Array.from(dropdown.querySelectorAll('button')).find(function(b){return b.textContent.indexOf('documents')!==-1||b.innerHTML.indexOf('ti-files')!==-1;});
-    if(existing){existing.innerHTML='<i class="ti ti-files"></i> Mes documents<span style="background:#E84533;color:white;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">'+docs.length+'</span>';}
-  },300);
-});
+SA.init();
 
 function addPrixRow(){
   var tpl='<div class="ep-row v-modal-grid" style="gap:8px;margin-bottom:8px;align-items:end">'+

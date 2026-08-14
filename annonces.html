@@ -31,7 +31,7 @@
 <!-- Leaflet est chargé à la demande (voir loadLeaflet()) uniquement quand la vue carte est ouverte -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=25"></script>
+<script src="sa-shared.js?v=27"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff;overflow-x:hidden}
@@ -1108,7 +1108,7 @@ function injectItemListSchema(results) {
       return {
         "@type": "ListItem",
         "position": i + 1,
-        "url": "https://sansagents.fr/annonce?id=" + encodeURIComponent(l.id) + (SA.listingSlug(l) ? "&s=" + encodeURIComponent(SA.listingSlug(l)) : "")
+        "url": SA.listingSlug(l) ? "https://sansagents.fr/annonce/" + SA.listingSlug(l) : "https://sansagents.fr/annonce?id=" + encodeURIComponent(l.id)
       };
     })
   };
@@ -1651,24 +1651,6 @@ SA.init().then(function() {
   onVilleInput();
   if (window.innerWidth <= 768) setView('list');
   applyFilters();
-  setTimeout(function(){
-    var dropdown=document.querySelector('.sa-account-dropdown');
-    if(!dropdown||!SA.getUser())return;
-    var docs=[];try{docs=JSON.parse(localStorage.getItem(((SA.getUser()&&SA.getUser().id)?'sa_user_docs_'+SA.getUser().id:'sa_user_docs_guest'))||'[]');}catch(e){}
-    var badge=docs.length?'<span style="background:#E84533;color:white;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">'+docs.length+'</span>':'';
-    var existing=Array.from(dropdown.querySelectorAll('button')).find(function(b){return b.innerHTML.indexOf('ti-files')!==-1;});
-    if(existing){existing.innerHTML='<i class="ti ti-files"></i> Mes documents'+badge;}
-    else{
-      var btnD=document.createElement('button');
-      btnD.setAttribute('data-docs-btn','1');
-      btnD.className='sa-account-dropdown-logout';btnD.style.cssText='color:#333;text-align:left';
-      btnD.innerHTML='<i class="ti ti-files"></i> Mes documents'+badge;
-      btnD.onclick=function(){window.location='/documents';};
-      var btns=dropdown.querySelectorAll('button');
-      if(btns.length){dropdown.insertBefore(btnD,btns[btns.length-1]);}
-      else{dropdown.appendChild(btnD);}
-    }
-  },200);
 });
 </script>
 </body>

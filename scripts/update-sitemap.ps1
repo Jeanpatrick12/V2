@@ -35,12 +35,25 @@ $staticUrls = @(
 )
 
 $headers = @{ apikey = $AnonKey; Authorization = "Bearer $AnonKey" }
-$query = "$SupabaseUrl/rest/v1/listings?select=id,created_at,updated_at&status=eq.active&is_demo=eq.false&order=created_at.desc"
+$query = "$SupabaseUrl/rest/v1/listings?select=id,type,transaction,ville,postal,created_at&status=eq.active&is_demo=eq.false&order=created_at.desc"
 $listings = @()
 try {
   $listings = Invoke-RestMethod -Uri $query -Headers $headers -Method Get
 } catch {
   Write-Warning "Impossible de récupérer les annonces depuis Supabase : $_"
+}
+
+function Get-ListingSlug($l) {
+  $parts = @()
+  if ($l.transaction) { $parts += (if ($l.transaction -eq "vente") { "vente" } else { "location" }) }
+  if ($l.type) {
+    $t = $l.type -replace '\s*/.*', ''
+    $parts += ([regex]::Replace($t, '[^a-zA-Z0-9]', '-')).ToLower()
+  }
+  if ($l.ville) { $parts += ([regex]::Replace($l.ville, '[^a-zA-Z0-9]', '-')).ToLower() }
+  if ($l.postal) { $parts += $l.postal }
+  $parts += $l.id.Substring(0, 8)
+  return ($parts -join '-')
 }
 
 $sb = New-Object System.Text.StringBuilder
@@ -50,9 +63,8 @@ foreach ($u in $staticUrls) {
   [void]$sb.AppendLine("  <url><loc>$($u.loc)</loc><lastmod>$($u.lastmod)</lastmod><changefreq>$($u.changefreq)</changefreq><priority>$($u.priority)</priority></url>")
 }
 foreach ($l in $listings) {
-  $loc = "https://sansagents.fr/annonce?id=$($l.id)"
-  $rawDate = if ($l.updated_at) { $l.updated_at } else { $l.created_at }
-  $lastmod = if ($rawDate) { ([datetime]$rawDate).ToString("yyyy-MM-dd") } else { $null }
+  $loc = "https://sansagents.fr/annonce/$(Get-ListingSlug $l)"
+  $lastmod = if ($l.created_at) { ([datetime]$l.created_at).ToString("yyyy-MM-dd") } else { $null }
   $lastmodTag = if ($lastmod) { "<lastmod>$lastmod</lastmod>" } else { "" }
   [void]$sb.AppendLine("  <url><loc>$loc</loc>$lastmodTag<changefreq>weekly</changefreq><priority>0.7</priority></url>")
 }

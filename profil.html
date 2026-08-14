@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=25"></script>
+<script src="sa-shared.js?v=27"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -221,21 +221,6 @@ async function saveProfile() {
 
 SA.init().then(function(){
   render();
-  setTimeout(function(){
-    var dropdown=document.querySelector('.sa-account-dropdown');
-    if(!dropdown||!SA.getUser())return;
-    var docs=[];
-    try{docs=JSON.parse(localStorage.getItem(((SA.getUser()&&SA.getUser().id)?'sa_user_docs_'+SA.getUser().id:'sa_user_docs_guest'))||'[]');}catch(e){}
-    var badge=docs.length?'<span style="background:#E84533;color:white;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;margin-left:6px">'+docs.length+'</span>':'';
-    var btn=document.createElement('button');
-    btn.className='sa-account-dropdown-logout';
-    btn.style.color='#333';
-    btn.innerHTML='<i class="ti ti-files"></i> Mes documents'+badge;
-    btn.onclick=function(){window.location='/documents';};
-    var btns=dropdown.querySelectorAll('button');
-    if(btns.length)dropdown.insertBefore(btn,btns[btns.length-1]);
-    else dropdown.appendChild(btn);
-  },200);
 });
 
 function openMesDocsOverlay(){

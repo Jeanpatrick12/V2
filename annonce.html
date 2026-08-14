@@ -10,6 +10,7 @@
   gtag('config', 'G-RWT8PG68M3');
 </script>
 <meta charset="UTF-8">
+<base href="/">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="description" content="Consultez cette annonce immobilière publiée directement par le propriétaire sur SansAgents, sans agence et sans commission exorbitante.">
 <link rel="canonical" href="https://sansagents.fr/annonce">
@@ -25,13 +26,13 @@
 <meta name="twitter:description" content="Consultez cette annonce immobilière publiée directement par le propriétaire, sans agence.">
 <meta name="twitter:image" content="https://sansagents.fr/apple-touch-icon.png">
 <meta name="theme-color" content="#E84533">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><!--sa_mloader--><script>(function(){if(window.innerWidth>768||localStorage.sa_force_desktop||/[?&]desktop=1/.test(location.search))return;document.documentElement.style.visibility="hidden";document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML="";document.body.style.margin="0";document.body.style.overflow="hidden";var f=document.createElement("iframe");f.src="/m/annonce.html"+location.search;f.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;border:0;background:#fff";f.onload=function(){try{document.title=f.contentDocument.title}catch(e){}document.documentElement.style.visibility=""};f.setAttribute("scrolling","yes");document.body.appendChild(f);});})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><!--sa_mloader--><script>(function(){if(window.innerWidth>768||localStorage.sa_force_desktop||/[?&]desktop=1/.test(location.search))return;document.documentElement.style.visibility="hidden";document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML="";document.body.style.margin="0";document.body.style.overflow="hidden";var f=document.createElement("iframe");var _sq=location.search;if(!_sq){var _pm=location.pathname.match(/^\/annonce\/([a-z0-9-]+?)\/?$/i);var _id8=_pm&&(_pm[1].match(/([0-9a-f]{8})$/i)||[])[1];if(_id8)_sq="?id="+encodeURIComponent(_id8);}f.src="/m/annonce.html"+_sq;f.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;border:0;background:#fff";f.onload=function(){try{document.title=f.contentDocument.title}catch(e){}document.documentElement.style.visibility=""};f.setAttribute("scrolling","yes");document.body.appendChild(f);});})();</script>
 <title>SansAgents — Détail de l'annonce</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <!-- Leaflet est chargé à la demande (voir loadLeaflet()) une fois les données de l'annonce disponibles -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=25"></script>
+<script src="sa-shared.js?v=27"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -812,6 +813,10 @@ function initGallerySwipe() {
   hero.addEventListener('pointercancel', function(){ dragging = false; hero.classList.remove('dragging'); });
 }
 
+function listingUrl(l) {
+  const slug = SA.listingSlug(l);
+  return slug ? 'https://sansagents.fr/annonce/' + slug : 'https://sansagents.fr/annonce?id=' + encodeURIComponent(l.id);
+}
 function updateSEOTags(l) {
   const photos = (Array.isArray(l.photos) ? l.photos : []).map(photoUrl).filter(Boolean);
   const title = 'SansAgents — ' + l.title;
@@ -820,7 +825,7 @@ function updateSEOTags(l) {
   if (l.surface) descBits.push(l.surface + ' m²');
   if (l.pieces) descBits.push(l.pieces + ' pièces');
   const desc = descBits.join(' — ') + (l.ville ? ' à ' + l.ville : '') + '. Annonce publiée directement par le propriétaire, sans agence, sur SansAgents.';
-  const url = 'https://sansagents.fr/annonce?id=' + encodeURIComponent(l.id);
+  const url = listingUrl(l);
   const image = photos[0] || 'https://sansagents.fr/apple-touch-icon.png';
 
   document.title = title;
@@ -854,7 +859,7 @@ function injectBreadcrumbs(l) {
     { name: 'Annonces', url: 'https://sansagents.fr/annonces' }
   ];
   if (l.ville) items.push({ name: l.ville, url: 'https://sansagents.fr/annonces?ville=' + encodeURIComponent(l.ville) });
-  items.push({ name: l.title, url: 'https://sansagents.fr/annonce?id=' + encodeURIComponent(l.id) });
+  items.push({ name: l.title, url: listingUrl(l) });
   const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -879,7 +884,7 @@ function injectStructuredData(l) {
     "@type": "RealEstateListing",
     "name": l.title,
     "description": l.desc || undefined,
-    "url": 'https://sansagents.fr/annonce?id=' + encodeURIComponent(l.id),
+    "url": listingUrl(l),
     "image": images.length ? images : undefined,
     "datePosted": l.createdAt ? new Date(l.createdAt).toISOString() : undefined,
     "address": {
@@ -1339,7 +1344,7 @@ function miniCardHTML(l){
   const icon = SA.TYPE_ICONS[l.type] || 'ti-home';
   const main = photos[0] ? photoUrl(photos[0]) : null;
   return `
-  <div class="sa-mini-card" onclick="window.location.href='annonce?id=${l.id}&s=${SA.listingSlug(l)}'">
+  <div class="sa-mini-card" onclick="window.location.href='${listingUrl(l)}'">
     <div class="sa-mini-photo" style="${main ? "background-image:url('" + main + "')" : 'background:' + grad}">
       ${!main ? `<i class="ti ${icon}"></i>` : ''}
       <span class="sa-mini-badge ${l.transaction === 'vente' ? 'vente' : 'location'}">${l.transaction === 'vente' ? 'Vente' : 'Location'}</span>

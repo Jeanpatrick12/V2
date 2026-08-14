@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=25"></script>
+<script src="sa-shared.js?v=27"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -564,7 +564,7 @@ function render() {
         ${msgCount ? `<div class="sa-mmsg-count"><i class="ti ti-message-2"></i> ${msgCount} conversation${msgCount > 1 ? 's' : ''}</div>` : ''}
         <div class="sa-mactions">
           <button class="sa-mbtn primary" onclick="openEdit('${l.id}')" ${sold ? 'disabled' : ''}><i class="ti ti-edit"></i> Modifier</button>
-          <button class="sa-mbtn" onclick="window.location.href='annonce?id=${l.id}'"><i class="ti ti-eye"></i> Voir l'annonce</button>
+          <button class="sa-mbtn" onclick="window.location.href='/annonce/${SA.listingSlug(l)}'"><i class="ti ti-eye"></i> Voir l'annonce</button>
           ${!sold ? `<button class="sa-mbtn" data-visit-btn="${l.id}" onclick="openVisitJournal('${l.id}')"><i class="ti ti-calendar-event"></i> ${visitCount ? visitCount + ' visite' + (visitCount > 1 ? 's' : '') : 'Journal des visites'}</button>` : ''}
           ${!sold ? `<button class="sa-mbtn success" onclick="markSold('${l.id}','${l.transaction}')"><i class="ti ti-circle-check"></i> Marquer ${l.transaction === 'vente' ? 'vendue' : 'louée'}</button>` : ''}
         </div>

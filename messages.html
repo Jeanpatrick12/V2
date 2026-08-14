@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=25"></script>
+<script src="sa-shared.js?v=27"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -330,7 +330,7 @@ function renderThread(id) {
           </button>
         </div>
       </div>
-      <span class="sa-msg-thread-header-listing" onclick="window.location.href='annonce?id=${encodeURIComponent(c.listingId)}'"><i class="ti ti-home" style="font-size:11px"></i> ${SA.escapeHtml(c.listingTitle)}</span>
+      <span class="sa-msg-thread-header-listing" onclick="window.location.href='${(function(){ var cl=SA.getListingById(c.listingId); return cl ? '/annonce/'+SA.listingSlug(cl) : 'annonce?id='+encodeURIComponent(c.listingId); })()}'"><i class="ti ti-home" style="font-size:11px"></i> ${SA.escapeHtml(c.listingTitle)}</span>
     </div>
     <div class="sa-msg-thread-body" id="threadBody">
       ${(function() {
@@ -406,24 +406,6 @@ window.addEventListener('sa:newMessage', function(e){
 
 SA.init().then(function(){
   render();
-  setTimeout(function(){
-    var dropdown=document.querySelector('.sa-account-dropdown');
-    if(!dropdown||!SA.getUser())return;
-    var uid2=SA.getUser()&&SA.getUser().id;var docs=[];try{docs=JSON.parse(localStorage.getItem(uid2?'sa_user_docs_'+uid2:'sa_user_docs_guest')||'[]');}catch(e){}
-    var badge=docs.length?'<span style="background:#E84533;color:white;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">'+docs.length+'</span>':'';
-    var existing=Array.from(dropdown.querySelectorAll('button')).find(function(b){return b.innerHTML.indexOf('ti-files')!==-1;});
-    if(existing){existing.innerHTML='<i class="ti ti-files"></i> Mes documents'+badge;}
-    else{
-      var btn=document.createElement('button');
-      btn.setAttribute('data-docs-btn','1');
-      btn.className='sa-account-dropdown-logout';btn.style.cssText='color:#333;text-align:left';
-      btn.innerHTML='<i class="ti ti-files"></i> Mes documents'+badge;
-      btn.onclick=function(){window.location='/documents';};
-      var btns=dropdown.querySelectorAll('button');
-      if(btns.length)dropdown.insertBefore(btn,btns[btns.length-1]);
-      else dropdown.appendChild(btn);
-    }
-  },200);
 });
 </script>
 </body>

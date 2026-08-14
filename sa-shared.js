@@ -569,7 +569,12 @@
       dbPatch.postal = addr.postal;
       dbPatch.lat = coords ? coords.lat : null;
       dbPatch.lng = coords ? coords.lng : null;
-      patch = Object.assign({}, patch, { ville: addr.ville, postal: addr.postal, lat: dbPatch.lat, lng: dbPatch.lng });
+      const current = _cache.dbListings.find(l => l.id === id);
+      const curType = patch.type !== undefined ? patch.type : (current && current.type);
+      const curPieces = patch.pieces !== undefined ? patch.pieces : (current && current.pieces);
+      const curMeuble = patch.meuble !== undefined ? patch.meuble : (current && current.meuble);
+      dbPatch.title = titleFor(curType, curPieces, addr.ville, curMeuble);
+      patch = Object.assign({}, patch, { ville: addr.ville, postal: addr.postal, lat: dbPatch.lat, lng: dbPatch.lng, title: dbPatch.title });
     }
     // Photos : upload les nouvelles (base64) et conserver les URLs existantes
     if (patch.photos !== undefined) {
@@ -1116,9 +1121,7 @@
     return parts.join("-");
   }
   function openListing(id, slug) {
-    var url = "/annonce?id=" + encodeURIComponent(id);
-    if (slug) url += "&s=" + encodeURIComponent(slug);
-    window.top.location.href = url;
+    window.top.location.href = slug ? "/annonce/" + slug : "/annonce?id=" + encodeURIComponent(id);
   }
   function closeListing() {
     const root = document.getElementById("saListingModalRoot");
