@@ -81,14 +81,14 @@ button{font-family:inherit;cursor:pointer}
 
 .v-hero{background:linear-gradient(135deg,#0c1622 0%,#152233 60%,#1c2e44 100%);padding:72px 40px 96px;position:relative;overflow:hidden}
 .v-hero::after{content:'';position:absolute;right:-120px;top:-80px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(232,69,51,.12) 0%,transparent 70%);pointer-events:none}
-.v-hero-inner{max-width:1100px;margin:0 auto;position:relative;display:grid;grid-template-columns:1fr 320px;gap:60px;align-items:center}
+.v-hero-inner{max-width:1180px;margin:0 auto;position:relative;display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center}
 .v-hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,122,104,.12);border:1px solid rgba(255,122,104,.3);border-radius:999px;padding:6px 14px;font-size:11.5px;font-weight:700;color:#ff7a68;letter-spacing:.05em;margin-bottom:22px}
 .v-hero h1{font-size:40px;font-weight:700;color:white;line-height:1.18;letter-spacing:-.6px;margin-bottom:16px}
 .v-hero h1 em{color:#ff7a68;font-style:normal}
 .v-hero-sub{font-size:15.5px;color:rgba(255,255,255,.55);line-height:1.75;max-width:460px}
 
 .v-hero-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.v-hstat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 18px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.v-hstat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 20px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
 .v-hstat:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.18)}
 .v-hstat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .v-hstat::after{content:'';position:absolute;top:-40px;left:-20px;width:120px;height:120px;border-radius:50%;opacity:.14;pointer-events:none;filter:blur(24px)}
@@ -100,8 +100,8 @@ button{font-family:inherit;cursor:pointer}
 .v-hstat:nth-child(2) .v-hstat-val{color:#ffa08c}
 .v-hstat:nth-child(3) .v-hstat-val{color:rgba(255,255,255,.92)}
 .v-hstat:nth-child(4) .v-hstat-val{color:rgba(255,255,255,.7)}
-.v-hstat-val{font-size:27px;font-weight:900;letter-spacing:-.4px}
-.v-hstat-lbl{font-size:10.5px;color:rgba(255,255,255,.5);margin-top:6px;line-height:1.4}
+.v-hstat-val{font-size:36px;font-weight:900;letter-spacing:-.5px}
+.v-hstat-lbl{font-size:11.5px;color:rgba(255,255,255,.55);margin-top:6px;line-height:1.4}
 
 .v-tabwrap{max-width:1000px;margin:-42px auto 0;padding:0 24px;position:relative;z-index:2}
 .v-tabs{display:flex;gap:8px;background:white;border-radius:18px;padding:10px;box-shadow:0 16px 40px rgba(12,22,34,.16);border:1px solid #ebebeb}
@@ -115,38 +115,38 @@ button{font-family:inherit;cursor:pointer}
 .v-tab.active .v-tab-ico{background:#E84533;color:white}
 .v-tab.active .v-tab-title{color:#E84533}
 
-.v-panel-wrap{max-width:1000px;margin:0 auto;padding:36px 24px 72px}
+.v-panel-wrap{max-width:1040px;margin:0 auto;padding:36px 24px 72px}
 .v-panel{display:none}
 .v-panel.active{display:block}
-.v-pcard{background:white;border:1px solid #ebebeb;border-radius:20px;padding:32px;box-shadow:0 4px 24px rgba(12,22,34,.05)}
-.v-pcard-head{display:flex;align-items:center;gap:16px;margin-bottom:24px}
-.v-pcard-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0}
-.v-pcard-title{font-size:21px;font-weight:800;color:#111;letter-spacing:-.3px}
-.v-pcard-tagline{font-size:13px;color:#888;margin-top:4px}
+.v-pcard{background:white;border:1px solid #ebebeb;border-radius:20px;padding:40px;box-shadow:0 4px 24px rgba(12,22,34,.05)}
+.v-pcard-head{display:flex;align-items:center;gap:18px;margin-bottom:28px;padding-bottom:26px;border-bottom:1px solid #f0f0f0}
+.v-pcard-ico{width:56px;height:56px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0;background:#fff5f4;color:#E84533}
+.v-pcard-title{font-size:23px;font-weight:800;color:#111;letter-spacing:-.4px}
+.v-pcard-tagline{font-size:13.5px;color:#888;margin-top:5px}
 
-.v-panel-badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:26px}
+.v-peyebrow{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.07em;margin-bottom:13px}
+
+.v-panel-badges{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
 @media(max-width:700px){.v-panel-badges{grid-template-columns:repeat(2,1fr)}}
-.v-pbadge{background:#f8f9fb;border:1px solid #f0f0f0;border-radius:12px;padding:14px 14px;position:relative;overflow:hidden}
+.v-pbadge{background:#f8f9fb;border:1px solid #f0f0f0;border-radius:14px;padding:20px 18px;position:relative;overflow:hidden;transition:border-color .15s,background .15s}
+.v-pbadge:hover{border-color:#f0d5d2;background:#fff9f8}
 .v-pbadge::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#E84533}
-.v-pbadge-ico{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;margin-bottom:9px;background:#fff5f4;color:#E84533}
-.v-pbadge-val{font-size:19px;font-weight:900;letter-spacing:-.3px;color:#111}
-.v-pbadge-lbl{font-size:10.5px;color:#888;margin-top:3px;line-height:1.4}
+.v-pbadge-val{font-size:27px;font-weight:900;letter-spacing:-.4px;color:#111}
+.v-pbadge-lbl{font-size:11.5px;color:#888;margin-top:7px;line-height:1.5}
 
-.v-psteps-label{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:11px}
-.v-psteps{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
-.v-pstep{display:inline-flex;align-items:center;gap:7px;background:#f8f9fb;border:1px solid #f0f0f0;border-radius:999px;padding:6px 13px 6px 6px;font-size:12px;font-weight:600;color:#555;text-decoration:none;transition:all .15s}
+.v-psteps{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:32px}
+.v-pstep{display:inline-flex;align-items:center;gap:8px;background:#f8f9fb;border:1px solid #f0f0f0;border-radius:999px;padding:7px 15px 7px 7px;font-size:12.5px;font-weight:600;color:#444;text-decoration:none;transition:all .15s}
 .v-pstep:hover{border-color:#ffd5d0;background:#fff5f4;color:#E84533;transform:translateY(-1px)}
-.v-pstep-num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:white;flex-shrink:0;background:#E84533}
+.v-pstep-num{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:white;flex-shrink:0;background:#E84533}
 
-.v-panel-intro{font-size:14.5px;color:#555;line-height:1.75;margin-bottom:26px;max-width:70ch}
+.v-panel-intro{font-size:14.5px;color:#555;line-height:1.75;margin-bottom:28px;padding-top:26px;border-top:1px solid #f0f0f0;max-width:70ch}
 .v-panel-cta{display:flex;gap:10px;flex-wrap:wrap}
-.v-hero-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:10px;font-size:13.5px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s;color:white}
+.v-hero-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:11px;font-size:13.5px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s;color:white}
 .v-hero-btn:hover{transform:translateY(-1px)}
 .v-hero-btn-primary{background:#E84533}
 .v-hero-btn-primary:hover{background:#c93a2a}
 .v-btn-ghost{background:#f8f9fb;color:#333;border:1.5px solid #e5e5e5}
 .v-btn-ghost:hover{background:#f0f0f0}
-.v-pcard-ico{background:#fff5f4;color:#E84533}
 
 @media(max-width:860px){
   .v-hero-inner{grid-template-columns:1fr}
@@ -234,13 +234,14 @@ button{font-family:inherit;cursor:pointer}
         <div class="v-pcard-ico"><i class="ti ti-home-dollar"></i></div>
         <div><div class="v-pcard-title">Vendre sans agence</div><div class="v-pcard-tagline">De l'estimation du prix à la signature chez le notaire</div></div>
       </div>
+      <div class="v-peyebrow">En chiffres</div>
       <div class="v-panel-badges">
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-percentage"></i></div><div class="v-pbadge-val">1%</div><div class="v-pbadge-lbl">commission SansAgents, uniquement si vente conclue</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-receipt-off"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">frais de publication de l'annonce</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-route"></i></div><div class="v-pbadge-val">9</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-files"></i></div><div class="v-pbadge-val">6</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">1%</div><div class="v-pbadge-lbl">commission SansAgents, uniquement si vente conclue</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">frais de publication de l'annonce</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">9</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">6</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
       </div>
-      <div class="v-psteps-label">Aperçu du parcours</div>
+      <div class="v-peyebrow">Aperçu du parcours</div>
       <div class="v-psteps">
         <a class="v-pstep" href="guide-vendeur#ts1"><span class="v-pstep-num">1</span> Estimer son bien</a>
         <a class="v-pstep" href="guide-vendeur#ts2"><span class="v-pstep-num">2</span> Préparer les documents</a>
@@ -266,13 +267,14 @@ button{font-family:inherit;cursor:pointer}
         <div class="v-pcard-ico"><i class="ti ti-key"></i></div>
         <div><div class="v-pcard-title">Acheter sans agence</div><div class="v-pcard-tagline">De la définition du budget à la signature de l'acte</div></div>
       </div>
+      <div class="v-peyebrow">En chiffres</div>
       <div class="v-panel-badges">
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-percentage"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">commission, l'acheteur ne paie jamais de frais</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-receipt-off"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">pour consulter et contacter les vendeurs</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-route"></i></div><div class="v-pbadge-val">7</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-files"></i></div><div class="v-pbadge-val">4</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">commission acheteur, toujours gratuite</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">pour consulter et contacter les vendeurs</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">7</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">4</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
       </div>
-      <div class="v-psteps-label">Aperçu du parcours</div>
+      <div class="v-peyebrow">Aperçu du parcours</div>
       <div class="v-psteps">
         <a class="v-pstep" href="guide-acheteur#ts1"><span class="v-pstep-num">1</span> Définir son budget</a>
         <a class="v-pstep" href="guide-acheteur#ts2"><span class="v-pstep-num">2</span> Rechercher les annonces</a>
@@ -296,13 +298,14 @@ button{font-family:inherit;cursor:pointer}
         <div class="v-pcard-ico"><i class="ti ti-home-share"></i></div>
         <div><div class="v-pcard-title">Louer sans agence</div><div class="v-pcard-tagline">Du loyer juste à la gestion locative au quotidien</div></div>
       </div>
+      <div class="v-peyebrow">En chiffres</div>
       <div class="v-panel-badges">
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-percentage"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">commission sur toute mise en location</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-receipt-off"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">frais de publication de l'annonce</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-route"></i></div><div class="v-pbadge-val">9</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-files"></i></div><div class="v-pbadge-val">6</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">commission sur toute mise en location</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">frais de publication de l'annonce</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">9</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-val">6</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
       </div>
-      <div class="v-psteps-label">Aperçu du parcours</div>
+      <div class="v-peyebrow">Aperçu du parcours</div>
       <div class="v-psteps">
         <a class="v-pstep" href="guide-loueur#ts1"><span class="v-pstep-num">1</span> Estimer le loyer</a>
         <a class="v-pstep" href="guide-loueur#ts2"><span class="v-pstep-num">2</span> Logement et diagnostics</a>
