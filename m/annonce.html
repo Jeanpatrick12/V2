@@ -6,9 +6,8 @@
 <title>Annonce — SansAgents</title>
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <meta name="theme-color" content="#E84533">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
+<!-- Leaflet est chargé à la demande (voir loadLeaflet()) une fois les données de l'annonce disponibles -->
 <link rel="stylesheet" href="m.css">
 <style>
 .m-risque-summary { font-size: 13px; color: #444; line-height: 1.7; display: flex; gap: 8px; }
@@ -172,7 +171,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=23"></script>
+<script src="../sa-shared.js?v=24"></script>
 <script>
 var listingId = new URLSearchParams(window.location.search).get('id');
 var photos = [];
@@ -631,7 +630,7 @@ function render(l) {
   // Annonces similaires
   renderSimilar(l);
   loadAvisSectionListing(safeId);
-  initDetailMapM(l);
+  if (l.lat && l.lng) { loadLeaflet().then(function(){ initDetailMapM(l); }); }
   injectStructuredDataM(l);
   loadRisquesM(l);
   loadSellerTrustM(l);
@@ -742,6 +741,21 @@ function injectStructuredDataM(l) {
   document.head.appendChild(script);
 }
 
+var leafletLoadPromise = null;
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  if (leafletLoadPromise) return leafletLoadPromise;
+  leafletLoadPromise = new Promise(function(resolve){
+    var l = document.createElement('link');
+    l.rel = 'stylesheet'; l.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(l);
+    var s = document.createElement('script');
+    s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s.onload = resolve;
+    document.head.appendChild(s);
+  });
+  return leafletLoadPromise;
+}
 var detailMapM = null;
 var poiLayersDetailM = { ecoles:null, universites:null, commerces:null, parcs:null, transports:null, sante:null };
 var poiConfigDetailM = {
@@ -892,7 +906,7 @@ function renderSimilar(l) {
       ? "background-image:url('" + xphUrl.replace(/'/g,"%27") + "');background-size:cover;background-position:center"
       : 'background:' + (GRAD[x.transaction] || '#e8e8e8');
     var xprice = x.price ? x.price.toLocaleString('fr-FR') + ' €' + (x.transaction==='location'?'/mois':'') : '';
-    return '<div class="m-similar-card m-carousel-item" onclick="SA.openListing(\'' + x.id + '\')">' +
+    return '<div class="m-similar-card m-carousel-item" onclick="SA.openListing(\'' + x.id + '\',\'' + SA.listingSlug(x) + '\')">' +
       '<div class="m-similar-img" style="' + imgStyle + '"></div>' +
       '<div class="m-similar-body">' +
         '<div class="m-similar-price">' + xprice + '</div>' +

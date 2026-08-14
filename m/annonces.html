@@ -6,12 +6,8 @@
 <title>Annonces — SansAgents</title>
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <meta name="theme-color" content="#E84533">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
+<!-- Leaflet est chargé à la demande (voir loadLeaflet()) uniquement quand la vue carte est ouverte -->
 <link rel="stylesheet" href="m.css">
 <style>
 .m-an-header { background: linear-gradient(135deg,#0f1923,#1a2c3d); padding: 28px var(--pad) 24px; }
@@ -469,7 +465,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAu
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=23"></script>
+<script src="../sa-shared.js?v=24"></script>
 <script>
 var filters = { transaction: '', type: '', ville: '', rayon: 0, budgetMin: '', budgetMax: '', piecesMin: '', piecesMax: '', chambresMin: '', chambresMax: '', surfaceMin: '', surfaceMax: '', dpe: [], ges: [], motsCles: '' };
 var villeCoordsCache = {};
@@ -703,6 +699,30 @@ var poiConfigM = {
   sante:       { color:'#e0245e', icon:'ti-first-aid-kit', label:'établissement de santé', category:'healthcare' }
 };
 
+var leafletLoadPromise = null;
+function loadLeaflet() {
+  if (window.L && window.L.markerClusterGroup) return Promise.resolve();
+  if (leafletLoadPromise) return leafletLoadPromise;
+  leafletLoadPromise = new Promise(function(resolve){
+    ['https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+     'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css',
+     'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css'].forEach(function(href){
+      var l = document.createElement('link');
+      l.rel = 'stylesheet'; l.href = href;
+      document.head.appendChild(l);
+    });
+    var s1 = document.createElement('script');
+    s1.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s1.onload = function(){
+      var s2 = document.createElement('script');
+      s2.src = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js';
+      s2.onload = resolve;
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+  });
+  return leafletLoadPromise;
+}
 function setResultsMode(mode) {
   resultsMode = mode;
   var listCont = document.getElementById('listingsContainer');
@@ -713,8 +733,10 @@ function setResultsMode(mode) {
     mapC.classList.add('show');
     mapBtn.classList.add('active');
     mapBtn.innerHTML = '<i class="ti ti-list"></i> Liste';
-    initMapM();
-    updateMapMarkers(lastResults);
+    loadLeaflet().then(function(){
+      initMapM();
+      updateMapMarkers(lastResults);
+    });
   } else {
     mapC.classList.remove('show');
     listCont.style.display = '';
@@ -798,7 +820,7 @@ function mapPopupHTMLM(l) {
       '<div class="m-map-popup-title">' + title + '</div>' +
       metaHtml +
       '<div class="m-map-popup-addr"><i class="ti ti-map-pin"></i> ' + (l.ville||'') + '</div>' +
-      '<button class="m-map-popup-btn" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')">Voir l\'annonce <i class="ti ti-arrow-right"></i></button>' +
+      '<button class="m-map-popup-btn" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')+\'&s=\'+encodeURIComponent(\'' + SA.listingSlug(l) + '\')">Voir l\'annonce <i class="ti ti-arrow-right"></i></button>' +
     '</div></div>';
 }
 
@@ -972,7 +994,7 @@ function renderListings(listings) {
           '<span class="m-an-card-counter" id="lcount-' + safeId + '">1/' + photosArr.length + '</span>'
         : '';
       cards.push(
-        '<div class="m-an-card" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')">' +
+        '<div class="m-an-card" onclick="window.top.location=\'/annonce?id=\'+encodeURIComponent(\'' + safeId + '\')+\'&s=\'+encodeURIComponent(\'' + SA.listingSlug(l) + '\')">' +
           '<div class="m-an-card-img" id="lph-' + safeId + '" style="' + photoStyle + '">' +
             '<span class="m-an-card-badge ' + badge + '">' + badgeLabel + '</span>' +
             '<button class="m-an-card-fav" onclick="event.stopPropagation();SA.toggleFavoriteUI(this,\'' + safeId + '\')" aria-label="Favori">' +

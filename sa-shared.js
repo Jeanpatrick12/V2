@@ -1115,8 +1115,10 @@
     parts.push(l.id.substring(0, 8));
     return parts.join("-");
   }
-  function openListing(id) {
-    window.top.location.href = "/annonce?id=" + encodeURIComponent(id);
+  function openListing(id, slug) {
+    var url = "/annonce?id=" + encodeURIComponent(id);
+    if (slug) url += "&s=" + encodeURIComponent(slug);
+    window.top.location.href = url;
   }
   function closeListing() {
     const root = document.getElementById("saListingModalRoot");
@@ -1351,7 +1353,7 @@
   /* ── API publique ────────────────────────────────────────────────── */
   window.SA = {
     TYPE_LABELS, TYPE_ICONS, DEMO_LISTINGS, DEMO_PROS, IMG_GRADIENTS,
-    fmtPrice, fmtPriceTransaction, parseAddress, capitalizeVille, piecesFromSelect, dpeLetterFrom, escapeHtml, titleFor,
+    fmtPrice, fmtPriceTransaction, parseAddress, capitalizeVille, piecesFromSelect, dpeLetterFrom, escapeHtml, titleFor, listingSlug,
     compressImageFile, hasEquip, containsContactInfo,
     geocodeAddress, distanceKm,
     init,

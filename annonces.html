@@ -27,15 +27,11 @@
 <meta name="theme-color" content="#E84533">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><!--sa_mloader--><script>(function(){if(window.innerWidth>768||localStorage.sa_force_desktop||/[?&]desktop=1/.test(location.search))return;document.documentElement.style.visibility="hidden";document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML="";document.body.style.margin="0";document.body.style.overflow="hidden";var f=document.createElement("iframe");f.src="/m/annonces.html"+location.search;f.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;border:0;background:#fff";f.onload=function(){try{document.title=f.contentDocument.title}catch(e){}document.documentElement.style.visibility=""};f.setAttribute("scrolling","yes");document.body.appendChild(f);});})();</script>
 <title>SansAgents — Toutes les annonces</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
+<!-- Leaflet est chargé à la demande (voir loadLeaflet()) uniquement quand la vue carte est ouverte -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=23"></script>
+<script src="sa-shared.js?v=24"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff;overflow-x:hidden}
@@ -1101,6 +1097,30 @@ function applyFilters(scrollToResults) {
 function runSearch() { applyFilters(true); }
 
 /* ───────────────── vue carte ───────────────── */
+let leafletLoadPromise = null;
+function loadLeaflet() {
+  if (window.L && window.L.markerClusterGroup) return Promise.resolve();
+  if (leafletLoadPromise) return leafletLoadPromise;
+  leafletLoadPromise = new Promise(function(resolve){
+    ['https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+     'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css',
+     'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css'].forEach(function(href){
+      const l = document.createElement('link');
+      l.rel = 'stylesheet'; l.href = href;
+      document.head.appendChild(l);
+    });
+    const s1 = document.createElement('script');
+    s1.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s1.onload = function(){
+      const s2 = document.createElement('script');
+      s2.src = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js';
+      s2.onload = resolve;
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+  });
+  return leafletLoadPromise;
+}
 let saMap = null;
 let mapMarkersLayer = null;
 let rayonCircle = null;
@@ -1132,8 +1152,10 @@ function setResultsMode(mode) {
     mapBtn.classList.add('active');
     mapBtn.innerHTML = '<i class="ti ti-list"></i> Voir la liste';
     document.body.classList.add('sa-map-active');
-    initMap();
-    updateMapMarkers(lastResults);
+    loadLeaflet().then(function(){
+      initMap();
+      updateMapMarkers(lastResults);
+    });
   } else {
     document.body.classList.remove('sa-map-active');
     grid.style.display = '';
@@ -1275,7 +1297,7 @@ function mapListCardHTML(l) {
   if (l.chambres) metaParts.push(`<span><i class="ti ti-bed"></i> ${l.chambres} ch.</span>`);
 
   return `
-  <div class="sa-maplist-card${l.id === selectedListingId ? ' selected' : ''}" data-id="${l.id}" onclick="SA.openListing('${l.id}')" onmouseenter="highlightMarker('${l.id}',true)" onmouseleave="highlightMarker('${l.id}',false)">
+  <div class="sa-maplist-card${l.id === selectedListingId ? ' selected' : ''}" data-id="${l.id}" onclick="SA.openListing('${l.id}','${SA.listingSlug(l)}')" onmouseenter="highlightMarker('${l.id}',true)" onmouseleave="highlightMarker('${l.id}',false)">
     <div class="sa-maplist-photo-wrap">
       <div class="sa-maplist-photo" id="mlph-${l.id}" style="${photos[0] ? "background-image:url('" + photos[0] + "')" : 'background:' + grad}">
         ${!photos[0] ? `<i class="ti ${icon}" style="color:rgba(255,255,255,.55);font-size:30px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)"></i>` : ''}
@@ -1450,7 +1472,7 @@ function cardHTML(l, mode) {
   if (l.etage !== null && l.etage !== undefined && l.etage !== '') metaParts.push(`<span><i class="ti ti-building"></i> Étage ${l.etage}</span>`);
 
   return `
-  <div class="sa-card sa-card-${mode}" data-id="${l.id}" onclick="SA.openListing('${l.id}')">
+  <div class="sa-card sa-card-${mode}" data-id="${l.id}" onclick="SA.openListing('${l.id}','${SA.listingSlug(l)}')">
     <div class="sa-card-photos" style="${photos[0] ? '' : 'background:' + grad}">
       <div class="sa-card-photo-main" id="cph-${l.id}" style="${photos[0] ? "background-image:url('" + photos[0] + "')" : ''}">
         ${!photos[0] ? `<i class="ti ${icon} sa-card-noimg"></i>` : ''}
