@@ -185,6 +185,11 @@ body.sa-has-bottom-nav { padding-bottom: 56px !important; }
   .sa-nav-left { position: static !important; left: auto !important; transform: none !important; }
   .sa-nav-links, .sa-nav-actions { display: none !important; }
 
+  /* ─ Logo : même taille que les pages m/*.html (.m-nav-icon/.m-nav-brand) ─ */
+  .sa-logo { width: 34px !important; height: 34px !important; }
+  .sa-logo i { font-size: 17px !important; }
+  .sa-brand { font-size: 17px !important; }
+
   /* iOS : empêcher zoom auto sur focus */
   input, select, textarea { font-size: 16px !important; }
 
