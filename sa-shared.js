@@ -1292,8 +1292,10 @@
         '<div class="sa-mobile-menu-section">Navigation</div>' +
         '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'./\'"><i class="ti ti-home"></i> Accueil</button>' +
         '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'annonces\'"><i class="ti ti-building-estate"></i> Annonces</button>' +
-        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'/m/vendre\'"><i class="ti ti-book-2"></i> Guide</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'guides\'"><i class="ti ti-book-2"></i> Guides</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'estimer-son-bien\'"><i class="ti ti-calculator"></i> Estimer son bien</button>' +
         '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'professionnels\'"><i class="ti ti-briefcase"></i> Professionnels</button>' +
+        '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'a-propos\'"><i class="ti ti-info-circle"></i> À propos</button>' +
         '<div class="sa-mobile-menu-divider"></div>' +
         '<div class="sa-mobile-menu-section">Mon espace</div>' +
         '<button class="sa-mobile-menu-item" onclick="window.top.location.href=\'favoris\'"><i class="ti ti-heart"></i> Favoris' + (favN > 0 ? ' <span style="margin-left:auto;background:#E84533;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px">' + favN + '</span>' : '') + '</button>' +
