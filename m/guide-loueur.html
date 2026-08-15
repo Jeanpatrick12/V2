@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><!--sa_mguard--><script>if(window.self===window.top&&location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide-vendeur","guide-acheteur":"guide-acheteur","guide-loueur":"guide-loueur",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script><base target="_top">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Louer sans agence — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#0c1622">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
+<link rel="stylesheet" href="m.css">
+<style>
+body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflow-x: hidden; }
+
+/* Hero */
+.vh-hero { background: linear-gradient(135deg,#0c1622 0%,#152233 70%,#1c2e44 100%); padding: 18px var(--pad) 20px; }
+.vh-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,122,104,.12); border: 1px solid rgba(255,122,104,.3); border-radius: 999px; padding: 4px 10px; font-size: 10.5px; font-weight: 700; color: #ff7a68; letter-spacing: .04em; margin-bottom: 10px; }
+.vh-hero h1 { font-size: 21px; font-weight: 700; color: white; line-height: 1.2; letter-spacing: -.3px; margin-bottom: 8px; }
+.vh-hero h1 em { color: #ff7a68; font-style: normal; }
+.vh-hero p { font-size: 12.5px; color: rgba(255,255,255,.55); line-height: 1.6; margin-bottom: 14px; }
+.vh-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+.vh-stat-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 18px 14px; position: relative; overflow: hidden; }
+.vh-sc-top { height: 3px; position: absolute; top: 0; left: 0; right: 0; }
+.vh-sc-val { font-size: 28px; font-weight: 900; line-height: 1; letter-spacing: -.5px; margin-bottom: 6px; }
+.vh-sc-lbl { font-size: 11px; color: rgba(255,255,255,.5); line-height: 1.4; }
+
+/* Step dots nav */
+.vh-dots { background: white; border-bottom: 1px solid var(--border); position: sticky; top: var(--nav-h); z-index: 50; display: flex; overflow-x: auto; scrollbar-width: none; padding: 0 var(--pad); gap: 0; }
+.vh-dots::-webkit-scrollbar { display: none; }
+.vh-dot { flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 12px 10px; cursor: pointer; border-bottom: 2px solid transparent; }
+.vh-dot.active { border-bottom-color: #ff7a68; }
+.vh-dot.done .vh-dn { background: #ecfdf5; border-color: #6ee7b7; color: #1a8c4e; }
+.vh-dot.active .vh-dn { background: var(--red); border-color: var(--red); color: white; }
+.vh-dn { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: var(--text3); flex-shrink: 0; }
+.vh-dl { font-size: 11px; font-weight: 600; color: var(--text3); white-space: nowrap; }
+.vh-dot.active .vh-dl { color: #ff7a68; }
+.vh-dot-sep { color: var(--border); font-size: 14px; flex-shrink: 0; align-self: center; }
+
+/* Step cards */
+.vh-steps { padding: 12px var(--pad) 0; display: flex; flex-direction: column; gap: 8px; }
+.vh-card { background: white; border-radius: 14px; border: 1.5px solid var(--border); overflow: hidden; scroll-margin-top: calc(var(--nav-h) + 54px); transition: border-color .2s; }
+.vh-card.active { border-color: var(--red); box-shadow: 0 2px 16px rgba(232,69,51,.09); }
+.vh-card.done { border-color: #a7f3d0; }
+.vh-card-head { display: flex; align-items: center; gap: 12px; padding: 14px; cursor: pointer; }
+.vh-card-ico { width: 38px; height: 38px; border-radius: 10px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 17px; color: var(--text3); flex-shrink: 0; transition: all .2s; }
+.vh-card.active .vh-card-ico { background: #fff5f3; color: #ff7a68; }
+.vh-card.done .vh-card-ico { background: #ecfdf5; color: #16a34a; }
+.vh-card-info { flex: 1; min-width: 0; }
+.vh-card-num { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; }
+.vh-card.active .vh-card-num { color: #ff7a68; }
+.vh-card-title { font-size: 14px; font-weight: 800; color: var(--text); margin-top: 1px; }
+.vh-chevron { color: var(--text3); font-size: 18px; flex-shrink: 0; transition: transform .2s; }
+.vh-card.active .vh-chevron { transform: rotate(180deg); color: #ff7a68; }
+.vh-body { display: none; border-top: 1px solid var(--border); }
+.vh-card.active .vh-body { display: block; }
+.vh-desc { font-size: 13px; color: var(--text2); line-height: 1.7; padding: 12px 14px 8px; }
+
+/* Checklist */
+.vh-checks { padding: 0 14px; }
+.vh-check { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid var(--bg); cursor: pointer; }
+.vh-check-box { width: 19px; height: 19px; border-radius: 5px; border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.vh-check-box.on { background: var(--red); border-color: var(--red); }
+.vh-check-box.on::after { content: '✓'; font-size: 10px; color: white; font-weight: 800; }
+.vh-check-txt { font-size: 12.5px; color: var(--text); line-height: 1.5; }
+.vh-check-txt.on { color: var(--text3); text-decoration: line-through; }
+
+/* Tips */
+.vh-tip { display: flex; align-items: flex-start; gap: 8px; margin: 10px 14px; padding: 10px 12px; border-radius: 9px; font-size: 12px; line-height: 1.55; }
+.vh-tip-blue { background: #f0f7ff; color: #1e3a8a; }
+.vh-tip-blue i { color: #3b82f6; flex-shrink: 0; margin-top: 1px; }
+.vh-tip-red { background: #fff5f4; color: #991b1b; }
+.vh-tip-red i { color: var(--red); flex-shrink: 0; margin-top: 1px; }
+.vh-tip-green { background: #f0fdf4; color: #14532d; }
+.vh-tip-green i { color: #16a34a; flex-shrink: 0; margin-top: 1px; }
+
+/* Actions */
+.vh-actions { display: flex; gap: 8px; padding: 10px 14px 16px; flex-wrap: wrap; }
+.vh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; border-radius: 9px; font-size: 12.5px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; }
+.vh-btn-red { background: var(--red); color: white; }
+.vh-btn-done { background: #ecfdf5; color: #1a8c4e; border: 1.5px solid #a7f3d0; }
+.vh-head-done { display:inline-flex;align-items:center;gap:4px;padding:5px 9px;background:#f0fdf4;border:1.5px solid #a7f3d0;color:#1a8c4e;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0; }
+.vh-head-done:active { background:#dcfce7; }
+.vh-card.done .vh-head-done { background:#dcfce7;border-color:#6ee7b7;pointer-events:none; }
+.vh-inline-link { display:inline-flex;align-items:center;gap:2px;font-size:10.5px;font-weight:600;color:#ff7a68;background:rgba(255,122,104,.08);border:1px solid rgba(255,122,104,.2);border-radius:4px;padding:2px 6px;margin-left:4px;text-decoration:none;white-space:nowrap;vertical-align:middle; }
+
+/* Docs section */
+.vh-docs { margin: 16px var(--pad) 0; }
+.vh-section-label { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+.vh-doc { display: flex; align-items: center; gap: 12px; background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 14px; margin-bottom: 8px; cursor: pointer; }
+.vh-doc:last-child { margin-bottom: 0; }
+.vh-doc:active { background: var(--bg); }
+.vh-doc-ico { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.vh-doc-info { flex: 1; }
+.vh-doc-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.vh-doc-desc { font-size: 11.5px; color: var(--text3); margin-top: 2px; }
+
+/* Inline doc link inside step body */
+.vh-doc-inline { display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8f9fb;border:1.5px solid #e8e8eb;border-radius:10px;cursor:pointer; }
+.vh-doc-inline-ico { width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.vh-docs-label { margin:14px 14px 6px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em; }
+
+/* Helper */
+.vh-helper { margin: 16px var(--pad) 0; background: white; border-radius: 14px; border: 1.5px solid var(--border); overflow: hidden; }
+.vh-helper-head { background: linear-gradient(135deg,#0c1622,#1c2e44); padding: 14px; display: flex; align-items: center; gap: 10px; }
+.vh-helper-head i { font-size: 20px; color: var(--red); }
+.vh-helper-head h3 { font-size: 13.5px; font-weight: 800; color: white; }
+.vh-helper-head p { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 2px; }
+.vh-helper-body { padding: 14px; }
+.vh-field { margin-bottom: 11px; }
+.vh-label { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; display: block; }
+.vh-input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 11px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; }
+.vh-input:focus { border-color: var(--red); }
+.vh-select { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 11px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; background: white; appearance: none; }
+.vh-gen-out { background: var(--bg); border: 1.5px dashed var(--border); border-radius: 9px; padding: 12px; font-size: 12.5px; color: var(--text); line-height: 1.65; white-space: pre-wrap; margin-top: 10px; min-height: 60px; font-family: inherit; }
+
+/* CTA bottom */
+.vh-cta { margin: 20px var(--pad) 0; background: linear-gradient(135deg,#0c1622,#1c2e44); border-radius: 14px; padding: 20px; text-align: center; }
+.vh-cta h3 { font-size: 16px; font-weight: 800; color: white; margin-bottom: 6px; }
+.vh-cta p { font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 14px; line-height: 1.5; }
+
+/* Modal */
+.vh-overlay { display: none; position: fixed; inset: 0; z-index: 600; background: rgba(0,0,0,.55); }
+.vh-sheet { position: absolute; bottom: 0; left: 0; right: 0; background: white; border-radius: 20px 20px 0 0; max-height: 92vh; display: flex; flex-direction: column; }
+.vh-sheet-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 12px auto 0; flex-shrink: 0; }
+.vh-sheet-head { display: flex; align-items: center; gap: 10px; padding: 14px var(--pad); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.vh-sheet-title { font-size: 16px; font-weight: 800; color: var(--text); flex: 1; }
+.vh-sheet-close { background: var(--bg); border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text2); font-size: 16px; }
+.vh-sheet-body { overflow-y: auto; padding: var(--pad); padding-bottom: 32px; }
+.vh-mfield { margin-bottom: 12px; }
+.vh-mgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Doc preview */
+/* ── Document preview mobile — redesign professionnel ── */
+.vh-doc-preview{background:white;border:1.5px solid #e0e1e6;border-radius:12px;overflow:hidden;margin-top:14px;font-size:12.5px;line-height:1.75;color:#111}
+.vh-doc-preview .dh{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:14px 16px 13px}
+.vh-doc-preview .dh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.vh-doc-preview .dh-brand{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:800;color:rgba(255,255,255,.8)}
+.vh-doc-preview .dh-badge{width:18px;height:18px;background:#E84533;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white}
+.vh-doc-preview .dh-meta{font-size:9.5px;color:rgba(255,255,255,.4);text-align:right;line-height:1.5}
+.vh-doc-preview .dh-band{border-top:1px solid rgba(255,255,255,.1);padding-top:11px;display:flex;align-items:center;gap:9px}
+.vh-doc-preview .dh-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.vh-doc-preview .dh-title{font-size:14px;font-weight:800;color:white;letter-spacing:-.1px}
+.vh-doc-preview .dh-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;line-height:1.4}
+/* Body */
+.vh-doc-preview .db{padding:16px 16px 14px}
+.vh-doc-preview .dparts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.vh-doc-preview .dpart{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:9px;padding:9px 11px}
+.vh-doc-preview .dpart-lbl{font-size:8.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.vh-doc-preview .dpart-name{font-size:12.5px;font-weight:700;color:#111}
+.vh-doc-preview .dadr{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:9px;padding:10px 12px;margin-bottom:13px;display:flex;align-items:flex-start;gap:8px}
+.vh-doc-preview .dadr-ico{color:#E84533;font-size:14px;flex-shrink:0;margin-top:1px}
+.vh-doc-preview .dadr-lbl{font-size:8.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.vh-doc-preview .dadr-val{font-size:13px;font-weight:700;color:#111}
+.vh-doc-preview .ds{margin-bottom:13px}
+.vh-doc-preview .ds-title{font-size:9.5px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;padding-bottom:6px;border-bottom:1.5px solid #f0f0f2;display:flex;align-items:center;gap:5px}
+.vh-doc-preview .dkv{display:flex;margin-bottom:4px;border:1px solid #eeeff2;border-radius:7px;overflow:hidden}
+.vh-doc-preview .dkv-k{font-size:10.5px;font-weight:700;color:#666;background:#f4f5f7;padding:7px 10px;min-width:120px;flex-shrink:0;border-right:1px solid #eeeff2}
+.vh-doc-preview .dkv-v{font-size:11.5px;font-weight:600;color:#111;padding:7px 10px;flex:1}
+.vh-doc-preview .dkv-v.big{font-size:15px;font-weight:800;color:#0f172a}
+.vh-doc-preview .dlegal{font-size:11.5px;color:#444;line-height:1.85;background:#fafbfc;border:1px solid #eeeef2;border-radius:9px;padding:11px 13px}
+.vh-doc-preview .dsigs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;padding-top:14px;border-top:1.5px solid #f0f0f2}
+.vh-doc-preview .dsig-box{border:1.5px solid #e4e5ea;border-radius:9px;overflow:hidden}
+.vh-doc-preview .dsig-hd{background:#f4f5f7;padding:7px 10px;font-size:9px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e4e5ea}
+.vh-doc-preview .dsig-bd{padding:9px 10px}
+.vh-doc-preview .dsig-name{font-size:11px;font-weight:700;color:#111;margin-bottom:7px}
+.vh-doc-preview .dsig-sp{height:38px;border:1.5px dashed #d8dce6;border-radius:6px;margin-bottom:8px}
+.vh-doc-preview .dsig-f{font-size:9.5px;color:#aaa;padding-bottom:12px;border-bottom:1px solid #e0e2e8}
+.vh-doc-preview .dfooter{background:#f8f9fb;border-top:1px solid #eeeff2;padding:8px 14px;text-align:center;font-size:9.5px;color:#bbb}
+
+@media print {
+  .m-nav, .vh-dots, .vh-steps, .vh-docs, .vh-helper, .vh-cta, .m-bottom-nav, .vh-sheet-close, .no-print { display: none !important; }
+  .vh-overlay { display: block !important; position: static; background: none; }
+  .vh-sheet { position: static; border-radius: 0; max-height: none; }
+  .vh-sheet-handle { display: none; }
+  body { padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="m-nav">
+  <div class="m-nav-logo" onclick="window.top.location='/'">
+    <div class="m-nav-icon"><i class="ti ti-key"></i></div>
+    <div class="m-nav-brand">Sans<span>Agents</span></div>
+  </div>
+
+<button class="m-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<div class="vh-hero">
+  <div class="vh-badge"><i class="ti ti-shield-check"></i> Guide officiel · Gratuit</div>
+  <h1>Louez votre bien,<br><em>en toute confiance</em></h1>
+  <p>Tout ce qu'il vous faut pour mettre votre bien en location sereinement : loyer juste, dossier locataire, bail conforme et gestion au quotidien. 9 étapes guidées et 6 documents officiels gratuits.</p>
+  <div class="vh-stats">
+    <div class="vh-stat-card">
+      <div class="vh-sc-top" style="background:#E84533"></div>
+      <div class="vh-sc-val" style="color:#ff7a68">0 €</div>
+      <div class="vh-sc-lbl">Commission sur toute mise en location</div>
+    </div>
+    <div class="vh-stat-card">
+      <div class="vh-sc-top" style="background:#ff7a68"></div>
+      <div class="vh-sc-val" style="color:#ffa08c">0 €</div>
+      <div class="vh-sc-lbl">Frais de publication de l'annonce</div>
+    </div>
+    <div class="vh-stat-card">
+      <div class="vh-sc-top" style="background:rgba(255,255,255,.25)"></div>
+      <div class="vh-sc-val" style="color:rgba(255,255,255,.92)">9</div>
+      <div class="vh-sc-lbl">Étapes guidées et illustrées</div>
+    </div>
+    <div class="vh-stat-card">
+      <div class="vh-sc-top" style="background:rgba(255,255,255,.15)"></div>
+      <div class="vh-sc-val" style="color:rgba(255,255,255,.7)">6</div>
+      <div class="vh-sc-lbl">Documents officiels gratuits</div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP DOTS -->
+<div class="vh-dots" id="vhDots">
+  <div class="vh-dot active" id="vd1" onclick="jumpTo(1)"><div class="vh-dn" id="vdn1">1</div><span class="vh-dl">Loyer</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd2" onclick="jumpTo(2)"><div class="vh-dn" id="vdn2">2</div><span class="vh-dl">Diagnostics</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd3" onclick="jumpTo(3)"><div class="vh-dn" id="vdn3">3</div><span class="vh-dl">Annonce</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd4" onclick="jumpTo(4)"><div class="vh-dn" id="vdn4">4</div><span class="vh-dl">Photos</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd5" onclick="jumpTo(5)"><div class="vh-dn" id="vdn5">5</div><span class="vh-dl">Publier</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd6" onclick="jumpTo(6)"><div class="vh-dn" id="vdn6">6</div><span class="vh-dl">Locataire</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd7" onclick="jumpTo(7)"><div class="vh-dn" id="vdn7">7</div><span class="vh-dl">Bail</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd8" onclick="jumpTo(8)"><div class="vh-dn" id="vdn8">8</div><span class="vh-dl">Clés</span></div>
+  <span class="vh-dot-sep">›</span>
+  <div class="vh-dot" id="vd9" onclick="jumpTo(9)"><div class="vh-dn" id="vdn9">9</div><span class="vh-dl">Gestion</span></div>
+</div>
+
+<!-- STEPS -->
+<div class="vh-steps">
+
+  <!-- 1 -->
+  <div class="vh-card active" id="vc1">
+    <div class="vh-card-head" onclick="openStep(1)">
+      <div class="vh-card-ico"><i class="ti ti-cash"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 1</div><div class="vh-card-title">Estimer le loyer</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(1)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Un loyer trop élevé rallonge la vacance locative et coûte au final plus cher qu'une petite baisse de prix dès le départ. Comparez les loyers pratiqués dans votre secteur, et vérifiez si votre commune applique l'encadrement des loyers : dans une zone tendue, un loyer de référence s'impose et le dépasser est interdit et sanctionnable.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-home-2" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Loyers comparables du secteur</div><div style="font-size:11px;color:#aaa;margin-top:1px">Même surface, même standing, même quartier</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-map-pins" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Vérification zone tendue</div><div style="font-size:11px;color:#aaa;margin-top:1px">L'encadrement des loyers peut s'appliquer selon la commune</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-receipt" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Charges récupérables</div><div style="font-size:11px;color:#aaa;margin-top:1px">À définir clairement, en plus du loyer hors charges</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-scale" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Loyer de référence si encadrement</div><div style="font-size:11px;color:#aaa;margin-top:1px">Le dépasser expose à des sanctions</div></div></div>
+      </div>
+      <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Encadrement des loyers :</strong> il s'applique dans certaines zones tendues (Paris, Lille et d'autres agglomérations). Vérifiez la situation de votre commune avant de fixer votre loyer.</span></div>
+      <div style="margin:14px 14px 6px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Outils officiels et gratuits</div>
+      <div class="vh-actions" style="padding-top:0">
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.service-public.gouv.fr/simulateur/calcul/encadrementDesLoyers','_blank')"><i class="ti ti-external-link"></i> Vérifier votre zone tendue</button>
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.data.gouv.fr/fr/pages/carte-des-loyers/','_blank')"><i class="ti ti-external-link"></i> Carte des loyers</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="vh-card" id="vc2">
+    <div class="vh-card-head" onclick="openStep(2)">
+      <div class="vh-card-ico"><i class="ti ti-files"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 2</div><div class="vh-card-title">Préparer le logement et les diagnostics</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(2)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Un logement mis en location doit répondre aux critères légaux de décence et être accompagné d'un dossier de diagnostics techniques. La surface habitable se calcule selon la loi Boutin, différente de la loi Carrez utilisée à la vente.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-leaf" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">DPE — Diagnostic de Performance Énergétique</div><div style="font-size:11px;color:#aaa;margin-top:1px">Obligatoire, affiché dans l'annonce — validité 10 ans</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-map-pins" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">ERP — État des Risques et Pollutions</div><div style="font-size:11px;color:#aaa;margin-top:1px">Validité 6 mois</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-bolt" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Électricité <span style="font-weight:400;color:#bbb">— si &gt; 15 ans</span></div><div style="font-size:11px;color:#aaa;margin-top:1px">Conditionnel selon l'ancienneté de l'installation</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-flame" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Gaz <span style="font-weight:400;color:#bbb">— si &gt; 15 ans</span></div><div style="font-size:11px;color:#aaa;margin-top:1px">Conditionnel selon l'ancienneté de l'installation</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-droplet" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Plomb (CREP) <span style="font-weight:400;color:#bbb">— si avant 1949</span></div><div style="font-size:11px;color:#aaa;margin-top:1px">Conditionnel selon la date de construction</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-ruler" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Surface habitable — loi Boutin</div><div style="font-size:11px;color:#aaa;margin-top:1px">Obligatoire dans le bail, calcul différent de la loi Carrez</div></div></div>
+      </div>
+      <div class="vh-tip vh-tip-green"><i class="ti ti-circle-check"></i><span><strong>Pas de panique.</strong> Cochez chaque document au fur et à mesure que vous le rassemblez — rien ne presse avant la première visite. Prévoyez 2 à 3 semaines pour obtenir les diagnostics auprès d'un diagnostiqueur certifié.</span></div>
+      <div class="vh-tip vh-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Décence du logement :</strong> surface minimale, absence de risques pour la santé et sécurité du locataire sont des conditions légales — un logement non-décent expose à des recours du locataire.</span></div>
+      <div class="vh-actions"></div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="vh-card" id="vc3">
+    <div class="vh-card-head" onclick="openStep(3)">
+      <div class="vh-card-ico"><i class="ti ti-pencil"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 3</div><div class="vh-card-title">Rédiger l'annonce de location</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(3)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Une annonce de location doit être précise sur les conditions financières autant que sur le logement : loyer, charges, dépôt de garantie et date de disponibilité sont les informations que les candidats cherchent en premier.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-heading" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Titre clair</div><div style="font-size:11px;color:#aaa;margin-top:1px">Type de bien, surface, quartier, vide ou meublé</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-list-details" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Description pièce par pièce</div><div style="font-size:11px;color:#aaa;margin-top:1px">Détaillez chaque pièce, son équipement, sa surface</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-coin" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Loyer charges comprises</div><div style="font-size:11px;color:#aaa;margin-top:1px">Loyer hors charges + charges détaillées, jamais un total flou</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-shield-lock" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Dépôt de garantie</div><div style="font-size:11px;color:#aaa;margin-top:1px">Montant précisé (1 mois vide, 2 mois meublé maximum)</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-leaf" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">DPE affiché</div><div style="font-size:11px;color:#aaa;margin-top:1px">Obligatoire dans toute annonce de location</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-calendar-event" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Date de disponibilité</div><div style="font-size:11px;color:#aaa;margin-top:1px">Évite les candidatures pour une date qui ne convient pas</div></div></div>
+      </div>
+      <div class="vh-tip" style="background:#f0fdf4;color:#166534"><i class="ti ti-checklist" style="color:#16a34a"></i><span><strong>Vide ou meublé ?</strong> Précisez-le dès le titre : cela détermine la durée du bail, le montant du dépôt de garantie et l'inventaire à fournir.</span></div>
+      <div class="vh-actions"></div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="vh-card" id="vc4">
+    <div class="vh-card-head" onclick="openStep(4)">
+      <div class="vh-card-ico"><i class="ti ti-camera"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 4</div><div class="vh-card-title">Prendre les photos</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(4)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Les photos sont le premier contact des candidats avec votre logement. De bonnes photos peuvent multiplier vos contacts par 3. Un smartphone récent suffit si vous suivez quelques règles simples.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-sparkles" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Ranger et désencombrer</div><div style="font-size:11px;color:#aaa;margin-top:1px">Dépersonnalisez chaque pièce avant de photographier</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-sun" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Lumière naturelle</div><div style="font-size:11px;color:#aaa;margin-top:1px">Photographiez en pleine journée, luminosité maximale</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-layout-grid" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Mode paysage</div><div style="font-size:11px;color:#aaa;margin-top:1px">Depuis les angles des pièces, pour donner du volume</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-home" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Couverture complète</div><div style="font-size:11px;color:#aaa;margin-top:1px">Toutes les pièces, salle de bain, cuisine, extérieur et façade</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-focus-2" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Qualité de l'image</div><div style="font-size:11px;color:#aaa;margin-top:1px">Netteté, horizon bien horizontal, aucun flou</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-photo" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Quantité idéale</div><div style="font-size:11px;color:#aaa;margin-top:1px">Minimum 8 photos, idéalement 15 à 20</div></div></div>
+      </div>
+      <div class="vh-tip vh-tip-blue"><i class="ti ti-bulb"></i><span><strong>Astuce :</strong> ouvrez tous les rideaux, allumez toutes les lumières même en journée, rangez les câbles. La première photo doit être la pièce de vie ou la façade.</span></div>
+      <div class="vh-actions"></div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="vh-card" id="vc5">
+    <div class="vh-card-head" onclick="openStep(5)">
+      <div class="vh-card-ico"><i class="ti ti-rocket"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 5</div><div class="vh-card-title">Publier l'annonce</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(5)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Publiez votre annonce gratuitement sur SansAgents en moins de 10 minutes. Elle sera visible immédiatement par tous les locataires actifs sur la plateforme.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-user-circle" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Compte SansAgents</div><div style="font-size:11px;color:#aaa;margin-top:1px">Créez votre compte ou connectez-vous</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-forms" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Formulaire complet</div><div style="font-size:11px;color:#aaa;margin-top:1px">Type de bien, localisation, caractéristiques, photos et prix</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-photo-up" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Ordre des photos</div><div style="font-size:11px;color:#aaa;margin-top:1px">La meilleure en premier — c'est elle qui attire le clic</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-eye" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Aperçu avant validation</div><div style="font-size:11px;color:#aaa;margin-top:1px">Relisez l'annonce telle qu'elle apparaîtra aux candidats</div></div></div>
+      </div>
+      <div class="vh-tip vh-tip-green"><i class="ti ti-info-circle"></i><span><strong>Rappel :</strong> la publication est 100% gratuite et SansAgents ne prélève aucune commission sur une mise en location, quelle que soit sa durée.</span></div>
+      <div class="vh-actions">
+        <button class="vh-btn vh-btn-red" onclick="window.top.location='/deposer-gate'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="vh-card" id="vc6">
+    <div class="vh-card-head" onclick="openStep(6)">
+      <div class="vh-card-ico"><i class="ti ti-users"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 6</div><div class="vh-card-title">Sélectionner le locataire</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(6)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Le choix du locataire doit reposer sur des critères objectifs de solvabilité — jamais sur l'origine, le sexe, la situation de famille ou tout autre motif discriminatoire, sanctionnés par la loi. La liste des pièces que vous pouvez demander est elle-même fixée par décret.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-folder" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Dossier complet demandé</div><div style="font-size:11px;color:#aaa;margin-top:1px">Pièce d'identité, justificatif de domicile, 3 derniers bulletins, contrat de travail, avis d'imposition</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-scale" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Solvabilité vérifiée</div><div style="font-size:11px;color:#aaa;margin-top:1px">Revenus généralement proches de 3 fois le loyer charges comprises</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-shield-check" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Garant ou garantie loyers impayés</div><div style="font-size:11px;color:#aaa;margin-top:1px">Caution physique, garantie Visale (gratuite) ou assurance GLI</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-scale-outline" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Non-discrimination</div><div style="font-size:11px;color:#aaa;margin-top:1px">Le choix repose uniquement sur la solvabilité du dossier</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-ban" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Documents interdits non demandés</div><div style="font-size:11px;color:#aaa;margin-top:1px">RIB, photo, jugement de divorce, dossier médical, casier judiciaire…</div></div></div>
+      </div>
+      <div class="vh-tip vh-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Attention :</strong> le RIB fait partie des pièces interdites avant la signature du bail — vous ne pouvez le demander qu'une fois le bail signé, pour le prélèvement automatique.</span></div>
+      <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Garantie Visale :</strong> ce dispositif gratuit d'Action Logement se porte caution pour les jeunes de moins de 30 ans et les salariés précaires — une alternative simple à un garant personnel.</span></div>
+      <div class="vh-actions"></div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="vh-card" id="vc7">
+    <div class="vh-card-head" onclick="openStep(7)">
+      <div class="vh-card-ico"><i class="ti ti-file-text"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 7</div><div class="vh-card-title">Rédiger le bail et l'état des lieux d'entrée</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(7)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Le bail encadre la relation entre les deux parties pendant toute la durée de la location : sa durée minimale et son contenu sont fixés par la loi du 6 juillet 1989. L'état des lieux d'entrée, réalisé de manière contradictoire, sert de référence unique en cas de litige à la sortie.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-calendar-time" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Durée adaptée</div><div style="font-size:11px;color:#aaa;margin-top:1px">3 ans pour une location vide, 1 an pour une location meublée</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-gavel" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Clauses obligatoires</div><div style="font-size:11px;color:#aaa;margin-top:1px">Identité des parties, désignation du logement, loyer, durée, dépôt</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-paperclip" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Annexes obligatoires</div><div style="font-size:11px;color:#aaa;margin-top:1px">DPE, ERP, notice d'information, état des risques et pollutions</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-clipboard-check" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">État des lieux contradictoire</div><div style="font-size:11px;color:#aaa;margin-top:1px">Pièce par pièce, signé par le bailleur et le locataire</div></div></div>
+      </div>
+      <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Meublé ou vide ?</strong> Une location meublée doit comprendre un mobilier minimal fixé par décret (literie, plaques de cuisson, réfrigérateur, vaisselle, luminaires…) — sans quoi elle peut être requalifiée en location vide par un juge.</span></div>
+      <div class="vh-docs-label">Documents à utiliser</div>
+      <div class="vh-doc-inline" onclick="openDoc('bail')" style="margin-bottom:8px">
+        <div class="vh-doc-inline-ico" style="background:#f0fdf4"><i class="ti ti-file-text" style="color:#16a34a;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Contrat de bail</div><div style="font-size:11.5px;color:#888;margin-top:2px">Modèle conforme, vide ou meublé</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-doc-inline" onclick="openDoc('etatlieux')">
+        <div class="vh-doc-inline-ico" style="background:#eff6ff"><i class="ti ti-clipboard-list" style="color:#3b82f6;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">État des lieux d'entrée</div><div style="font-size:11.5px;color:#888;margin-top:2px">Constat contradictoire à la remise des clés</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-actions">
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.service-public.fr/particuliers/vosdroits/F1170','_blank')"><i class="ti ti-external-link"></i> service-public.fr</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="vh-card" id="vc8">
+    <div class="vh-card-head" onclick="openStep(8)">
+      <div class="vh-card-ico"><i class="ti ti-key"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 8</div><div class="vh-card-title">Signer et remettre les clés</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(8)"><i class="ti ti-check"></i> Terminé</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">Avant de remettre les clés, deux points à sécuriser : le dépôt de garantie, dont le montant est plafonné par la loi, et l'assurance habitation du locataire, obligatoire pour occuper le logement — demandez-en l'attestation avant l'entrée dans les lieux.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-shield-lock" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Dépôt de garantie encaissé</div><div style="font-size:11px;color:#aaa;margin-top:1px">Plafond légal : 1 mois hors charges (vide), 2 mois (meublé)</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-umbrella" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Assurance habitation vérifiée</div><div style="font-size:11px;color:#aaa;margin-top:1px">Attestation demandée avant la remise des clés</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-signature" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Bail signé par toutes les parties</div><div style="font-size:11px;color:#aaa;margin-top:1px">Un exemplaire original pour chacun</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-key" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Remise des clés</div><div style="font-size:11px;color:#aaa;margin-top:1px">Après signature du bail et de l'état des lieux d'entrée</div></div></div>
+      </div>
+      <div class="vh-tip vh-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Dépôt de garantie :</strong> il doit être restitué au locataire dans un délai d'1 mois après son départ si l'état des lieux de sortie est conforme à l'entrée, ou de 2 mois si des retenues sont justifiées.</span></div>
+      <div class="vh-docs-label">Document à utiliser</div>
+      <div class="vh-doc-inline" onclick="openDoc('attestation')">
+        <div class="vh-doc-inline-ico" style="background:#f0fdf4"><i class="ti ti-umbrella" style="color:#16a34a;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Attestation d'assurance demandée</div><div style="font-size:11.5px;color:#888;margin-top:2px">Courrier avant remise des clés</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-actions"></div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="vh-card" id="vc9">
+    <div class="vh-card-head" onclick="openStep(9)">
+      <div class="vh-card-ico"><i class="ti ti-repeat"></i></div>
+      <div class="vh-card-info"><div class="vh-card-num">Étape 9</div><div class="vh-card-title">Gérer la relation locative</div></div>
+      <button class="vh-head-done" onclick="event.stopPropagation();markDone(9)"><i class="ti ti-trophy"></i> Location en cours !</button>
+      <i class="ti ti-chevron-down vh-chevron"></i>
+    </div>
+    <div class="vh-body">
+      <p class="vh-desc">La relation locative ne s'arrête pas à la remise des clés : quittances, révision annuelle du loyer, régularisation des charges et, le jour venu, préavis et restitution du dépôt de garantie rythment toute la durée du bail.</p>
+      <div class="vh-checks">
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-receipt" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Quittance de loyer</div><div style="font-size:11px;color:#aaa;margin-top:1px">Obligatoire dès que le locataire la demande, chaque mois</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-chart-line" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Révision annuelle du loyer</div><div style="font-size:11px;color:#aaa;margin-top:1px">Indexée sur l'IRL, si le bail le prévoit</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-calculator" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Régularisation des charges</div><div style="font-size:11px;color:#aaa;margin-top:1px">Une fois par an, sur justificatifs</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-door-exit" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Préavis de départ respecté</div><div style="font-size:11px;color:#aaa;margin-top:1px">1 mois en zone tendue ou meublé, 3 mois sinon</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-cash-banknote" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Restitution du dépôt de garantie</div><div style="font-size:11px;color:#aaa;margin-top:1px">1 mois si conforme, 2 mois si des retenues sont justifiées</div></div></div>
+      </div>
+      <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>IRL :</strong> publié chaque trimestre par l'INSEE, il plafonne la hausse annuelle du loyer si le bail prévoit une clause de révision — une hausse au-delà de l'IRL n'est pas opposable au locataire.</span></div>
+      <div class="vh-docs-label">Documents à utiliser</div>
+      <div class="vh-doc-inline" onclick="openDoc('quittance')" style="margin-bottom:8px">
+        <div class="vh-doc-inline-ico" style="background:#f0f9ff"><i class="ti ti-receipt" style="color:#0284c7;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Quittance de loyer</div><div style="font-size:11.5px;color:#888;margin-top:2px">À remettre chaque mois sur demande</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-doc-inline" onclick="openDoc('echeance')" style="margin-bottom:8px">
+        <div class="vh-doc-inline-ico" style="background:#fff7ed"><i class="ti ti-calendar-due" style="color:#ea580c;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Avis d'échéance</div><div style="font-size:11.5px;color:#888;margin-top:2px">Rappel du loyer dû avant échéance</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-doc-inline" onclick="openDoc('conge')">
+        <div class="vh-doc-inline-ico" style="background:#fefce8"><i class="ti ti-door-exit" style="color:#ca8a04;font-size:16px"></i></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Lettre de congé</div><div style="font-size:11.5px;color:#888;margin-top:2px">Préavis de départ, bailleur ou locataire</div></div>
+        <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
+      </div>
+      <div class="vh-actions">
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.service-public.fr/particuliers/vosdroits/F1310','_blank')"><i class="ti ti-external-link"></i> IRL — service-public.fr</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /steps -->
+
+<!-- DOCUMENTS -->
+<div class="vh-docs" style="margin-top:20px">
+  <div class="vh-section-label">6 documents officiels gratuits</div>
+  <div class="vh-doc" onclick="openDoc('bail')">
+    <div class="vh-doc-ico" style="background:#f0fdf4"><i class="ti ti-file-text" style="color:#16a34a"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Contrat de bail</div><div class="vh-doc-desc">Vide ou meublé, conforme loi 1989</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('etatlieux')">
+    <div class="vh-doc-ico" style="background:#eff6ff"><i class="ti ti-clipboard-list" style="color:#3b82f6"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">État des lieux d'entrée</div><div class="vh-doc-desc">Constat contradictoire pièce par pièce</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('attestation')">
+    <div class="vh-doc-ico" style="background:#f0fdf4"><i class="ti ti-umbrella" style="color:#16a34a"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Attestation d'assurance demandée</div><div class="vh-doc-desc">Courrier avant remise des clés</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('quittance')">
+    <div class="vh-doc-ico" style="background:#f0f9ff"><i class="ti ti-receipt" style="color:#0284c7"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Quittance de loyer</div><div class="vh-doc-desc">À remettre chaque mois sur demande</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('echeance')">
+    <div class="vh-doc-ico" style="background:#fff7ed"><i class="ti ti-calendar-due" style="color:#ea580c"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Avis d'échéance</div><div class="vh-doc-desc">Rappel du loyer dû avant échéance</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+  <div class="vh-doc" onclick="openDoc('conge')">
+    <div class="vh-doc-ico" style="background:#fefce8"><i class="ti ti-door-exit" style="color:#ca8a04"></i></div>
+    <div class="vh-doc-info"><div class="vh-doc-name">Lettre de congé</div><div class="vh-doc-desc">Préavis de départ, bailleur ou locataire</div></div>
+    <i class="ti ti-chevron-right" style="color:var(--text3)"></i>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="vh-cta">
+  <h3>Prêt à louer votre bien ?</h3>
+  <p>Publiez votre annonce et trouvez un locataire directement, sans commission.</p>
+  <button onclick="window.top.location='/deposer-gate'" style="background:var(--red);color:white;border:none;border-radius:10px;padding:13px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+</div>
+
+<!-- DOC ACTION BAR -->
+<div id="docActBar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:700;background:#1e293b;border-top:1.5px solid #334155;padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))">
+  <div style="display:flex;gap:8px">
+    <button onclick="saveCurrentDoc()" style="flex:1;padding:12px;background:#E84533;color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-device-floppy"></i> Sauvegarder</button>
+    <button onclick="printCurrentDoc()" style="width:46px;padding:12px;background:rgba(255,255,255,.1);color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-download"></i></button>
+    <button id="docActShare" onclick="shareCurrentDoc()" style="width:46px;padding:12px;background:rgba(255,255,255,.1);color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-share"></i></button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="m-bottom-nav sa-bottom-nav">
+  <button class="m-tab" onclick="window.top.location='/'"><i class="ti ti-home-2"></i><span>Accueil</span></button>
+  <button class="m-tab" onclick="window.top.location='/annonces'"><i class="ti ti-building-estate"></i><span>Annonces</span></button>
+  <button class="m-tab-cta" onclick="window.top.location='/deposer'">
+    <div class="m-tab-cta-circle"><i class="ti ti-plus"></i></div>
+    <span>Déposer</span>
+  </button>
+  <button class="m-tab" onclick="window.top.location='/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
+  <button class="m-tab" onclick="window.top.location='/connexion'"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+</nav>
+
+<!-- MODAL CONTRAT DE BAIL -->
+<div class="vh-overlay" id="mBail" onclick="closeDoc('mBail')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-file-text" style="color:#16a34a"></i></div>
+      <div class="vh-sheet-title">Contrat de bail</div>
+      <button class="vh-sheet-close no-print" onclick="closeDoc('mBail')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du logement</label><input class="vh-input" id="baAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('bail')"></div>
+      <div class="vh-field"><label class="vh-label">Type de location</label><select class="vh-select" id="baType" onchange="buildDoc('bail')"><option value="Vide">Vide</option><option value="Meublé">Meublé</option></select></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Bailleur</label><input class="vh-input" id="baBailleur" placeholder="Jean Dupont" oninput="buildDoc('bail')"></div>
+        <div class="vh-field"><label class="vh-label">Locataire</label><input class="vh-input" id="baLocataire" placeholder="Marie Martin" oninput="buildDoc('bail')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Loyer hors charges (€)</label><input class="vh-input" type="number" id="baLoyer" placeholder="850" oninput="buildDoc('bail')"></div>
+        <div class="vh-field"><label class="vh-label">Charges (€)</label><input class="vh-input" type="number" id="baCharges" placeholder="60" oninput="buildDoc('bail')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Dépôt de garantie (€)</label><input class="vh-input" type="number" id="baDepot" placeholder="850" oninput="buildDoc('bail')"></div>
+        <div class="vh-field"><label class="vh-label">Date de signature</label><input class="vh-input" type="date" id="baDate" oninput="buildDoc('bail')"></div>
+      </div>
+      <div class="vh-field"><label class="vh-label">Date d'entrée dans les lieux</label><input class="vh-input" type="date" id="baEntree" oninput="buildDoc('bail')"></div>
+      <div class="vh-doc-preview" id="docBail"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ÉTAT DES LIEUX D'ENTRÉE -->
+<div class="vh-overlay" id="mEtatlieux" onclick="closeDoc('mEtatlieux')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-clipboard-list" style="color:#3b82f6"></i></div>
+      <div class="vh-sheet-title">État des lieux d'entrée</div>
+      <button class="vh-sheet-close no-print" onclick="closeDoc('mEtatlieux')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du logement</label><input class="vh-input" id="elAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('etatlieux')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Bailleur</label><input class="vh-input" id="elBailleur" placeholder="Jean Dupont" oninput="buildDoc('etatlieux')"></div>
+        <div class="vh-field"><label class="vh-label">Locataire</label><input class="vh-input" id="elLocataire" placeholder="Marie Martin" oninput="buildDoc('etatlieux')"></div>
+      </div>
+      <div class="vh-field"><label class="vh-label">Date de l'état des lieux</label><input class="vh-input" type="date" id="elDate" oninput="buildDoc('etatlieux')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Compteur électricité</label><input class="vh-input" id="elElec" placeholder="012345" oninput="buildDoc('etatlieux')"></div>
+        <div class="vh-field"><label class="vh-label">Compteur gaz</label><input class="vh-input" id="elGaz" placeholder="012345" oninput="buildDoc('etatlieux')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Compteur eau</label><input class="vh-input" id="elEau" placeholder="012345" oninput="buildDoc('etatlieux')"></div>
+        <div class="vh-field"><label class="vh-label">Clés remises</label><input class="vh-input" type="number" id="elCles" placeholder="2" oninput="buildDoc('etatlieux')"></div>
+      </div>
+      <div class="vh-doc-preview" id="docEtatlieux"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ATTESTATION D'ASSURANCE -->
+<div class="vh-overlay" id="mAttestation" onclick="closeDoc('mAttestation')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-umbrella" style="color:#16a34a"></i></div>
+      <div class="vh-sheet-title">Demande d'attestation</div>
+      <button class="vh-sheet-close no-print" onclick="closeDoc('mAttestation')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du logement</label><input class="vh-input" id="atAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('attestation')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Bailleur</label><input class="vh-input" id="atBailleur" placeholder="Jean Dupont" oninput="buildDoc('attestation')"></div>
+        <div class="vh-field"><label class="vh-label">Locataire</label><input class="vh-input" id="atLocataire" placeholder="Marie Martin" oninput="buildDoc('attestation')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Date d'entrée prévue</label><input class="vh-input" type="date" id="atEntree" oninput="buildDoc('attestation')"></div>
+        <div class="vh-field"><label class="vh-label">Date du courrier</label><input class="vh-input" type="date" id="atDate" oninput="buildDoc('attestation')"></div>
+      </div>
+      <div class="vh-doc-preview" id="docAttestation"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL QUITTANCE DE LOYER -->
+<div class="vh-overlay" id="mQuittance" onclick="closeDoc('mQuittance')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#f0f9ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-receipt" style="color:#0284c7"></i></div>
+      <div class="vh-sheet-title">Quittance de loyer</div>
+      <button class="vh-sheet-close no-print" onclick="closeDoc('mQuittance')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du logement</label><input class="vh-input" id="quAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('quittance')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Bailleur</label><input class="vh-input" id="quBailleur" placeholder="Jean Dupont" oninput="buildDoc('quittance')"></div>
+        <div class="vh-field"><label class="vh-label">Locataire</label><input class="vh-input" id="quLocataire" placeholder="Marie Martin" oninput="buildDoc('quittance')"></div>
+      </div>
+      <div class="vh-field"><label class="vh-label">Mois concerné</label><input class="vh-input" id="quPeriode" placeholder="Janvier 2026" oninput="buildDoc('quittance')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Loyer hors charges (€)</label><input class="vh-input" type="number" id="quLoyer" placeholder="850" oninput="buildDoc('quittance')"></div>
+        <div class="vh-field"><label class="vh-label">Charges (€)</label><input class="vh-input" type="number" id="quCharges" placeholder="60" oninput="buildDoc('quittance')"></div>
+      </div>
+      <div class="vh-field"><label class="vh-label">Date de paiement</label><input class="vh-input" type="date" id="quDate" oninput="buildDoc('quittance')"></div>
+      <div class="vh-doc-preview" id="docQuittance"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AVIS D'ÉCHÉANCE -->
+<div class="vh-overlay" id="mEcheance" onclick="closeDoc('mEcheance')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#fff7ed;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-calendar-due" style="color:#ea580c"></i></div>
+      <div class="vh-sheet-title">Avis d'échéance</div>
+      <button class="vh-sheet-close no-print" onclick="closeDoc('mEcheance')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-field"><label class="vh-label">Adresse du logement</label><input class="vh-input" id="ecAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('echeance')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Bailleur</label><input class="vh-input" id="ecBailleur" placeholder="Jean Dupont" oninput="buildDoc('echeance')"></div>
+        <div class="vh-field"><label class="vh-label">Locataire</label><input class="vh-input" id="ecLocataire" placeholder="Marie Martin" oninput="buildDoc('echeance')"></div>
+      </div>
+      <div class="vh-field"><label class="vh-label">Période concernée</label><input class="vh-input" id="ecPeriode" placeholder="Février 2026" oninput="buildDoc('echeance')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Loyer hors charges (€)</label><input class="vh-input" type="number" id="ecLoyer" placeholder="850" oninput="buildDoc('echeance')"></div>
+        <div class="vh-field"><label class="vh-label">Charges (€)</label><input class="vh-input" type="number" id="ecCharges" placeholder="60" oninput="buildDoc('echeance')"></div>
+      </div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Date d'échéance</label><input class="vh-input" type="date" id="ecEcheance" oninput="buildDoc('echeance')"></div>
+        <div class="vh-field"><label class="vh-label">Date d'émission</label><input class="vh-input" type="date" id="ecDate" oninput="buildDoc('echeance')"></div>
+      </div>
+      <div class="vh-doc-preview" id="docEcheance"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LETTRE DE CONGÉ -->
+<div class="vh-overlay" id="mConge" onclick="closeDoc('mConge')">
+  <div class="vh-sheet" onclick="event.stopPropagation()">
+    <div class="vh-sheet-handle"></div>
+    <div class="vh-sheet-head">
+      <div style="width:32px;height:32px;border-radius:8px;background:#fefce8;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-door-exit" style="color:#ca8a04"></i></div>
+      <div class="vh-sheet-title">Lettre de congé</div>
+      <button class="vh-sheet-close no-print" onclick="closeDoc('mConge')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="vh-sheet-body">
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Qui donne congé ?</label><select class="vh-select" id="coExpediteur" onchange="buildDoc('conge')"><option value="locataire">Le locataire</option><option value="bailleur">Le bailleur</option></select></div>
+        <div class="vh-field"><label class="vh-label">Durée de préavis</label><select class="vh-select" id="coPreavis" onchange="buildDoc('conge')"><option value="1 mois">1 mois</option><option value="3 mois">3 mois</option><option value="6 mois">6 mois</option></select></div>
+      </div>
+      <div class="vh-field"><label class="vh-label">Adresse du logement</label><input class="vh-input" id="coAdresse" placeholder="12 rue de la Paix, 75001 Paris" oninput="buildDoc('conge')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Nom de l'expéditeur</label><input class="vh-input" id="coNomExp" placeholder="Marie Martin" oninput="buildDoc('conge')"></div>
+        <div class="vh-field"><label class="vh-label">Nom du destinataire</label><input class="vh-input" id="coNomDest" placeholder="Jean Dupont" oninput="buildDoc('conge')"></div>
+      </div>
+      <div class="vh-field"><label class="vh-label">Motif du congé (si bailleur)</label><input class="vh-input" id="coMotif" placeholder="Vente du logement, reprise pour habiter…" oninput="buildDoc('conge')"></div>
+      <div class="vh-mgrid">
+        <div class="vh-field"><label class="vh-label">Date de la lettre</label><input class="vh-input" type="date" id="coDate" oninput="buildDoc('conge')"></div>
+        <div class="vh-field"><label class="vh-label">Fin du préavis</label><input class="vh-input" type="date" id="coEcheance" oninput="buildDoc('conge')"></div>
+      </div>
+      <div class="vh-doc-preview" id="docConge"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js?v=28"></script>
+<script>
+var done = JSON.parse(localStorage.getItem('sa_loueur_done')||'[]');
+var openSteps = new Set([1]);
+
+function renderAllSteps(){
+  for(var i=1;i<=9;i++){
+    var isDone=done.indexOf(i)!==-1, isOpen=openSteps.has(i);
+    document.getElementById('vc'+i).className='vh-card'+(isOpen?' active':isDone?' done':'');
+    document.getElementById('vd'+i).className='vh-dot'+(isOpen?' active':isDone?' done':'');
+    document.getElementById('vdn'+i).textContent=isDone&&!isOpen?'✓':i;
+  }
+}
+
+function openStep(n){
+  if(openSteps.has(n)){
+    openSteps.delete(n);
+  } else {
+    openSteps.add(n);
+    setTimeout(function(){document.getElementById('vc'+n).scrollIntoView({behavior:'smooth',block:'start'});},60);
+  }
+  renderAllSteps();
+}
+
+function jumpTo(n){
+  if(!openSteps.has(n)) openSteps.add(n);
+  renderAllSteps();
+  setTimeout(function(){document.getElementById('vc'+n).scrollIntoView({behavior:'smooth',block:'start'});},60);
+  document.getElementById('vd'+n).scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function markDone(n){
+  if(done.indexOf(n)===-1)done.push(n);
+  localStorage.setItem('sa_loueur_done',JSON.stringify(done));
+  openSteps.delete(n);
+  if(n<9){openSteps.add(n+1);setTimeout(function(){document.getElementById('vc'+(n+1)).scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  renderAllSteps();
+}
+
+function tc(el){
+  el.querySelector('.vh-check-box').classList.toggle('on');
+  el.querySelector('.vh-check-txt').classList.toggle('on');
+}
+
+done.forEach(function(n){if(!openSteps.has(n)){var c=document.getElementById('vc'+n);if(c)c.className='vh-card done';}});
+
+// Docs
+var _docModalMap={bail:'mBail',etatlieux:'mEtatlieux',attestation:'mAttestation',quittance:'mQuittance',echeance:'mEcheance',conge:'mConge'};
+var _currentDocType=null;
+var _DOC_TITLES_FR={bail:'Contrat de bail',etatlieux:"État des lieux d'entrée",attestation:"Demande d'attestation d'assurance",quittance:'Quittance de loyer',echeance:"Avis d'échéance",conge:'Lettre de congé'};
+
+function openDoc(type){
+  document.getElementById(_docModalMap[type]).style.display='block';
+  document.body.style.overflow='hidden';
+  _currentDocType=type;
+  var bar=document.getElementById('docActBar');
+  if(bar){bar.style.display='block';document.getElementById('docActShare').style.display=navigator.share?'':'none';}
+  var today=new Date().toISOString().slice(0,10);
+  var d30=new Date(Date.now()+30*864e5).toISOString().slice(0,10);
+  if(type==='bail'){document.getElementById('baDate').value=today;document.getElementById('baEntree').value=today;}
+  if(type==='etatlieux')document.getElementById('elDate').value=today;
+  if(type==='attestation')document.getElementById('atDate').value=today;
+  if(type==='quittance')document.getElementById('quDate').value=today;
+  if(type==='echeance')document.getElementById('ecDate').value=today;
+  if(type==='conge'){document.getElementById('coDate').value=today;document.getElementById('coEcheance').value=d30;}
+  buildDoc(type);
+}
+function closeDoc(id){
+  document.getElementById(id).style.display='none';
+  document.body.style.overflow='';
+  _currentDocType=null;
+  var bar=document.getElementById('docActBar');
+  if(bar) bar.style.display='none';
+}
+function saveCurrentDoc(){
+  if(!_currentDocType) return;
+  var el=document.getElementById(_docModalMap[_currentDocType]);
+  var preview=el?el.querySelector('.vh-doc-preview'):null;
+  if(!preview) return;
+  SA.saveDoc({type:_currentDocType,title:_DOC_TITLES_FR[_currentDocType]||_currentDocType,html:preview.outerHTML,date:new Date().toLocaleDateString('fr-FR')}).then(function(){
+    var t=document.createElement('div');
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#0f172a;color:#4ade80;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;white-space:nowrap;border:1px solid rgba(74,222,128,.3)';
+    t.innerHTML='<i class="ti ti-check" style="margin-right:6px"></i>Document sauvegardé !';
+    document.body.appendChild(t);
+    setTimeout(function(){t.remove();},2200);
+  });
+}
+function printCurrentDoc(){
+  if(!_currentDocType) return;
+  var el=document.getElementById(_docModalMap[_currentDocType]);
+  var preview=el?el.querySelector('.vh-doc-preview'):null;
+  var previewHtml=preview?preview.outerHTML:'';
+  var blob=new Blob(['<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media=\'all\'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript><style>body{background:#f0f2f5;padding:20px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin:0}.dw{max-width:720px;margin:0 auto}.db-btns{display:flex;gap:10px;margin-bottom:16px}button{padding:10px 20px;background:#E84533;color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}.vh-doc-preview{background:white;border:1.5px solid #e0e1e6;border-radius:12px;overflow:hidden;font-size:12.5px;line-height:1.75;color:#111}.vh-doc-preview .dh{background:linear-gradient(135deg,#0f172a,#1e293b);padding:14px 16px 13px}.vh-doc-preview .dh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.vh-doc-preview .dh-brand{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:800;color:rgba(255,255,255,.8)}.vh-doc-preview .dh-badge{width:18px;height:18px;background:#E84533;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white}.vh-doc-preview .dh-meta{font-size:9.5px;color:rgba(255,255,255,.4);text-align:right;line-height:1.5}.vh-doc-preview .dh-band{border-top:1px solid rgba(255,255,255,.1);padding-top:11px;display:flex;align-items:center;gap:9px}.vh-doc-preview .dh-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}.vh-doc-preview .dh-title{font-size:14px;font-weight:800;color:white}.vh-doc-preview .dh-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}.vh-doc-preview .db{padding:16px 16px 14px}.vh-doc-preview .dparts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.vh-doc-preview .dpart{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:9px;padding:9px 11px}.vh-doc-preview .dpart-lbl{font-size:8.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}.vh-doc-preview .dpart-name{font-size:12.5px;font-weight:700;color:#111}.vh-doc-preview .dadr{background:#f8f9fb;border:1.5px solid #e4e5ea;border-radius:9px;padding:10px 12px;margin-bottom:13px;display:flex;align-items:flex-start;gap:8px}.vh-doc-preview .dadr-ico{color:#E84533;font-size:14px;flex-shrink:0;margin-top:1px}.vh-doc-preview .dadr-lbl{font-size:8.5px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}.vh-doc-preview .dadr-val{font-size:13px;font-weight:700;color:#111}.vh-doc-preview .ds{margin-bottom:13px}.vh-doc-preview .ds-title{font-size:9.5px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;padding-bottom:6px;border-bottom:1.5px solid #f0f0f2;display:flex;align-items:center;gap:5px}.vh-doc-preview .dkv{display:flex;margin-bottom:4px;border:1px solid #eeeff2;border-radius:7px;overflow:hidden}.vh-doc-preview .dkv-k{font-size:10.5px;font-weight:700;color:#666;background:#f4f5f7;padding:7px 10px;min-width:120px;flex-shrink:0;border-right:1px solid #eeeff2}.vh-doc-preview .dkv-v{font-size:11.5px;font-weight:600;color:#111;padding:7px 10px;flex:1}.vh-doc-preview .dkv-v.big{font-size:15px;font-weight:800;color:#0f172a}.vh-doc-preview .dlegal{font-size:11.5px;color:#444;line-height:1.85;background:#fafbfc;border:1px solid #eeeef2;border-radius:9px;padding:11px 13px}.vh-doc-preview .dsigs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;padding-top:14px;border-top:1.5px solid #f0f0f2}.vh-doc-preview .dsig-box{border:1.5px solid #e4e5ea;border-radius:9px;overflow:hidden}.vh-doc-preview .dsig-hd{background:#f4f5f7;padding:7px 10px;font-size:9px;font-weight:800;color:#777;text-transform:uppercase;border-bottom:1px solid #e4e5ea}.vh-doc-preview .dsig-bd{padding:9px 10px}.vh-doc-preview .dsig-name{font-size:11px;font-weight:700;color:#111;margin-bottom:7px}.vh-doc-preview .dsig-sp{height:38px;border:1.5px dashed #d8dce6;border-radius:6px;margin-bottom:8px}.vh-doc-preview .dsig-f{font-size:9.5px;color:#aaa;padding-bottom:12px;border-bottom:1px solid #e0e2e8}.vh-doc-preview .dfooter{background:#f8f9fb;border-top:1px solid #eeeff2;padding:8px 14px;text-align:center;font-size:9.5px;color:#bbb}@media print{.db-btns{display:none!important}@page{size:A4 portrait;margin:8mm}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}</style></head><body><div class="dw"><div class="db-btns"><button onclick="window.print()">Imprimer / PDF</button><button onclick="window.close()" style="background:#f5f5f5;color:#555;border:1.5px solid #e5e5e5">Fermer</button></div>'+previewHtml+'</div></body></html>'],{type:'text/html'});
+  window.open(URL.createObjectURL(blob),'_blank');
+}
+function shareCurrentDoc(){
+  if(!_currentDocType||!navigator.share) return;
+  navigator.share({title:_DOC_TITLES_FR[_currentDocType]||_currentDocType,text:'Document SansAgents'}).catch(function(){});
+}
+// Auto-open doc modal if URL has ?openDoc=type
+(function(){var p=new URLSearchParams(window.location.search).get('openDoc');if(p)setTimeout(function(){openDoc(p);},600);})();
+
+function nm(v){return v?parseInt(v).toLocaleString('fr-FR'):'__________';}
+function fd(s){if(!s)return '__________';var x=new Date(/^\d{4}-\d{2}-\d{2}$/.test(s)?s+'T00:00:00':s);return isNaN(x)?s:x.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
+function td(){return new Date().toLocaleDateString('fr-FR');}
+function refid(p){return p+'-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'-'+Math.floor(Math.random()*9000+1000);}
+
+function mDocHead(title,ref,ico,color,sub){
+  return '<div class="dh">'+
+    '<div class="dh-top"><div class="dh-brand"><div class="dh-badge">SA</div>SansAgents.fr</div>'+
+    '<div class="dh-meta">Réf. '+ref+'<br>'+td()+'</div></div>'+
+    '<div class="dh-band"><div class="dh-ico" style="background:rgba(255,255,255,.1);color:'+color+'"><i class="ti '+ico+'"></i></div>'+
+    '<div><div class="dh-title">'+title+'</div><div class="dh-sub">'+sub+'</div></div></div></div>'+
+    '<div class="db">';
+}
+function mDocEnd(){return '</div>';}
+function mDocFoot(){return '<div class="dfooter">SansAgents.fr · '+td()+' · contact@sansagents.fr</div>';}
+function mDocParts(labels,names){
+  var h='<div class="dparts">';
+  for(var i=0;i<labels.length;i++) h+='<div class="dpart"><div class="dpart-lbl">'+labels[i]+'</div><div class="dpart-name">'+names[i]+'</div></div>';
+  return h+'</div>';
+}
+function mDocAdr(adr){return '<div class="dadr"><i class="ti ti-map-pin dadr-ico"></i><div><div class="dadr-lbl">Bien immobilier</div><div class="dadr-val">'+adr+'</div></div></div>';}
+function mDocKV(rows){
+  var h='';
+  rows.forEach(function(r){h+='<div class="dkv"><div class="dkv-k">'+r[0]+'</div><div class="dkv-v'+(r[2]?' big':'')+'">'+r[1]+'</div></div>';});
+  return h;
+}
+function mDocSec(title,ico,content){return '<div class="ds"><div class="ds-title"><i class="ti '+ico+'"></i>'+title+'</div>'+content+'</div>';}
+function mDocLegal(text){return '<div class="dlegal">'+text+'</div>';}
+function mDocSigs(sigs){
+  var h='<div class="dsigs">';
+  sigs.forEach(function(s){
+    h+='<div class="dsig-box"><div class="dsig-hd">'+s.l+'</div><div class="dsig-bd">'+
+      '<div class="dsig-name">'+s.n+'</div><div class="dsig-sp"></div>'+
+      '<div class="dsig-f">Date :</div></div></div>';
+  });
+  return h+'</div>';
+}
+
+function buildDoc(type){
+  if(type==='bail'){
+    var adr=document.getElementById('baAdresse').value||'__________';
+    var typ=document.getElementById('baType').value;
+    var bail=document.getElementById('baBailleur').value||'__________';
+    var loc=document.getElementById('baLocataire').value||'__________';
+    var loyer=document.getElementById('baLoyer').value;
+    var charges=document.getElementById('baCharges').value;
+    var depot=nm(document.getElementById('baDepot').value);
+    var dt=fd(document.getElementById('baDate').value);
+    var entree=fd(document.getElementById('baEntree').value);
+    var total=loyer&&charges?nm(parseInt(loyer)+parseInt(charges)):(loyer?nm(loyer):'__________');
+    var duree=typ==='Meublé'?'1 an (renouvelable tacitement)':'3 ans (renouvelable tacitement)';
+    var depotMax=typ==='Meublé'?'2 mois de loyer hors charges':'1 mois de loyer hors charges';
+    document.getElementById('docBail').innerHTML=
+      mDocHead('Contrat de location — logement '+typ.toLowerCase(),refid('BAIL'),'ti-file-text','#16a34a','Bail conforme à la loi du 6 juillet 1989')+
+      mDocAdr(adr)+mDocParts(['Bailleur','Locataire'],[bail,loc])+
+      mDocSec('Conditions financières','ti-currency-euro',mDocKV([['Loyer mensuel HC',nm(loyer)+' €',true],['Charges mensuelles',nm(charges)+' €'],['Loyer total CC',total+' €'],['Dépôt de garantie',depot+' €']]))+
+      mDocSec('Durée et prise d\'effet','ti-calendar',mDocKV([['Type de location',typ],['Durée du bail',duree],['Entrée dans les lieux',entree],['Date de signature',dt]]))+
+      mDocSec('Clauses essentielles','ti-gavel',mDocLegal('Le présent contrat est conclu conformément à la loi n°89-462 du 6 juillet 1989. Le dépôt de garantie versé par le locataire ne peut excéder <strong>'+depotMax+'</strong>, conformément au plafond légal.<br><br>Le bail est accompagné en annexe du DPE, de l\'ERP et de la notice d\'information relative aux droits et obligations des locataires et bailleurs.<br><br>Le locataire s\'engage à souscrire une assurance habitation couvrant les risques locatifs et à en justifier à première demande.'))+
+      mDocSigs([{l:'Signature du bailleur',n:bail},{l:'Signature du locataire',n:loc}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='etatlieux'){
+    var adr=document.getElementById('elAdresse').value||'__________';
+    var bail=document.getElementById('elBailleur').value||'__________';
+    var loc=document.getElementById('elLocataire').value||'__________';
+    var dt=fd(document.getElementById('elDate').value);
+    var elec=document.getElementById('elElec').value||'__________';
+    var gaz=document.getElementById('elGaz').value||'__________';
+    var eau=document.getElementById('elEau').value||'__________';
+    var cles=document.getElementById('elCles').value||'__';
+    document.getElementById('docEtatlieux').innerHTML=
+      mDocHead('État des lieux d\'entrée',refid('EL'),'ti-clipboard-list','#3b82f6','Constat contradictoire établi à la remise des clés')+
+      mDocAdr(adr)+mDocParts(['Bailleur','Locataire'],[bail,loc])+
+      mDocSec('Relevés des compteurs','ti-gauge',mDocKV([['Électricité',elec],['Gaz',gaz],['Eau',eau]]))+
+      mDocSec('Remise des clés','ti-key',mDocKV([['Clés remises',cles+' clé'+(parseInt(cles)>1?'s':''),true],['Date de l\'état des lieux',dt]]))+
+      mDocSec('Constat contradictoire','ti-file-text',mDocLegal('Le présent état des lieux est établi contradictoirement entre les parties lors de la remise des clés. Il décrit l\'état du logement, pièce par pièce, ainsi que celui des équipements installés.<br><br>Il constitue, avec l\'état des lieux de sortie, l\'unique référence pour l\'appréciation d\'éventuelles dégradations imputables au locataire à son départ.'))+
+      mDocSigs([{l:'Signature du bailleur',n:bail},{l:'Signature du locataire',n:loc}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='attestation'){
+    var adr=document.getElementById('atAdresse').value||'__________';
+    var bail=document.getElementById('atBailleur').value||'__________';
+    var loc=document.getElementById('atLocataire').value||'__________';
+    var entree=fd(document.getElementById('atEntree').value);
+    var dt=fd(document.getElementById('atDate').value);
+    document.getElementById('docAttestation').innerHTML=
+      mDocHead('Demande d\'attestation d\'assurance',refid('AT'),'ti-umbrella','#16a34a','Courrier à adresser au locataire avant la remise des clés')+
+      mDocAdr(adr)+mDocParts(['Bailleur','Locataire'],[bail,loc])+
+      mDocSec('Échéances','ti-calendar-event',mDocKV([['Entrée dans les lieux',entree,true],['Date du courrier',dt]]))+
+      mDocSec('Objet de la demande','ti-file-text',mDocLegal('Conformément à l\'article 7 g) de la loi du 6 juillet 1989, le locataire est tenu de s\'assurer contre les risques locatifs et de justifier de cette assurance au bailleur à la remise des clés, puis chaque année à sa demande.<br><br>Merci de bien vouloir faire parvenir une attestation d\'assurance habitation en cours de validité avant la date d\'entrée dans les lieux mentionnée ci-dessus.'))+
+      mDocSigs([{l:'Signature du bailleur',n:bail}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='quittance'){
+    var adr=document.getElementById('quAdresse').value||'__________';
+    var bail=document.getElementById('quBailleur').value||'__________';
+    var loc=document.getElementById('quLocataire').value||'__________';
+    var per=document.getElementById('quPeriode').value||'__________';
+    var loyer=document.getElementById('quLoyer').value;
+    var charges=document.getElementById('quCharges').value;
+    var total=loyer||charges?nm((parseInt(loyer)||0)+(parseInt(charges)||0)):'__________';
+    var dt=fd(document.getElementById('quDate').value);
+    document.getElementById('docQuittance').innerHTML=
+      mDocHead('Quittance de loyer',refid('QU'),'ti-receipt','#0284c7','Reçu attestant du paiement du loyer et des charges')+
+      mDocAdr(adr)+mDocParts(['Bailleur','Locataire'],[bail,loc])+
+      mDocSec('Période concernée','ti-calendar',mDocKV([['Mois de location',per],['Loyer hors charges',nm(loyer)+' €'],['Charges',nm(charges)+' €'],['Total réglé',total+' €',true]]))+
+      mDocSec('Attestation de paiement','ti-file-check',mDocLegal('Je soussigné(e) <strong>'+bail+'</strong>, bailleur du logement désigné ci-dessus, déclare avoir reçu de <strong>'+loc+'</strong> la somme de <strong>'+total+' €</strong> au titre du loyer et des charges de la période <strong>'+per+'</strong>, réglée le <strong>'+dt+'</strong>.<br><br>Cette quittance annule tout reçu ou acompte antérieur délivré pour cette même période, conformément à l\'article 21 de la loi du 6 juillet 1989.'))+
+      mDocSigs([{l:'Signature du bailleur',n:bail}])+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='echeance'){
+    var adr=document.getElementById('ecAdresse').value||'__________';
+    var bail=document.getElementById('ecBailleur').value||'__________';
+    var loc=document.getElementById('ecLocataire').value||'__________';
+    var per=document.getElementById('ecPeriode').value||'__________';
+    var loyer=document.getElementById('ecLoyer').value;
+    var charges=document.getElementById('ecCharges').value;
+    var total=loyer||charges?nm((parseInt(loyer)||0)+(parseInt(charges)||0)):'__________';
+    var ech=fd(document.getElementById('ecEcheance').value);
+    var dt=fd(document.getElementById('ecDate').value);
+    document.getElementById('docEcheance').innerHTML=
+      mDocHead('Avis d\'échéance',refid('AV'),'ti-calendar-due','#ea580c','Rappel du montant dû avant la date d\'échéance du loyer')+
+      mDocAdr(adr)+mDocParts(['Bailleur','Locataire'],[bail,loc])+
+      mDocSec('Montant à régler','ti-currency-euro',mDocKV([['Période concernée',per],['Loyer hors charges',nm(loyer)+' €'],['Charges',nm(charges)+' €'],['Total à régler',total+' €',true],['Date d\'échéance',ech]]))+
+      mDocSec('Rappel','ti-info-circle',mDocLegal('Nous vous rappelons que le loyer et les charges de la période mentionnée ci-dessus doivent être réglés au plus tard le <strong>'+ech+'</strong>, conformément aux modalités prévues au contrat de bail.<br><br>Ce document est un simple rappel d\'échéance et ne constitue pas une quittance de paiement.'))+
+      mDocEnd()+mDocFoot();
+  }
+  if(type==='conge'){
+    var exp=document.getElementById('coExpediteur').value;
+    var preavis=document.getElementById('coPreavis').value;
+    var adr=document.getElementById('coAdresse').value||'__________';
+    var nomExp=document.getElementById('coNomExp').value||'__________';
+    var nomDest=document.getElementById('coNomDest').value||'__________';
+    var motif=document.getElementById('coMotif').value||'__________';
+    var dt=fd(document.getElementById('coDate').value);
+    var ech=fd(document.getElementById('coEcheance').value);
+    var isBailleur=exp==='bailleur';
+    var labels=isBailleur?['Bailleur','Locataire']:['Locataire','Bailleur'];
+    var legal=isBailleur?
+      'Je soussigné(e) <strong>'+nomExp+'</strong>, bailleur du logement désigné ci-dessus, vous notifie par la présente mon congé pour le motif suivant : <strong>'+motif+'</strong>, conformément à l\'article 15 de la loi du 6 juillet 1989.<br><br>Ce congé, délivré au moins 6 mois avant le terme du bail pour une location vide (3 mois pour une location meublée), doit vous être notifié par lettre recommandée avec accusé de réception ou par acte de commissaire de justice.'
+      :'Je soussigné(e) <strong>'+nomExp+'</strong>, locataire du logement désigné ci-dessus, vous notifie par la présente mon congé et mon intention de quitter les lieux.<br><br>Le délai de préavis applicable est de <strong>'+preavis+'</strong>, courant à compter de la réception de la présente notification, conformément à l\'article 15 de la loi du 6 juillet 1989.';
+    document.getElementById('docConge').innerHTML=
+      mDocHead(isBailleur?'Congé donné par le bailleur':'Congé donné par le locataire',refid('CG'),'ti-door-exit','#ca8a04',isBailleur?'Notification de fin de bail au locataire':'Notification de préavis de départ au bailleur')+
+      mDocAdr(adr)+mDocParts(labels,[nomExp,nomDest])+
+      mDocSec('Détails du congé','ti-calendar-event',mDocKV([['Partie notifiant le congé',isBailleur?'Le bailleur':'Le locataire'],['Motif',isBailleur?motif:'Non requis pour le locataire'],['Date de notification',dt],['Durée de préavis',preavis,true],['Fin du préavis',ech]]))+
+      mDocSec('Notification','ti-file-text',mDocLegal(legal))+
+      mDocSigs([{l:'Signature de l\'expéditeur',n:nomExp}])+
+      mDocEnd()+mDocFoot();
+  }
+}
+
+SA.init().then(function(){
+  var u=SA.getUser();
+  if(u)document.getElementById('botProfileLabel').textContent=u.prenom||'Profil';
+});
+
+// Ouverture automatique d'un document depuis /documents ("Générer" -> /guide?doc=TYPE
+// -> ici sur mobile) : la page guide desktop lit ce paramètre, mais la version mobile
+// (cette page) ne le faisait pas encore, donc le document ne s'ouvrait jamais.
+(function(){
+  var docType = new URLSearchParams(window.location.search).get('doc');
+  if(docType && _docModalMap[docType]) setTimeout(function(){ openDoc(docType); }, 300);
+})();
+</script>
+
+<div class="m-menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="m-menu" id="sideMenu">
+  <div class="m-menu-section">Navigation</div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/'"><i class="ti ti-home-2"></i> Accueil</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/guides'"><i class="ti ti-book-2"></i> Guides</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/estimer-son-bien'"><i class="ti ti-calculator"></i> Estimer son bien</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/annonces'"><i class="ti ti-building-estate"></i> Annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/professionnels'"><i class="ti ti-briefcase"></i> Professionnels</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/deposer'"><i class="ti ti-circle-plus"></i> Déposer une annonce</button>
+  <div class="m-menu-divider"></div>
+  <div class="m-menu-section">Mon compte</div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/recherches'"><i class="ti ti-search"></i> Mes recherches</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/favoris'"><i class="ti ti-heart"></i> Mes favoris</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/mes-annonces'"><i class="ti ti-home-star"></i> Mes annonces</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/messages'"><i class="ti ti-message-circle"></i> Messages</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/documents'"><i class="ti ti-files"></i> Mes documents</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/a-propos'"><i class="ti ti-info-circle"></i> À propos</button>
+  <button class="m-menu-item" onclick="closeMenu();window.top.location='/contact'"><i class="ti ti-help-circle"></i> Contact</button>
+  <div class="m-menu-divider"></div>
+  <button class="m-menu-item" id="menuAuthBtn" onclick="handleAuthClick()"><i class="ti ti-user"></i> <span id="menuAuthLabel">Se connecter</span></button>
+  <button class="m-menu-item red" id="menuLogout" style="display:none" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+</div>
+<script>
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('sideMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');document.body.style.overflow=document.getElementById('sideMenu').classList.contains('open')?'hidden':'';}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleAuthClick(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;if(u)window.top.location='/profil';else window.top.location='/connexion?redirect='+window.location.pathname;}
+function _updateMenuAuth(){var u=typeof SA!=='undefined'&&SA.getUser?SA.getUser():null;var el=document.getElementById('menuAuthLabel');var lo=document.getElementById('menuLogout');if(el)el.textContent=u?(u.prenom||u.email&&u.email.split('@')[0]||'Mon profil'):'Se connecter';if(lo)lo.style.display=u?'':'none';}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(_updateMenuAuth,600);});
+</script>
+</body>
+</html>
