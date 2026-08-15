@@ -141,20 +141,21 @@ button{font-family:inherit;cursor:pointer}
 .v-pbadge:nth-child(3) .v-pbadge-val{color:rgba(255,255,255,.92)}
 .v-pbadge:nth-child(4) .v-pbadge-val{color:rgba(255,255,255,.7)}
 .v-pbadge-lbl{font-size:11.5px;color:rgba(255,255,255,.55);margin-top:6px;line-height:1.4}
-.v-panel-outro{background:#f8f9fb;border:1.5px solid #eeeff2;border-radius:14px;padding:26px;margin-top:28px}
-.v-panel-trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid #e8e8eb}
+.v-panel-outro{background:#f8f9fb;border:1.5px solid #eeeff2;border-radius:14px;padding:24px 26px;margin-top:28px}
+.v-outro-main{display:flex;align-items:center;justify-content:space-between;gap:24px 32px;flex-wrap:wrap}
+.v-panel-trust{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid #e8e8eb}
 .v-panel-trust span{display:flex;align-items:center;gap:7px;font-size:12px;color:#888;font-weight:500}
 .v-panel-trust i{color:#16a34a;font-size:14px}
-@media(max-width:700px){.v-panel-trust{gap:12px 18px}}
+@media(max-width:700px){.v-panel-trust{gap:12px 18px;justify-content:flex-start}}
 
 .v-psteps{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:32px}
 .v-pstep{display:inline-flex;align-items:center;gap:8px;background:#f8f9fb;border:1px solid #f0f0f0;border-radius:999px;padding:7px 15px 7px 7px;font-size:12.5px;font-weight:600;color:#444;text-decoration:none;transition:all .15s}
 .v-pstep:hover{border-color:#ffd5d0;background:#fff5f4;color:#E84533;transform:translateY(-1px)}
 .v-pstep-num{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:white;flex-shrink:0;background:#E84533}
 
-.v-panel-intro{font-size:14.5px;color:#444;line-height:1.75;margin-bottom:18px;max-width:70ch}
-@media(max-width:700px){.v-panel-intro{max-width:100%}}
-.v-panel-cta{display:flex;gap:10px;flex-wrap:wrap}
+.v-panel-intro{font-size:14.5px;color:#444;line-height:1.6;flex:1 1 260px;min-width:0}
+.v-panel-cta{display:flex;gap:10px;flex-wrap:nowrap;flex-shrink:0}
+@media(max-width:760px){.v-outro-main{flex-direction:column;align-items:stretch}.v-panel-intro{flex:none;margin-bottom:16px}.v-panel-cta{flex-wrap:wrap}}
 .v-hero-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:11px;font-size:13.5px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s;color:white}
 .v-hero-btn:hover{transform:translateY(-1px)}
 .v-hero-btn-primary{background:#E84533}
@@ -268,10 +269,12 @@ button{font-family:inherit;cursor:pointer}
         <a class="v-pstep" href="guide-vendeur#ts9"><span class="v-pstep-num">9</span> Signer chez le notaire</a>
       </div>
       <div class="v-panel-outro">
-        <p class="v-panel-intro">Le parcours complet pour vendre sans agence, de l'estimation du prix à la signature chez le notaire.</p>
-        <div class="v-panel-cta">
-          <button class="v-hero-btn v-hero-btn-primary" onclick="window.location.href='guide-vendeur'"><i class="ti ti-rocket"></i> Commencer le guide vendeur</button>
-          <button class="v-hero-btn v-btn-ghost" onclick="window.location.href='deposer'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+        <div class="v-outro-main">
+          <p class="v-panel-intro">Le parcours complet pour vendre sans agence, de l'estimation du prix à la signature chez le notaire.</p>
+          <div class="v-panel-cta">
+            <button class="v-hero-btn v-hero-btn-primary" onclick="window.location.href='guide-vendeur'"><i class="ti ti-rocket"></i> Commencer le guide vendeur</button>
+            <button class="v-hero-btn v-btn-ghost" onclick="window.location.href='deposer'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+          </div>
         </div>
         <div class="v-panel-trust">
           <span><i class="ti ti-shield-check"></i> Sans engagement, résiliable à tout moment</span>
@@ -305,10 +308,12 @@ button{font-family:inherit;cursor:pointer}
         <a class="v-pstep" href="guide-acheteur#ts7"><span class="v-pstep-num">7</span> Signer chez le notaire</a>
       </div>
       <div class="v-panel-outro">
-        <p class="v-panel-intro">Le parcours complet pour acheter sereinement, de la définition de votre budget à la signature de l'acte.</p>
-        <div class="v-panel-cta">
-          <button class="v-hero-btn v-hero-btn-primary" onclick="window.location.href='guide-acheteur'"><i class="ti ti-rocket"></i> Commencer le guide acheteur</button>
-          <button class="v-hero-btn v-btn-ghost" onclick="window.location.href='annonces'"><i class="ti ti-building-estate"></i> Voir les annonces</button>
+        <div class="v-outro-main">
+          <p class="v-panel-intro">Le parcours complet pour acheter sereinement, de la définition de votre budget à la signature de l'acte.</p>
+          <div class="v-panel-cta">
+            <button class="v-hero-btn v-hero-btn-primary" onclick="window.location.href='guide-acheteur'"><i class="ti ti-rocket"></i> Commencer le guide acheteur</button>
+            <button class="v-hero-btn v-btn-ghost" onclick="window.location.href='annonces'"><i class="ti ti-building-estate"></i> Voir les annonces</button>
+          </div>
         </div>
         <div class="v-panel-trust">
           <span><i class="ti ti-shield-check"></i> Aucune carte bancaire requise</span>
@@ -344,10 +349,12 @@ button{font-family:inherit;cursor:pointer}
         <a class="v-pstep" href="guide-loueur#ts9"><span class="v-pstep-num">9</span> Gérer la relation locative</a>
       </div>
       <div class="v-panel-outro">
-        <p class="v-panel-intro">Le parcours complet pour mettre votre bien en location en toute confiance, du loyer juste à la gestion au quotidien.</p>
-        <div class="v-panel-cta">
-          <button class="v-hero-btn v-hero-btn-primary" onclick="window.location.href='guide-loueur'"><i class="ti ti-rocket"></i> Commencer le guide loueur</button>
-          <button class="v-hero-btn v-btn-ghost" onclick="window.location.href='deposer'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+        <div class="v-outro-main">
+          <p class="v-panel-intro">Le parcours complet pour mettre votre bien en location en toute confiance, du loyer juste à la gestion au quotidien.</p>
+          <div class="v-panel-cta">
+            <button class="v-hero-btn v-hero-btn-primary" onclick="window.location.href='guide-loueur'"><i class="ti ti-rocket"></i> Commencer le guide loueur</button>
+            <button class="v-hero-btn v-btn-ghost" onclick="window.location.href='deposer'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+          </div>
         </div>
         <div class="v-panel-trust">
           <span><i class="ti ti-shield-check"></i> Sans engagement, résiliable à tout moment</span>
