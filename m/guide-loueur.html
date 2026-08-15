@@ -255,12 +255,16 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-map-pins" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Vérification zone tendue</div><div style="font-size:11px;color:#aaa;margin-top:1px">L'encadrement des loyers peut s'appliquer selon la commune</div></div></div>
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-receipt" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Charges récupérables</div><div style="font-size:11px;color:#aaa;margin-top:1px">À définir clairement, en plus du loyer hors charges</div></div></div>
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-scale" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Loyer de référence si encadrement</div><div style="font-size:11px;color:#aaa;margin-top:1px">Le dépasser expose à des sanctions</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-leaf" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">DPE pris en compte</div><div style="font-size:11px;color:#aaa;margin-top:1px">Un logement classé F ou G ne peut plus voir son loyer augmenté</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-calculator" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Simulateur officiel consulté</div><div style="font-size:11px;color:#aaa;margin-top:1px">Vérifiez le loyer de référence exact avant de publier</div></div></div>
       </div>
       <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Encadrement des loyers :</strong> il s'applique dans certaines zones tendues (Paris, Lille et d'autres agglomérations). Vérifiez la situation de votre commune avant de fixer votre loyer.</span></div>
+      <div class="vh-tip vh-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Gel des loyers passoires thermiques :</strong> depuis le 24 août 2022, interdiction d'augmenter le loyer d'un logement classé F ou G au DPE. Depuis 2025, les logements classés G sont interdits à la location.</span></div>
       <div style="margin:14px 14px 6px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Outils officiels et gratuits</div>
       <div class="vh-actions" style="padding-top:0">
         <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.service-public.gouv.fr/simulateur/calcul/encadrementDesLoyers','_blank')"><i class="ti ti-external-link"></i> Vérifier votre zone tendue</button>
         <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.data.gouv.fr/fr/pages/carte-des-loyers/','_blank')"><i class="ti ti-external-link"></i> Carte des loyers</button>
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.ecologie.gouv.fr/diagnostics-techniques-immobiliers','_blank')"><i class="ti ti-external-link"></i> DPE et passoires thermiques</button>
       </div>
     </div>
   </div>
@@ -285,6 +289,30 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
       </div>
       <div class="vh-tip vh-tip-green"><i class="ti ti-circle-check"></i><span><strong>Pas de panique.</strong> Cochez chaque document au fur et à mesure que vous le rassemblez — rien ne presse avant la première visite. Prévoyez 2 à 3 semaines pour obtenir les diagnostics auprès d'un diagnostiqueur certifié.</span></div>
       <div class="vh-tip vh-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Décence du logement :</strong> surface minimale, absence de risques pour la santé et sécurité du locataire sont des conditions légales — un logement non-décent expose à des recours du locataire.</span></div>
+      <div style="margin:14px 14px 6px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Références légales officielles</div>
+      <div style="margin:0 14px 8px;border:1.5px solid #e8e8eb;border-radius:12px;overflow:hidden;background:#f8f9fb">
+        <a href="https://www.service-public.fr/particuliers/vosdroits/F33463" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Diagnostics à fournir par le bailleur <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Liste complète selon le bien — service-public.fr</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+        <a href="https://www.service-public.fr/particuliers/vosdroits/F2042" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Critères du logement décent <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Surface, sécurité, équipements minimaux — service-public.fr</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+        <a href="https://www.ecologie.gouv.fr/diagnostics-techniques-immobiliers" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Interdiction des passoires thermiques <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Calendrier DPE — ministère de la Transition écologique</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+      </div>
       <div class="vh-actions"></div>
     </div>
   </div>
@@ -377,6 +405,16 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
       </div>
       <div class="vh-tip vh-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Attention :</strong> le RIB fait partie des pièces interdites avant la signature du bail — vous ne pouvez le demander qu'une fois le bail signé, pour le prélèvement automatique.</span></div>
       <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Garantie Visale :</strong> ce dispositif gratuit d'Action Logement se porte caution pour les jeunes de moins de 30 ans et les salariés précaires — une alternative simple à un garant personnel.</span></div>
+      <div style="margin:14px 14px 6px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Sécuriser vos loyers</div>
+      <div style="margin:0 14px 8px;border:1.5px solid #e8e8eb;border-radius:12px;overflow:hidden;background:#f8f9fb">
+        <a href="https://www.visale.fr/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Garantie Visale <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Caution gratuite d'Action Logement — jusqu'à 36 mensualités couvertes</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+      </div>
       <div class="vh-actions"></div>
     </div>
   </div>
@@ -396,8 +434,27 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-gavel" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Clauses obligatoires</div><div style="font-size:11px;color:#aaa;margin-top:1px">Identité des parties, désignation du logement, loyer, durée, dépôt</div></div></div>
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-paperclip" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Annexes obligatoires</div><div style="font-size:11px;color:#aaa;margin-top:1px">DPE, ERP, notice d'information, état des risques et pollutions</div></div></div>
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-clipboard-check" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">État des lieux contradictoire</div><div style="font-size:11px;color:#aaa;margin-top:1px">Pièce par pièce, signé par le bailleur et le locataire</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-users" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Clause de solidarité en colocation</div><div style="font-size:11px;color:#aaa;margin-top:1px">Chaque colocataire reste responsable de l'ensemble du loyer</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-list-check" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Relecture avec le locataire</div><div style="font-size:11px;color:#aaa;margin-top:1px">Passez en revue chaque clause avant la signature</div></div></div>
       </div>
       <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Meublé ou vide ?</strong> Une location meublée doit comprendre un mobilier minimal fixé par décret (literie, plaques de cuisson, réfrigérateur, vaisselle, luminaires…) — sans quoi elle peut être requalifiée en location vide par un juge.</span></div>
+      <div style="margin:14px 14px 6px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Aide juridique gratuite</div>
+      <div style="margin:0 14px 8px;border:1.5px solid #e8e8eb;border-radius:12px;overflow:hidden;background:#f8f9fb">
+        <a href="https://www.anil.org/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">ANIL <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Conseils juridiques gratuits sur le bail, réseau des ADIL</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+        <a href="https://www.anil.org/parole-expert-logement-location-etat-lieux-entree/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111">Réussir l'état des lieux d'entrée</div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Conseils pratiques de l'ANIL pour un constat sans contestation</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+      </div>
       <div class="vh-docs-label">Documents à utiliser</div>
       <div class="vh-doc-inline" onclick="openDoc('bail')" style="margin-bottom:8px">
         <div class="vh-doc-inline-ico" style="background:#f0fdf4"><i class="ti ti-file-text" style="color:#16a34a;font-size:16px"></i></div>
@@ -430,8 +487,20 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-umbrella" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Assurance habitation vérifiée</div><div style="font-size:11px;color:#aaa;margin-top:1px">Attestation demandée avant la remise des clés</div></div></div>
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-signature" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Bail signé par toutes les parties</div><div style="font-size:11px;color:#aaa;margin-top:1px">Un exemplaire original pour chacun</div></div></div>
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-key" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Remise des clés</div><div style="font-size:11px;color:#aaa;margin-top:1px">Après signature du bail et de l'état des lieux d'entrée</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-gauge" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Relevés des compteurs</div><div style="font-size:11px;color:#aaa;margin-top:1px">Index électricité, gaz et eau notés lors de l'état des lieux</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-address-book" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Coordonnées échangées</div><div style="font-size:11px;color:#aaa;margin-top:1px">Adresse de correspondance du locataire, utile en cas de départ</div></div></div>
       </div>
       <div class="vh-tip vh-tip-red"><i class="ti ti-alert-triangle"></i><span><strong>Dépôt de garantie :</strong> il doit être restitué au locataire dans un délai d'1 mois après son départ si l'état des lieux de sortie est conforme à l'entrée, ou de 2 mois si des retenues sont justifiées.</span></div>
+      <div style="margin:14px 14px 6px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Référence légale officielle</div>
+      <div style="margin:0 14px 8px;border:1.5px solid #e8e8eb;border-radius:12px;overflow:hidden;background:#f8f9fb">
+        <a href="https://www.service-public.fr/particuliers/vosdroits/F31269" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Dépôt de garantie <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Plafond, encaissement et délais de restitution — service-public.fr</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+      </div>
       <div class="vh-docs-label">Document à utiliser</div>
       <div class="vh-doc-inline" onclick="openDoc('attestation')">
         <div class="vh-doc-inline-ico" style="background:#f0fdf4"><i class="ti ti-umbrella" style="color:#16a34a;font-size:16px"></i></div>
@@ -458,6 +527,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-calculator" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Régularisation des charges</div><div style="font-size:11px;color:#aaa;margin-top:1px">Une fois par an, sur justificatifs</div></div></div>
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-door-exit" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Préavis de départ respecté</div><div style="font-size:11px;color:#aaa;margin-top:1px">1 mois en zone tendue ou meublé, 3 mois sinon</div></div></div>
         <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-cash-banknote" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Restitution du dépôt de garantie</div><div style="font-size:11px;color:#aaa;margin-top:1px">1 mois si conforme, 2 mois si des retenues sont justifiées</div></div></div>
+        <div class="vh-check" onclick="tc(this)" style="padding:10px 0"><div class="vh-check-box"></div><div style="width:30px;height:30px;border-radius:7px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-receipt-tax" style="color:#E84533;font-size:14px"></i></div><div style="flex:1;min-width:0"><div class="vh-check-txt" style="font-weight:700;font-size:13px">Revenus locatifs déclarés</div><div style="font-size:11px;color:#aaa;margin-top:1px">Micro-foncier/réel si nue, micro-BIC/LMNP si meublée</div></div></div>
       </div>
       <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>IRL :</strong> publié chaque trimestre par l'INSEE, il plafonne la hausse annuelle du loyer si le bail prévoit une clause de révision — une hausse au-delà de l'IRL n'est pas opposable au locataire.</span></div>
       <div class="vh-docs-label">Documents à utiliser</div>
@@ -476,8 +546,29 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
         <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#111">Lettre de congé</div><div style="font-size:11.5px;color:#888;margin-top:2px">Préavis de départ, bailleur ou locataire</div></div>
         <i class="ti ti-chevron-right" style="color:#ccc;font-size:16px;flex-shrink:0"></i>
       </div>
-      <div class="vh-actions">
-        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.service-public.fr/particuliers/vosdroits/F1310','_blank')"><i class="ti ti-external-link"></i> IRL — service-public.fr</button>
+      <div style="margin:14px 14px 6px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Références officielles utiles</div>
+      <div style="margin:0 14px 8px;border:1.5px solid #e8e8eb;border-radius:12px;overflow:hidden;background:#f8f9fb">
+        <a href="https://www.service-public.fr/particuliers/vosdroits/F13723" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">IRL — Indice de référence des loyers <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Valeur trimestrielle INSEE pour réviser le loyer</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+        <a href="https://www.service-public.fr/particuliers/vosdroits/F1168" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Préavis et congé du locataire <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Durée de préavis selon la zone et simulateur</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
+        <a href="https://www.impots.gouv.fr/particulier/questions/je-mets-en-location-un-logement-vide-comment-declarer-les-loyers-percus" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Déclarer vos revenus fonciers <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Micro-foncier ou régime réel — impots.gouv.fr</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
       </div>
     </div>
   </div>
