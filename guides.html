@@ -127,18 +127,26 @@ button{font-family:inherit;cursor:pointer}
 
 .v-panel-badges{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
 @media(max-width:700px){.v-panel-badges{grid-template-columns:repeat(2,1fr)}}
-.v-pbadge{background:#f8f9fb;border:1px solid #f0f0f0;border-radius:14px;padding:20px 18px;position:relative;overflow:hidden;transition:transform .2s,border-color .15s,box-shadow .2s}
-.v-pbadge:hover{transform:translateY(-2px);border-color:#f0d5d2;background:#fff9f8;box-shadow:0 10px 24px rgba(232,69,51,.1)}
+.v-pbadge{background:#f8f9fb;border:1px solid #f0f0f0;border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:transform .2s,border-color .15s,box-shadow .2s}
+.v-pbadge:hover{transform:translateY(-2px);border-color:#f0d5d2;background:#fff9f8;box-shadow:0 10px 24px rgba(232,69,51,.08)}
 .v-pbadge::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#E84533}
-.v-pbadge::after{content:'';position:absolute;top:-30px;right:-20px;width:100px;height:100px;border-radius:50%;background:#E84533;opacity:.08;pointer-events:none;filter:blur(22px)}
-.v-pbadge:nth-child(1)::before,.v-pbadge:nth-child(1)::after{background:#E84533}
+.v-pbadge::after{content:'';position:absolute;top:-30px;right:-20px;width:90px;height:90px;border-radius:50%;background:#E84533;opacity:.06;pointer-events:none;filter:blur(20px)}
 .v-pbadge:nth-child(2)::before,.v-pbadge:nth-child(2)::after{background:#ff7a68}
-.v-pbadge:nth-child(3)::before,.v-pbadge:nth-child(3)::after{background:#3b82f6}
-.v-pbadge:nth-child(4)::before,.v-pbadge:nth-child(4)::after{background:#16a34a}
-.v-pbadge-val{font-size:30px;font-weight:900;letter-spacing:-.5px;color:#111}
+.v-pbadge:nth-child(3)::before{background:#334155}
+.v-pbadge:nth-child(3)::after{background:#334155;opacity:.05}
+.v-pbadge:nth-child(4)::before{background:#94a3b8}
+.v-pbadge:nth-child(4)::after{background:#94a3b8;opacity:.05}
+.v-pbadge-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:12px;background:#fff0ee;color:#E84533}
+.v-pbadge:nth-child(2) .v-pbadge-ico{background:#fff0ee;color:#ff7a68}
+.v-pbadge:nth-child(3) .v-pbadge-ico,.v-pbadge:nth-child(4) .v-pbadge-ico{background:#eef0f2;color:#0c1622}
+.v-pbadge-val{font-size:28px;font-weight:900;letter-spacing:-.5px;color:#111}
 .v-pbadge:nth-child(1) .v-pbadge-val{color:#E84533}
 .v-pbadge:nth-child(2) .v-pbadge-val{color:#ff7a68}
-.v-pbadge-lbl{font-size:11.5px;color:#888;margin-top:8px;line-height:1.5;font-weight:500}
+.v-pbadge-lbl{font-size:11.5px;color:#888;margin-top:6px;line-height:1.5;font-weight:500}
+.v-panel-trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px;padding-top:20px;border-top:1px solid #f0f0f0}
+.v-panel-trust span{display:flex;align-items:center;gap:7px;font-size:12px;color:#888;font-weight:500}
+.v-panel-trust i{color:#16a34a;font-size:14px}
+@media(max-width:700px){.v-panel-trust{gap:12px 18px}}
 
 .v-psteps{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:32px}
 .v-pstep{display:inline-flex;align-items:center;gap:8px;background:#f8f9fb;border:1px solid #f0f0f0;border-radius:999px;padding:7px 15px 7px 7px;font-size:12.5px;font-weight:600;color:#444;text-decoration:none;transition:all .15s}
@@ -243,10 +251,10 @@ button{font-family:inherit;cursor:pointer}
       </div>
       <div class="v-peyebrow">En chiffres</div>
       <div class="v-panel-badges">
-        <div class="v-pbadge"><div class="v-pbadge-val">1%</div><div class="v-pbadge-lbl">commission SansAgents, uniquement si vente conclue</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">frais de publication de l'annonce</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-val">9</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-val">6</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-receipt-2"></i></div><div class="v-pbadge-val">1%</div><div class="v-pbadge-lbl">commission SansAgents, uniquement si vente conclue</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-gift"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">frais de publication de l'annonce</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-route"></i></div><div class="v-pbadge-val">9</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-files"></i></div><div class="v-pbadge-val">6</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
       </div>
       <div class="v-peyebrow">Aperçu du parcours</div>
       <div class="v-psteps">
@@ -265,6 +273,11 @@ button{font-family:inherit;cursor:pointer}
         <button class="v-hero-btn v-hero-btn-primary" onclick="window.location.href='guide-vendeur'"><i class="ti ti-rocket"></i> Commencer le guide vendeur</button>
         <button class="v-hero-btn v-btn-ghost" onclick="window.location.href='deposer'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
       </div>
+      <div class="v-panel-trust">
+        <span><i class="ti ti-shield-check"></i> Sans engagement, résiliable à tout moment</span>
+        <span><i class="ti ti-message-circle"></i> Support par chat 7j/7</span>
+        <span><i class="ti ti-lock"></i> Vos données ne sont jamais revendues</span>
+      </div>
     </div>
   </div>
 
@@ -276,10 +289,10 @@ button{font-family:inherit;cursor:pointer}
       </div>
       <div class="v-peyebrow">En chiffres</div>
       <div class="v-panel-badges">
-        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">commission acheteur, toujours gratuite</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">pour consulter et contacter les vendeurs</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-val">7</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-val">4</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-receipt-2"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">commission acheteur, toujours gratuite</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-gift"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">pour consulter et contacter les vendeurs</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-route"></i></div><div class="v-pbadge-val">7</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-files"></i></div><div class="v-pbadge-val">4</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
       </div>
       <div class="v-peyebrow">Aperçu du parcours</div>
       <div class="v-psteps">
@@ -296,6 +309,11 @@ button{font-family:inherit;cursor:pointer}
         <button class="v-hero-btn v-hero-btn-primary" onclick="window.location.href='guide-acheteur'"><i class="ti ti-rocket"></i> Commencer le guide acheteur</button>
         <button class="v-hero-btn v-btn-ghost" onclick="window.location.href='annonces'"><i class="ti ti-building-estate"></i> Voir les annonces</button>
       </div>
+      <div class="v-panel-trust">
+        <span><i class="ti ti-shield-check"></i> Aucune carte bancaire requise</span>
+        <span><i class="ti ti-message-circle"></i> Support par chat 7j/7</span>
+        <span><i class="ti ti-lock"></i> Vos données ne sont jamais revendues</span>
+      </div>
     </div>
   </div>
 
@@ -307,10 +325,10 @@ button{font-family:inherit;cursor:pointer}
       </div>
       <div class="v-peyebrow">En chiffres</div>
       <div class="v-panel-badges">
-        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">commission sur toute mise en location</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">frais de publication de l'annonce</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-val">9</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
-        <div class="v-pbadge"><div class="v-pbadge-val">6</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-receipt-2"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">commission sur toute mise en location</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-gift"></i></div><div class="v-pbadge-val">0 €</div><div class="v-pbadge-lbl">frais de publication de l'annonce</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-route"></i></div><div class="v-pbadge-val">9</div><div class="v-pbadge-lbl">étapes guidées et illustrées</div></div>
+        <div class="v-pbadge"><div class="v-pbadge-ico"><i class="ti ti-files"></i></div><div class="v-pbadge-val">6</div><div class="v-pbadge-lbl">documents officiels à générer gratuitement</div></div>
       </div>
       <div class="v-peyebrow">Aperçu du parcours</div>
       <div class="v-psteps">
@@ -328,6 +346,11 @@ button{font-family:inherit;cursor:pointer}
       <div class="v-panel-cta">
         <button class="v-hero-btn v-hero-btn-primary" onclick="window.location.href='guide-loueur'"><i class="ti ti-rocket"></i> Commencer le guide loueur</button>
         <button class="v-hero-btn v-btn-ghost" onclick="window.location.href='deposer'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
+      </div>
+      <div class="v-panel-trust">
+        <span><i class="ti ti-shield-check"></i> Sans engagement, résiliable à tout moment</span>
+        <span><i class="ti ti-message-circle"></i> Support par chat 7j/7</span>
+        <span><i class="ti ti-lock"></i> Vos données ne sont jamais revendues</span>
       </div>
     </div>
   </div>
