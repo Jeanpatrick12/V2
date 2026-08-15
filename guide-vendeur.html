@@ -336,7 +336,14 @@ button{font-family:inherit;cursor:pointer}
 .v-doc-inline-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .v-doc-inline-info{flex:1}
 .v-doc-inline-name{font-size:13px;font-weight:700;color:#111}
-.v-doc-inline-desc{font-size:11.5px;color:#888;margin-top:1px}
+.v-doc-inline-desc{font-size:11.5px;color:#888;margin-top:5px;line-height:1.5}
+.v-wide-link{display:flex;align-items:center;gap:12px;padding:13px 16px;background:#fff9f8;border:1.5px solid rgba(255,122,104,.28);border-radius:10px;margin:0 24px 8px;cursor:pointer;text-decoration:none;transition:all .15s}
+.v-wide-link:hover{border-color:#E84533;background:#fff0ee}
+.v-wide-link-ico{width:36px;height:36px;border-radius:9px;background:white;display:flex;align-items:center;justify-content:center;font-size:16px;color:#E84533;flex-shrink:0}
+.v-wide-link-info{flex:1;min-width:0}
+.v-wide-link-name{font-size:13.5px;font-weight:700;color:#111}
+.v-wide-link-desc{font-size:11.5px;color:#888;margin-top:3px;line-height:1.45}
+.v-wide-link-arrow{color:#E84533;font-size:16px;flex-shrink:0}
 .v-doc-inline:hover .v-doc-inline-arrow{color:#E84533}
 .v-doc-inline-arrow{color:#ccc;font-size:16px;flex-shrink:0;transition:color .15s}
 .v-docs-label{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;padding:14px 24px 6px}
@@ -514,7 +521,11 @@ button{font-family:inherit;cursor:pointer}
                 <a href="https://www.pap.fr/" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
               </div>
             </div>
-            <a class="v-inline-link" href="estimer-son-bien" style="margin:0 24px 8px;display:inline-flex">Voir la méthode complète en 4 étapes <i class="ti ti-arrow-right"></i></a>
+            <a class="v-wide-link" href="estimer-son-bien">
+              <div class="v-wide-link-ico"><i class="ti ti-route"></i></div>
+              <div class="v-wide-link-info"><div class="v-wide-link-name">Voir la méthode complète en 4 étapes</div><div class="v-wide-link-desc">Le détail pas-à-pas pour estimer votre bien au juste prix</div></div>
+              <i class="ti ti-arrow-right v-wide-link-arrow"></i>
+            </a>
             <div class="v-docs-label">Document à remplir</div>
             <div class="v-doc-inline" onclick="openDocModal('prix')">
               <div class="v-doc-inline-ico" style="background:#f0f7ff"><i class="ti ti-table" style="color:#3b82f6"></i></div>
@@ -591,7 +602,7 @@ button{font-family:inherit;cursor:pointer}
                   <div class="v-tool-name">Service-Public.fr — Diagnostics immobiliers <span class="v-badge-official">OFFICIEL</span></div>
                   <div class="v-tool-desc">Liste complète et à jour des diagnostics obligatoires selon votre bien</div>
                 </div>
-                <a href="https://www.service-public.fr/particuliers/vosdroits/F16144" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
+                <a href="https://www.service-public.fr/particuliers/vosdroits/F10798" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
               </div>
               <div class="v-tool-row">
                 <div class="v-tool-info">
@@ -605,7 +616,7 @@ button{font-family:inherit;cursor:pointer}
                   <div class="v-tool-name">Impots.gouv.fr — Espace propriétaire <span class="v-badge-official">OFFICIEL</span></div>
                   <div class="v-tool-desc">Consultez et téléchargez votre dernier avis de taxe foncière en ligne</div>
                 </div>
-                <a href="https://www.impots.gouv.fr/" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
+                <a href="https://www.impots.gouv.fr/particulier" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
               </div>
             </div>
             <div class="v-card-actions">
@@ -767,9 +778,11 @@ button{font-family:inherit;cursor:pointer}
               <div class="v-doc-inline-info"><div class="v-doc-inline-name">Refus d'offre</div><div class="v-doc-inline-desc">Décliner une offre d'achat de manière formelle et courtoise</div></div>
               <i class="ti ti-chevron-right v-doc-inline-arrow"></i>
             </div>
-            <div class="v-card-actions">
-              <button class="v-btn v-btn-ghost" onclick="window.open('https://www.anil.org/votre-projet/vous-etes-acheteur-locataire/achat-immobilier/faire-une-offre-dachat/','_blank')"><i class="ti ti-external-link"></i> ANIL — Guide des offres d'achat <span style="font-size:11px;opacity:.7;font-weight:500">(info officielle gratuite)</span></button>
-            </div>
+            <a class="v-wide-link" href="https://www.anil.org/votre-projet/vous-etes-acheteur-locataire/achat-immobilier/faire-une-offre-dachat/" target="_blank">
+              <div class="v-wide-link-ico"><i class="ti ti-file-text"></i></div>
+              <div class="v-wide-link-info"><div class="v-wide-link-name">ANIL — Guide des offres d'achat</div><div class="v-wide-link-desc">Information officielle et gratuite sur les offres d'achat</div></div>
+              <i class="ti ti-external-link v-wide-link-arrow"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -832,9 +845,9 @@ button{font-family:inherit;cursor:pointer}
               <div class="v-tool-row">
                 <div class="v-tool-info">
                   <div class="v-tool-name">Notaires de France — Frais et simulateurs <span class="v-badge-official">OFFICIEL</span></div>
-                  <div class="v-tool-desc">Simulez les frais de notaire et trouvez un office près de chez vous</div>
+                  <div class="v-tool-desc">Simulez les frais de notaire pour votre vente</div>
                 </div>
-                <a href="https://www.notaires.fr/fr/immobilier-fiscalit%C3%A9/argent-fiscalit%C3%A9-et-immobilier/frais-dachat-dans-lancien" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
+                <a href="https://www.immobilier.notaires.fr/fr/frais-de-notaire" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
               </div>
               <div class="v-tool-row">
                 <div class="v-tool-info">
@@ -848,7 +861,7 @@ button{font-family:inherit;cursor:pointer}
                   <div class="v-tool-name">Service-Public.fr — Compromis et acte de vente <span class="v-badge-official">OFFICIEL</span></div>
                   <div class="v-tool-desc">Vos droits et obligations lors de la signature chez le notaire</div>
                 </div>
-                <a href="https://www.service-public.fr/particuliers/vosdroits/F31228" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
+                <a href="https://www.service-public.fr/particuliers/vosdroits/F2965" target="_blank" class="v-tool-open"><i class="ti ti-external-link"></i> Ouvrir</a>
               </div>
             </div>
             <div class="v-docs-label">Document à utiliser</div>
@@ -857,10 +870,11 @@ button{font-family:inherit;cursor:pointer}
               <div class="v-doc-inline-info"><div class="v-doc-inline-name">Procès-verbal de remise des clés</div><div class="v-doc-inline-desc">Acte signé lors de la remise des clés — preuve officielle de la livraison du bien</div></div>
               <i class="ti ti-chevron-right v-doc-inline-arrow"></i>
             </div>
-            <div class="v-card-actions">
-              <button class="v-btn v-btn-ghost" onclick="window.open('https://www.notaires.fr/fr/annuaire','_blank')"><i class="ti ti-external-link"></i> Trouver un notaire</button>
-              <button class="v-btn v-btn-ghost" onclick="window.open('https://www.notaires.fr/fr/simulateurs-0','_blank')"><i class="ti ti-calculator"></i> Simulateur de frais de notaire</button>
-            </div>
+            <a class="v-wide-link" href="https://www.notaires.fr/fr/annuaire" target="_blank">
+              <div class="v-wide-link-ico"><i class="ti ti-map-pin"></i></div>
+              <div class="v-wide-link-info"><div class="v-wide-link-name">Trouver un notaire</div><div class="v-wide-link-desc">Annuaire officiel des notaires de France, près de chez vous</div></div>
+              <i class="ti ti-external-link v-wide-link-arrow"></i>
+            </a>
           </div>
         </div>
       </div>

@@ -50,12 +50,12 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
 .vh-card-title { font-size: 14px; font-weight: 800; color: var(--text); margin-top: 1px; }
 .vh-chevron { color: var(--text3); font-size: 18px; flex-shrink: 0; transition: transform .2s; }
 .vh-card.active .vh-chevron { transform: rotate(180deg); color: #ff7a68; }
-.vh-body { display: none; border-top: 1px solid var(--border); }
+.vh-body { display: none; border-top: 1px solid var(--border); padding: 0 14px; }
 .vh-card.active .vh-body { display: block; }
-.vh-desc { font-size: 13px; color: var(--text2); line-height: 1.7; padding: 12px 14px 8px; }
+.vh-desc { font-size: 13px; color: var(--text2); line-height: 1.7; padding: 12px 0 8px; }
 
 /* Checklist */
-.vh-checks { padding: 0 14px; }
+.vh-checks { padding: 0; }
 .vh-check { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid var(--bg); cursor: pointer; }
 .vh-check-box { width: 19px; height: 19px; border-radius: 5px; border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
 .vh-check-box.on { background: var(--red); border-color: var(--red); }
@@ -73,7 +73,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
 .vh-tip-green i { color: #16a34a; flex-shrink: 0; margin-top: 1px; }
 
 /* Actions */
-.vh-actions { display: flex; gap: 8px; padding: 10px 14px 16px; flex-wrap: wrap; }
+.vh-actions { display: flex; gap: 8px; padding: 10px 0 16px; flex-wrap: wrap; }
 .vh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; border-radius: 9px; font-size: 12.5px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; }
 .vh-btn-red { background: var(--red); color: white; }
 .vh-btn-done { background: #ecfdf5; color: #1a8c4e; border: 1.5px solid #a7f3d0; }
@@ -261,7 +261,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
           </div>
           <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
         </a>
-        <a href="https://www.notaires.fr/fr/immobilier-fiscalit%C3%A9/argent-fiscalit%C3%A9-et-immobilier/frais-dachat-dans-lancien" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
+        <a href="https://www.immobilier.notaires.fr/fr/frais-de-notaire" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
           <div style="flex:1;min-width:0">
             <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Notaires de France <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
             <div style="font-size:11.5px;color:#888;margin-top:2px">Simulateur des frais d'acquisition dans l'ancien et le neuf</div>
@@ -270,7 +270,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
         </a>
       </div>
       <div class="vh-actions">
-        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.notaires.fr/fr/simulateurs-0','_blank')"><i class="ti ti-calculator"></i> Frais de notaire</button>
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.notaires.fr/fr/annuaire','_blank')"><i class="ti ti-external-link"></i> Trouver un notaire</button>
       </div>
     </div>
   </div>
@@ -401,7 +401,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
       <div class="vh-tip vh-tip-blue"><i class="ti ti-shield-check"></i><span><strong>Garantie décennale :</strong> les travaux réalisés il y a moins de 10 ans peuvent encore être couverts. Demandez les factures et attestations d'assurance.</span></div>
       <div style="margin:14px 0 4px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Outils recommandés</div>
       <div style="border:1.5px solid #e8e8eb;border-radius:12px;overflow:hidden;background:#f8f9fb">
-        <a href="https://www.service-public.fr/particuliers/vosdroits/F16144" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+        <a href="https://www.service-public.fr/particuliers/vosdroits/F10798" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
           <div style="flex:1;min-width:0">
             <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Service-Public.fr <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
             <div style="font-size:11.5px;color:#888;margin-top:2px">Liste complète des diagnostics immobiliers obligatoires</div>
@@ -483,7 +483,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
       <div class="vh-tip vh-tip-blue"><i class="ti ti-info-circle"></i><span><strong>Délai SRU :</strong> 10 jours après la signature du compromis pour se rétracter sans motif. Passé ce délai, la vente est ferme.</span></div>
       <div style="margin:14px 0 4px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em">Ressource officielle</div>
       <div style="border:1.5px solid #e8e8eb;border-radius:12px;overflow:hidden;background:#f8f9fb">
-        <a href="https://www.service-public.fr/particuliers/vosdroits/F31228" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
+        <a href="https://www.service-public.fr/particuliers/vosdroits/F2965" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit">
           <div style="flex:1;min-width:0">
             <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap">Service-Public.fr <span style="font-size:9px;font-weight:800;color:#16a34a;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;letter-spacing:.05em">OFFICIEL</span></div>
             <div style="font-size:11.5px;color:#888;margin-top:2px">Compromis et acte de vente — déroulement, délais et obligations</div>
@@ -493,7 +493,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
       </div>
       <div class="vh-actions">
         <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.notaires.fr/fr/annuaire','_blank')"><i class="ti ti-external-link"></i> Trouver un notaire</button>
-        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.notaires.fr/fr/simulateurs-0','_blank')"><i class="ti ti-calculator"></i> Frais de notaire</button>
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.immobilier.notaires.fr/fr/frais-de-notaire','_blank')"><i class="ti ti-calculator"></i> Frais de notaire</button>
       </div>
     </div>
   </div>

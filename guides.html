@@ -127,11 +127,18 @@ button{font-family:inherit;cursor:pointer}
 
 .v-panel-badges{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
 @media(max-width:700px){.v-panel-badges{grid-template-columns:repeat(2,1fr)}}
-.v-pbadge{background:#f8f9fb;border:1px solid #f0f0f0;border-radius:14px;padding:20px 18px;position:relative;overflow:hidden;transition:border-color .15s,background .15s}
-.v-pbadge:hover{border-color:#f0d5d2;background:#fff9f8}
+.v-pbadge{background:#f8f9fb;border:1px solid #f0f0f0;border-radius:14px;padding:20px 18px;position:relative;overflow:hidden;transition:transform .2s,border-color .15s,box-shadow .2s}
+.v-pbadge:hover{transform:translateY(-2px);border-color:#f0d5d2;background:#fff9f8;box-shadow:0 10px 24px rgba(232,69,51,.1)}
 .v-pbadge::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#E84533}
-.v-pbadge-val{font-size:27px;font-weight:900;letter-spacing:-.4px;color:#111}
-.v-pbadge-lbl{font-size:11.5px;color:#888;margin-top:7px;line-height:1.5}
+.v-pbadge::after{content:'';position:absolute;top:-30px;right:-20px;width:100px;height:100px;border-radius:50%;background:#E84533;opacity:.08;pointer-events:none;filter:blur(22px)}
+.v-pbadge:nth-child(1)::before,.v-pbadge:nth-child(1)::after{background:#E84533}
+.v-pbadge:nth-child(2)::before,.v-pbadge:nth-child(2)::after{background:#ff7a68}
+.v-pbadge:nth-child(3)::before,.v-pbadge:nth-child(3)::after{background:#3b82f6}
+.v-pbadge:nth-child(4)::before,.v-pbadge:nth-child(4)::after{background:#16a34a}
+.v-pbadge-val{font-size:30px;font-weight:900;letter-spacing:-.5px;color:#111}
+.v-pbadge:nth-child(1) .v-pbadge-val{color:#E84533}
+.v-pbadge:nth-child(2) .v-pbadge-val{color:#ff7a68}
+.v-pbadge-lbl{font-size:11.5px;color:#888;margin-top:8px;line-height:1.5;font-weight:500}
 
 .v-psteps{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:32px}
 .v-pstep{display:inline-flex;align-items:center;gap:8px;background:#f8f9fb;border:1px solid #f0f0f0;border-radius:999px;padding:7px 15px 7px 7px;font-size:12.5px;font-weight:600;color:#444;text-decoration:none;transition:all .15s}
@@ -139,6 +146,7 @@ button{font-family:inherit;cursor:pointer}
 .v-pstep-num{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:white;flex-shrink:0;background:#E84533}
 
 .v-panel-intro{font-size:14.5px;color:#555;line-height:1.75;margin-bottom:28px;padding-top:26px;border-top:1px solid #f0f0f0;max-width:70ch}
+@media(max-width:700px){.v-panel-intro{max-width:100%}}
 .v-panel-cta{display:flex;gap:10px;flex-wrap:wrap}
 .v-hero-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:11px;font-size:13.5px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s;color:white}
 .v-hero-btn:hover{transform:translateY(-1px)}

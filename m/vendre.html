@@ -50,12 +50,12 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
 .vh-card-title { font-size: 14px; font-weight: 800; color: var(--text); margin-top: 1px; }
 .vh-chevron { color: var(--text3); font-size: 18px; flex-shrink: 0; transition: transform .2s; }
 .vh-card.active .vh-chevron { transform: rotate(180deg); color: #ff7a68; }
-.vh-body { display: none; border-top: 1px solid var(--border); }
+.vh-body { display: none; border-top: 1px solid var(--border); padding: 0 14px; }
 .vh-card.active .vh-body { display: block; }
-.vh-desc { font-size: 13px; color: var(--text2); line-height: 1.7; padding: 12px 14px 8px; }
+.vh-desc { font-size: 13px; color: var(--text2); line-height: 1.7; padding: 12px 0 8px; }
 
 /* Checklist */
-.vh-checks { padding: 0 14px; }
+.vh-checks { padding: 0; }
 .vh-check { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid var(--bg); cursor: pointer; }
 .vh-check-box { width: 19px; height: 19px; border-radius: 5px; border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
 .vh-check-box.on { background: var(--red); border-color: var(--red); }
@@ -73,7 +73,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
 .vh-tip-green i { color: #16a34a; flex-shrink: 0; margin-top: 1px; }
 
 /* Actions */
-.vh-actions { display: flex; gap: 8px; padding: 10px 14px 16px; flex-wrap: wrap; }
+.vh-actions { display: flex; gap: 8px; padding: 10px 0 16px; flex-wrap: wrap; }
 .vh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; border-radius: 9px; font-size: 12.5px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; }
 .vh-btn-red { background: var(--red); color: white; }
 .vh-btn-done { background: #ecfdf5; color: #1a8c4e; border: 1.5px solid #a7f3d0; }
@@ -615,7 +615,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
       </div>
       <div class="vh-actions">
         <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.notaires.fr/fr/annuaire','_blank')"><i class="ti ti-external-link"></i> Trouver un notaire</button>
-        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.notaires.fr/fr/simulateurs-0','_blank')"><i class="ti ti-calculator"></i> Frais de notaire</button>
+        <button class="vh-btn" style="background:#f0f9ff;color:#0284c7;border:1.5px solid #bae6fd" onclick="window.open('https://www.immobilier.notaires.fr/fr/frais-de-notaire','_blank')"><i class="ti ti-calculator"></i> Frais de notaire</button>
       </div>
     </div>
   </div>
