@@ -481,8 +481,7 @@ function renderResults(results) {
         <div class="sa-pro-row-desc">${SA.escapeHtml(p.desc)}</div>
         <div class="sa-pro-row-meta">
           ${p.reviews > 0
-            ? `<span class="sa-pro-row-rating"><i class="ti ti-star-filled"></i> ${p.rating.toFixed(1)} <em>(${p.reviews} avis)</em></span>
-               <span class="sa-pro-row-google"><i class="ti ti-brand-google" style="font-size:12px"></i> Avis Google synchronisés</span>`
+            ? `<span class="sa-pro-row-rating"><i class="ti ti-star-filled"></i> ${p.rating.toFixed(1)} <em>(${p.reviews} avis)</em></span>`
             : `<span class="sa-pro-row-rating"><em>Pas encore d'avis</em></span>`}
           <span><i class="ti ti-map-pin"></i> ${SA.escapeHtml(p.city)}</span>
           <span class="sa-pro-row-discount"><i class="ti ti-discount-2" style="color:#E84533"></i><strong style="color:#E84533;font-weight:800">-5%</strong> avec le code <span class="sa-pro-row-discount-code">SANSAGENTS5</span></span>
