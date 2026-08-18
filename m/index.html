@@ -94,6 +94,24 @@
 .m-home-listing-seller-avatar { width: 18px; height: 18px; border-radius: 50%; background: var(--red-light); color: var(--red); font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .m-home-listing-date { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
 .m-home-listing-date i { font-size: 11px; }
+
+/* Footer */
+.m-ftr{background:linear-gradient(180deg,#0c1117 0%,#090c11 100%);color:#8a94a3}
+.m-ftr-top{padding:28px var(--pad) 22px;display:flex;align-items:center;gap:12px}
+.m-ftr-logo{width:34px;height:34px;background:var(--red);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.m-ftr-logo i{color:white;font-size:15px}
+.m-ftr-brand{font-size:16px;font-weight:800;color:white;letter-spacing:-.3px}
+.m-ftr-brand span{color:var(--red)}
+.m-ftr-tagline{font-size:11.5px;color:#5a6474;margin-top:2px}
+.m-ftr-cols{padding:6px var(--pad) 20px;border-top:1px solid rgba(255,255,255,.06);display:grid;grid-template-columns:1fr 1fr;gap:24px 16px}
+.m-ftr-col-title{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.m-ftr-col-title i{color:var(--red);font-size:13px}
+.m-ftr-cols a{display:block;font-size:13.5px;color:#8a94a3;text-decoration:none;padding:7px 0}
+.m-ftr-cols a:active{color:white}
+.m-ftr-legal{padding:18px var(--pad);border-top:1px solid rgba(255,255,255,.06);display:flex;flex-wrap:wrap;gap:8px}
+.m-ftr-legal a{font-size:11.5px;color:#8a94a3;text-decoration:none;padding:6px 12px;background:rgba(255,255,255,.05);border-radius:999px}
+.m-ftr-legal a:active{background:rgba(255,255,255,.1);color:#fff}
+.m-ftr-bottom{padding:16px var(--pad) 24px;text-align:center;font-size:11.5px;color:#4a5568;border-top:1px solid rgba(255,255,255,.05)}
 </style>
 </head>
 <body>
@@ -421,60 +439,57 @@
 </div>
 
 <!-- ─── FOOTER ────────────────────────────────────────── -->
-<!-- ─── FOOTER ────────────────────────────────────────────── -->
-<footer style="background:#0c1117;color:#888;border-top:1px solid #1e2530">
+<footer class="m-ftr">
   <!-- Logo + tagline -->
-  <div style="padding:24px var(--pad) 20px;border-bottom:1px solid #1e2530;display:flex;align-items:center;gap:10px">
-    <div style="background:var(--red);border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-      <i class="ti ti-key" style="color:white;font-size:13px"></i>
-    </div>
+  <div class="m-ftr-top">
+    <div class="m-ftr-logo"><i class="ti ti-key"></i></div>
     <div>
-      <div style="font-size:15px;font-weight:800;color:white;letter-spacing:-0.3px">Sans<span style="color:var(--red)">Agents</span></div>
-      <div style="font-size:11px;color:#4a5568;margin-top:1px">L'immobilier entre particuliers</div>
+      <div class="m-ftr-brand">Sans<span>Agents</span></div>
+      <div class="m-ftr-tagline">L'immobilier entre particuliers</div>
     </div>
   </div>
   <!-- Links -->
-  <div style="padding:24px var(--pad);border-bottom:1px solid #1e2530;display:grid;grid-template-columns:1fr 1fr;gap:24px 20px">
+  <div class="m-ftr-cols">
     <div>
-      <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Annonces</div>
-      <a href="/annonces?transaction=vente" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Acheter</a>
-      <a href="/annonces?transaction=location" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Louer</a>
-      <a href="/annonces" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Toutes les annonces</a>
-      <a href="/guides?type=acheteur" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Guide acheteur</a>
-      <a href="/acheteur" style="display:block;font-size:13px;color:#6b7585">Documents acheteur</a>
+      <div class="m-ftr-col-title"><i class="ti ti-building-estate"></i> Annonces</div>
+      <a href="/annonces?transaction=vente">Acheter</a>
+      <a href="/annonces?transaction=location">Louer</a>
+      <a href="/annonces">Toutes les annonces</a>
+      <a href="/guides?type=acheteur">Guide acheteur</a>
+      <a href="/acheteur">Documents acheteur</a>
     </div>
     <div>
-      <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Propriétaires</div>
-      <a href="/guides?type=vendeur" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Guide vendeur</a>
-      <a href="/guides?type=loueur" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Guide loueur</a>
-      <a href="/estimer-son-bien" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Estimer son bien</a>
-      <a href="/vendeur" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Documents vendeur</a>
-      <a href="/deposer" style="display:block;font-size:13px;color:#6b7585">Déposer une annonce</a>
+      <div class="m-ftr-col-title"><i class="ti ti-home-dollar"></i> Propriétaires</div>
+      <a href="/guides?type=vendeur">Guide vendeur</a>
+      <a href="/guides?type=loueur">Guide loueur</a>
+      <a href="/estimer-son-bien">Estimer son bien</a>
+      <a href="/vendeur">Documents vendeur</a>
+      <a href="/deposer">Déposer une annonce</a>
     </div>
     <div>
-      <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Professionnels</div>
-      <a href="/professionnels" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Trouver un pro</a>
-      <a href="/professionnels#rejoindre" style="display:block;font-size:13px;color:#6b7585">Rejoindre le réseau</a>
+      <div class="m-ftr-col-title"><i class="ti ti-briefcase"></i> Professionnels</div>
+      <a href="/professionnels">Trouver un pro</a>
+      <a href="/professionnels#rejoindre">Rejoindre le réseau</a>
     </div>
     <div>
-      <div style="font-size:10.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Mon compte</div>
-      <a href="/profil" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mon profil</a>
-      <a href="/mes-annonces" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes annonces</a>
-      <a href="/favoris" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Mes favoris</a>
-      <a href="/messages" style="display:block;font-size:13px;color:#6b7585;margin-bottom:9px">Messages</a>
-      <a href="/documents" style="display:block;font-size:13px;color:#6b7585">Mes documents</a>
+      <div class="m-ftr-col-title"><i class="ti ti-user-circle"></i> Mon compte</div>
+      <a href="/profil">Mon profil</a>
+      <a href="/mes-annonces">Mes annonces</a>
+      <a href="/favoris">Mes favoris</a>
+      <a href="/messages">Messages</a>
+      <a href="/documents">Mes documents</a>
     </div>
   </div>
   <!-- Legal -->
-  <div style="padding:18px var(--pad);display:flex;flex-wrap:wrap;gap:10px 18px;border-bottom:1px solid #1e2530">
-    <a href="/a-propos" style="font-size:12px;color:#4a5568">À propos</a>
-    <a href="/cgu" style="font-size:12px;color:#4a5568">CGU</a>
-    <a href="/confidentialite" style="font-size:12px;color:#4a5568">Confidentialité</a>
-    <a href="/mentions-legales" style="font-size:12px;color:#4a5568">Mentions légales</a>
-    <a href="/contact" style="font-size:12px;color:#4a5568">Contact</a>
+  <div class="m-ftr-legal">
+    <a href="/a-propos">À propos</a>
+    <a href="/cgu">CGU</a>
+    <a href="/confidentialite">Confidentialité</a>
+    <a href="/mentions-legales">Mentions légales</a>
+    <a href="/contact">Contact</a>
   </div>
   <!-- Copyright -->
-  <div style="padding:14px var(--pad);font-size:11.5px;color:#3a4455">© 2026 SansAgents — L'immobilier entre particuliers</div>
+  <div class="m-ftr-bottom">© 2026 SansAgents — L'immobilier entre particuliers</div>
 </footer>
 
 <!-- ─── BOTTOM NAV ──────────────────────────────────── -->
