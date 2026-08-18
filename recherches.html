@@ -6,6 +6,7 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_consent_analytics')==='granted')?'granted':'denied', 'ad_storage': 'denied'});
   gtag('js', new Date());
   gtag('config', 'G-RWT8PG68M3');
 </script>
@@ -92,10 +93,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   .sa-search-actions{width:100%}
   .sa-search-actions button{flex:1}
 }
+.sa-auth-gate{position:fixed;inset:0;background:#fff;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.sa-auth-gate-card{max-width:380px;text-align:center}
+.sa-auth-gate-card i{font-size:38px;color:#E84533;margin-bottom:14px;display:block}
+.sa-auth-gate-card h2{font-size:20px;font-weight:700;color:#111;margin-bottom:10px;letter-spacing:-0.3px}
+.sa-auth-gate-card p{font-size:13.5px;color:#777;line-height:1.6;margin-bottom:20px}
+.sa-auth-gate-card button{background:#E84533;color:#fff;border:none;padding:13px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
 </style>
 <link rel="stylesheet" href="sa-mobile.css?v=4">
 </head>
 <body>
+
+<div class="sa-auth-gate" id="authGate">
+  <div class="sa-auth-gate-card">
+    <i class="ti ti-lock"></i>
+    <h2>Connectez-vous pour voir vos recherches</h2>
+    <p>Enregistrez vos critères de recherche depuis la page Annonces et retrouvez-les ici, avec des alertes par email dès qu'une nouvelle annonce correspond.</p>
+    <button onclick="window.location.href='connexion?redirect=' + encodeURIComponent('recherches')">Se connecter ou créer un compte</button>
+  </div>
+</div>
 
 <div class="sa-nav-wrapper">
   <nav class="sa-nav">
@@ -169,6 +185,7 @@ function buildQuery(criteria) {
 }
 
 function render() {
+  if (!SA.getUser()) { document.getElementById('authGate').style.display = 'flex'; return; }
   const list = SA.getSavedSearches();
   const root = document.getElementById('searchList');
   const empty = document.getElementById('searchEmpty');

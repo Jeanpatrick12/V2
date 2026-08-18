@@ -6,6 +6,7 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_consent_analytics')==='granted')?'granted':'denied', 'ad_storage': 'denied'});
   gtag('js', new Date());
   gtag('config', 'G-RWT8PG68M3');
 </script>
@@ -87,7 +88,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   </div>
   <div class="sa-cookie-pref">
     <div><strong>Mesure d'audience</strong><span>Nous aide à améliorer le site</span></div>
-    <div class="sa-toggle" id="toggleAudience" onclick="this.classList.toggle('on')"></div>
+    <div class="sa-toggle" id="toggleAudience" onclick="toggleAnalyticsConsent()"></div>
   </div>
 
   <h2>Comment supprimer les cookies déjà déposés ?</h2>
@@ -100,5 +101,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   <a onclick="window.location.href='cookies'">Cookies</a>
   <a onclick="window.location.href='mentions-legales'">Mentions légales</a>
 </div>
+
+<script>
+function toggleAnalyticsConsent(){
+  var granted = localStorage.getItem('sa_consent_analytics') === 'granted';
+  var next = !granted;
+  localStorage.setItem('sa_consent_analytics', next ? 'granted' : 'denied');
+  document.getElementById('toggleAudience').classList.toggle('on', next);
+  gtag('consent', 'update', {'analytics_storage': next ? 'granted' : 'denied'});
+}
+document.getElementById('toggleAudience').classList.toggle('on', localStorage.getItem('sa_consent_analytics') === 'granted');
+</script>
 </body>
 </html>

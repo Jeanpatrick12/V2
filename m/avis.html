@@ -185,7 +185,7 @@
     <span>Déposer</span>
   </button>
   <button class="m-tab" onclick="window.top.location='/messages'"><i class="ti ti-message-circle"></i><span>Messages</span></button>
-  <button class="m-tab" onclick="window.top.location='/connexion'"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
+  <button class="m-tab" onclick="handleAuthClick()"><i class="ti ti-user"></i><span id="botProfileLabel">Connexion</span></button>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -274,8 +274,15 @@ function showSuccess() {
   document.getElementById('successScreen').style.display = 'block';
 }
 
+function handleAuthClick(){
+  var user = SA.getUser();
+  if (user) window.top.location = '/profil';
+  else window.top.location = '/connexion?redirect=' + encodeURIComponent(window.location.pathname);
+}
+
 // Init
 SA.init().then(function(){
+  document.getElementById('botProfileLabel').textContent = SA.getUser() ? 'Profil' : 'Connexion';
   var params = new URLSearchParams(window.location.search);
   reviewType = params.get('type') || 'general';
   reviewId   = params.get('id')   || '';

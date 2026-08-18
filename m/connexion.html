@@ -80,11 +80,18 @@ body { background: var(--bg); padding-bottom: 0; }
         <label class="m-label">Mot de passe</label>
         <input class="m-input" type="password" id="signupPwd" placeholder="8 caractères minimum" autocomplete="new-password">
       </div>
+      <div class="m-field">
+        <label class="m-label">Confirmer le mot de passe</label>
+        <input class="m-input" type="password" id="signupPwd2" placeholder="••••••••" autocomplete="new-password">
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:8px;margin-top:6px">
+        <input type="checkbox" id="signupCgu" style="margin-top:3px;flex-shrink:0">
+        <label for="signupCgu" style="font-size:11.5px;color:var(--text2);line-height:1.5">J'accepte les <a href="/cgu" style="color:var(--red);font-weight:600">CGU</a> et la <a href="/confidentialite" style="color:var(--red);font-weight:600">politique de confidentialité</a> de SansAgents.</label>
+      </div>
       <div class="m-err" id="signupErr"></div>
       <button class="m-btn m-btn-primary m-btn-full" style="margin-top:16px" onclick="doSignup()" id="signupBtn">
         <i class="ti ti-user-plus"></i> Créer mon compte
       </button>
-      <p style="font-size:11px;color:var(--text3);margin-top:12px;line-height:1.5;text-align:center">En créant un compte, vous acceptez les <a href="/cgu" style="color:var(--red);font-weight:600">CGU</a> et la <a href="/confidentialite" style="color:var(--red);font-weight:600">politique de confidentialité</a>.</p>
     </div>
 
     <!-- FORGOT -->
@@ -163,8 +170,11 @@ async function doSignup() {
   var name = document.getElementById('signupName').value.trim();
   var email = document.getElementById('signupEmail').value.trim();
   var pwd = document.getElementById('signupPwd').value;
-  if(!name||!email||!pwd){showErr('signupErr','Remplissez tous les champs.');return;}
+  var pwd2 = document.getElementById('signupPwd2').value;
+  if(!name||!email||!pwd||!pwd2){showErr('signupErr','Remplissez tous les champs.');return;}
   if(pwd.length<8){showErr('signupErr','Le mot de passe doit faire au moins 8 caractères.');return;}
+  if(pwd!==pwd2){showErr('signupErr','Les mots de passe ne correspondent pas.');return;}
+  if(!document.getElementById('signupCgu').checked){showErr('signupErr','Vous devez accepter les CGU pour créer un compte.');return;}
   setLoading('signupBtn',true);
   var parts = name.split(/\s+/);
   try {
