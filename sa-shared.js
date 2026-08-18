@@ -1415,4 +1415,30 @@
   document.addEventListener("DOMContentLoaded", function() {
     init().then(function() { initMobileNav(); });
   });
+
+  // Restaure la position de scroll au retour arrière (au lieu de remonter en haut)
+  (function () {
+    var KEY = "sa_scroll_" + location.pathname + location.search;
+    try { history.scrollRestoration = "manual"; } catch (e) {}
+    window.addEventListener("pageshow", function () {
+      var saved = sessionStorage.getItem(KEY);
+      if (saved == null) return;
+      var y = parseInt(saved, 10) || 0;
+      var tries = 0;
+      (function attempt() {
+        window.scrollTo(0, y);
+        tries++;
+        if (tries < 10 && document.documentElement.scrollHeight - window.innerHeight < y) {
+          setTimeout(attempt, 100);
+        }
+      })();
+    });
+    var saveTimer;
+    function saveScroll() { sessionStorage.setItem(KEY, window.scrollY); }
+    window.addEventListener("scroll", function () {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveScroll, 150);
+    }, { passive: true });
+    window.addEventListener("pagehide", saveScroll);
+  })();
 })();
