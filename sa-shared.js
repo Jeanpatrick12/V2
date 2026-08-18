@@ -145,6 +145,7 @@
       icon:      row.icon || "ti-briefcase",
       logo:      row.logo,
       verified:  !!row.verified,
+      googleRating: row.google_rating !== undefined && row.google_rating !== null ? parseFloat(row.google_rating) : null,
       createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
       isUserPro: true
     };
@@ -865,6 +866,18 @@
     const pro = _cache.dbPros.find(p => p.id === id);
     if (pro) pro.verified = !!verified;
   }
+  async function setProGoogleRating(id, rating) {
+    const val = rating === null || rating === "" ? null : Math.max(0, Math.min(5, parseFloat(rating)));
+    const { error } = await _sb.from("pros").update({ google_rating: val }).eq("id", id);
+    if (error) throw error;
+    const pro = _cache.dbPros.find(p => p.id === id);
+    if (pro) pro.googleRating = val;
+  }
+  function proGoogleMapsUrl(p) {
+    if (!p) return "";
+    const q = [p.name, p.job, p.city].filter(Boolean).join(" ");
+    return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+  }
 
   /* ── Avis (pro / vendeur / acheteur / général) ──────────────────── */
   async function submitReview(payload) {
@@ -1387,7 +1400,7 @@
     markConversationRead, deleteConversation, getUnreadMessageCount, isMessageFromOther,
     getListingContact,
     // Pros
-    getAllPros, getProById, getUserPros, addPro, setProVerified, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
+    getAllPros, getProById, getUserPros, addPro, setProVerified, setProGoogleRating, proGoogleMapsUrl, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
     getAllAvisAdmin, updateAvisStatus, getAllSignalementsAdmin, updateSignalementStatus,
     // Documents
     saveDoc, getDocs, deleteDoc,

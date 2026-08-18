@@ -26,7 +26,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=30"></script>
+<script src="sa-shared.js?v=31"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -207,6 +207,8 @@ function render() {
             <div class="sa-pro-meta-row">
               ${p.reviews > 0 ? `<span class="stars"><i class="ti ti-star-filled"></i> ${p.rating.toFixed(1)} (${p.reviews} avis)</span>` : `<span><em>Pas encore d'avis</em></span>`}
               <span><i class="ti ti-map-pin"></i> ${SA.escapeHtml(p.city)}</span>
+              ${p.googleRating ? `<span><i class="ti ti-brand-google" style="font-size:12px"></i> ${p.googleRating.toFixed(1)} sur Google</span>` : ''}
+              <a href="${SA.proGoogleMapsUrl(p)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;color:inherit;text-decoration:underline"><i class="ti ti-external-link" style="font-size:12px"></i> Voir sur Google</a>
             </div>
           </div>
         </div>
