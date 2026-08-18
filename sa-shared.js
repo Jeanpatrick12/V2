@@ -136,6 +136,7 @@
       siret:     row.siret,
       phone:     row.phone,
       email:     row.email,
+      website:   row.website || "",
       desc:      row.description || "",
       longDesc:  row.long_desc || "",
       services:  Array.isArray(row.services) ? row.services : [],
@@ -845,6 +846,7 @@
       siret:       siret,
       phone:       data.phone || "",
       email:       data.email || "",
+      website:     data.website || "",
       description: data.desc || "",
       long_desc:   data.longDesc || data.desc || "",
       services:    Array.isArray(data.services) ? data.services : [],
@@ -877,6 +879,10 @@
     if (!p) return "";
     const q = [p.name, p.job, p.city].filter(Boolean).join(" ");
     return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+  }
+  function proWebsiteUrl(p) {
+    if (!p || !p.website) return "";
+    return /^https?:\/\//i.test(p.website) ? p.website : "https://" + p.website;
   }
 
   /* ── Avis (pro / vendeur / acheteur / général) ──────────────────── */
@@ -1400,7 +1406,7 @@
     markConversationRead, deleteConversation, getUnreadMessageCount, isMessageFromOther,
     getListingContact,
     // Pros
-    getAllPros, getProById, getUserPros, addPro, setProVerified, setProGoogleRating, proGoogleMapsUrl, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
+    getAllPros, getProById, getUserPros, addPro, setProVerified, setProGoogleRating, proGoogleMapsUrl, proWebsiteUrl, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
     getAllAvisAdmin, updateAvisStatus, getAllSignalementsAdmin, updateSignalementStatus,
     // Documents
     saveDoc, getDocs, deleteDoc,

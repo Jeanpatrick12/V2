@@ -120,7 +120,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=31"></script>
+<script src="../sa-shared.js?v=32"></script>
 <script>
 var COLORS = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2'];
 var currentPro = null;
@@ -198,6 +198,7 @@ function renderPro(p) {
       (reviewsCount ? '<div style="font-size:12px;color:rgba(255,255,255,0.5)">('+reviewsCount+' avis)</div>' : '') +
       (p.googleRating ? '<div style="font-size:11.5px;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:4px"><i class="ti ti-brand-google" style="font-size:11px"></i> '+p.googleRating.toFixed(1)+' sur Google</div>' : '') +
       '<a href="'+SA.proGoogleMapsUrl(p)+'" target="_blank" rel="noopener" style="font-size:11.5px;color:rgba(255,255,255,0.6);text-decoration:underline;display:flex;align-items:center;gap:4px;margin-left:auto"><i class="ti ti-external-link" style="font-size:11px"></i> Voir sur Google</a>' +
+      (p.website ? '<a href="'+SA.proWebsiteUrl(p)+'" target="_blank" rel="noopener" style="font-size:11.5px;color:#ff7a68;font-weight:700;text-decoration:underline;display:flex;align-items:center;gap:4px"><i class="ti ti-world" style="font-size:11px"></i> Site internet</a>' : '') +
     '</div>' +
   '</div>';
 

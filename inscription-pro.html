@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=31"></script>
+<script src="sa-shared.js?v=32"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -264,6 +264,7 @@
         <div class="field-group"><div class="field-label">Téléphone <span class="req">*</span></div><input type="tel" id="proPhone" placeholder="06 12 34 56 78" oninput="checkStep4()"></div>
         <div class="field-group"><div class="field-label">Email <span class="req">*</span></div><input type="email" id="proEmail" placeholder="contact@votre-activite.fr" oninput="checkStep4()"></div>
       </div>
+      <div class="field-group"><div class="field-label">Site internet <span style="color:var(--text-tertiary);font-weight:400">(optionnel)</span></div><input type="url" id="proWebsite" placeholder="https://votre-site.fr"></div>
       <div class="fee-banner">
         <i class="ti ti-info-circle"></i>
         <p>Le particulier mentionne le code <strong>SANSAGENTS5</strong> en demandant son devis → vous lui appliquez <strong>5% de réduction</strong> → s'il signe ce devis réduit, SansAgents vous facture <strong>8%</strong> du montant réduit. Le particulier ne paie jamais cette commission.</p>
@@ -290,6 +291,7 @@
         <div class="recap-row"><span class="recap-key">Services</span><span class="recap-val" id="rServices">—</span></div>
         <div class="recap-row"><span class="recap-key">Téléphone</span><span class="recap-val" id="rPhone">—</span></div>
         <div class="recap-row"><span class="recap-key">Email</span><span class="recap-val" id="rEmail">—</span></div>
+        <div class="recap-row"><span class="recap-key">Site internet</span><span class="recap-val" id="rWebsite">—</span></div>
       </div>
       <div class="nav-row">
         <button class="btn-prev" onclick="goBack(5)"><i class="ti ti-arrow-left"></i> Modifier</button>
@@ -397,6 +399,7 @@
     document.getElementById('rServices').textContent = services.length ? services.join(', ') : '—';
     document.getElementById('rPhone').textContent = document.getElementById('proPhone').value.trim() || '—';
     document.getElementById('rEmail').textContent = document.getElementById('proEmail').value.trim() || '—';
+    document.getElementById('rWebsite').textContent = document.getElementById('proWebsite').value.trim() || '—';
   }
 
   function showStep(step) {
@@ -453,7 +456,8 @@
       longDesc: document.getElementById('proLongDesc').value.trim(),
       services: services.slice(),
       phone: document.getElementById('proPhone').value.trim(),
-      email: document.getElementById('proEmail').value.trim()
+      email: document.getElementById('proEmail').value.trim(),
+      website: document.getElementById('proWebsite').value.trim()
     };
   }
 

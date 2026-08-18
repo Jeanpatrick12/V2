@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=31"></script>
+<script src="sa-shared.js?v=32"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#f7f8fa}
@@ -54,8 +54,10 @@ a{text-decoration:none;color:inherit}
 .adm-card-title{font-size:16.5px;font-weight:800;color:#111;letter-spacing:-.2px}
 .adm-card-sub{font-size:12.5px;color:#888;margin-top:3px;line-height:1.5}
 
-.sa-admin-callout{background:#fff8f7;border:1px solid #ffd9d2;border-radius:12px;padding:12px 16px;font-size:12.5px;color:#a8392b;margin-bottom:16px;display:flex;gap:8px;align-items:flex-start}
-.sa-admin-callout i{margin-top:1px;flex-shrink:0}
+.sa-admin-callout{background:#fff9f8;border:1px solid #ffd9d2;border-left:4px solid #E84533;border-radius:4px 12px 12px 4px;padding:13px 16px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start}
+.sa-admin-callout-ico{width:32px;height:32px;border-radius:9px;background:#ffe4de;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sa-admin-callout-body{font-size:12.5px;color:#7a3226;line-height:1.65}
+.sa-admin-callout-body strong{color:#a8392b;font-weight:700}
 .adm-note{font-size:12px;color:#999;margin-bottom:14px;line-height:1.5;display:flex;align-items:flex-start;gap:6px}
 .adm-note i{margin-top:2px;flex-shrink:0;color:#bbb}
 .sa-admin-table{width:100%;background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;border-collapse:collapse}
@@ -119,7 +121,10 @@ a{text-decoration:none;color:inherit}
       <div><div class="adm-card-title">Vérification des professionnels</div><div class="adm-card-sub">Activez le badge « Vérifié » uniquement après avoir contrôlé le SIRET sur <a href="https://annuaire-entreprises.data.gouv.fr" target="_blank" style="color:#E84533;font-weight:600">annuaire-entreprises.data.gouv.fr</a>.</div></div>
     </div>
 
-    <div class="sa-admin-callout"><i class="ti ti-info-circle"></i>Le badge « Vérifié » indique aux particuliers que l'équipe SansAgents a contrôlé manuellement l'existence et l'activité de l'entreprise. Ne l'activez jamais sans avoir vérifié le SIRET au préalable.</div>
+    <div class="sa-admin-callout">
+      <div class="sa-admin-callout-ico"><i class="ti ti-alert-triangle"></i></div>
+      <div class="sa-admin-callout-body"><strong>Le badge « Vérifié »</strong> indique aux particuliers que l'équipe SansAgents a contrôlé manuellement l'existence et l'activité de l'entreprise. Ne l'activez jamais sans avoir vérifié le SIRET au préalable.</div>
+    </div>
 
     <p class="adm-note"><i class="ti ti-brand-google"></i> La « Note Google » est saisie manuellement en consultant la fiche Google du professionnel — elle n'est pas synchronisée automatiquement, pensez à la rafraîchir de temps en temps.</p>
     <table class="sa-admin-table" id="proTable">
