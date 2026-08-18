@@ -24,76 +24,123 @@
 <script src="sa-shared.js?v=31"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;background:#fafafa}
-.sa-admin-top{background:#0d1117;padding:16px 32px;display:flex;align-items:center;gap:10px}
-.sa-admin-top i{color:#ff7a68;font-size:18px}
-.sa-admin-top span{color:#fff;font-weight:700;font-size:15px}
-.sa-admin-top small{color:rgba(255,255,255,0.5);font-size:11.5px;margin-left:8px}
-.sa-admin-wrap{max-width:980px;margin:0 auto;padding:2.2rem 24px 4rem}
-.sa-admin-wrap h1{font-size:22px;font-weight:700;margin-bottom:6px}
-.sa-admin-sub{font-size:13px;color:#888;margin-bottom:1.8rem}
-.sa-admin-callout{background:#fff8f7;border:1px solid #ffd9d2;border-radius:12px;padding:12px 16px;font-size:12.5px;color:#a8392b;margin-bottom:1.6rem;display:flex;gap:8px;align-items:flex-start}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#f7f8fa}
+a{text-decoration:none;color:inherit}
+
+/* ── Nav (identique au reste du site) ── */
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:200}
+.sa-nav{max-width:1180px;margin:0 auto;padding:0 32px;display:flex;align-items:center;height:64px;gap:14px}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{width:36px;height:36px;background:#E84533;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-.3px}
+.sa-brand span{color:#E84533}
+.adm-nav-badge{display:inline-flex;align-items:center;gap:6px;background:#fff0ee;color:#E84533;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:999px;letter-spacing:.02em}
+.adm-auth{margin-left:auto;font-size:12.5px;color:#888;text-align:right}
+.adm-auth a{color:#E84533;font-weight:600}
+
+/* ── Bandeau sombre (même dégradé que les pages guides) ── */
+.adm-header{background:linear-gradient(135deg,#0c1622 0%,#152233 60%,#1c2e44 100%);padding:34px 32px}
+.adm-header-inner{max-width:1180px;margin:0 auto}
+.adm-header h1{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:800;color:white;letter-spacing:-.4px;margin-bottom:6px}
+.adm-header h1 i{color:#ff7a68;font-size:22px}
+.adm-header p{font-size:13.5px;color:rgba(255,255,255,.5)}
+
+/* ── Layout ── */
+.adm-wrap{max-width:1180px;margin:0 auto;padding:28px 32px 60px;display:flex;flex-direction:column;gap:20px}
+.adm-card{background:white;border:1.5px solid #ebebeb;border-radius:18px;padding:24px 26px;box-shadow:0 4px 20px rgba(12,22,34,.04)}
+.adm-card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #f2f2f2}
+.adm-card-ico{width:40px;height:40px;border-radius:11px;background:#fff0ee;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.adm-card-title{font-size:16.5px;font-weight:800;color:#111;letter-spacing:-.2px}
+.adm-card-sub{font-size:12.5px;color:#888;margin-top:3px;line-height:1.5}
+
+.sa-admin-callout{background:#fff8f7;border:1px solid #ffd9d2;border-radius:12px;padding:12px 16px;font-size:12.5px;color:#a8392b;margin-bottom:16px;display:flex;gap:8px;align-items:flex-start}
 .sa-admin-callout i{margin-top:1px;flex-shrink:0}
+.adm-note{font-size:12px;color:#999;margin-bottom:14px;line-height:1.5;display:flex;align-items:flex-start;gap:6px}
+.adm-note i{margin-top:2px;flex-shrink:0;color:#bbb}
 .sa-admin-table{width:100%;background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;border-collapse:collapse}
-.sa-admin-table th{text-align:left;background:#fafafa;padding:11px 16px;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid #eee}
+.sa-admin-table th{text-align:left;background:#fafbfc;padding:11px 16px;font-size:10.5px;color:#999;text-transform:uppercase;letter-spacing:.05em;font-weight:700;border-bottom:1px solid #eee}
 .sa-admin-table td{padding:12px 16px;border-bottom:1px solid #f3f3f3;font-size:13.5px;vertical-align:middle}
 .sa-admin-table tr:last-child td{border-bottom:none}
 .sa-admin-name{font-weight:700;color:#111}
 .sa-admin-job{font-size:11.5px;color:#888}
 .sa-admin-siret{font-family:monospace;font-size:12.5px;color:#444}
 .sa-admin-siret.missing{color:#c0392b;font-style:italic;font-family:inherit}
-.sa-admin-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase}
+.sa-admin-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.02em}
 .sa-admin-badge.yes{background:#e9f7ef;color:#1a8c4e}
 .sa-admin-badge.no{background:#f1f1f1;color:#888}
-.sa-admin-toggle{border:1.5px solid #ddd;background:#fff;color:#444;font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;font-family:inherit}
+.sa-admin-toggle{border:1.5px solid #ddd;background:#fff;color:#444;font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;font-family:inherit;transition:all .15s}
 .sa-admin-toggle.on{background:#1a8c4e;border-color:#1a8c4e;color:#fff}
-.sa-admin-toggle:hover{border-color:#E84533}
-.sa-admin-section{margin-top:2.6rem}
+.sa-admin-toggle:hover{border-color:#E84533;color:#E84533}
+.sa-admin-toggle.on:hover{color:#fff}
 .sa-admin-actions{display:flex;gap:6px;flex-wrap:wrap}
-.sa-admin-btn{border:1.5px solid #ddd;background:#fff;color:#444;font-size:11.5px;font-weight:600;padding:6px 11px;border-radius:7px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.sa-admin-btn{border:1.5px solid #ddd;background:#fff;color:#444;font-size:11.5px;font-weight:600;padding:6px 11px;border-radius:7px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s}
 .sa-admin-btn:hover{border-color:#E84533;color:#E84533}
 .sa-admin-btn.approve{background:#1a8c4e;border-color:#1a8c4e;color:#fff}
+.sa-admin-btn.approve:hover{color:#fff;opacity:.9}
 .sa-admin-btn.reject{background:#c0392b;border-color:#c0392b;color:#fff}
+.sa-admin-btn.reject:hover{color:#fff;opacity:.9}
 .sa-admin-badge.pending{background:#fff4e5;color:#b7791f}
 .sa-admin-badge.approved{background:#e9f7ef;color:#1a8c4e}
 .sa-admin-badge.rejected{background:#fdeceb;color:#c0392b}
 .sa-admin-badge.traite{background:#e9f7ef;color:#1a8c4e}
-.sa-admin-empty{font-size:13px;color:#aaa;padding:1.2rem;text-align:center;background:#fff;border:1px solid #eee;border-radius:14px}
+.sa-admin-empty{font-size:13px;color:#aaa;padding:1.4rem;text-align:center;background:#fafbfc;border:1px dashed #e5e5e5;border-radius:12px}
 .sa-admin-stars{color:#f59e0b;font-size:12px;white-space:nowrap}
 .sa-admin-comment{max-width:260px;font-size:12.5px;color:#555;line-height:1.5}
 .sa-admin-denied{font-size:13px;color:#a8392b;background:#fff8f7;border:1px solid #ffd9d2;border-radius:14px;padding:1.2rem;text-align:center}
+@media(max-width:640px){.adm-wrap,.adm-header-inner,.sa-nav{padding-left:16px;padding-right:16px}.sa-admin-table{display:block;overflow-x:auto}}
 </style>
 <link rel="stylesheet" href="sa-mobile.css?v=4">
 </head>
 <body>
-<div class="sa-admin-top">
-  <i class="ti ti-shield-lock"></i>
-  <span>SansAgents — Administration</span>
-  <small>Accès réservé à l'équipe SansAgents</small>
-  <div id="authStatus" style="margin-left:auto;font-size:12.5px;color:rgba(255,255,255,0.7)"></div>
+
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='/'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+    <div class="adm-nav-badge"><i class="ti ti-shield-lock"></i> Administration</div>
+    <div id="authStatus" class="adm-auth"></div>
+  </nav>
 </div>
 
-<div class="sa-admin-wrap" id="adminWrap">
-  <h1>Vérification des professionnels</h1>
-  <p class="sa-admin-sub">Activez le badge « Vérifié » uniquement après avoir contrôlé le SIRET sur <a href="https://annuaire-entreprises.data.gouv.fr" target="_blank" style="color:#E84533;font-weight:600">annuaire-entreprises.data.gouv.fr</a>.</p>
+<div class="adm-header">
+  <div class="adm-header-inner">
+    <h1><i class="ti ti-layout-dashboard"></i> Tableau de bord</h1>
+    <p>Vérification des professionnels, modération des avis et des signalements — accès réservé à l'équipe SansAgents.</p>
+  </div>
+</div>
 
-  <div class="sa-admin-callout"><i class="ti ti-info-circle"></i>Le badge « Vérifié » indique aux particuliers que l'équipe SansAgents a contrôlé manuellement l'existence et l'activité de l'entreprise. Ne l'activez jamais sans avoir vérifié le SIRET au préalable.</div>
+<div class="adm-wrap" id="adminWrap">
+  <div class="adm-card">
+    <div class="adm-card-head">
+      <div class="adm-card-ico"><i class="ti ti-shield-check"></i></div>
+      <div><div class="adm-card-title">Vérification des professionnels</div><div class="adm-card-sub">Activez le badge « Vérifié » uniquement après avoir contrôlé le SIRET sur <a href="https://annuaire-entreprises.data.gouv.fr" target="_blank" style="color:#E84533;font-weight:600">annuaire-entreprises.data.gouv.fr</a>.</div></div>
+    </div>
 
-  <p class="sa-admin-sub">La « Note Google » est saisie manuellement en consultant la fiche Google du professionnel — elle n'est pas synchronisée automatiquement, pensez à la rafraîchir de temps en temps.</p>
-  <table class="sa-admin-table" id="proTable">
-    <thead><tr><th>Professionnel</th><th>SIRET</th><th>Statut</th><th>Note Google</th><th></th></tr></thead>
-    <tbody id="proTbody"></tbody>
-  </table>
+    <div class="sa-admin-callout"><i class="ti ti-info-circle"></i>Le badge « Vérifié » indique aux particuliers que l'équipe SansAgents a contrôlé manuellement l'existence et l'activité de l'entreprise. Ne l'activez jamais sans avoir vérifié le SIRET au préalable.</div>
 
-  <div class="sa-admin-section">
-    <h1>Avis à modérer</h1>
-    <p class="sa-admin-sub">Un avis approuvé devient visible publiquement sur la fiche du professionnel ou de l'annonce concernée.</p>
+    <p class="adm-note"><i class="ti ti-brand-google"></i> La « Note Google » est saisie manuellement en consultant la fiche Google du professionnel — elle n'est pas synchronisée automatiquement, pensez à la rafraîchir de temps en temps.</p>
+    <table class="sa-admin-table" id="proTable">
+      <thead><tr><th>Professionnel</th><th>SIRET</th><th>Statut</th><th>Note Google</th><th></th></tr></thead>
+      <tbody id="proTbody"></tbody>
+    </table>
+  </div>
+
+  <div class="adm-card">
+    <div class="adm-card-head">
+      <div class="adm-card-ico"><i class="ti ti-star"></i></div>
+      <div><div class="adm-card-title">Avis à modérer</div><div class="adm-card-sub">Un avis approuvé devient visible publiquement sur la fiche du professionnel ou de l'annonce concernée.</div></div>
+    </div>
     <div id="avisZone"></div>
   </div>
 
-  <div class="sa-admin-section">
-    <h1>Signalements</h1>
-    <p class="sa-admin-sub">Annonces ou profils signalés par les visiteurs comme suspects ou provenant d'une agence.</p>
+  <div class="adm-card">
+    <div class="adm-card-head">
+      <div class="adm-card-ico"><i class="ti ti-flag"></i></div>
+      <div><div class="adm-card-title">Signalements</div><div class="adm-card-sub">Annonces ou profils signalés par les visiteurs comme suspects ou provenant d'une agence.</div></div>
+    </div>
     <div id="signalementsZone"></div>
   </div>
 </div>
