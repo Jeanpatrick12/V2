@@ -167,6 +167,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
       <div class="sa-pfield"><label>Nom</label><input type="text" id="pNom"></div>
     </div>
     <div class="sa-pfield"><label>Email</label><input type="email" id="pEmail"></div>
+    <div class="sa-pfield"><label>Téléphone</label><input type="tel" id="pPhone" placeholder="06 12 34 56 78"></div>
 
     <button class="sa-profile-save" onclick="saveProfile()"><i class="ti ti-device-floppy"></i> Enregistrer les modifications</button>
   </div>
@@ -187,6 +188,7 @@ function render() {
   document.getElementById('pPrenom').value = user.prenom || '';
   document.getElementById('pNom').value = user.nom || '';
   document.getElementById('pEmail').value = user.email || '';
+  document.getElementById('pPhone').value = user.phone || '';
 }
 
 function refreshAvatar(user) {
@@ -213,8 +215,9 @@ async function saveProfile() {
   const prenom = document.getElementById('pPrenom').value.trim();
   const nom = document.getElementById('pNom').value.trim();
   const email = document.getElementById('pEmail').value.trim();
+  const phone = document.getElementById('pPhone').value.trim();
   if (!prenom || !email) { SA.toast("Le prénom et l'email sont requis", 'ti-alert-triangle'); return; }
-  await SA.updateUser({ prenom, nom, email, photo: photoData });
+  await SA.updateUser({ prenom, nom, email, phone, photo: photoData });
   SA.toast('Profil mis à jour', 'ti-circle-check');
   render();
 }

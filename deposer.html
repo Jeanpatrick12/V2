@@ -1788,7 +1788,7 @@ function gfbPrevScreen(){
       h += '</div>';
 
       h += ds('Obligatoires — diagnostics techniques (DDT)');
-      let ddt = 'DPE · ERP (État des Risques et Pollutions) · Électricité si installation +15 ans · Gaz si installation +15 ans · Plomb/CREP si construit avant 1949 · Amiante si construit avant 1997';
+      let ddt = 'DPE · ERP (État des Risques et Pollutions) · Électricité si installation +15 ans · Gaz si installation +15 ans · Plomb/CREP si construit avant 1949 · Amiante si construit avant 1997 · Diagnostic bruit si zone d\'aérodrome';
       if (!isMaison) ddt += ' · Loi Carrez (surface des lots de copropriété)';
       if (isMaison) ddt += ' · Assainissement non collectif · Termites (si zone concernée)';
       h += di('clipboard-check', 'Dossier de diagnostics techniques (DDT)', ddt, 'Obligatoire');

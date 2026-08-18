@@ -473,7 +473,7 @@ function renderResults(results) {
       <div class="sa-pro-row-info">
         <div class="sa-pro-row-top">
           <span class="sa-pro-row-name">${SA.escapeHtml(p.name)}</span>
-          ${p.verified ? '<span class="sa-pro-row-badge" title="Le SIRET de ce professionnel a ete verifie manuellement par l\'equipe SansAgents"><i class="ti ti-check" style="font-size:9px"></i> Vérifié</span>' : ''}
+          ${p.verified && p.siret ? '<span class="sa-pro-row-badge" title="Le SIRET de ce professionnel a ete verifie manuellement par l\'equipe SansAgents"><i class="ti ti-check" style="font-size:9px"></i> Vérifié</span>' : ''}
           ${p.isUserPro ? '<span class="sa-pro-row-badge" style="color:#1e6abf;background:#eaf1fb"><i class="ti ti-sparkles" style="font-size:9px"></i> Nouveau</span>' : ''}
           ${SA.isDemoPro(p.id) ? '<span class="sa-pro-row-badge" style="color:#888;background:#f0f0f0">Démo</span>' : ''}
         </div>

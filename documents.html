@@ -206,7 +206,7 @@ function editBuyDoc(idx){
   else if(d.type==='contre')data={t:'contre',a:f['c-adresse'],v:f['c-vendeur'],ac:f['c-acheteur'],pi:f['c-prix-initial'],pc:f['c-prix-new'],d:f['c-date']};
   if(data){
     var enc;try{enc=btoa(unescape(encodeURIComponent(JSON.stringify(data))));}catch(e){enc=null;}
-    if(enc){window.open('guide?sign='+enc,'_blank');return;}
+    if(enc){window.open('guide-acheteur?sign='+enc,'_blank');return;}
   }
   SA.toast('Ce document ne peut pas être modifié — il reste consultable et imprimable.','ti-info-circle');
   openBuyDoc(idx);

@@ -86,7 +86,7 @@ body.sa-has-bottom-nav{padding-bottom:0!important}
       <div class="gate-tip-ico slate"><i class="ti ti-layout-columns"></i></div>
       <div class="gate-tip-body">
         <strong>Astuce : deux onglets côte à côte</strong>
-        <span>ouvrez le guide vendeur dans un onglet et le formulaire dans un autre — vous pourrez consulter les checklists et générer vos documents en même temps.</span>
+        <span id="gateGuideTip">ouvrez le guide dans un onglet et le formulaire dans un autre — vous pourrez consulter les checklists et générer vos documents en même temps.</span>
       </div>
     </div>
     <div class="gate-tip">
@@ -101,7 +101,7 @@ body.sa-has-bottom-nav{padding-bottom:0!important}
   <button class="gate-btn-primary" onclick="window.location.href='deposer?skip=1&desktop=1'">
     <i class="ti ti-rocket"></i> Commencer le formulaire
   </button>
-  <button class="gate-btn-ghost" onclick="window.location.href='guide-vendeur'">
+  <button class="gate-btn-ghost" id="gateBackBtn" onclick="window.location.href='guide-vendeur'">
     <i class="ti ti-arrow-left" style="font-size:12px"></i> Retour au guide
   </button>
 </div>
@@ -109,5 +109,14 @@ body.sa-has-bottom-nav{padding-bottom:0!important}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
 <script src="sa-shared.js?v=30"></script>
+<script>
+(function(){
+  var type = new URLSearchParams(window.location.search).get('type');
+  var guide = type === 'location' ? 'guide-loueur' : 'guide-vendeur';
+  var label = type === 'location' ? 'guide loueur' : 'guide vendeur';
+  document.getElementById('gateGuideTip').textContent = 'ouvrez le ' + label + ' dans un onglet et le formulaire dans un autre — vous pourrez consulter les checklists et générer vos documents en même temps.';
+  document.getElementById('gateBackBtn').setAttribute('onclick', "window.location.href='" + guide + "'");
+})();
+</script>
 </body>
 </html>

@@ -199,7 +199,7 @@ function render() {
           <div>
             <div class="sa-pro-name">
               ${SA.escapeHtml(p.name)}
-              ${p.verified ? '<span class="sa-pro-badge verified" title="Le SIRET de ce professionnel a ete verifie manuellement par l\'equipe SansAgents"><i class="ti ti-check" style="font-size:9px"></i> Vérifié</span>' : ''}
+              ${p.verified && p.siret ? '<span class="sa-pro-badge verified" title="Le SIRET de ce professionnel a ete verifie manuellement par l\'equipe SansAgents"><i class="ti ti-check" style="font-size:9px"></i> Vérifié</span>' : ''}
               ${p.isUserPro ? '<span class="sa-pro-badge new"><i class="ti ti-sparkles" style="font-size:9px"></i> Nouveau</span>' : ''}
               ${SA.isDemoPro(p.id) ? '<span class="sa-pro-badge demo">Démo</span>' : ''}
             </div>

@@ -388,7 +388,7 @@ function renderPros(pros) {
         '</div>' +
         '<div class="m-pro-head-right">' +
           '<div class="m-pro-stars">' + starsHtml + ' <span>' + rating.toFixed(1) + '</span></div>' +
-          (p.verified ? '<span class="m-pro-badge"><i class="ti ti-check" style="font-size:9px"></i> Vérifié</span>' : '') +
+          (p.verified && p.siret ? '<span class="m-pro-badge"><i class="ti ti-check" style="font-size:9px"></i> Vérifié</span>' : '') +
         '</div>' +
       '</div>' +
       '<div class="m-pro-desc">' + desc + '</div>' +
