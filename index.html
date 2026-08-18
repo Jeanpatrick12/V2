@@ -13,18 +13,18 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="description" content="Achetez, vendez ou louez un bien immobilier directement entre particuliers sur SansAgents. 0 % de commission d'agence partout en France, mise en relation directe et sécurisée avec les propriétaires.">
+<meta name="description" content="Achetez, vendez ou louez un bien immobilier directement entre particuliers sur SansAgents. Seulement 1% de commission sur la vente, uniquement si elle se conclut (jamais sur une location), mise en relation directe et sécurisée avec les propriétaires.">
 <link rel="canonical" href="https://sansagents.fr/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sansagents.fr/">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:title" content="SansAgents — L'immobilier sans intermédiaire">
-<meta property="og:description" content="Achetez, vendez ou louez un bien immobilier directement entre particuliers sur SansAgents. 0 % de commission d'agence partout en France, mise en relation directe et sécurisée avec les propriétaires.">
+<meta property="og:description" content="Achetez, vendez ou louez un bien immobilier directement entre particuliers sur SansAgents. Seulement 1% de commission sur la vente, uniquement si elle se conclut (jamais sur une location), mise en relation directe et sécurisée avec les propriétaires.">
 <meta property="og:site_name" content="SansAgents">
 <meta property="og:image" content="https://sansagents.fr/apple-touch-icon.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SansAgents — L'immobilier sans intermédiaire">
-<meta name="twitter:description" content="Achetez, vendez ou louez un bien immobilier directement entre particuliers sur SansAgents. 0 % de commission d'agence, mise en relation directe et sécurisée.">
+<meta name="twitter:description" content="Achetez, vendez ou louez un bien immobilier directement entre particuliers sur SansAgents. Seulement 1% de commission sur la vente, jamais sur une location.">
 <meta name="twitter:image" content="https://sansagents.fr/apple-touch-icon.png">
 <meta name="theme-color" content="#E84533">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><!--sa_mloader--><script>(function(){if(window.innerWidth>768||localStorage.sa_force_desktop||/[?&]desktop=1/.test(location.search))return;document.documentElement.style.visibility="hidden";document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML="";document.body.style.margin="0";document.body.style.overflow="hidden";var f=document.createElement("iframe");f.src="/m/index.html"+location.search;f.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;border:0;background:#fff";f.onload=function(){try{document.title=f.contentDocument.title}catch(e){}document.documentElement.style.visibility=""};f.setAttribute("scrolling","yes");document.body.appendChild(f);});})();</script>
@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=29"></script>
+<script src="sa-shared.js?v=30"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -794,42 +794,42 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
   <p class="sa-section-title">Besoin d'un professionnel ?</p>
   <p class="sa-section-sub">Notaires, diagnostiqueurs, artisans… des professionnels de confiance à portée de main, avec une réduction exclusive pour les utilisateurs de SansAgents.</p>
   <div class="sa-pros-grid">
-    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr1'">
+    <div class="sa-pro-card" onclick="window.location.href='/pro/'+SA.proSlug(SA.getProById('pr1'))">
       <div class="sa-pro-avatar" style="background:#2563eb"><i class="ti ti-stamp"></i></div>
       <div class="sa-pro-name">Maître Lefebvre <span class="sa-pro-demo-badge">Démo</span></div>
       <div class="sa-pro-job">Notaire</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.9 (127 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Lyon</div>
     </div>
-    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr6'">
+    <div class="sa-pro-card" onclick="window.location.href='/pro/'+SA.proSlug(SA.getProById('pr6'))">
       <div class="sa-pro-avatar" style="background:#E84533"><i class="ti ti-bulb"></i></div>
       <div class="sa-pro-name">Karim Benali <span class="sa-pro-demo-badge">Démo</span></div>
       <div class="sa-pro-job">Électricien</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.8 (84 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Bordeaux</div>
     </div>
-    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr3'">
+    <div class="sa-pro-card" onclick="window.location.href='/pro/'+SA.proSlug(SA.getProById('pr3'))">
       <div class="sa-pro-avatar" style="background:#1a8c4e"><i class="ti ti-ruler-2"></i></div>
       <div class="sa-pro-name">Julie Marchand <span class="sa-pro-demo-badge">Démo</span></div>
       <div class="sa-pro-job">Diagnostiqueur DPE</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 5.0 (52 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Paris</div>
     </div>
-    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr7'">
+    <div class="sa-pro-card" onclick="window.location.href='/pro/'+SA.proSlug(SA.getProById('pr7'))">
       <div class="sa-pro-avatar" style="background:#9333ea"><i class="ti ti-brick"></i></div>
       <div class="sa-pro-name">Thomas Petit <span class="sa-pro-demo-badge">Démo</span></div>
       <div class="sa-pro-job">Carreleur</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.7 (63 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Lille</div>
     </div>
-    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr5'">
+    <div class="sa-pro-card" onclick="window.location.href='/pro/'+SA.proSlug(SA.getProById('pr5'))">
       <div class="sa-pro-avatar" style="background:#7c3aed"><i class="ti ti-map-2"></i></div>
       <div class="sa-pro-name">Camille Faure <span class="sa-pro-demo-badge">Démo</span></div>
       <div class="sa-pro-job">Géomètre</div>
       <div class="sa-pro-rating"><i class="ti ti-star-filled"></i> 4.8 (45 avis)</div>
       <div class="sa-pro-loc"><i class="ti ti-map-pin"></i> Toulouse</div>
     </div>
-    <div class="sa-pro-card" onclick="window.location.href='pro?id=pr10'">
+    <div class="sa-pro-card" onclick="window.location.href='/pro/'+SA.proSlug(SA.getProById('pr10'))">
       <div class="sa-pro-avatar" style="background:#0d9488"><i class="ti ti-droplet"></i></div>
       <div class="sa-pro-name">Antoine Garcia <span class="sa-pro-demo-badge">Démo</span></div>
       <div class="sa-pro-job">Plombier</div>

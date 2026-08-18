@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=29"></script>
+<script src="sa-shared.js?v=30"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -468,7 +468,7 @@ function renderResults(results) {
   noResults.style.display = 'none';
 
   list.innerHTML = results.map(p => `
-    <div class="sa-pro-row" onclick="window.location.href='pro?id=${p.id}'">
+    <div class="sa-pro-row" onclick="window.location.href='/pro/'+SA.proSlug(p)">
       <div class="sa-pro-row-avatar" style="${p.logo ? `background-image:url('${p.logo}');background-size:cover;background-position:center` : `background:${p.color}`}">${!p.logo ? `<i class="ti ${p.icon}"></i>` : ''}</div>
       <div class="sa-pro-row-info">
         <div class="sa-pro-row-top">
@@ -490,7 +490,7 @@ function renderResults(results) {
       </div>
       <div class="sa-pro-row-action">
         <button class="sa-pro-fav${SA.isFavorite(p.id) ? ' active' : ''}" onclick="event.stopPropagation();SA.toggleFavoriteUI(this,'${p.id}')" title="Ajouter aux favoris"><i class="ti ti-heart${SA.isFavorite(p.id) ? '-filled' : ''}"></i></button>
-        <button class="primary-fill" onclick="event.stopPropagation();window.location.href='pro?id=${p.id}'">Voir le profil</button>
+        <button class="primary-fill" onclick="event.stopPropagation();window.location.href='/pro/'+SA.proSlug(p)">Voir le profil</button>
       </div>
     </div>
   `).join('');

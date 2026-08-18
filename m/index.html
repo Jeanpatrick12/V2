@@ -507,7 +507,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=29"></script>
+<script src="../sa-shared.js?v=30"></script>
 <script>
 // ── Navigation menu ──────────────────────────────────────────
 function toggleMenu() {
@@ -692,7 +692,7 @@ function renderPros(pros) {
     var stars = Math.round(rating);
     var starsHtml = '<i class="ti ti-star-filled"></i> ' + rating.toFixed(1);
     var job = p.metier || p.profession || p.job || p.category || p.categorie || p.type || p.specialite || 'Professionnel';
-    return '<div class="m-pro-card-home m-carousel-item" onclick="window.top.location=\'/pro?id=' + p.id + '\'">' +
+    return '<div class="m-pro-card-home m-carousel-item" onclick="window.top.location=\'/pro/' + SA.proSlug(p) + '\'">' +
       '<div class="m-pro-card-avatar" style="background:' + color + '">' + initials + '</div>' +
       '<div class="m-pro-card-name">' + (p.name || p.nom || 'Professionnel') + (SA.isDemoPro(p.id) ? ' <span class="m-demo-badge-inline">Démo</span>' : '') + '</div>' +
       '<div class="m-pro-card-job">' + job + '</div>' +
@@ -712,7 +712,7 @@ function renderStaticPros() {
     {id:'pr7',name:'Thomas Petit',job:'Carreleur',rating:4.7,city:'Lille',color:'#9333ea',icon:'ti-brick'}
   ];
   grid.innerHTML = staticPros.map(function(p) {
-    return '<div style="border:1px solid var(--border);border-radius:12px;padding:14px 10px;background:white;cursor:pointer;text-align:center" onclick="window.top.location=\'/pro?id=' + p.id + '\'">' +
+    return '<div style="border:1px solid var(--border);border-radius:12px;padding:14px 10px;background:white;cursor:pointer;text-align:center" onclick="window.top.location=\'/pro/' + SA.proSlug(p) + '\'">' +
       '<div style="width:44px;height:44px;border-radius:50%;margin:0 auto 8px;background:' + p.color + ';display:flex;align-items:center;justify-content:center">' +
         '<i class="ti ' + p.icon + '" style="color:white;font-size:18px"></i>' +
       '</div>' +

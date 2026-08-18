@@ -1120,6 +1120,15 @@
     parts.push(l.id.substring(0, 8));
     return parts.join("-");
   }
+  function proSlug(p) {
+    if (!p) return "";
+    var parts = [];
+    if (p.name) parts.push(p.name.replace(/[^a-z0-9]/gi, "-").toLowerCase());
+    if (p.job) parts.push(p.job.replace(/[^a-z0-9]/gi, "-").toLowerCase());
+    if (p.city) parts.push(p.city.replace(/[^a-z0-9]/gi, "-").toLowerCase());
+    parts.push(p.id.length > 8 ? p.id.substring(0, 8) : p.id);
+    return parts.join("-");
+  }
   function openListing(id, slug) {
     window.top.location.href = slug ? "/annonce/" + slug : "/annonce?id=" + encodeURIComponent(id);
   }
@@ -1359,7 +1368,7 @@
   /* ── API publique ────────────────────────────────────────────────── */
   window.SA = {
     TYPE_LABELS, TYPE_ICONS, DEMO_LISTINGS, DEMO_PROS, IMG_GRADIENTS,
-    fmtPrice, fmtPriceTransaction, parseAddress, capitalizeVille, piecesFromSelect, dpeLetterFrom, escapeHtml, titleFor, listingSlug,
+    fmtPrice, fmtPriceTransaction, parseAddress, capitalizeVille, piecesFromSelect, dpeLetterFrom, escapeHtml, titleFor, listingSlug, proSlug,
     compressImageFile, hasEquip, containsContactInfo,
     geocodeAddress, distanceKm,
     init,

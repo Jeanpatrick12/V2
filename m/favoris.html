@@ -45,7 +45,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=29"></script>
+<script src="../sa-shared.js?v=30"></script>
 <script>
 function favHeart(id, btn){ event.stopPropagation(); SA.toggleFavorite(id,'listing'); btn.innerHTML='<i class="ti ti-heart" style="color:#ccc"></i>'; }
 
@@ -121,7 +121,7 @@ SA.init().then(function(){
           var city = p.city || p.ville || '';
           var stars = '';
           if(rating){ for(var s=0;s<5;s++) stars+='<i class="ti ti-star'+(s<Math.round(rating)?'-filled':'')+'" style="font-size:9px;color:'+(s<Math.round(rating)?'#fbbf24':'#ddd')+'"></i>'; stars='<div style="display:flex;justify-content:center;align-items:center;gap:1px;margin-bottom:4px">'+stars+'<span style="font-size:9.5px;color:#999;margin-left:3px">'+rating.toFixed(1)+(reviews?' ('+reviews+')':'')+'</span></div>'; }
-          return '<div style="flex-shrink:0;width:150px;background:white;border-radius:14px;border:1.5px solid var(--border);padding:14px 10px;cursor:pointer;text-align:center;position:relative" onclick="window.top.location=\'/pro?id='+p.id+'\'">'
+          return '<div style="flex-shrink:0;width:150px;background:white;border-radius:14px;border:1.5px solid var(--border);padding:14px 10px;cursor:pointer;text-align:center;position:relative" onclick="window.top.location=\'/pro/'+SA.proSlug(p)+'\'">'
             +'<button style="position:absolute;top:7px;right:7px;background:none;border:none;cursor:pointer;padding:2px;font-size:15px;color:#E84533;line-height:1" onclick="event.stopPropagation();SA.toggleFavorite(\''+p.id+'\');this.style.opacity=\'0.3\'"><i class="ti ti-heart-filled"></i></button>'
             +'<div style="width:46px;height:46px;border-radius:12px;'+(p.logo?'background-image:url(\''+p.logo+'\');background-size:cover;background-position:center':'background:'+col+';display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:white')+';margin:0 auto 8px">'+(p.logo?'':'<i class="ti '+(p.icon||'ti-user')+'"></i>')+'</div>'
             +'<div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+name+'</div>'

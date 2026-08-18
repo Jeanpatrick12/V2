@@ -120,7 +120,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=29"></script>
+<script src="../sa-shared.js?v=30"></script>
 <script>
 var COLORS = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2'];
 var currentPro = null;
@@ -340,6 +340,11 @@ SA.init().then(function(){
   if(SA.getProById) pro = SA.getProById(id);
   // Fallback to DEMO_PROS exported by SA
   if(!pro && SA.DEMO_PROS) pro = SA.DEMO_PROS.find(function(p){ return p.id === id; });
+  // URL propre : "id" n'est alors qu'un préfixe (dernier segment du slug)
+  if(!pro) {
+    var all = SA.getAllPros ? SA.getAllPros() : [];
+    pro = all.find(function(p){ return p.id && p.id.startsWith(id); }) || null;
+  }
 
   if(pro) renderPro(pro);
   else renderNotFound();

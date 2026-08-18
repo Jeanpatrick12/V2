@@ -11,6 +11,7 @@
 /professionnels     /professionnels.html     200
 /inscription-pro    /inscription-pro.html    200
 /pro                /pro.html                200
+/pro/*              /pro.html                200
 /admin              /admin.html              200
 /cgu                /cgu.html                200
 /mentions-legales   /mentions-legales.html   200

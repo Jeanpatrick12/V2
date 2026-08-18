@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=29"></script>
+<script src="sa-shared.js?v=30"></script>
 <link rel="stylesheet" href="sa-mobile.css?v=4">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -413,7 +413,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
           <div class="payment-method-title">Virement bancaire</div>
           <div class="payment-method-sub">Mentionnez la référence du document en objet du virement</div>
           <div class="iban-box">
-            <span id="iban_display">FR76 XXXX XXXX XXXX XXXX XXXX XXX</span>
+            <span id="iban_display"></span>
             <button class="iban-copy" onclick="copyIban()">Copier</button>
           </div>
         </div>
@@ -435,7 +435,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 </div>
 
 <script>
-SA.init().then(function() { SA.mountNavAuth(); });
+SA.init().then(function() {
+  SA.mountNavAuth();
+  var ibanEl = document.getElementById('iban_display');
+  if (ibanEl) ibanEl.textContent = window.SA_CONFIG.iban;
+});
 
 let currentStep = 1;
 
@@ -548,7 +552,7 @@ function copyLink() {
 }
 
 function copyIban() {
-  navigator.clipboard.writeText('FR76 XXXX XXXX XXXX XXXX XXXX XXX').then(function() {
+  navigator.clipboard.writeText(window.SA_CONFIG.iban).then(function() {
     SA.toast('IBAN copié', 'ti-copy');
   });
 }

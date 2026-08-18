@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=29"></script>
+<script src="sa-shared.js?v=30"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -317,6 +317,7 @@
   let maxStepReached = 1;
   let services = [];
   let lastPublishedId = null;
+  let lastPublishedPro = null;
 
   const JOBS = {
     immobilier: ["Notaire", "Diagnostiqueur DPE", "Géomètre-expert", "Architecte", "Courtier en prêt immobilier", "Autre"],
@@ -462,13 +463,14 @@
     let pro;
     try { pro = await SA.addPro(collectFormData()); } catch(e) { SA.toast(e.message === 'siret-invalid' ? 'Le SIRET doit contenir exactement 14 chiffres.' : 'Erreur : ' + e.message, 'ti-alert-circle'); if (btn) btn.disabled = false; return; }
     lastPublishedId = pro.id;
+    lastPublishedPro = pro;
     document.getElementById('mainForm').style.display = 'none';
     document.getElementById('successScreen').style.display = 'block';
     document.getElementById('progressBar').style.display = 'none';
   }
 
   function viewMyProfile() {
-    window.location.href = 'pro?id=' + encodeURIComponent(lastPublishedId || '');
+    window.location.href = lastPublishedPro ? '/pro/' + SA.proSlug(lastPublishedPro) : 'pro?id=' + encodeURIComponent(lastPublishedId || '');
   }
 </script>
 </body>
