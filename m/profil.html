@@ -150,7 +150,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=32"></script>
+<script src="../sa-shared.js?v=33"></script>
 <script>
 async function doLogout() {
   await SA.logout();
@@ -171,10 +171,7 @@ SA.init().then(function(){
 });
 
 function loadMesDocsMenu(){
-  var uid = SA.getUser() && SA.getUser().id;
-  var n = 0;
-  try{n += JSON.parse(localStorage.getItem(uid?'sa_user_docs_'+uid:'sa_user_docs_guest')||'[]').length;}catch(e){}
-  try{n += JSON.parse(localStorage.getItem(uid?'sa_buyer_docs_'+uid:'sa_buyer_docs_guest')||'[]').length;}catch(e){}
+  var n = SA.getDocs().length + SA.getDocs('acheteur').length;
   if(n > 0) document.getElementById('mesDocsCount').textContent = n + ' document' + (n>1?'s':'') + ' sauvegardé' + (n>1?'s':'');
 }
 

@@ -126,7 +126,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div data-nav-account style="display:none"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=32"></script>
+<script src="sa-shared.js?v=33"></script>
 
 <div class="page-header">
   <div class="page-header-inner">
@@ -350,13 +350,12 @@ var COLORS={visite:'#E84533',offre:'#E84533',contre:'#d97706',acceptation:'#16a3
 var BKGS={visite:'#fff5f4',offre:'#fff5f4',contre:'#fff7ed',acceptation:'#f0fdf4'};
 var TITLES={visite:'Bon de visite',offre:"Offre d'achat",contre:'Contre-proposition',acceptation:"Acceptation d'offre"};
 
-function docsKey(){
-  var uid=SA.getUser()&&SA.getUser().id;
-  return uid?'sa_buyer_docs_'+uid:'sa_buyer_docs_guest';
+function getBuyDocs(){
+  return SA.getDocs?SA.getDocs('acheteur'):[];
 }
 
 function loadDocs(){
-  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
+  var docs=getBuyDocs();
   var grid=document.getElementById('docGrid');
   var empty=document.getElementById('emptyState');
   if(!docs.length){grid.style.display='none';empty.style.display='';return;}
@@ -387,6 +386,7 @@ var FIELD_IDS={
   acceptation:['a-adresse','a-acheteur','a-vendeur','a-prix','a-date','a-etape','a-message']
 };
 var editingIdx=null;
+var editingId=null;
 
 function openModal(type){
   var today=new Date().toISOString().split('T')[0];
@@ -395,7 +395,7 @@ function openModal(type){
   document.getElementById('modal-'+type).classList.add('open');
 }
 function closeModal(type,e){if(e.target===e.currentTarget)closeModalId(type);}
-function closeModalId(type){document.getElementById('modal-'+type).classList.remove('open');editingIdx=null;}
+function closeModalId(type){document.getElementById('modal-'+type).classList.remove('open');editingIdx=null;editingId=null;}
 
 function guideData(d){
   var f=d.fields||{};
@@ -407,13 +407,13 @@ function guideData(d){
 }
 
 function editDoc(idx){
-  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
+  var docs=getBuyDocs();
   var d=docs[idx];if(!d)return;
   // Ouvre le guide avec le document affiché, pré-rempli, signable et partageable
   var data=d.fields?guideData(d):null;
   if(data){
     var enc;try{enc=btoa(unescape(encodeURIComponent(JSON.stringify(data))));}catch(e){enc=null;}
-    if(enc){window.open('guide?sign='+enc,'_blank');return;}
+    if(enc){window.open('guide-acheteur?sign='+enc,'_blank');return;}
   }
   // Repli : formulaire pré-rempli sur place
   if(!d.fields){SA.toast('Ce document ne peut pas être modifié — regénérez-le.','ti-info-circle');return;}
@@ -422,6 +422,7 @@ function editDoc(idx){
     if(el&&d.fields[id]!==undefined)el.value=d.fields[id];
   });
   editingIdx=idx;
+  editingId=d.id;
   openModal(d.type);
 }
 
@@ -455,11 +456,9 @@ function generateDoc(type){
 
   var fields={};
   (FIELD_IDS[type]||[]).forEach(function(id){fields[id]=val(id);});
-  var doc={type:type,title:title,html:html,fields:fields,date:now()};
-  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
-  if(editingIdx!==null&&docs[editingIdx]){docs[editingIdx]=doc;}else{docs.unshift(doc);}
-  localStorage.setItem(docsKey(),JSON.stringify(docs));
-  if (SA.mountNavAuth) SA.mountNavAuth();
+  var id=editingId||(type+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,8));
+  var doc={id:id,type:type,title:title,html:html,fields:fields,date:now(),role:'acheteur'};
+  SA.saveDoc(doc);
   closeModalId(type);
   loadDocs();
   SA.toast('Document sauvegardé !','ti-circle-check');
@@ -654,20 +653,17 @@ function openDocFromHtml(d){
 }
 
 function openDoc(idx){
-  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
-  var d=docs[idx];if(!d)return;
+  var d=getBuyDocs()[idx];if(!d)return;
   openDocFromHtml(d);
 }
 
 function deleteDoc(idx){
   if(!confirm('Supprimer ce document ? Cette action est irréversible.'))return;
-  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
+  var d=getBuyDocs()[idx];if(!d)return;
   var card=document.getElementById('card'+idx);
   if(card){card.style.opacity='0';card.style.transition='opacity .3s';}
   setTimeout(function(){
-    docs.splice(idx,1);
-    localStorage.setItem(docsKey(),JSON.stringify(docs));
-    if (SA.mountNavAuth) SA.mountNavAuth();
+    SA.deleteDoc(d.id||d.type,'acheteur');
     loadDocs();
   },300);
 }

@@ -986,7 +986,7 @@ button{font-family:inherit;cursor:pointer}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=32"></script>
+<script src="sa-shared.js?v=33"></script>
 <script>
 // ── State ──
 var done = JSON.parse(localStorage.getItem('sa_acheteur_done')||'[]');
@@ -1616,7 +1616,7 @@ function saveCurrDoc(type,title,btn){
     var flds={};
     var fl=SHARE_FIELDS[type];
     if(fl){for(var k in fl){var fe=document.getElementById(fl[k]);if(fe)flds[k]=fe.value;}}
-    SA.saveDoc({type:type,title:title,html:el.outerHTML,fields:flds,date:new Date().toLocaleDateString('fr-FR')});
+    SA.saveDoc({type:type,title:title,html:el.outerHTML,fields:flds,date:new Date().toLocaleDateString('fr-FR'),role:'acheteur'});
     SA.toast('Sauvegardé dans vos documents','ti-heart');
     if(btn){var ico=btn.querySelector('i');if(ico){ico.className='ti ti-heart-filled';ico.style.color='#E84533';}}
   }catch(e){SA.toast('Erreur lors de la sauvegarde','ti-alert-triangle');}
@@ -1626,7 +1626,7 @@ function savePrixDoc(btn){
   var el=document.getElementById('docPrix');
   if(!el||!el.innerHTML.trim()){SA.toast('Renseignez la fiche avant de sauvegarder','ti-alert-triangle');return;}
   try{
-    SA.saveDoc({type:'prix',title:'Fiche d\'estimation',html:el.outerHTML,fields:{},date:new Date().toLocaleDateString('fr-FR')});
+    SA.saveDoc({type:'prix',title:'Fiche d\'estimation',html:el.outerHTML,fields:{},date:new Date().toLocaleDateString('fr-FR'),role:'acheteur'});
     SA.toast('Fiche sauvegardée','ti-heart');
     if(btn){var ico=btn.querySelector('i');if(ico){ico.className='ti ti-heart-filled';ico.style.color='#E84533';}}
   }catch(e){SA.toast('Erreur lors de la sauvegarde','ti-alert-triangle');}

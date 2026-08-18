@@ -221,12 +221,21 @@
     localStorage.setItem(_docsKey(uid), JSON.stringify(docs));
   }
 
+  // Les documents acheteur et vendeur partagent des noms de type identiques
+  // (offre, visite, acceptation, contre...) : on préfixe la clé de stockage
+  // par rôle pour qu'un même utilisateur puisse avoir les deux sans collision.
+  function _storageType(doc) {
+    var key = (doc && doc.id) || (doc && doc.type);
+    return (doc && doc.role === "acheteur" ? "acheteur_" : "") + key;
+  }
+
   async function saveDoc(doc) {
     if (!doc || !doc.type) return;
     var user = getUser();
     var uid = user && user.id;
     var docs = _getLocalDocs(uid);
-    docs = docs.filter(function(d) { return d.type !== doc.type; });
+    var st = _storageType(doc);
+    docs = docs.filter(function(d) { return _storageType(d) !== st; });
     docs.unshift(doc);
     if (docs.length > 20) docs = docs.slice(0, 20);
     _setLocalDocs(docs, uid);
@@ -234,31 +243,33 @@
     if (user && _sb) {
       try {
         await _sb.from("user_documents").upsert(
-          { user_id: user.id, doc_type: doc.type, doc_data: doc, updated_at: new Date().toISOString() },
+          { user_id: user.id, doc_type: st, doc_data: doc, updated_at: new Date().toISOString() },
           { onConflict: "user_id,doc_type" }
         );
       } catch(e) {}
     }
   }
 
-  async function deleteDoc(docType) {
+  async function deleteDoc(docType, role) {
     var user = getUser();
     var uid = user && user.id;
+    var st = (role === "acheteur" ? "acheteur_" : "") + docType;
     var docs = _getLocalDocs(uid);
-    docs = docs.filter(function(d) { return d.type !== docType; });
+    docs = docs.filter(function(d) { return _storageType(d) !== st; });
     _setLocalDocs(docs, uid);
     mountNavAuth();
     if (user && _sb) {
       try {
-        await _sb.from("user_documents").delete().eq("user_id", user.id).eq("doc_type", docType);
+        await _sb.from("user_documents").delete().eq("user_id", user.id).eq("doc_type", st);
       } catch(e) {}
     }
   }
 
-  function getDocs() {
+  function getDocs(role) {
     var uid = _cache.user && _cache.user.id;
-    if (!uid) return [];
-    return _getLocalDocs(uid);
+    var all = _getLocalDocs(uid);
+    return role === "acheteur" ? all.filter(function(d) { return d.role === "acheteur"; })
+                                : all.filter(function(d) { return d.role !== "acheteur"; });
   }
 
   /* ── Chargement des données utilisateur (après login) ──────────── */
@@ -301,12 +312,13 @@
     // Sync documents: Supabase is authoritative. Merge only THIS user's unsynced local cache.
     const sbDocs = (docsRes.data || []).map(function(r) { return r.doc_data; }).filter(Boolean);
     const localDocs = _getLocalDocs(userId);
-    const sbTypes = new Set(sbDocs.map(function(d) { return d.type; }));
+    const sbTypes = new Set(sbDocs.map(_storageType));
     localDocs.forEach(function(d) {
-      if (!sbTypes.has(d.type)) {
+      const st = _storageType(d);
+      if (!sbTypes.has(st)) {
         sbDocs.push(d);
         _sb.from("user_documents").upsert(
-          { user_id: userId, doc_type: d.type, doc_data: d, updated_at: new Date().toISOString() },
+          { user_id: userId, doc_type: st, doc_data: d, updated_at: new Date().toISOString() },
           { onConflict: "user_id,doc_type" }
         ).then(function() {});
       }
@@ -1198,9 +1210,7 @@
     mountMobileMenuBadges();
   }
   function mountMobileMenuBadges() {
-    const user = _cache.user;
-    let docsN = getDocs().length;
-    if (user) { try { docsN += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch (e) {} }
+    let docsN = getDocs().length + getDocs("acheteur").length;
     const counts = {
       "/recherches": getSavedSearches().length,
       "/favoris": _cache.favorites.length,
@@ -1244,7 +1254,7 @@
           '<div class="sa-account-dropdown-email"><i class="ti ti-user-circle"></i> ' + escapeHtml(user.email || "") + "</div>" +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'profil\'"><i class="ti ti-user-circle"></i> Mon profil</button>' +
           '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'mes-annonces\'"><i class="ti ti-home"></i> Mes annonces' + (getUserListings().length > 0 ? ' <span style="margin-left:6px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:16px;max-width:16px;min-height:16px;max-height:16px;border-radius:8px;box-sizing:border-box;padding:1px 0 2px">' + getUserListings().length + '</span>' : '') + '</button>' +
-          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length; try { n += JSON.parse(localStorage.getItem("sa_buyer_docs_" + user.id) || "[]").length; } catch(e) {} return n > 0 ? ' <span style="margin-left:6px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:16px;max-width:16px;min-height:16px;max-height:16px;border-radius:8px;box-sizing:border-box;padding:1px 0 2px">' + n + '</span>' : ''; })() + '</button>' +
+          '<button class="sa-account-dropdown-logout" style="color:#333" onclick="window.top.location.href=\'documents\'"><i class="ti ti-files"></i> Mes documents' + (function(){ var n = getDocs().length + getDocs("acheteur").length; return n > 0 ? ' <span style="margin-left:6px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:#E84533;color:white;font-size:9px;font-weight:700;min-width:16px;max-width:16px;min-height:16px;max-height:16px;border-radius:8px;box-sizing:border-box;padding:1px 0 2px">' + n + '</span>' : ''; })() + '</button>' +
           '<button class="sa-account-dropdown-logout" onclick="SA.logout()"><i class="ti ti-logout"></i> Se déconnecter</button>';
       } else {
         btn.onclick = function() {

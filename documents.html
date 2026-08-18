@@ -96,7 +96,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div data-nav-account style="display:none"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=32"></script>
+<script src="sa-shared.js?v=33"></script>
 
 <div class="page-header">
   <div class="page-header-inner">
@@ -142,9 +142,8 @@ var ICONS={visite:'ti-door-enter',offre:'ti-file-euro',acceptation:'ti-circle-ch
 var COLORS={visite:'#ff7a68',offre:'#E84533',acceptation:'#E84533',contre:'#d97706',refus:'#dc2626',cles:'#ca8a04',plan:'#E84533'};
 var BKGS={visite:'#fff5f4',offre:'#fff5f4',acceptation:'#fff5f4',contre:'#fff7ed',refus:'#fef2f2',cles:'#fefce8',plan:'#fff5f4'};
 
-function docsKey(){var uid=SA.getUser()&&SA.getUser().id;return uid?'sa_user_docs_'+uid:'sa_user_docs_guest';}
-function buyKey(){var uid=SA.getUser()&&SA.getUser().id;return uid?'sa_buyer_docs_'+uid:'sa_buyer_docs_guest';}
-function getBuyDocs(){try{return JSON.parse(localStorage.getItem(buyKey())||'[]');}catch(e){return [];}}
+function getDocs(){return SA.getDocs?SA.getDocs():[];}
+function getBuyDocs(){return SA.getDocs?SA.getDocs('acheteur'):[];}
 
 function docCard(d,i,prefix,fns){
   var ico=ICONS[d.type]||'ti-file-text';
@@ -165,8 +164,7 @@ function docCard(d,i,prefix,fns){
 }
 
 function loadDocs(){
-  var docs=[];
-  try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
+  var docs=getDocs();
   var grid=document.getElementById('docGrid');
   var empty=document.getElementById('emptyState');
   if(!docs.length){grid.style.display='none';empty.style.display='';}
@@ -189,8 +187,7 @@ function getStyles(){
 }
 
 function openDoc(idx){
-  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
-  openDocData(docs[idx]);
+  openDocData(getDocs()[idx]);
 }
 
 function openBuyDoc(idx){
@@ -214,13 +211,11 @@ function editBuyDoc(idx){
 
 function deleteBuyDoc(idx){
   if(!confirm('Supprimer ce document ? Cette action est irréversible.'))return;
-  var docs=getBuyDocs();
+  var d=getBuyDocs()[idx];if(!d)return;
   var card=document.getElementById('bcard'+idx);
   if(card){card.style.opacity='0';card.style.transition='opacity .3s';}
   setTimeout(function(){
-    docs.splice(idx,1);
-    localStorage.setItem(buyKey(),JSON.stringify(docs));
-    if (SA.mountNavAuth) SA.mountNavAuth();
+    SA.deleteDoc(d.id||d.type,'acheteur');
     loadDocs();
   },300);
 }
@@ -318,8 +313,7 @@ function printDoc(idx){
 }
 
 function editDoc(idx){
-  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
-  var d=docs[idx];if(!d)return;
+  var d=getDocs()[idx];if(!d)return;
   var editable=['visite','offre','acceptation','contre','refus','cles'];
   if(d.fields&&editable.indexOf(d.type)!==-1){
     var data=Object.assign({},d.fields,{t:d.type});
@@ -333,8 +327,7 @@ function editDoc(idx){
 
 function deleteDoc(idx){
   if(!confirm('Supprimer ce document ? Cette action est irréversible.'))return;
-  var docs=[];try{docs=JSON.parse(localStorage.getItem(docsKey())||'[]');}catch(e){}
-  var d=docs[idx];if(!d)return;
+  var d=getDocs()[idx];if(!d)return;
   var card=document.getElementById('card'+idx);
   if(card){card.style.opacity='0';card.style.transition='opacity .3s';}
   setTimeout(function(){

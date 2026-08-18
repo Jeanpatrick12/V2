@@ -193,7 +193,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=32"></script>
+<script src="../sa-shared.js?v=33"></script>
 <script>
 var ICONS={visite:'ti-door-enter',offre:'ti-file-euro',acceptation:'ti-circle-check',contre:'ti-arrows-exchange',refus:'ti-x',cles:'ti-key',plan:'ti-layout-list',prix:'ti-chart-line'};
 var COLORS={visite:'#ff7a68',offre:'#E84533',acceptation:'#16a34a',contre:'#d97706',refus:'#dc2626',cles:'#ca8a04',plan:'#E84533',prix:'#7c3aed'};
@@ -222,8 +222,7 @@ function _docCardM(d,i,fns){
 }
 
 function getBuyDocsM(){
-  var uid = SA.getUser() && SA.getUser().id;
-  try{ return JSON.parse(localStorage.getItem(uid?'sa_buyer_docs_'+uid:'sa_buyer_docs_guest')||'[]'); }catch(e){ return []; }
+  return SA.getDocs ? SA.getDocs('acheteur') : [];
 }
 
 function loadDocs(){
@@ -261,11 +260,9 @@ function openViewerB(idx){
 
 function deleteBuyDocMobile(idx){
   if(!confirm('Supprimer ce document ?')) return;
-  var uid = SA.getUser() && SA.getUser().id;
-  var key = uid?'sa_buyer_docs_'+uid:'sa_buyer_docs_guest';
   var docs = getBuyDocsM();
-  docs.splice(idx,1);
-  localStorage.setItem(key, JSON.stringify(docs));
+  var d = docs[idx]; if(!d) return;
+  SA.deleteDoc(d.id || d.type, 'acheteur');
   loadDocs();
 }
 
