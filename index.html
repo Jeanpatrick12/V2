@@ -34,7 +34,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=36"></script>
+<script src="sa-shared.js?v=37"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -112,18 +112,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   background:#E84533;flex-shrink:0;
   box-shadow:0 0 8px rgba(232,69,51,0.8)
 }
-/* badge lancement — même gabarit, accent rouge pour ressortir */
-.sa-hero-launch{
-  display:inline-flex;align-items:center;gap:9px;
-  background:rgba(232,69,51,0.16);
-  color:#ffd9d2;font-size:13px;font-weight:600;
-  padding:7px 16px 7px 12px;
-  border-radius:999px;margin-bottom:1.4rem;margin-left:10px;
-  border:1px solid rgba(232,69,51,0.4);
-  backdrop-filter:blur(6px)
+/* bandeau d'offre de lancement — bande pleine largeur au-dessus du header,
+   pour une phrase complète (une pastille dans le hero coupait le texte
+   de façon peu lisible) */
+.sa-announce-bar{
+  background:#E84533;color:white;text-align:center;
+  font-size:13px;font-weight:600;
+  padding:9px 20px;line-height:1.4
 }
-.sa-hero-launch i{color:#ff7a68;font-size:14px}
-.sa-hero-launch strong{color:white}
+.sa-announce-bar i{margin-right:7px;font-size:14px;vertical-align:-1px}
+.sa-announce-bar strong{font-weight:800}
 .sa-hero h1{font-size:50px;font-weight:700;line-height:1.15;letter-spacing:-1.5px;margin-bottom:1rem;color:white}
 .sa-hero h1 span{color:#ff7a68}
 .sa-hero-left p{font-size:16.5px;color:rgba(255,255,255,0.6);line-height:1.65;margin-bottom:2rem}
@@ -167,14 +165,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-trust-title{font-size:13px;font-weight:600;color:#111;line-height:1.2}
 .sa-trust-sub{font-size:11.5px;color:#888;line-height:1.3}
 
-/* ── COMPTEUR PUBLIC (annonces vendues / louées) ── */
-.sa-counter-bar{background:white;border-bottom:1px solid #ededed}
-.sa-counter-bar-inner{max-width:1240px;margin:0 auto;padding:26px 40px;display:flex;align-items:center;justify-content:center;gap:64px;flex-wrap:wrap}
-.sa-counter-item{display:flex;align-items:center;gap:14px}
-.sa-counter-icon{width:44px;height:44px;border-radius:12px;background:#fff0ee;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sa-counter-icon i{color:#E84533;font-size:20px}
-.sa-counter-num{font-size:28px;font-weight:700;color:#111;letter-spacing:-0.5px;line-height:1}
-.sa-counter-label{font-size:12.5px;color:#888;margin-top:3px}
+/* ── COMPTEUR PUBLIC (annonces vendues / louées) ──
+   Même langage visuel que les bannières d'impact déjà sur le site
+   (sa-safety-banner, sa-pros-banner) : carte dégradée bleu marine,
+   icônes rondes accent rouge. Chevauche la courbe du hero pour une
+   carte "flottante" bien visible dès l'arrivée sur la page. ── */
+.sa-counter-wrap{max-width:1240px;margin:-56px auto 0;padding:0 40px;position:relative;z-index:2}
+.sa-counter-banner{
+  background:linear-gradient(135deg,#1a2c3d,#0f1923);
+  border-radius:20px;padding:1.9rem 2.4rem;
+  display:flex;align-items:center;justify-content:center;gap:72px;flex-wrap:wrap;
+  box-shadow:0 20px 44px rgba(15,25,35,0.28);
+  border:1px solid rgba(255,255,255,0.06)
+}
+.sa-counter-eyebrow{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:#E84533;color:white;font-size:10.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;padding:5px 16px;border-radius:999px;
+  white-space:nowrap;box-shadow:0 4px 12px rgba(232,69,51,0.35)
+}
+.sa-counter-item{display:flex;align-items:center;gap:16px}
+.sa-counter-icon{width:52px;height:52px;border-radius:14px;background:rgba(232,69,51,0.18);border:1px solid rgba(232,69,51,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-counter-icon i{color:#ff7a68;font-size:23px}
+.sa-counter-num{font-size:36px;font-weight:700;color:white;letter-spacing:-0.8px;line-height:1;font-variant-numeric:tabular-nums}
+.sa-counter-label{font-size:13.5px;color:rgba(255,255,255,0.68);margin-top:5px;line-height:1.3;max-width:180px}
+.sa-counter-sep{width:1px;align-self:stretch;background:rgba(255,255,255,0.1)}
+@media (max-width:860px){
+  .sa-counter-wrap{margin-top:-40px;padding:0 20px}
+  .sa-counter-banner{gap:32px;padding:1.6rem}
+  .sa-counter-sep{display:none}
+}
 
 /* ── SEARCH BAR ── */
 .sa-search-wrapper{max-width:1240px;margin:0 auto;padding:2.5rem 40px 0}
@@ -484,6 +504,11 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 </head>
 <body>
 
+<!-- ── BANDEAU OFFRE DE LANCEMENT ── -->
+<div class="sa-announce-bar" id="announceBar" style="display:none">
+  <i class="ti ti-rocket"></i>Offre de lancement : <strong>0% de commission</strong> pour toute annonce publiée avant le <strong id="announceDate">—</strong>
+</div>
+
 <!-- ── NAV ── -->
 <div class="sa-nav-wrapper">
   <nav class="sa-nav">
@@ -592,10 +617,6 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
         <span class="sa-hero-badge-dot"></span>
         Plateforme 100% entre particuliers
       </div>
-      <div class="sa-hero-launch" id="heroLaunchBadge" style="display:none">
-        <i class="ti ti-rocket"></i>
-        <span>Offre de lancement — <strong>0% de commission</strong> pour toute annonce publiée avant le <strong id="heroLaunchDate">—</strong></span>
-      </div>
       <h1>L'immobilier <span>sans intermédiaire</span>, sans frais cachés</h1>
       <p>Vendez ou louez directement à un particulier et gardez jusqu'à 9% de plus dans votre poche. SansAgents ne prélève que 1% de commission — et seulement si la vente se conclut.</p>
       <div class="sa-hero-stats">
@@ -633,6 +654,28 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
   </div>
 </div>
 
+<!-- ── COMPTEUR PUBLIC ── -->
+<div class="sa-counter-wrap" id="saCounterBar" style="display:none">
+  <div class="sa-counter-banner">
+    <div class="sa-counter-eyebrow">Nos chiffres</div>
+    <div class="sa-counter-item" id="counterSoldItem" style="display:none">
+      <div class="sa-counter-icon"><i class="ti ti-key"></i></div>
+      <div>
+        <div class="sa-counter-num" id="counterSoldNum">0</div>
+        <div class="sa-counter-label">biens vendus entre particuliers</div>
+      </div>
+    </div>
+    <div class="sa-counter-sep" id="counterSep" style="display:none"></div>
+    <div class="sa-counter-item" id="counterRentedItem" style="display:none">
+      <div class="sa-counter-icon"><i class="ti ti-home-check"></i></div>
+      <div>
+        <div class="sa-counter-num" id="counterRentedNum">0</div>
+        <div class="sa-counter-label">locations conclues</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── TRUST BAR ── -->
 <div class="sa-trust-bar">
   <div class="sa-trust-bar-inner">
@@ -655,26 +698,6 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
     <div class="sa-trust-item">
       <div class="sa-trust-icon"><i class="ti ti-circle-off"></i></div>
       <div class="sa-trust-text"><div class="sa-trust-title">0€ sur les locations</div><div class="sa-trust-sub">Aucune commission</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ── COMPTEUR PUBLIC ── -->
-<div class="sa-counter-bar" id="saCounterBar" style="display:none">
-  <div class="sa-counter-bar-inner">
-    <div class="sa-counter-item" id="counterSoldItem" style="display:none">
-      <div class="sa-counter-icon"><i class="ti ti-key"></i></div>
-      <div>
-        <div class="sa-counter-num" id="counterSoldNum">0</div>
-        <div class="sa-counter-label">biens vendus entre particuliers</div>
-      </div>
-    </div>
-    <div class="sa-counter-item" id="counterRentedItem" style="display:none">
-      <div class="sa-counter-icon"><i class="ti ti-home-check"></i></div>
-      <div>
-        <div class="sa-counter-num" id="counterRentedNum">0</div>
-        <div class="sa-counter-label">locations conclues</div>
-      </div>
     </div>
   </div>
 </div>
@@ -1207,8 +1230,8 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   if (SA.isLaunchFree()) {
     var launchLabel = SA.launchFreeUntilLabel();
-    document.getElementById('heroLaunchDate').textContent = launchLabel;
-    document.getElementById('heroLaunchBadge').style.display = 'inline-flex';
+    document.getElementById('announceDate').textContent = launchLabel;
+    document.getElementById('announceBar').style.display = 'block';
     document.getElementById('faqLaunchDate').textContent = launchLabel;
     document.getElementById('faqLaunchOffer').style.display = 'block';
   }
@@ -1222,6 +1245,9 @@ document.addEventListener('DOMContentLoaded', function() {
       if (stats.rented > 0) {
         document.getElementById('counterRentedItem').style.display = 'flex';
         animateCounter('counterRentedNum', stats.rented);
+      }
+      if (stats.sold > 0 && stats.rented > 0) {
+        document.getElementById('counterSep').style.display = 'block';
       }
       document.getElementById('saCounterBar').style.display = 'block';
     });
