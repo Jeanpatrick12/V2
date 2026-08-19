@@ -15,5 +15,10 @@ window.SA_CONFIG = {
   // Regle imperative : cette date ne peut etre que reportee (repoussee dans
   // le temps), jamais avancee. Un utilisateur qui a publie sous l'offre de
   // lancement doit pouvoir en beneficier quoi qu'il arrive.
+  //
+  // Fin de l'offre : rien a modifier ailleurs dans le code. Une fois cette
+  // date passee, tout le site (textes "0%", bandeau, tableau de prix, FAQ...)
+  // repasse automatiquement a l'affichage normal a 1% - c'est deja pilote
+  // par cette seule valeur (voir SA.isLaunchFree() dans sa-shared.js).
   commissionFreeUntil: "2027-02-01"
 };

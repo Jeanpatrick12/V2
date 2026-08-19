@@ -168,15 +168,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 /* ── COMPTEUR PUBLIC (annonces vendues / louées) ──
    Même langage visuel que les bannières d'impact déjà sur le site
    (sa-safety-banner, sa-pros-banner) : carte dégradée bleu marine,
-   icônes rondes accent rouge. Chevauche la courbe du hero pour une
-   carte "flottante" bien visible dès l'arrivée sur la page. ── */
-.sa-counter-wrap{max-width:1240px;margin:-56px auto 0;padding:0 40px;position:relative;z-index:2}
+   icônes rondes accent rouge. Placée en flux normal (pas de chevauchement
+   du hero, qui entrait en collision avec le décor immeubles/vague et avec
+   d'autres éléments flottants existants sur d'autres pages). ── */
+.sa-counter-wrap{max-width:1240px;margin:40px auto 44px;padding:0 40px}
 .sa-counter-banner{
   background:linear-gradient(135deg,#1a2c3d,#0f1923);
-  border-radius:20px;padding:1.9rem 2.4rem;
+  border-radius:20px;padding:2rem 2.4rem 1.8rem;
   display:flex;align-items:center;justify-content:center;gap:72px;flex-wrap:wrap;
-  box-shadow:0 20px 44px rgba(15,25,35,0.28);
-  border:1px solid rgba(255,255,255,0.06)
+  box-shadow:0 16px 36px rgba(15,25,35,0.16);
+  border:1px solid rgba(255,255,255,0.06);
+  position:relative
 }
 .sa-counter-eyebrow{
   position:absolute;top:-13px;left:50%;transform:translateX(-50%);
@@ -191,8 +193,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-counter-label{font-size:13.5px;color:rgba(255,255,255,0.68);margin-top:5px;line-height:1.3;max-width:180px}
 .sa-counter-sep{width:1px;align-self:stretch;background:rgba(255,255,255,0.1)}
 @media (max-width:860px){
-  .sa-counter-wrap{margin-top:-40px;padding:0 20px}
-  .sa-counter-banner{gap:32px;padding:1.6rem}
+  .sa-counter-wrap{margin:28px auto 32px;padding:0 20px}
+  .sa-counter-banner{gap:32px;padding:1.8rem 1.6rem}
   .sa-counter-sep{display:none}
 }
 
