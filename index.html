@@ -618,7 +618,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
         Plateforme 100% entre particuliers
       </div>
       <h1>L'immobilier <span>sans intermédiaire</span>, sans frais cachés</h1>
-      <p>Vendez ou louez directement à un particulier et gardez jusqu'à 9% de plus dans votre poche. SansAgents ne prélève que 1% de commission — et seulement si la vente se conclut.</p>
+      <p id="heroSub">Vendez ou louez directement à un particulier et gardez jusqu'à 9% de plus dans votre poche. SansAgents ne prélève que 1% de commission — et seulement si la vente se conclut.</p>
       <div class="sa-hero-stats">
         <!-- stat 1: impactful saving at avg price -->
         <div class="sa-hero-stat">
@@ -627,8 +627,8 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
         </div>
         <!-- stat 2: commission clearly explained -->
         <div class="sa-hero-stat">
-          <div class="sa-hero-stat-num">Commission <em>à 1%</em></div>
-          <div class="sa-hero-stat-label">au lieu de 3–10% prélevés par une agence traditionnelle</div>
+          <div class="sa-hero-stat-num" id="heroStatComm">Commission <em>à 1%</em></div>
+          <div class="sa-hero-stat-label" id="heroStatCommLabel">au lieu de 3–10% prélevés par une agence traditionnelle</div>
         </div>
         <!-- stat 3: unchanged, already good -->
         <div class="sa-hero-stat">
@@ -685,7 +685,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
     </div>
     <div class="sa-trust-item">
       <div class="sa-trust-icon"><i class="ti ti-receipt-2"></i></div>
-      <div class="sa-trust-text"><div class="sa-trust-title">1% si vente conclue</div><div class="sa-trust-sub">Jamais à l'avance</div></div>
+      <div class="sa-trust-text"><div class="sa-trust-title" id="trustCommTitle">1% si vente conclue</div><div class="sa-trust-sub" id="trustCommSub">Jamais à l'avance</div></div>
     </div>
     <div class="sa-trust-item">
       <div class="sa-trust-icon"><i class="ti ti-building-bank"></i></div>
@@ -731,7 +731,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
 <!-- ── SAVINGS ── -->
 <div class="sa-section">
   <p class="sa-section-title">Gagnez des milliers d'euros en vendant sans agence</p>
-  <p class="sa-section-sub">Les agences traditionnelles facturent entre 3% et 10% du prix de vente, en moyenne 5%. SansAgents, c'est 1%, point final.</p>
+  <p class="sa-section-sub" id="savingsSub">Les agences traditionnelles facturent entre 3% et 10% du prix de vente, en moyenne 5%. SansAgents, c'est 1%, point final.</p>
   <div class="sa-savings-layout">
     <div>
       <div class="sa-compare">
@@ -741,9 +741,9 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
           <div class="sa-compare-detail">Commission moyenne de 5% sur un bien vendu 250 000 €</div>
         </div>
         <div class="sa-compare-card good">
-          <div class="sa-compare-label">Avec SansAgents</div>
-          <div class="sa-compare-big">2 500 €</div>
-          <div class="sa-compare-detail">Commission fixe de 1%, uniquement si la vente se conclut</div>
+          <div class="sa-compare-label" id="compareGoodLabel">Avec SansAgents</div>
+          <div class="sa-compare-big" id="compareGoodBig">2 500 €</div>
+          <div class="sa-compare-detail" id="compareGoodDetail">Commission fixe de 1%, uniquement si la vente se conclut</div>
         </div>
       </div>
       <div class="sa-savings-banner" id="savingsBanner">
@@ -755,12 +755,12 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
       <div class="sa-table-wrap">
         <div class="sa-table-header"><i class="ti ti-calculator"></i> Calculez vos économies</div>
         <table class="sa-price-table">
-          <thead><tr><th>Prix de vente</th><th>Agence (5%)</th><th>SansAgents (1%)</th><th>Vous gagnez</th></tr></thead>
+          <thead><tr><th>Prix de vente</th><th>Agence (5%)</th><th id="tableSaHeader">SansAgents (1%)</th><th>Vous gagnez</th></tr></thead>
           <tbody>
-            <tr><td>180 000 €</td><td>9 000 €</td><td>1 800 €</td><td>7 200 €</td></tr>
-            <tr class="row-highlight"><td>250 000 €</td><td>12 500 €</td><td>2 500 €</td><td>10 000 €</td></tr>
-            <tr><td>350 000 €</td><td>17 500 €</td><td>3 500 €</td><td>14 000 €</td></tr>
-            <tr><td>500 000 €</td><td>25 000 €</td><td>5 000 €</td><td>20 000 €</td></tr>
+            <tr><td>180 000 €</td><td>9 000 €</td><td id="sa180">1 800 €</td><td id="gain180">7 200 €</td></tr>
+            <tr class="row-highlight"><td>250 000 €</td><td>12 500 €</td><td id="sa250">2 500 €</td><td id="gain250">10 000 €</td></tr>
+            <tr><td>350 000 €</td><td>17 500 €</td><td id="sa350">3 500 €</td><td id="gain350">14 000 €</td></tr>
+            <tr><td>500 000 €</td><td>25 000 €</td><td id="sa500">5 000 €</td><td id="gain500">20 000 €</td></tr>
             <tr class="row-custom">
               <td><span class="sa-row-custom-tag"><i class="ti ti-calculator"></i> Votre prix</span><input class="sa-price-input" id="customPrice" type="text" placeholder="Entrez un montant…" oninput="calcCustom(this.value)"></td>
               <td id="customAgence">—</td>
@@ -772,7 +772,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
       </div>
     </div>
   </div>
-  <p class="sa-source-note">Commission agence : moyenne nationale ~5% (réseaux traditionnels, 2025). Publication gratuite, aucune commission sur les locations.</p>
+  <p class="sa-source-note" id="savingsSourceNote">Commission agence : moyenne nationale ~5% (réseaux traditionnels, 2025). Publication gratuite, aucune commission sur les locations.</p>
 </div>
 </div><!-- close sa-home -->
 
@@ -927,7 +927,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Comment fonctionne SansAgents concrètement ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Vous déposez une annonce en 7 étapes (type de bien, caractéristiques, photos, prix, documents, contact, récapitulatif), et les acheteurs ou locataires intéressés vous contactent directement, sans intermédiaire. Vous gérez vous-même les visites, la négociation et la conclusion de la transaction.</div></div>
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Les agences peuvent-elles publier sur SansAgents ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Non. Seuls les particuliers non professionnels peuvent publier une annonce. Toute annonce d'agence est supprimée et peut faire l'objet de poursuites judiciaires conformément aux CGU.</div></div>
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Comment estimer le prix de vente de mon bien ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Croisez les ventes récentes de votre secteur (DVF Étalab, notaires de France) avec des biens comparables, puis ajustez selon l'état de votre bien. <a href="estimer-son-bien" style="color:#E84533;font-weight:600">Voir la méthode complète et les outils gratuits</a>.</div></div>
-    <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Combien ça coûte exactement ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">La publication est toujours gratuite. En cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.</div></div>
+    <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Combien ça coûte exactement ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a" id="faqCostAnswer">La publication est toujours gratuite. En cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.</div></div>
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Quand dois-je payer la commission de 1% ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Uniquement au moment où la vente est effectivement conclue, jamais avant. Si votre bien ne se vend pas, vous ne payez rien.</div></div>
     <div class="sa-faq-item" id="faqLaunchOffer" style="display:none"><div class="sa-faq-q" onclick="toggleFaq(this)">Et l'offre de lancement à 0% ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Pendant la phase de lancement, toute annonce publiée avant le <strong id="faqLaunchDate">—</strong> est <strong>définitivement exonérée</strong> de la commission de 1%, même si la vente se conclut après cette date. Cette date peut être reportée (repoussée dans le temps) si SansAgents prolonge l'offre, mais elle ne sera jamais avancée : ce qui est acquis lors de votre publication le reste.</div></div>
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Comment savoir quels documents sont obligatoires ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">La plateforme génère automatiquement la liste exacte des documents requis selon le type de bien, la transaction et le bail, avec une explication en clair pour chaque document.</div></div>
@@ -1101,16 +1101,18 @@ function calcCustom(raw) {
     gainCell.textContent = '—'; gainCell.className = '';
     // revert banner to the default example
     bannerLabel.textContent = 'Sur une vente à 250 000 €, vous gagnez';
-    bannerAmount.innerHTML = '<span>10 000 €</span> de plus dans votre poche';
+    bannerAmount.innerHTML = SA_RATE === 0
+      ? '<span>12 500 €</span> de plus dans votre poche'
+      : '<span>10 000 €</span> de plus dans votre poche';
     return;
   }
   const agence = Math.round(price * 0.05);
-  const sa = Math.round(price * 0.01);
+  const sa = Math.round(price * SA_RATE);
   const gain = agence - sa;
 
   agCell.textContent = fmt(agence);
   agCell.className = 'td-agence-custom';
-  saCell.textContent = fmt(sa);
+  saCell.innerHTML = SA_RATE === 0 ? '0 € <span style="color:#4ade80;font-size:11px;font-weight:700">offert</span>' : fmt(sa);
   gainCell.textContent = fmt(gain);
   gainCell.className = 'td-gain-custom';
 
@@ -1224,19 +1226,54 @@ function renderHomeListings(listings) {
   el.innerHTML = cards.join('');
 }
 
+var SA_RATE = (SA.isLaunchFree()) ? 0 : 0.01;
+
+function applyLaunchMessaging() {
+  var launchLabel = SA.launchFreeUntilLabel();
+  document.getElementById('announceDate').textContent = launchLabel;
+  document.getElementById('announceBar').style.display = 'block';
+  document.getElementById('faqLaunchDate').textContent = launchLabel;
+  document.getElementById('faqLaunchOffer').style.display = 'block';
+
+  document.getElementById('heroSub').innerHTML =
+    'Vendez ou louez directement à un particulier et gardez jusqu\'à 9% de plus dans votre poche. SansAgents ne prélève <strong style="color:#4ade80">aucune commission</strong> pour toute annonce publiée avant le ' + launchLabel + ' — et seulement si la vente se conclut.';
+
+  document.getElementById('heroStatComm').innerHTML = 'Commission <em style="color:#4ade80">à 0%</em>';
+  document.getElementById('heroStatCommLabel').textContent = 'offre de lancement, jusqu\'au ' + launchLabel;
+
+  document.getElementById('trustCommTitle').textContent = '0% si vente conclue';
+  document.getElementById('trustCommSub').textContent = 'Offre de lancement';
+
+  document.getElementById('savingsSub').innerHTML =
+    'Les agences traditionnelles facturent entre 3% et 10% du prix de vente, en moyenne 5%. SansAgents, c\'est <strong style="color:#4ade80">0% pendant l\'offre de lancement</strong>, puis 1%.';
+
+  document.getElementById('compareGoodBig').innerHTML = '0 € <span style="font-size:15px;color:#4ade80;font-weight:700">offert</span>';
+  document.getElementById('compareGoodDetail').textContent = 'Offre de lancement : aucune commission avant le ' + launchLabel + ' — 1% ensuite, uniquement si la vente se conclut';
+
+  document.getElementById('tableSaHeader').innerHTML = 'SansAgents <span style="color:#4ade80">(0%)</span>';
+  document.getElementById('savingsSourceNote').innerHTML =
+    'Commission agence : moyenne nationale ~5% (réseaux traditionnels, 2025). Publication gratuite, aucune commission sur les locations. <strong>Colonne SansAgents à 0% pendant l\'offre de lancement</strong> (annonce publiée avant le ' + launchLabel + '), 1% ensuite.';
+
+  document.getElementById('faqCostAnswer').innerHTML =
+    'La publication est toujours gratuite. Pendant l\'offre de lancement (annonce publiée avant le ' + launchLabel + '), SansAgents ne perçoit <strong>aucune commission</strong>. Après cette date, en cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.';
+
+  var agenceByRow = { 180: 9000, 250: 12500, 350: 17500, 500: 25000 };
+  Object.keys(agenceByRow).forEach(function(k) {
+    document.getElementById('sa' + k).innerHTML = '0 € <span style="color:#4ade80;font-size:11px;font-weight:700">offert</span>';
+    document.getElementById('gain' + k).textContent = agenceByRow[k].toLocaleString('fr-FR') + ' €';
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   SA.init().then(function() {
     renderHomeListings(SA.getAllListings());
   });
   if (SA.isLaunchFree()) {
-    var launchLabel = SA.launchFreeUntilLabel();
-    document.getElementById('announceDate').textContent = launchLabel;
-    document.getElementById('announceBar').style.display = 'block';
-    document.getElementById('faqLaunchDate').textContent = launchLabel;
-    document.getElementById('faqLaunchOffer').style.display = 'block';
+    applyLaunchMessaging();
   }
+  var previewStats = /[?&]demo_stats=1/.test(location.search);
   SA.init().then(function() {
-    SA.getPublicStats().then(function(stats) {
+    (previewStats ? Promise.resolve({ sold: 47, rented: 132 }) : SA.getPublicStats()).then(function(stats) {
       if (!stats || (stats.sold <= 0 && stats.rented <= 0)) return;
       if (stats.sold > 0) {
         document.getElementById('counterSoldItem').style.display = 'flex';

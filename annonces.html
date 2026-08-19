@@ -75,6 +75,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-an-header h1 span{color:#ff7a68}
 .sa-an-header p{font-size:14px;color:rgba(255,255,255,0.55);max-width:560px;line-height:1.6}
 
+/* ── BANDEAU OFFRE + COMPTEUR (mêmes styles que la page d'accueil) ── */
+.sa-announce-bar{background:#E84533;color:white;text-align:center;font-size:13px;font-weight:600;padding:9px 20px;line-height:1.4}
+.sa-announce-bar i{margin-right:7px;font-size:14px;vertical-align:-1px}
+.sa-announce-bar strong{font-weight:800}
+.sa-counter-wrap{max-width:1240px;margin:-32px auto 0;padding:0 40px;position:relative;z-index:2}
+.sa-counter-banner{background:linear-gradient(135deg,#1a2c3d,#0f1923);border-radius:20px;padding:1.6rem 2.4rem;display:flex;align-items:center;justify-content:center;gap:72px;flex-wrap:wrap;box-shadow:0 20px 44px rgba(15,25,35,0.28);border:1px solid rgba(255,255,255,0.06)}
+.sa-counter-eyebrow{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:#E84533;color:white;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:5px 16px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 12px rgba(232,69,51,0.35)}
+.sa-counter-item{display:flex;align-items:center;gap:16px}
+.sa-counter-icon{width:52px;height:52px;border-radius:14px;background:rgba(232,69,51,0.18);border:1px solid rgba(232,69,51,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-counter-icon i{color:#ff7a68;font-size:23px}
+.sa-counter-num{font-size:36px;font-weight:700;color:white;letter-spacing:-0.8px;line-height:1;font-variant-numeric:tabular-nums}
+.sa-counter-label{font-size:13.5px;color:rgba(255,255,255,0.68);margin-top:5px;line-height:1.3;max-width:180px}
+.sa-counter-sep{width:1px;align-self:stretch;background:rgba(255,255,255,0.1)}
+@media (max-width:860px){.sa-counter-wrap{margin-top:-24px;padding:0 20px}.sa-counter-banner{gap:32px;padding:1.6rem}.sa-counter-sep{display:none}}
+
 /* ── BARRE DE FILTRES (façon SeLoger) ── */
 .sa-filterbar-wrapper{background:white;border-bottom:1px solid #ebebeb;position:sticky;top:64px;z-index:1300;box-shadow:0 1px 0 rgba(0,0,0,0.02)}
 .sa-filterbar{max-width:1240px;margin:0 auto;padding:13px 40px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -342,6 +357,11 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
 </head>
 <body>
 
+<!-- ── BANDEAU OFFRE DE LANCEMENT ── -->
+<div class="sa-announce-bar" id="announceBar" style="display:none">
+  <i class="ti ti-rocket"></i>Offre de lancement : <strong>0% de commission</strong> pour toute annonce publiée avant le <strong id="announceDate">—</strong>
+</div>
+
 <!-- ── NAV ── -->
 <div class="sa-nav-wrapper">
   <nav class="sa-nav">
@@ -388,6 +408,28 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
   <div class="sa-an-header-inner">
     <h1>Toutes les <span>annonces</span></h1>
     <p>Maisons, appartements, studios et lofts proposés directement par leurs propriétaires, partout en France. Aucune agence, aucun intermédiaire.</p>
+  </div>
+</div>
+
+<!-- ── COMPTEUR PUBLIC ── -->
+<div class="sa-counter-wrap" id="saCounterBar" style="display:none">
+  <div class="sa-counter-banner">
+    <div class="sa-counter-eyebrow">Nos chiffres</div>
+    <div class="sa-counter-item" id="counterSoldItem" style="display:none">
+      <div class="sa-counter-icon"><i class="ti ti-key"></i></div>
+      <div>
+        <div class="sa-counter-num" id="counterSoldNum">0</div>
+        <div class="sa-counter-label">biens vendus entre particuliers</div>
+      </div>
+    </div>
+    <div class="sa-counter-sep" id="counterSep" style="display:none"></div>
+    <div class="sa-counter-item" id="counterRentedItem" style="display:none">
+      <div class="sa-counter-icon"><i class="ti ti-home-check"></i></div>
+      <div>
+        <div class="sa-counter-num" id="counterRentedNum">0</div>
+        <div class="sa-counter-label">locations conclues</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1647,11 +1689,33 @@ function initFromParams() {
   if (params.get('prixMax')) document.getElementById('prixMax').value = params.get('prixMax');
 }
 
+if (SA.isLaunchFree()) {
+  document.getElementById('announceDate').textContent = SA.launchFreeUntilLabel();
+  document.getElementById('announceBar').style.display = 'block';
+}
+
 SA.init().then(function() {
   initFromParams();
   onVilleInput();
   if (window.innerWidth <= 768) setView('list');
   applyFilters();
+
+  var previewStats = /[?&]demo_stats=1/.test(location.search);
+  (previewStats ? Promise.resolve({ sold: 47, rented: 132 }) : SA.getPublicStats()).then(function(stats) {
+    if (!stats || (stats.sold <= 0 && stats.rented <= 0)) return;
+    if (stats.sold > 0) {
+      document.getElementById('counterSoldItem').style.display = 'flex';
+      document.getElementById('counterSoldNum').textContent = stats.sold.toLocaleString('fr-FR');
+    }
+    if (stats.rented > 0) {
+      document.getElementById('counterRentedItem').style.display = 'flex';
+      document.getElementById('counterRentedNum').textContent = stats.rented.toLocaleString('fr-FR');
+    }
+    if (stats.sold > 0 && stats.rented > 0) {
+      document.getElementById('counterSep').style.display = 'block';
+    }
+    document.getElementById('saCounterBar').style.display = 'block';
+  });
 });
 </script>
 </body>
