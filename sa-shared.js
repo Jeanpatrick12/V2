@@ -388,6 +388,30 @@
     return _initPromise;
   }
 
+  /* ── Offre de lancement (commission 0% avant une date, cf. sa-config.js) ── */
+  function launchFreeUntilDate() {
+    var iso = (window.SA_CONFIG && window.SA_CONFIG.commissionFreeUntil) || null;
+    if (!iso) return null;
+    var d = new Date(iso + "T23:59:59");
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function launchFreeUntilLabel() {
+    var d = launchFreeUntilDate();
+    if (!d) return "";
+    var day = d.getDate();
+    var rest = d.toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
+    return (day === 1 ? "1er" : day) + " " + rest;
+  }
+  // Une annonce publiée avant la date de l'offre de lancement reste gratuite
+  // à vie, même si la vente se conclut après cette date. Sans date fournie,
+  // on se base sur aujourd'hui (ex. écran de dépôt d'une nouvelle annonce).
+  function isLaunchFree(publishedAt) {
+    var cutoff = launchFreeUntilDate();
+    if (!cutoff) return false;
+    var ref = publishedAt ? new Date(publishedAt) : new Date();
+    return ref.getTime() <= cutoff.getTime();
+  }
+
   /* ── Utilitaires publics (synchrones, inchangés) ────────────────── */
   function fmtPrice(n) {
     if (n === null || n === undefined || isNaN(n)) return "—";
@@ -1401,6 +1425,7 @@
     fmtPrice, fmtPriceTransaction, parseAddress, capitalizeVille, piecesFromSelect, dpeLetterFrom, escapeHtml, titleFor, listingSlug, proSlug,
     compressImageFile, hasEquip, containsContactInfo,
     geocodeAddress, distanceKm,
+    launchFreeUntilDate, launchFreeUntilLabel, isLaunchFree,
     init,
     // Annonces
     getAllListings, getListingById, getUserListings, addListing, updateListing,

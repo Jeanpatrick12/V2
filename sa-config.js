@@ -8,5 +8,12 @@ window.SA_CONFIG = {
   geoapifyKey: "ec26545074284f04a8a5f940f25eaa1f",
   // IBAN du compte SansAgents pour le reglement des commissions par virement
   // (affiche et copie depuis accord.html). A REMPLIR avec le vrai IBAN.
-  iban: "FR76 XXXX XXXX XXXX XXXX XXXX XXX"
+  iban: "FR76 XXXX XXXX XXXX XXXX XXXX XXX",
+  // Offre de lancement : toute annonce publiee AVANT cette date est
+  // definitivement exoneree de la commission de 1%, meme si la vente se
+  // conclut apres cette date. Format AAAA-MM-JJ.
+  // Regle imperative : cette date ne peut etre que reportee (repoussee dans
+  // le temps), jamais avancee. Un utilisateur qui a publie sous l'offre de
+  // lancement doit pouvoir en beneficier quoi qu'il arrive.
+  commissionFreeUntil: "2027-02-01"
 };

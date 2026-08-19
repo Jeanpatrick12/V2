@@ -29,7 +29,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=33"></script>
+<script src="sa-shared.js?v=35"></script>
 <link rel="stylesheet" href="sa-mobile.css?v=4">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -195,7 +195,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 <div class="accord-page">
   <div class="accord-header">
     <h1><i class="ti ti-file-certificate"></i> Accord de vente / location</h1>
-    <p>Formalisez votre transaction en quelques étapes. Ce document constitue une preuve écrite de l'accord entre les deux parties et déclenche la commission SansAgents de <strong>1% du prix de vente final</strong>.</p>
+    <p>Formalisez votre transaction en quelques étapes. Ce document constitue une preuve écrite de l'accord entre les deux parties et déclenche la commission SansAgents de <strong>1% du prix de vente final</strong> — <strong id="headerLaunchNote" style="display:none;color:#1a8c4e">sauf si votre annonce a été publiée pendant l'offre de lancement (0% de commission)</strong>.</p>
   </div>
 
   <!-- Étapes -->
@@ -237,6 +237,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
     <div class="afield">
       <label>Adresse complète du bien</label>
       <input type="text" id="f_adresse" placeholder="12 rue de la Paix, 75001 Paris">
+    </div>
+    <div class="afield" id="f_date_annonce_field" style="display:none">
+      <label>Date de publication de l'annonce sur SansAgents</label>
+      <input type="date" id="f_date_annonce" onchange="updateCommission()">
+      <div class="afield-note" id="f_date_annonce_note">Sert à vérifier l'éligibilité à l'offre de lancement (0% de commission).</div>
     </div>
     <div class="accord-grid">
       <div class="afield">
@@ -305,14 +310,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
     <div class="prix-box" id="prixBox" style="display:none">
       <div class="prix-box-title">Prix convenu</div>
       <div class="prix-main" id="prixAffiche">—</div>
-      <div class="prix-comm">Commission SansAgents : <strong id="commAffiche">—</strong> (1% du prix final)</div>
+      <div class="prix-comm">Commission SansAgents : <strong id="commAffiche">—</strong> <span id="commAfficheSuffix">(1% du prix final)</span></div>
     </div>
 
     <div class="comm-box" id="commBox" style="display:none">
       <div class="comm-box-title">Détail de la commission</div>
       <div class="comm-rows">
         <div class="comm-row-item"><div class="comm-row-label">Prix de vente</div><div class="comm-row-val" id="cd_prix">—</div></div>
-        <div class="comm-row-item"><div class="comm-row-label">Taux SansAgents</div><div class="comm-row-val">1 %</div></div>
+        <div class="comm-row-item"><div class="comm-row-label">Taux SansAgents</div><div class="comm-row-val" id="cd_taux">1 %</div></div>
         <div class="comm-row-item"><div class="comm-row-label">Commission due</div><div class="comm-row-val accent" id="cd_comm">—</div></div>
         <div class="comm-row-item"><div class="comm-row-label">Économie vs agence (3%)</div><div class="comm-row-val" style="color:#4cb85c" id="cd_eco">—</div></div>
       </div>
@@ -385,13 +390,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
             <div class="doc-highlight-val" id="doc_prix">—</div>
           </div>
           <div class="doc-commission">
-            <div class="doc-commission-label">Commission SansAgents (1% du prix final)</div>
+            <div class="doc-commission-label" id="doc_commission_label">Commission SansAgents (1% du prix final)</div>
             <div class="doc-commission-val" id="doc_commission">—</div>
           </div>
         </div>
 
         <div style="background:#f8f8f8;border-radius:10px;padding:14px 16px;font-size:12.5px;color:#888;line-height:1.6;margin-top:1rem">
-          <strong style="color:#555">Clause SansAgents :</strong> Les deux parties reconnaissent avoir utilisé la plateforme SansAgents.fr pour cette transaction et s'engagent au paiement de la commission de 1% du prix de vente final signé à SansAgents, conformément aux Conditions Générales d'Utilisation acceptées lors de la publication de l'annonce.
+          <strong style="color:#555">Clause SansAgents :</strong> <span id="doc_clause_text">Les deux parties reconnaissent avoir utilisé la plateforme SansAgents.fr pour cette transaction et s'engagent au paiement de la commission de 1% du prix de vente final signé à SansAgents, conformément aux Conditions Générales d'Utilisation acceptées lors de la publication de l'annonce.</span>
         </div>
       </div>
       <div class="doc-footer">
@@ -405,10 +410,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
       <button class="accord-action-btn share" onclick="copyLink()"><i class="ti ti-copy"></i> Copier le résumé</button>
     </div>
 
-    <div class="payment-box">
-      <h3><i class="ti ti-coin"></i> Payer la commission SansAgents</h3>
-      <p>Conformément aux CGU, la commission de <strong id="pay_comm">—</strong> est due à SansAgents suite à cette transaction. Elle peut être réglée par virement bancaire ou bientôt par carte en ligne.</p>
-      <div class="payment-method">
+    <div class="payment-box" id="paymentBox">
+      <h3 id="payment_title"><i class="ti ti-coin"></i> Payer la commission SansAgents</h3>
+      <p id="payment_desc">Conformément aux CGU, la commission de <strong id="pay_comm">—</strong> est due à SansAgents suite à cette transaction. Elle peut être réglée par virement bancaire ou bientôt par carte en ligne.</p>
+      <div class="payment-method" id="payment_method_row">
         <i class="ti ti-building-bank"></i>
         <div>
           <div class="payment-method-title">Virement bancaire</div>
@@ -419,7 +424,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
           </div>
         </div>
       </div>
-      <div class="payment-method" style="opacity:.6">
+      <div class="payment-method" style="opacity:.6" id="payment_method_soon">
         <i class="ti ti-credit-card"></i>
         <div>
           <div class="payment-method-title">Paiement en ligne — bientôt disponible</div>
@@ -441,6 +446,19 @@ SA.init().then(function() {
   var ibanEl = document.getElementById('iban_display');
   if (ibanEl) ibanEl.textContent = window.SA_CONFIG.iban;
 });
+
+if (SA.launchFreeUntilDate()) {
+  document.getElementById('f_date_annonce_field').style.display = 'block';
+  document.getElementById('f_date_annonce_note').textContent =
+    "Offre de lancement : toute annonce publiée avant le " + SA.launchFreeUntilLabel() + " est exonérée de commission, même si la vente se conclut plus tard.";
+  document.getElementById('headerLaunchNote').style.display = 'inline';
+}
+
+function isCommissionFree() {
+  const dateAnnonce = document.getElementById('f_date_annonce').value;
+  if (!dateAnnonce) return false;
+  return SA.isLaunchFree(dateAnnonce);
+}
 
 let currentStep = 1;
 
@@ -465,12 +483,15 @@ function updateCommission() {
   const commBox = document.getElementById('commBox');
   const btn = document.getElementById('btnGenerate');
   if (prix > 0) {
-    const comm = Math.round(prix * 0.01);
+    const free = isCommissionFree();
+    const comm = free ? 0 : Math.round(prix * 0.01);
     const agence = Math.round(prix * 0.03);
     document.getElementById('prixAffiche').textContent = fmtEur(prix);
-    document.getElementById('commAffiche').textContent = fmtEur(comm);
+    document.getElementById('commAffiche').innerHTML = free ? 'Offerte <span style="color:#1a8c4e">(lancement)</span>' : fmtEur(comm);
+    document.getElementById('commAfficheSuffix').textContent = free ? '' : '(1% du prix final)';
     document.getElementById('cd_prix').textContent = fmtEur(prix);
-    document.getElementById('cd_comm').textContent = fmtEur(comm);
+    document.getElementById('cd_taux').textContent = free ? '0 %' : '1 %';
+    document.getElementById('cd_comm').textContent = free ? '0 € (offert)' : fmtEur(comm);
     document.getElementById('cd_eco').textContent = '− ' + fmtEur(agence - comm);
     prixBox.style.display = 'block';
     commBox.style.display = 'block';
@@ -484,7 +505,8 @@ function updateCommission() {
 
 function generateDocument() {
   const prix = parseFloat(document.getElementById('f_prix').value) || 0;
-  const comm = Math.round(prix * 0.01);
+  const free = isCommissionFree();
+  const comm = free ? 0 : Math.round(prix * 0.01);
   const trans = document.getElementById('f_transaction').value;
   const now = new Date();
   const dateStr = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
@@ -524,8 +546,27 @@ function generateDocument() {
   }
 
   document.getElementById('doc_prix').textContent = fmtEur(prix);
-  document.getElementById('doc_commission').textContent = fmtEur(comm);
-  document.getElementById('pay_comm').textContent = fmtEur(comm);
+
+  if (free) {
+    document.getElementById('doc_commission_label').textContent = 'Commission SansAgents — offerte (offre de lancement)';
+    document.getElementById('doc_commission').textContent = '0 €';
+    document.getElementById('doc_clause_text').textContent =
+      "Les deux parties reconnaissent avoir utilisé la plateforme SansAgents.fr pour cette transaction. L'annonce ayant été publiée avant le " + SA.launchFreeUntilLabel() + " (offre de lancement), aucune commission n'est due à SansAgents au titre de cette vente, conformément aux Conditions Générales d'Utilisation.";
+    document.getElementById('payment_title').innerHTML = '<i class="ti ti-confetti"></i> Rien à payer';
+    document.getElementById('payment_desc').textContent = "Cette annonce a été publiée pendant l'offre de lancement : aucune commission n'est due à SansAgents, quel que soit le prix de vente final.";
+    document.getElementById('payment_method_row').style.display = 'none';
+    document.getElementById('payment_method_soon').style.display = 'none';
+  } else {
+    document.getElementById('doc_commission_label').textContent = 'Commission SansAgents (1% du prix final)';
+    document.getElementById('doc_commission').textContent = fmtEur(comm);
+    document.getElementById('doc_clause_text').textContent =
+      "Les deux parties reconnaissent avoir utilisé la plateforme SansAgents.fr pour cette transaction et s'engagent au paiement de la commission de 1% du prix de vente final signé à SansAgents, conformément aux Conditions Générales d'Utilisation acceptées lors de la publication de l'annonce.";
+    document.getElementById('payment_title').innerHTML = '<i class="ti ti-coin"></i> Payer la commission SansAgents';
+    document.getElementById('payment_desc').innerHTML = 'Conformément aux CGU, la commission de <strong id="pay_comm">' + fmtEur(comm) + '</strong> est due à SansAgents suite à cette transaction. Elle peut être réglée par virement bancaire ou bientôt par carte en ligne.';
+    document.getElementById('payment_method_row').style.display = 'flex';
+    document.getElementById('payment_method_soon').style.display = 'flex';
+  }
+
   document.getElementById('doc_ref').textContent = 'Réf. ' + ref;
 
   goToStep(5);
@@ -533,7 +574,8 @@ function generateDocument() {
 
 function copyLink() {
   const prix = parseFloat(document.getElementById('f_prix').value) || 0;
-  const comm = Math.round(prix * 0.01);
+  const free = isCommissionFree();
+  const comm = free ? 0 : Math.round(prix * 0.01);
   const vPr = document.getElementById('f_v_prenom').value;
   const vNo = document.getElementById('f_v_nom').value;
   const aPr = document.getElementById('f_a_prenom').value;
@@ -545,7 +587,7 @@ function copyLink() {
     'Vendeur : ' + vPr + ' ' + vNo + '\n' +
     'Acheteur : ' + aPr + ' ' + aNo + '\n' +
     'Prix final : ' + fmtEur(prix) + '\n' +
-    'Commission SansAgents : ' + fmtEur(comm) + '\n' +
+    'Commission SansAgents : ' + (free ? 'Offerte (offre de lancement)' : fmtEur(comm)) + '\n' +
     'Généré via SansAgents.fr';
   navigator.clipboard.writeText(text).then(function() {
     SA.toast('Résumé copié dans le presse-papiers', 'ti-copy');

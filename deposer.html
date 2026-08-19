@@ -42,7 +42,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=33"></script>
+<script src="sa-shared.js?v=35"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1093,7 +1093,13 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
     <button onclick="window.location.href='connexion?redirect=' + encodeURIComponent('deposer')">Se connecter ou créer un compte</button>
   </div>
 </div>
-<script>SA.init().then(function(){ if (!SA.getUser()) { document.getElementById('authGate').style.display=''; } });</script>
+<script>
+SA.init().then(function(){ if (!SA.getUser()) { document.getElementById('authGate').style.display=''; } });
+if (SA.isLaunchFree()) {
+  document.getElementById('gfbLaunchDate').textContent = SA.launchFreeUntilLabel();
+  document.getElementById('gfbLaunchTip').style.display = 'flex';
+}
+</script>
 <!-- ═══ NAV ═══ -->
 <div class="sa-nav-wrapper">
   <div class="sa-nav">
@@ -1166,6 +1172,10 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
       <div class="d-gfb-tip">
         <div class="d-gfb-tip-ico green"><i class="ti ti-device-floppy"></i></div>
         <div class="d-gfb-tip-text"><strong>Votre saisie est sauvegardée automatiquement</strong> à chaque étape. Vous pouvez quitter et revenir à tout moment sans perdre vos données.</div>
+      </div>
+      <div class="d-gfb-tip" id="gfbLaunchTip" style="display:none">
+        <div class="d-gfb-tip-ico"><i class="ti ti-rocket"></i></div>
+        <div class="d-gfb-tip-text"><strong>Offre de lancement :</strong> toute annonce publiée avant le <strong id="gfbLaunchDate">—</strong> est définitivement exonérée de la commission de 1%, même si la vente se conclut après cette date.</div>
       </div>
 
       <button class="d-gfb-btn-confirm" onclick="gfbSetOpen(false)">
@@ -2208,7 +2218,11 @@ function gfbPrevScreen(){
       const fee = p ? Math.round(p * 0.01).toLocaleString('fr-FR') + ' €' : '—';
       document.getElementById('rPrixLabel').textContent = 'Prix de vente';
       document.getElementById('rPrix').textContent = p ? p.toLocaleString('fr-FR') + ' €' : '—';
-      feeTxt.innerHTML = `Publication <strong>100% gratuite</strong>. En cas de vente conclue, SansAgents perçoit <strong>1% du prix de vente final signé</strong> — soit <strong>${fee} à titre indicatif</strong> (montant définitif calculé sur le prix réel de la transaction). Aucune agence ne touche un centime.`;
+      if (SA.isLaunchFree()) {
+        feeTxt.innerHTML = `Publication <strong>100% gratuite</strong>. Votre annonce est publiée sous l'<strong>offre de lancement</strong> : <strong>0% de commission</strong>, même si la vente se conclut après le ${SA.launchFreeUntilLabel()}. Cet avantage est acquis définitivement dès la publication.`;
+      } else {
+        feeTxt.innerHTML = `Publication <strong>100% gratuite</strong>. En cas de vente conclue, SansAgents perçoit <strong>1% du prix de vente final signé</strong> — soit <strong>${fee} à titre indicatif</strong> (montant définitif calculé sur le prix réel de la transaction). Aucune agence ne touche un centime.`;
+      }
     } else {
       const l = parseFloat(document.getElementById('loyer').value) || 0;
       const c = parseFloat(document.getElementById('charges').value) || 0;
