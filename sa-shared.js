@@ -729,6 +729,21 @@
     } catch (e) { return null; }
   }
 
+  /* ── Compteur public (annonces vendues / louées) ────────────────── */
+  async function getPublicStats() {
+    if (!_sb) return null;
+    try {
+      const { data, error } = await _sb.rpc("get_public_stats");
+      if (error || !data) return null;
+      const s = Array.isArray(data) ? data[0] : data;
+      if (!s) return null;
+      return {
+        sold: parseInt(s.sold_count, 10) || 0,
+        rented: parseInt(s.rented_count, 10) || 0
+      };
+    } catch (e) { return null; }
+  }
+
   /* ── Messagerie ─────────────────────────────────────────────────── */
   function getConversations() { return _cache.conversations.slice(); }
   function getConversation(id) { return _cache.conversations.find(c => c.id === id) || null; }
@@ -1434,7 +1449,7 @@
     // Recherches
     getSavedSearches, addSavedSearch, removeSavedSearch, toggleSearchAlerts,
     // Confiance
-    getSellerTrustInfo,
+    getSellerTrustInfo, getPublicStats,
     // Messagerie
     getConversations, getConversation, getConversationByListing, hasConversation,
     sendMessage, setContactShared, setBuyerConfirmedSale,

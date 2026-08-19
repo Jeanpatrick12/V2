@@ -156,6 +156,21 @@ LANGUAGE sql SECURITY DEFINER AS $$
 $$;
 GRANT EXECUTE ON FUNCTION public.get_response_stats(uuid) TO anon, authenticated;
 
+-- Compteur public de transactions abouties (ventes/locations), affiche sur
+-- la page d'accueil comme preuve sociale. Contourne la RLS des listings
+-- (qui cache les annonces 'sold' aux non-proprietaires) via SECURITY DEFINER,
+-- mais ne renvoie jamais que deux chiffres agreges - aucune donnee d'annonce
+-- individuelle. Les annonces demo (is_demo) sont exclues du decompte.
+CREATE OR REPLACE FUNCTION public.get_public_stats()
+RETURNS TABLE(sold_count bigint, rented_count bigint)
+LANGUAGE sql SECURITY DEFINER AS $$
+  SELECT
+    COUNT(*) FILTER (WHERE transaction = 'vente'    AND status = 'sold' AND NOT is_demo),
+    COUNT(*) FILTER (WHERE transaction = 'location' AND status = 'sold' AND NOT is_demo)
+  FROM public.listings;
+$$;
+GRANT EXECUTE ON FUNCTION public.get_public_stats() TO anon, authenticated;
+
 -- ── 3. PROFESSIONNELS ────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.pros (
   id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
