@@ -445,7 +445,7 @@ button{font-family:inherit;cursor:pointer}
       </div>
     </div>
     <div class="v-stats-grid">
-      <div class="v-stat"><div class="v-stat-val">1%</div><div class="v-stat-lbl">commission SansAgents,<br>uniquement si vente conclue</div></div>
+      <div class="v-stat"><div class="v-stat-val" id="gvCommVal">1%</div><div class="v-stat-lbl" id="gvCommLbl">commission SansAgents,<br>uniquement si vente conclue</div></div>
       <div class="v-stat"><div class="v-stat-val">0 €</div><div class="v-stat-lbl">frais de publication<br>de l'annonce</div></div>
       <div class="v-stat"><div class="v-stat-val">9</div><div class="v-stat-lbl">étapes guidées<br>et illustrées</div></div>
       <div class="v-stat"><div class="v-stat-val">6</div><div class="v-stat-lbl">modèles de documents<br>à générer gratuitement</div></div>
@@ -738,7 +738,7 @@ button{font-family:inherit;cursor:pointer}
               <div class="v-check" onclick="toggleCheck(this)"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-photo-up" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Ordre des photos</div><div style="font-size:12px;color:#888;margin-top:2px">La meilleure en premier — c'est elle qui attire le clic</div></div></div>
               <div class="v-check" onclick="toggleCheck(this)" style="border-bottom:none"><div class="v-check-box"></div><div style="width:32px;height:32px;border-radius:8px;background:#fff5f4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-eye" style="color:#E84533;font-size:15px"></i></div><div style="flex:1;min-width:0"><div class="v-check-txt" style="font-weight:700">Aperçu avant validation</div><div style="font-size:12px;color:#888;margin-top:2px">Relisez l'annonce telle qu'elle apparaîtra aux acheteurs</div></div></div>
             </div>
-            <div class="v-tip v-tip-green"><i class="ti ti-info-circle"></i><span><strong>Rappel :</strong> La publication est 100% gratuite. La commission de 1% n'est due qu'en cas de vente effectivement conclue — jamais sur une location.</span></div>
+            <div class="v-tip v-tip-green"><i class="ti ti-info-circle"></i><span id="gvTipText"><strong>Rappel :</strong> La publication est 100% gratuite. La commission de 1% n'est due qu'en cas de vente effectivement conclue — jamais sur une location.</span></div>
             <div class="v-card-actions">
               <button class="v-btn v-btn-primary" onclick="window.location.href='deposer-gate?type=vente'"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
             </div>
@@ -1011,7 +1011,7 @@ button{font-family:inherit;cursor:pointer}
   <div id="guideFaqList">
     <div class="v-faq-item">
       <div class="v-faq-q" onclick="toggleFaq(this)"><span>Combien coûte de vendre sans agence sur SansAgents ?</span><i class="ti ti-chevron-down"></i></div>
-      <div class="v-faq-a"><p>SansAgents ne prélève qu'1% de commission, et uniquement si la vente se conclut. La publication de l'annonce est gratuite. Une agence traditionnelle facture en moyenne 3 à 8% du prix de vente.</p></div>
+      <div class="v-faq-a"><p id="gvFaqCost">SansAgents ne prélève qu'1% de commission, et uniquement si la vente se conclut. La publication de l'annonce est gratuite. Une agence traditionnelle facture en moyenne 3 à 8% du prix de vente.</p></div>
     </div>
     <div class="v-faq-item">
       <div class="v-faq-q" onclick="toggleFaq(this)"><span>Quels diagnostics sont obligatoires pour vendre un bien en France ?</span><i class="ti ti-chevron-down"></i></div>
@@ -1633,7 +1633,7 @@ function generateDesc(){
   if(dpe&&dpe!=='NC'){L.push('⚡ Étiquette énergétique : DPE '+dpe+'. '+(dpe==='A'||dpe==='B'?'Excellent bilan thermique.':dpe==='C'||dpe==='D'?'Bilan énergétique correct.':'Travaux de rénovation énergétique possibles.')+'  ');L.push('');}
   if(chauf&&chauf!=='nc'){L.push('🔥 Chauffage : '+chauf+'.');L.push('');}
   if(arr.length){L.push('✅ Points forts :');arr.forEach(function(x){L.push('   • '+x.charAt(0).toUpperCase()+x.slice(1));});L.push('');}
-  L.push('Bien vendu directement par le propriétaire via SansAgents.fr — sans frais d\'agence. Commission SansAgents de 1% uniquement en cas de vente conclue.');
+  L.push('Bien vendu directement par le propriétaire via SansAgents.fr — sans frais d\'agence. '+(SA.isLaunchFree()?'Offre de lancement : 0% de commission pour cette annonce.':'Commission SansAgents de 1% uniquement en cas de vente conclue.'));
   L.push('');L.push('Visites sur rendez-vous uniquement. Contactez-nous via la messagerie SansAgents.');
   document.getElementById('helperText').textContent=L.join('\n');
   document.getElementById('helperResult').style.display='';
@@ -1662,6 +1662,13 @@ function copyDesc(){
 
 SA.init();
 SA.wireLeadForm(document.getElementById('leadForm'), 'guide-vendeur');
+if (SA.isLaunchFree()) {
+  var gvLabel = SA.launchFreeUntilLabel();
+  document.getElementById('gvCommVal').innerHTML = '<span style="color:#4ade80">0%</span>';
+  document.getElementById('gvCommLbl').innerHTML = 'offre de lancement,<br>jusqu\'au ' + gvLabel;
+  document.getElementById('gvTipText').innerHTML = '<strong>Rappel :</strong> La publication est 100% gratuite. Offre de lancement : <strong>aucune commission</strong> pour toute annonce publiée avant le ' + gvLabel + ' — 1% ensuite, uniquement en cas de vente conclue, jamais sur une location.';
+  document.getElementById('gvFaqCost').innerHTML = 'Pendant l\'offre de lancement (annonce publiée avant le ' + gvLabel + '), SansAgents ne prélève <strong>aucune commission</strong>. Après cette date, la commission est de 1%, uniquement si la vente se conclut. La publication de l\'annonce est gratuite dans tous les cas. Une agence traditionnelle facture en moyenne 3 à 8% du prix de vente.';
+}
 
 function addPrixRow(){
   var tpl='<div class="ep-row v-modal-grid" style="gap:8px;margin-bottom:8px;align-items:end">'+

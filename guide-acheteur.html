@@ -872,7 +872,7 @@ button{font-family:inherit;cursor:pointer}
   <div id="guideFaqList">
     <div class="v-faq-item">
       <div class="v-faq-q" onclick="toggleFaq(this)"><span>L'acheteur paie-t-il une commission sur SansAgents ?</span><i class="ti ti-chevron-down"></i></div>
-      <div class="v-faq-a"><p>Non. L'acheteur ne paie jamais de commission ni de frais pour consulter les annonces ou contacter un vendeur sur SansAgents. Seul le vendeur règle 1% du prix, et uniquement si la vente se conclut.</p></div>
+      <div class="v-faq-a"><p id="gaFaqComm">Non. L'acheteur ne paie jamais de commission ni de frais pour consulter les annonces ou contacter un vendeur sur SansAgents. Seul le vendeur règle 1% du prix, et uniquement si la vente se conclut.</p></div>
     </div>
     <div class="v-faq-item">
       <div class="v-faq-q" onclick="toggleFaq(this)"><span>Combien coûtent les frais de notaire pour un acheteur ?</span><i class="ti ti-chevron-down"></i></div>
@@ -1374,7 +1374,7 @@ function generateDesc(){
   if(dpe&&dpe!=='NC'){L.push('⚡ Étiquette énergétique : DPE '+dpe+'. '+(dpe==='A'||dpe==='B'?'Excellent bilan thermique.':dpe==='C'||dpe==='D'?'Bilan énergétique correct.':'Travaux de rénovation énergétique possibles.')+'  ');L.push('');}
   if(chauf&&chauf!=='nc'){L.push('🔥 Chauffage : '+chauf+'.');L.push('');}
   if(arr.length){L.push('✅ Points forts :');arr.forEach(function(x){L.push('   • '+x.charAt(0).toUpperCase()+x.slice(1));});L.push('');}
-  L.push('Bien vendu directement par le propriétaire via SansAgents.fr — sans frais d\'agence. Commission SansAgents de 1% uniquement en cas de vente conclue.');
+  L.push('Bien vendu directement par le propriétaire via SansAgents.fr — sans frais d\'agence. '+(SA.isLaunchFree()?'Offre de lancement : 0% de commission pour cette annonce.':'Commission SansAgents de 1% uniquement en cas de vente conclue.'));
   L.push('');L.push('Visites sur rendez-vous uniquement. Contactez-nous via la messagerie SansAgents.');
   document.getElementById('helperText').textContent=L.join('\n');
   document.getElementById('helperResult').style.display='';
@@ -1403,6 +1403,9 @@ function copyDesc(){
 
 SA.init();
 SA.wireLeadForm(document.getElementById('leadForm'), 'guide-acheteur');
+if (SA.isLaunchFree()) {
+  document.getElementById('gaFaqComm').innerHTML = 'Non. L\'acheteur ne paie jamais de commission ni de frais pour consulter les annonces ou contacter un vendeur sur SansAgents. Pendant l\'offre de lancement (annonce publiée avant le ' + SA.launchFreeUntilLabel() + '), le vendeur non plus : <strong>aucune commission</strong>. Après cette date, le vendeur règle 1% du prix, uniquement si la vente se conclut.';
+}
 
 function addPrixRow(){
   var tpl='<div class="ep-row v-modal-grid" style="gap:8px;margin-bottom:8px;align-items:end">'+

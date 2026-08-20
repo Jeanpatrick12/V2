@@ -1544,7 +1544,7 @@ function generateDesc(){
   if(dpe&&dpe!=='NC'){L.push('⚡ Étiquette énergétique : DPE '+dpe+'. '+(dpe==='A'||dpe==='B'?'Excellent bilan thermique.':dpe==='C'||dpe==='D'?'Bilan énergétique correct.':'Travaux de rénovation énergétique possibles.')+'  ');L.push('');}
   if(chauf&&chauf!=='nc'){L.push('🔥 Chauffage : '+chauf+'.');L.push('');}
   if(arr.length){L.push('✅ Points forts :');arr.forEach(function(x){L.push('   • '+x.charAt(0).toUpperCase()+x.slice(1));});L.push('');}
-  L.push('Bien vendu directement par le propriétaire via SansAgents.fr — sans frais d\'agence. Commission SansAgents de 1% uniquement en cas de vente conclue.');
+  L.push('Bien loué directement par le propriétaire via SansAgents.fr — sans frais d\'agence. Aucune commission sur les locations.');
   L.push('');L.push('Visites sur rendez-vous uniquement. Contactez-nous via la messagerie SansAgents.');
   document.getElementById('helperText').textContent=L.join('\n');
   document.getElementById('helperResult').style.display='';
