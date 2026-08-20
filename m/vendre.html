@@ -226,6 +226,18 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
   </div>
 </div>
 
+<!-- CAPTURE VISITEURS PAS ENCORE PRÊTS -->
+<div class="m-lead-card">
+  <div class="m-lead-icon"><i class="ti ti-mail"></i></div>
+  <div class="m-lead-title">Pas encore prêt à vendre ?</div>
+  <div class="m-lead-sub">Recevez nos conseils par email, zéro spam.</div>
+  <form class="sa-lead-form" id="leadForm">
+    <input type="email" class="sa-lead-input" placeholder="vous@email.com" required>
+    <button type="submit" class="sa-lead-btn">S'inscrire</button>
+    <div class="sa-lead-msg"></div>
+  </form>
+</div>
+
 <!-- STEP DOTS -->
 <div class="vh-dots" id="vhDots">
   <div class="vh-dot active" id="vd1" onclick="jumpTo(1)"><div class="vh-dn" id="vdn1">1</div><span class="vh-dl">Estimer</span></div>
@@ -682,18 +694,6 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
   <h3>Prêt à vendre ?</h3>
   <p>Déposez votre annonce gratuitement et touchez des milliers d'acheteurs.</p>
   <button onclick="window.top.location='/deposer-gate?type=vente'" style="background:var(--red);color:white;border:none;border-radius:10px;padding:13px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px"><i class="ti ti-rocket"></i> Déposer mon annonce</button>
-</div>
-
-<!-- CAPTURE VISITEURS PAS ENCORE PRÊTS -->
-<div class="m-lead-card">
-  <div class="m-lead-icon"><i class="ti ti-mail"></i></div>
-  <div class="m-lead-title">Pas encore prêt à vendre ?</div>
-  <div class="m-lead-sub">Recevez nos conseils par email, zéro spam.</div>
-  <form class="sa-lead-form" id="leadForm">
-    <input type="email" class="sa-lead-input" placeholder="vous@email.com" required>
-    <button type="submit" class="sa-lead-btn">S'inscrire</button>
-    <div class="sa-lead-msg"></div>
-  </form>
 </div>
 
 <!-- DOC ACTION BAR -->
