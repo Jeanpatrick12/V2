@@ -167,7 +167,7 @@ body.em-open .m-bottom-nav{display:none!important}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=37"></script>
+<script src="../sa-shared.js?v=39"></script>
 <script>
 SA.init().then(function(){
   var u = SA.getUser();
@@ -248,7 +248,14 @@ function markSold(id, transaction){
   var isLoc = (transaction||l.transaction)==='location';
   if(!confirm('Confirmer : cette annonce est '+(isLoc?'louée':'vendue')+' ? Elle sera retirée des résultats de recherche.'))return;
   if(SA.updateListing){
-    SA.updateListing(id,{status:'sold'}).then(function(){ window.location.reload(); }).catch(function(){ window.location.reload(); });
+    SA.updateListing(id,{status:'sold'}).then(function(){
+      // Reutilise le gtag deja initialise sur la page parente (le shell
+      // desktop garde son contexte JS vivant meme apres le remplacement
+      // de son body par cet iframe) plutot que de recharger toute la
+      // configuration Analytics ici.
+      if (window.top && typeof window.top.gtag === 'function') window.top.gtag('event', 'annonce_vendue', { transaction: transaction });
+      window.location.reload();
+    }).catch(function(){ window.location.reload(); });
     return;
   }
   l.status='sold';

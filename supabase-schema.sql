@@ -471,6 +471,24 @@ CREATE POLICY "saved_searches_insert" ON public.saved_searches FOR INSERT WITH C
 CREATE POLICY "saved_searches_update" ON public.saved_searches FOR UPDATE USING (user_id = auth.uid());
 CREATE POLICY "saved_searches_delete" ON public.saved_searches FOR DELETE USING (user_id = auth.uid());
 
+-- ── LEADS (2026-08-19) ─────────────────────────────────────────────
+-- Capture les visiteurs pas encore prets a deposer une annonce (via un
+-- petit formulaire email sur les pages guides/estimation). Ecriture
+-- publique uniquement (comme un formulaire de contact) ; pas de lecture
+-- publique, consultation depuis l'onglet Table Editor de Supabase ou via
+-- le service_role. Un webhook Database (a configurer manuellement, voir
+-- README plus bas) synchronise chaque nouveau lead vers Brevo.
+CREATE TABLE IF NOT EXISTS public.leads (
+  id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email      text NOT NULL,
+  source     text NOT NULL DEFAULT '',
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS leads_email_unique ON public.leads (lower(email));
+ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "leads_insert" ON public.leads;
+CREATE POLICY "leads_insert" ON public.leads FOR INSERT WITH CHECK (true);
+
 -- ═══════════════════════════════════════════════════════════════════
 -- BUCKET STORAGE — à créer MANUELLEMENT dans Supabase
 --

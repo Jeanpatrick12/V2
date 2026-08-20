@@ -42,7 +42,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=37"></script>
+<script src="sa-shared.js?v=39"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2372,6 +2372,7 @@ function gfbPrevScreen(){
 
   function goNext(from) {
     showStep(from + 1);
+    if (typeof gtag === 'function') gtag('event', 'deposer_step', { step: from + 1 });
   }
 
   function goBack(from) {
@@ -2515,6 +2516,7 @@ function gfbPrevScreen(){
     let listing;
     try { listing = await SA.addListing(collectFormData()); } catch(e) { SA.toast('Erreur lors de la publication : ' + e.message, 'ti-alert-circle'); btn.disabled = false; return; }
     lastPublishedId = listing.id;
+    if (typeof gtag === 'function') gtag('event', 'annonce_publiee', { transaction: listing.transaction || '' });
     document.getElementById('formLayout').style.display = 'none';
     document.getElementById('progressBar').style.display = 'none';
     var sw = document.getElementById('successWrap');

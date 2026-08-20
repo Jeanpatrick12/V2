@@ -117,6 +117,21 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
 .vh-cta h3 { font-size: 16px; font-weight: 800; color: white; margin-bottom: 6px; }
 .vh-cta p { font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 14px; line-height: 1.5; }
 
+/* Capture visiteurs pas encore prêts (newsletter) */
+.m-lead-card { margin: 14px var(--pad) 0; background: #fff5f4; border: 1px solid #ffd4cb; border-radius: 14px; padding: 18px 16px; text-align: center; }
+.m-lead-icon { width: 40px; height: 40px; border-radius: 11px; background: var(--red); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+.m-lead-icon i { color: white; font-size: 18px; }
+.m-lead-title { font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.m-lead-sub { font-size: 11.5px; color: var(--text3); line-height: 1.5; margin-bottom: 13px; }
+.sa-lead-form { display: flex; flex-direction: column; gap: 8px; }
+.sa-lead-input { padding: 12px 14px; border: 1.5px solid #e5cfc9; border-radius: 10px; font-size: 13.5px; font-family: inherit; outline: none; background: white; width: 100%; }
+.sa-lead-input:focus { border-color: var(--red); }
+.sa-lead-btn { background: var(--red); color: white; border: none; padding: 13px; border-radius: 10px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; width: 100%; }
+.sa-lead-btn:disabled { opacity: .6; }
+.sa-lead-msg { font-size: 11.5px; font-weight: 600; }
+.sa-lead-msg.ok { color: #1a8c4e; }
+.sa-lead-msg.err { color: #c0392b; }
+
 /* Modal */
 .vh-overlay { display: none; position: fixed; inset: 0; z-index: 600; background: rgba(0,0,0,.55); }
 .vh-sheet { position: absolute; bottom: 0; left: 0; right: 0; background: white; border-radius: 20px 20px 0 0; max-height: 92vh; display: flex; flex-direction: column; }
@@ -619,6 +634,18 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
   <button onclick="window.top.location='/deposer-gate?type=location'" style="background:var(--red);color:white;border:none;border-radius:10px;padding:13px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px"><i class="ti ti-home-plus"></i> Déposer mon annonce</button>
 </div>
 
+<!-- CAPTURE VISITEURS PAS ENCORE PRÊTS -->
+<div class="m-lead-card">
+  <div class="m-lead-icon"><i class="ti ti-mail"></i></div>
+  <div class="m-lead-title">Pas encore prêt à louer ?</div>
+  <div class="m-lead-sub">Recevez nos conseils par email, zéro spam.</div>
+  <form class="sa-lead-form" id="leadForm">
+    <input type="email" class="sa-lead-input" placeholder="vous@email.com" required>
+    <button type="submit" class="sa-lead-btn">S'inscrire</button>
+    <div class="sa-lead-msg"></div>
+  </form>
+</div>
+
 <!-- DOC ACTION BAR -->
 <div id="docActBar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:700;background:#1e293b;border-top:1.5px solid #334155;padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))">
   <div style="display:flex;gap:8px">
@@ -809,7 +836,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=37"></script>
+<script src="../sa-shared.js?v=39"></script>
 <script>
 var done = JSON.parse(localStorage.getItem('sa_loueur_done')||'[]');
 var openSteps = new Set([1]);
@@ -1066,6 +1093,7 @@ SA.init().then(function(){
   var u=SA.getUser();
   if(u)document.getElementById('botProfileLabel').textContent=u.prenom||'Profil';
 });
+SA.wireLeadForm(document.getElementById('leadForm'), 'guide-loueur-mobile');
 
 // Ouverture automatique d'un document depuis /documents ("Générer" -> /guide?doc=TYPE
 // -> ici sur mobile) : la page guide desktop lit ce paramètre, mais la version mobile

@@ -22,7 +22,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=37"></script>
+<script src="sa-shared.js?v=39"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -579,6 +579,7 @@ async function markSold(id, transaction) {
   if (!confirm('Confirmer : cette annonce est ' + (transaction === 'vente' ? 'vendue' : 'louée') + ' ? Elle sera retirée des résultats de recherche.')) return;
   await SA.updateListing(id, { status: 'sold' });
   SA.toast('Annonce mise à jour — merci de l\'avoir signalé', 'ti-circle-check');
+  if (typeof gtag === 'function') gtag('event', 'annonce_vendue', { transaction: transaction });
   const l = SA.getListingById(id);
   const user = SA.getUser();
   const fd = new FormData();

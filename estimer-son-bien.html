@@ -179,6 +179,25 @@ button{font-family:inherit;cursor:pointer}
 .v-cta-inner h2{font-size:28px;font-weight:800;color:white;margin-bottom:12px}
 .v-cta-inner p{font-size:14.5px;color:rgba(255,255,255,.5);margin-bottom:26px}
 
+/* ── Capture visiteurs pas encore prêts (newsletter) ── */
+.sa-lead-wrap{max-width:900px;margin:0 auto;padding:40px 40px 0}
+.sa-lead-card{background:#fff5f4;border:1px solid #ffd4cb;border-radius:18px;padding:1.8rem 2rem;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.sa-lead-icon{width:50px;height:50px;border-radius:13px;background:#E84533;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-lead-icon i{color:white;font-size:21px}
+.sa-lead-text{flex:1;min-width:220px}
+.sa-lead-title{font-size:16.5px;font-weight:700;color:#111;margin-bottom:4px}
+.sa-lead-sub{font-size:12.5px;color:#888;line-height:1.5}
+.sa-lead-form{display:flex;gap:9px;flex-wrap:wrap}
+.sa-lead-input{padding:12px 15px;border:1.5px solid #e5cfc9;border-radius:10px;font-size:13.5px;font-family:inherit;min-width:220px;outline:none;background:white}
+.sa-lead-input:focus{border-color:#E84533}
+.sa-lead-btn{background:#E84533;color:white;border:none;padding:12px 20px;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.sa-lead-btn:hover{background:#c93a2a}
+.sa-lead-btn:disabled{opacity:.6;cursor:default}
+.sa-lead-msg{width:100%;font-size:12.5px;font-weight:600;margin-top:2px}
+.sa-lead-msg.ok{color:#1a8c4e}
+.sa-lead-msg.err{color:#c0392b}
+@media(max-width:640px){.sa-lead-wrap{padding:28px 20px 0}.sa-lead-card{padding:1.5rem}}
+
 @media(max-width:900px){
   .v-hero-inner{grid-template-columns:1fr}
   .v-stats-grid{grid-template-columns:repeat(3,1fr)}
@@ -366,11 +385,28 @@ button{font-family:inherit;cursor:pointer}
   </div>
 </div>
 
+<!-- CAPTURE VISITEURS PAS ENCORE PRÊTS -->
+<div class="sa-lead-wrap">
+  <div class="sa-lead-card">
+    <div class="sa-lead-icon"><i class="ti ti-mail"></i></div>
+    <div class="sa-lead-text">
+      <div class="sa-lead-title">Recevez votre estimation par email</div>
+      <div class="sa-lead-sub">Et nos conseils pour vendre au meilleur prix quand vous serez prêt. Zéro spam, désinscription en un clic.</div>
+    </div>
+    <form class="sa-lead-form" id="leadForm">
+      <input type="email" class="sa-lead-input" placeholder="vous@email.com" required>
+      <button type="submit" class="sa-lead-btn">S'inscrire</button>
+      <div class="sa-lead-msg"></div>
+    </form>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=37"></script>
+<script src="sa-shared.js?v=39"></script>
 <script>
 SA.init().then(function() { SA.mountNavAuth(); });
+SA.wireLeadForm(document.getElementById('leadForm'), 'estimer-son-bien');
 </script>
 </body>
 </html>

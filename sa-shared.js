@@ -74,6 +74,19 @@
   }
   function uid() { return "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
+  // Envoie un evenement GA4. Sur les pages /m/*.html (chargees dans l'iframe
+  // du shell mobile), window.gtag n'existe pas car Analytics est initialise
+  // uniquement sur la page parente avant qu'elle ne soit videe ; on reutilise
+  // alors son contexte encore actif via window.top.gtag.
+  function _track(eventName, params) {
+    try {
+      var g = (typeof window.gtag === "function") ? window.gtag
+        : (window.top && typeof window.top.gtag === "function") ? window.top.gtag
+        : null;
+      if (g) g("event", eventName, params || {});
+    } catch (e) {}
+  }
+
   /* ── Normalisation des données venant de la DB ──────────────────── */
   function _normListing(row) {
     return {
@@ -744,6 +757,49 @@
     } catch (e) { return null; }
   }
 
+  /* ── Capture visiteurs (newsletter / rappel) ─────────────────────── */
+  async function submitLead(email, source) {
+    if (!_sb) return { ok: false, reason: "offline" };
+    email = (email || "").trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { ok: false, reason: "invalid" };
+    try {
+      const { error } = await _sb.from("leads").insert({ email: email, source: source || "" });
+      if (error) {
+        // contrainte d'unicite sur l'email = deja inscrit, ce n'est pas un echec cote utilisateur
+        if (error.code === "23505") return { ok: true, already: true };
+        return { ok: false, reason: "error" };
+      }
+      return { ok: true };
+    } catch (e) { return { ok: false, reason: "error" }; }
+  }
+
+  // Branche un <form> de capture d'email standard (voir .sa-lead-* dans
+  // les pages guide-*/estimer-son-bien) : cherche .sa-lead-input,
+  // .sa-lead-btn et .sa-lead-msg à l'intérieur du formulaire.
+  function wireLeadForm(formEl, source) {
+    if (!formEl) return;
+    formEl.addEventListener("submit", function(e) {
+      e.preventDefault();
+      var input = formEl.querySelector(".sa-lead-input");
+      var btn = formEl.querySelector(".sa-lead-btn");
+      var msg = formEl.querySelector(".sa-lead-msg");
+      btn.disabled = true;
+      msg.className = "sa-lead-msg";
+      msg.textContent = "";
+      submitLead(input.value, source).then(function(res) {
+        btn.disabled = false;
+        if (res.ok) {
+          msg.className = "sa-lead-msg ok";
+          msg.textContent = res.already ? "Déjà inscrit(e) — c'est noté !" : "Inscription confirmée, merci !";
+          input.value = "";
+        } else {
+          msg.className = "sa-lead-msg err";
+          msg.textContent = res.reason === "invalid" ? "Adresse email invalide." : "Une erreur est survenue, réessayez.";
+        }
+      });
+    });
+  }
+
   /* ── Messagerie ─────────────────────────────────────────────────── */
   function getConversations() { return _cache.conversations.slice(); }
   function getConversation(id) { return _cache.conversations.find(c => c.id === id) || null; }
@@ -794,6 +850,7 @@
 
     const listing = getListingById(listingId);
     let convo = getConversationByListing(listingId);
+    const isFirstContact = !convo;
     const contactName = listing ? ((listing.contactPrenom || "") + " " + (listing.contactNom || "")).trim() || "L'annonceur" : "L'annonceur";
 
     if (!convo) {
@@ -827,6 +884,7 @@
     }
 
     convo.messages.push(_normMsg(msg));
+    _track("message_envoye", { premier_contact: isFirstContact });
 
     // Mise à jour last_message_at
     await _sb.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", convo.id);
@@ -1051,6 +1109,7 @@
       else msg = msg.charAt(0).toUpperCase() + msg.slice(1);
       throw new Error(msg);
     }
+    _track("compte_cree");
     // Pas de session renvoyée → confirmation email requise
     if (!j.access_token) {
       const err = new Error("Compte créé ! Vérifiez votre boîte email pour confirmer votre adresse.");
@@ -1449,7 +1508,7 @@
     // Recherches
     getSavedSearches, addSavedSearch, removeSavedSearch, toggleSearchAlerts,
     // Confiance
-    getSellerTrustInfo, getPublicStats,
+    getSellerTrustInfo, getPublicStats, submitLead, wireLeadForm,
     // Messagerie
     getConversations, getConversation, getConversationByListing, hasConversation,
     sendMessage, setContactShared, setBuyerConfirmedSale,
