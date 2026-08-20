@@ -18,28 +18,33 @@
 .savings-banner .amt { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; }
 .savings-banner .amt em { color: #4ade80; font-style: normal; }
 
-/* Carte flottante dégradée, chevauche le bas du hero — même langage que
-   .savings-banner, bien visible dès l'arrivée sur la page. */
-.m-counter-wrap { padding: 0 var(--pad); margin-top: -22px; position: relative; z-index: 2; }
+/* Même carte "Nos chiffres" que la version ordinateur : dégradé bleu
+   marine, grille à 3 colonnes égales pour que le séparateur tombe
+   toujours exactement au centre. Espacement normal (pas de chevauchement
+   du hero) pour éviter toute collision selon la page. */
+.m-counter-wrap { padding: 0 var(--pad); margin: 20px 0 24px; }
 .m-counter-bar {
   position: relative;
-  display: flex; justify-content: center; align-items: center; gap: 22px;
-  padding: 18px 14px 16px; background: linear-gradient(135deg, #1a2c3d, #0f1923);
-  border-radius: 16px; box-shadow: 0 14px 30px rgba(15,25,35,0.3);
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px;
+  padding: 20px 16px 17px; background: linear-gradient(135deg, #1a2c3d, #0f1923);
+  border-radius: 16px; box-shadow: 0 14px 30px rgba(15,25,35,0.16);
   border: 1px solid rgba(255,255,255,0.06);
 }
+.m-counter-bar.single { display: flex; justify-content: center; }
 .m-counter-eyebrow {
   position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
   background: var(--red); color: white; font-size: 9.5px; font-weight: 700;
   text-transform: uppercase; letter-spacing: .07em; padding: 4px 12px; border-radius: 999px;
   white-space: nowrap; box-shadow: 0 3px 10px rgba(232,69,51,0.35);
 }
-.m-counter-item { display: flex; align-items: center; gap: 10px; }
+.m-counter-item { display: flex; align-items: center; gap: 10px; justify-self: center; }
 .m-counter-icon { width: 38px; height: 38px; border-radius: 11px; background: rgba(232,69,51,0.18); border: 1px solid rgba(232,69,51,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .m-counter-icon i { font-size: 17px; color: #ff7a68; }
 .m-counter-num { font-size: 23px; font-weight: 700; color: white; line-height: 1; letter-spacing: -0.3px; font-variant-numeric: tabular-nums; }
 .m-counter-label { font-size: 11.5px; color: rgba(255,255,255,0.68); margin-top: 4px; line-height: 1.3; }
 .m-counter-sep { width: 1px; align-self: stretch; background: rgba(255,255,255,0.1); }
+
+.m-offert-badge { display: inline-flex; align-items: center; background: rgba(74,222,128,0.15); color: #4ade80; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; vertical-align: middle; margin-left: 5px; text-transform: uppercase; letter-spacing: .03em; }
 
 .m-announce-bar { background: var(--red); color: white; text-align: center; font-size: 12px; font-weight: 600; padding: 9px 14px; line-height: 1.4; }
 .m-announce-bar i { margin-right: 6px; font-size: 13px; vertical-align: -1px; }
@@ -189,7 +194,7 @@
 <div class="m-hero">
   <div class="m-hero-badge"><div class="m-hero-dot"></div> Plateforme 100% entre particuliers</div>
   <h1>L'immobilier <span>sans intermédiaire</span>, sans frais cachés</h1>
-  <p class="m-hero-sub">Vendez ou louez directement à un particulier et gardez 2 à 9% de plus dans votre poche. SansAgents ne prélève que 1% de commission.</p>
+  <p class="m-hero-sub" id="mHeroSub">Vendez ou louez directement à un particulier et gardez 2 à 9% de plus dans votre poche. SansAgents ne prélève que 1% de commission.</p>
   <!-- Stats carousel -->
   <div class="m-carousel" style="margin: 0 -16px; padding: 0 16px;">
     <div class="m-stat-pill m-carousel-item">
@@ -197,8 +202,8 @@
       <div class="m-stat-label">sur une vente à 250 000 € vs. agence à 5%</div>
     </div>
     <div class="m-stat-pill m-carousel-item">
-      <div class="m-stat-num">Commission <em>à 1%</em></div>
-      <div class="m-stat-label">au lieu de 3–10% prélevés par une agence</div>
+      <div class="m-stat-num" id="mHeroStatComm">Commission <em>à 1%</em></div>
+      <div class="m-stat-label" id="mHeroStatCommLabel">au lieu de 3–10% prélevés par une agence</div>
     </div>
     <div class="m-stat-pill m-carousel-item" style="margin-right:16px">
       <div class="m-stat-num">Publication <em>gratuite</em></div>
@@ -269,7 +274,7 @@
 <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden">
   <div class="m-carousel" style="padding: 0 var(--pad);">
     <div class="m-trust-item m-carousel-item"><div class="m-trust-icon"><i class="ti ti-pig-money"></i></div><div><div class="m-trust-title">Publication gratuite</div><div class="m-trust-sub">Vente & location</div></div></div>
-    <div class="m-trust-item m-carousel-item"><div class="m-trust-icon"><i class="ti ti-receipt-2"></i></div><div><div class="m-trust-title">1% si vente conclue</div><div class="m-trust-sub">Jamais à l'avance</div></div></div>
+    <div class="m-trust-item m-carousel-item"><div class="m-trust-icon"><i class="ti ti-receipt-2"></i></div><div><div class="m-trust-title" id="mTrustCommTitle">1% si vente conclue</div><div class="m-trust-sub" id="mTrustCommSub">Jamais à l'avance</div></div></div>
     <div class="m-trust-item m-carousel-item"><div class="m-trust-icon"><i class="ti ti-building-bank"></i></div><div><div class="m-trust-title">Acte chez le notaire</div><div class="m-trust-sub">Sécurité garantie</div></div></div>
     <div class="m-trust-item m-carousel-item"><div class="m-trust-icon"><i class="ti ti-users-group"></i></div><div><div class="m-trust-title">Aucune agence</div><div class="m-trust-sub">Aucun intermédiaire</div></div></div>
     <div class="m-trust-item m-carousel-item" style="border-right:none;margin-right:var(--pad)"><div class="m-trust-icon"><i class="ti ti-circle-off"></i></div><div><div class="m-trust-title">0€ locations</div><div class="m-trust-sub">Aucune commission</div></div></div>
@@ -279,7 +284,7 @@
 <!-- ─── SAVINGS ──────────────────────────────────────────── -->
 <div class="m-section" style="background:white;border-top:none">
   <div class="m-section-title">Gagnez des milliers d'euros en vendant sans agence</div>
-  <div class="m-section-sub" style="margin-top:6px">Les agences traditionnelles facturent entre 3% et 10% du prix de vente, en moyenne 5%. SansAgents, c'est 1%, point final.</div>
+  <div class="m-section-sub" id="mSavingsSub" style="margin-top:6px">Les agences traditionnelles facturent entre 3% et 10% du prix de vente, en moyenne 5%. SansAgents, c'est 1%, point final.</div>
   <div class="m-compare">
     <div class="m-compare-card bad">
       <div class="m-compare-label">Agence traditionnelle</div>
@@ -288,8 +293,8 @@
     </div>
     <div class="m-compare-card good">
       <div class="m-compare-label">Avec SansAgents</div>
-      <div class="m-compare-big">2 500 €</div>
-      <div class="m-compare-detail">Commission fixe de 1%, uniquement si la vente se conclut</div>
+      <div class="m-compare-big" id="mCompareGoodBig">2 500 €</div>
+      <div class="m-compare-detail" id="mCompareGoodDetail">Commission fixe de 1%, uniquement si la vente se conclut</div>
     </div>
   </div>
   <div class="savings-banner">
@@ -306,33 +311,33 @@
     <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;background:#0f1923;padding:8px 14px;gap:4px">
       <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px">Prix de vente</div>
       <div style="font-size:10px;font-weight:700;color:#ff7a68;text-transform:uppercase;letter-spacing:0.5px;text-align:center">Agence 5%</div>
-      <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px;text-align:center">SansAgents</div>
+      <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px;text-align:center" id="mTableSaHeader">SansAgents</div>
       <div style="font-size:10px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:0.5px;text-align:center">Gain</div>
     </div>
     <!-- Lignes -->
     <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;border-bottom:1px solid var(--bg);align-items:center">
       <div style="font-size:13px;font-weight:600;color:#111">180 000 €</div>
       <div style="font-size:12px;color:#c0392b;text-align:center;font-weight:600">9 000 €</div>
-      <div style="font-size:12px;color:#666;text-align:center">1 800 €</div>
-      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700">7 200 €</div>
+      <div style="font-size:12px;color:#666;text-align:center" id="mSa180">1 800 €</div>
+      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700" id="mGain180">7 200 €</div>
     </div>
     <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;border-bottom:1px solid var(--bg);align-items:center">
       <div style="font-size:13px;font-weight:700;color:#111">250 000 €<br><span style="font-size:10px;color:var(--red);font-weight:600">Exemple type</span></div>
       <div style="font-size:12px;color:#c0392b;text-align:center;font-weight:600">12 500 €</div>
-      <div style="font-size:12px;color:#666;text-align:center">2 500 €</div>
-      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700">10 000 €</div>
+      <div style="font-size:12px;color:#666;text-align:center" id="mSa250">2 500 €</div>
+      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700" id="mGain250">10 000 €</div>
     </div>
     <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;border-bottom:1px solid var(--bg);align-items:center">
       <div style="font-size:13px;font-weight:600;color:#111">350 000 €</div>
       <div style="font-size:12px;color:#c0392b;text-align:center;font-weight:600">17 500 €</div>
-      <div style="font-size:12px;color:#666;text-align:center">3 500 €</div>
-      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700">14 000 €</div>
+      <div style="font-size:12px;color:#666;text-align:center" id="mSa350">3 500 €</div>
+      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700" id="mGain350">14 000 €</div>
     </div>
     <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;border-bottom:1px solid var(--border);align-items:center">
       <div style="font-size:13px;font-weight:600;color:#111">500 000 €</div>
       <div style="font-size:12px;color:#c0392b;text-align:center;font-weight:600">25 000 €</div>
-      <div style="font-size:12px;color:#666;text-align:center">5 000 €</div>
-      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700">20 000 €</div>
+      <div style="font-size:12px;color:#666;text-align:center" id="mSa500">5 000 €</div>
+      <div style="font-size:12px;color:#1a8c4e;text-align:center;font-weight:700" id="mGain500">20 000 €</div>
     </div>
     <!-- Ligne personnalisée -->
     <div style="display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.1fr;padding:10px 14px;gap:4px;align-items:center;background:#fff5f4">
@@ -465,7 +470,7 @@
   <div style="background:white;border-radius:12px;padding:0 var(--pad)">
     <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Comment fonctionne SansAgents concrètement ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">Vous déposez une annonce en 7 étapes (type de bien, caractéristiques, photos, prix, documents, contact, récapitulatif), et les acheteurs ou locataires intéressés vous contactent directement, sans intermédiaire. Vous gérez vous-même les visites, la négociation et la conclusion de la transaction.</div></div>
     <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Les agences peuvent-elles publier sur SansAgents ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">Non. Seuls les particuliers non professionnels peuvent publier une annonce. Toute annonce d'agence est supprimée et peut faire l'objet de poursuites judiciaires conformément aux CGU.</div></div>
-    <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Combien ça coûte exactement ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">La publication est toujours gratuite. En cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.</div></div>
+    <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Combien ça coûte exactement ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a" id="mFaqCostAnswer">La publication est toujours gratuite. En cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.</div></div>
     <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Quand dois-je payer la commission de 1% ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">Uniquement au moment où la vente est effectivement conclue, jamais avant. Si votre bien ne se vend pas, vous ne payez rien.</div></div>
     <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Comment savoir quels documents sont obligatoires ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">La plateforme génère automatiquement la liste exacte des documents requis selon le type de bien, la transaction et le bail, avec une explication en clair pour chaque document.</div></div>
     <div class="m-faq-item"><div class="m-faq-q" onclick="toggleFaq(this)">Que se passe-t-il si mon logement est en zone tendue ? <i class="ti ti-chevron-down"></i></div><div class="m-faq-a">La plateforme vous alerte si l'encadrement des loyers s'applique à votre ville, pour que vous fixiez un loyer conforme à la loi avant publication.</div></div>
@@ -633,14 +638,16 @@ function calcCustom(raw) {
     saCell.textContent = '—';
     gainCell.innerHTML = '—';
     bannerLabel.textContent = 'Sur une vente à 250 000 €, vous gagnez';
-    bannerAmt.innerHTML = '<em>10 000 €</em> de plus dans votre poche';
+    bannerAmt.innerHTML = M_RATE === 0
+      ? '<em>12 500 €</em> de plus dans votre poche'
+      : '<em>10 000 €</em> de plus dans votre poche';
     return;
   }
   var agence = Math.round(price * 0.05);
-  var sa = Math.round(price * 0.01);
+  var sa = Math.round(price * M_RATE);
   var gain = agence - sa;
   agCell.innerHTML = '<strong style="color:var(--red)">' + fmt(agence) + '</strong>';
-  saCell.textContent = fmt(sa);
+  saCell.innerHTML = M_RATE === 0 ? '0 € <span class="m-offert-badge">offert</span>' : fmt(sa);
   gainCell.innerHTML = '<strong style="color:#1a8c4e">' + fmt(gain) + '</strong>';
   document.getElementById('customPrice').value = price.toLocaleString('fr-FR');
   bannerLabel.textContent = 'Sur une vente à ' + fmt(price) + ', vous gagnez';
@@ -779,20 +786,55 @@ function renderStaticPros() {
 }
 
 // ── Init ──────────────────────────────────────────────────────
-if (SA.isLaunchFree()) {
-  document.getElementById('mAnnounceDate').textContent = SA.launchFreeUntilLabel();
+var M_RATE = SA.isLaunchFree() ? 0 : 0.01;
+
+function applyMobileLaunchMessaging() {
+  var launchLabel = SA.launchFreeUntilLabel();
+  document.getElementById('mAnnounceDate').textContent = launchLabel;
   document.getElementById('mAnnounceBar').style.display = 'block';
+
+  document.getElementById('mHeroSub').innerHTML =
+    'Vendez ou louez directement à un particulier et gardez 2 à 9% de plus dans votre poche. SansAgents ne prélève <strong style="color:#4ade80">aucune commission</strong> avant le ' + launchLabel + '.';
+
+  document.getElementById('mHeroStatComm').innerHTML = 'Commission <em style="color:#4ade80">à 0%</em>';
+  document.getElementById('mHeroStatCommLabel').textContent = 'offre de lancement, jusqu\'au ' + launchLabel;
+
+  document.getElementById('mTrustCommTitle').textContent = '0% si vente conclue';
+  document.getElementById('mTrustCommSub').textContent = 'Offre de lancement';
+
+  document.getElementById('mSavingsSub').innerHTML =
+    'Les agences traditionnelles facturent entre 3% et 10% du prix de vente, en moyenne 5%. SansAgents, c\'est <strong style="color:#4ade80">0% pendant l\'offre de lancement</strong>, puis 1%.';
+
+  document.getElementById('mCompareGoodBig').innerHTML = '0 € <span class="m-offert-badge">offert</span>';
+  document.getElementById('mCompareGoodDetail').textContent = 'Offre de lancement : aucune commission avant le ' + launchLabel + ' — 1% ensuite, uniquement si la vente se conclut';
+
+  document.getElementById('mTableSaHeader').innerHTML = 'SansAgents <span style="color:#4ade80">(0%)</span>';
+
+  document.getElementById('mFaqCostAnswer').innerHTML =
+    'La publication est toujours gratuite. Pendant l\'offre de lancement (annonce publiée avant le ' + launchLabel + '), SansAgents ne perçoit <strong>aucune commission</strong>. Après cette date, en cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.';
+
+  var agenceByRow = { 180: 9000, 250: 12500, 350: 17500, 500: 25000 };
+  Object.keys(agenceByRow).forEach(function(k) {
+    document.getElementById('mSa' + k).innerHTML = '0 € <span class="m-offert-badge">offert</span>';
+    document.getElementById('mGain' + k).textContent = agenceByRow[k].toLocaleString('fr-FR') + ' €';
+  });
+
+  document.getElementById('savingsAmt').innerHTML = '<em>12 500 €</em> de plus dans votre poche';
 }
+
+if (SA.isLaunchFree()) {
+  applyMobileLaunchMessaging();
+}
+
+var mPreviewStats = /[?&]demo_stats=1/.test(location.search);
 
 SA.init().then(function() {
   updateAuthUI(SA.getUser());
   renderListings(SA.getAllListings());
-  if (SA.getAllPros) {
-    var pros = SA.getAllPros();
-    if (pros && pros.length) { renderPros(pros); return; }
-  }
-  renderPros([]);
-  SA.getPublicStats().then(function(stats) {
+  var pros = SA.getAllPros ? SA.getAllPros() : null;
+  renderPros(pros && pros.length ? pros : []);
+
+  (mPreviewStats ? Promise.resolve({ sold: 47, rented: 132 }) : SA.getPublicStats()).then(function(stats) {
     if (!stats || (stats.sold <= 0 && stats.rented <= 0)) return;
     if (stats.sold > 0) {
       document.getElementById('mCounterSoldItem').style.display = 'flex';
@@ -802,9 +844,11 @@ SA.init().then(function() {
       document.getElementById('mCounterRentedItem').style.display = 'flex';
       document.getElementById('mCounterRentedNum').textContent = stats.rented.toLocaleString('fr-FR');
     }
-    if (stats.sold > 0 && stats.rented > 0) {
+    var mBothVisible = stats.sold > 0 && stats.rented > 0;
+    if (mBothVisible) {
       document.getElementById('mCounterSep').style.display = 'block';
     }
+    document.querySelector('#mCounterBar .m-counter-bar').classList.toggle('single', !mBothVisible);
     document.getElementById('mCounterBar').style.display = 'block';
   });
 });
