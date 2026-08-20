@@ -1,19 +1,5 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
 const BREVO_API_KEY = Deno.env.get('BREVO_API_KEY')!
 const BREVO_LIST_ID = Deno.env.get('BREVO_LIST_ID') // optionnel — voir README du dossier
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
-
-function getServiceKey(): string {
-  const secretKeysRaw = Deno.env.get('SUPABASE_SECRET_KEYS')
-  if (secretKeysRaw) {
-    try {
-      const parsed = JSON.parse(secretKeysRaw)
-      if (parsed.service_role) return parsed.service_role
-    } catch (_) {}
-  }
-  return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
-}
 
 Deno.serve(async (req) => {
   try {
