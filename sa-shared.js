@@ -773,9 +773,12 @@
     } catch (e) { return { ok: false, reason: "error" }; }
   }
 
-  // Branche un <form> de capture d'email standard (voir .sa-lead-* dans
-  // les pages guide-*/estimer-son-bien) : cherche .sa-lead-input,
-  // .sa-lead-btn et .sa-lead-msg à l'intérieur du formulaire.
+  // Branche un <form> de capture d'email standard (voir .sa-lead-*/.m-lead-*
+  // dans les pages guide-*/estimer-son-bien, desktop et mobile) : cherche
+  // .sa-lead-input, .sa-lead-btn et .sa-lead-msg à l'intérieur du formulaire.
+  // En cas de succès, la carte entière (icône/titre/sous-titre) bascule
+  // dans un état "confirmé" plutôt que d'ajouter une ligne de texte sous
+  // le formulaire, qui cassait visuellement la carte.
   function wireLeadForm(formEl, source) {
     if (!formEl) return;
     formEl.addEventListener("submit", function(e) {
@@ -787,15 +790,20 @@
       msg.className = "sa-lead-msg";
       msg.textContent = "";
       submitLead(input.value, source).then(function(res) {
-        btn.disabled = false;
-        if (res.ok) {
-          msg.className = "sa-lead-msg ok";
-          msg.textContent = res.already ? "Déjà inscrit(e) — c'est noté !" : "Inscription confirmée, merci !";
-          input.value = "";
-        } else {
+        if (!res.ok) {
+          btn.disabled = false;
           msg.className = "sa-lead-msg err";
           msg.textContent = res.reason === "invalid" ? "Adresse email invalide." : "Une erreur est survenue, réessayez.";
+          return;
         }
+        var card = formEl.closest(".sa-lead-card, .m-lead-card");
+        var icon = card && card.querySelector(".sa-lead-icon, .m-lead-icon");
+        var title = card && card.querySelector(".sa-lead-title, .m-lead-title");
+        var sub = card && card.querySelector(".sa-lead-sub, .m-lead-sub");
+        if (icon) { icon.innerHTML = '<i class="ti ti-check"></i>'; icon.style.background = "#1a8c4e"; }
+        if (title) title.textContent = res.already ? "Déjà inscrit(e) !" : "Inscription confirmée !";
+        if (sub) sub.textContent = res.already ? "Votre adresse était déjà enregistrée — c'est toujours noté." : "Vous recevrez nos prochains conseils par email.";
+        formEl.style.display = "none";
       });
     });
   }
