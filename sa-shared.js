@@ -87,6 +87,57 @@
     } catch (e) {}
   }
 
+  // Banniere de consentement cookies (RGPD). Tant que l'utilisateur n'a pas
+  // choisi, gtag('consent','default', ...) reste sur 'denied' (cf. <head> de
+  // chaque page) : Analytics ne collecte quasiment rien sans cette bannière.
+  // S'affiche sur desktop ET dans l'iframe /m/*.html (même localStorage,
+  // origine identique) ; le "Accepter" met à jour le consentement via
+  // window.top.gtag depuis l'iframe, comme pour _track ci-dessus.
+  function _initCookieBanner() {
+    if (/\/cookies(\.html)?$/.test(location.pathname)) return;
+    var already;
+    try { already = localStorage.getItem("sa_consent_analytics"); } catch (e) { return; }
+    if (already !== null) return;
+    if (document.getElementById("saCookieBanner")) return;
+
+    var style = document.createElement("style");
+    style.textContent =
+      "#saCookieBanner{position:fixed;left:0;right:0;bottom:0;z-index:999999;background:#fff;border-top:1px solid #e5e5e5;box-shadow:0 -4px 24px rgba(0,0,0,.1);padding:16px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}" +
+      "#saCookieBanner p{margin:0;color:#444;font-size:13px;line-height:1.5;flex:1;min-width:220px}" +
+      "#saCookieBanner a{color:#E84533;text-decoration:underline}" +
+      "#saCookieBanner .sa-cb-actions{display:flex;gap:10px;flex-shrink:0}" +
+      "#saCookieBanner button{border:none;border-radius:8px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}" +
+      "#saCookieBanner .sa-cb-refuse{background:#f0f0f0;color:#333}" +
+      "#saCookieBanner .sa-cb-refuse:hover{background:#e5e5e5}" +
+      "#saCookieBanner .sa-cb-accept{background:#E84533;color:#fff}" +
+      "#saCookieBanner .sa-cb-accept:hover{background:#d13a2a}" +
+      "@media(max-width:480px){#saCookieBanner{padding:14px 16px}#saCookieBanner p{min-width:100%;font-size:12.5px}#saCookieBanner .sa-cb-actions{width:100%}#saCookieBanner button{flex:1}}";
+    document.head.appendChild(style);
+
+    var el = document.createElement("div");
+    el.id = "saCookieBanner";
+    el.innerHTML =
+      "<p>Nous utilisons des cookies de mesure d'audience pour comprendre comment le site est utilisé et l'améliorer. <a href=\"/cookies\">En savoir plus</a></p>" +
+      '<div class="sa-cb-actions">' +
+        '<button type="button" class="sa-cb-refuse">Refuser</button>' +
+        '<button type="button" class="sa-cb-accept">Accepter</button>' +
+      "</div>";
+    document.body.appendChild(el);
+
+    function resolve(granted) {
+      try { localStorage.setItem("sa_consent_analytics", granted ? "granted" : "denied"); } catch (e) {}
+      try {
+        var g = (typeof window.gtag === "function") ? window.gtag
+          : (window.top && typeof window.top.gtag === "function") ? window.top.gtag
+          : null;
+        if (g && granted) g("consent", "update", { analytics_storage: "granted" });
+      } catch (e) {}
+      el.remove();
+    }
+    el.querySelector(".sa-cb-refuse").addEventListener("click", function() { resolve(false); });
+    el.querySelector(".sa-cb-accept").addEventListener("click", function() { resolve(true); });
+  }
+
   /* ── Normalisation des données venant de la DB ──────────────────── */
   function _normListing(row) {
     return {
@@ -1559,6 +1610,7 @@
 
   // Démarre automatiquement (sans bloquer le rendu de la page)
   document.addEventListener("DOMContentLoaded", function() {
+    _initCookieBanner();
     init().then(function() { initMobileNav(); });
   });
 
