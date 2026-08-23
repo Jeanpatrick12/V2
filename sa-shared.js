@@ -102,27 +102,33 @@
 
     var style = document.createElement("style");
     style.textContent =
-      "#saCookieBanner{position:fixed;left:0;right:0;bottom:0;z-index:999999;background:#fff;border-top:1px solid #e5e5e5;box-shadow:0 -4px 24px rgba(0,0,0,.1);padding:16px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}" +
-      "#saCookieBanner p{margin:0;color:#444;font-size:13px;line-height:1.5;flex:1;min-width:220px}" +
+      "#saCookieBanner{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(12px);opacity:0;transition:opacity .35s ease,transform .35s ease;z-index:999999;width:calc(100% - 32px);max-width:400px;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(17,17,17,.16),0 0 0 1px rgba(17,17,17,.05);padding:22px 22px 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}" +
+      "#saCookieBanner.sa-cb-in{opacity:1;transform:translateX(-50%) translateY(0)}" +
+      "#saCookieBanner .sa-cb-icon{width:38px;height:38px;border-radius:10px;background:#fdeceb;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:12px}" +
+      "#saCookieBanner h3{margin:0 0 6px;font-size:15px;font-weight:700;color:#111}" +
+      "#saCookieBanner p{margin:0;color:#666;font-size:13px;line-height:1.55}" +
       "#saCookieBanner a{color:#E84533;text-decoration:underline}" +
-      "#saCookieBanner .sa-cb-actions{display:flex;gap:10px;flex-shrink:0}" +
-      "#saCookieBanner button{border:none;border-radius:8px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}" +
-      "#saCookieBanner .sa-cb-refuse{background:#f0f0f0;color:#333}" +
-      "#saCookieBanner .sa-cb-refuse:hover{background:#e5e5e5}" +
+      "#saCookieBanner .sa-cb-actions{display:flex;gap:8px;margin-top:16px}" +
+      "#saCookieBanner button{flex:1;border:none;border-radius:9px;padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;transition:background .15s ease}" +
+      "#saCookieBanner .sa-cb-refuse{background:#f2f2f2;color:#333}" +
+      "#saCookieBanner .sa-cb-refuse:hover{background:#e7e7e7}" +
       "#saCookieBanner .sa-cb-accept{background:#E84533;color:#fff}" +
       "#saCookieBanner .sa-cb-accept:hover{background:#d13a2a}" +
-      "@media(max-width:480px){#saCookieBanner{padding:14px 16px}#saCookieBanner p{min-width:100%;font-size:12.5px}#saCookieBanner .sa-cb-actions{width:100%}#saCookieBanner button{flex:1}}";
+      "@media(max-width:480px){#saCookieBanner{bottom:12px;padding:20px 18px 16px}}";
     document.head.appendChild(style);
 
     var el = document.createElement("div");
     el.id = "saCookieBanner";
     el.innerHTML =
+      '<div class="sa-cb-icon"><i class="ti ti-cookie"></i></div>' +
+      "<h3>Votre vie privée</h3>" +
       "<p>Nous utilisons des cookies de mesure d'audience pour comprendre comment le site est utilisé et l'améliorer. <a href=\"/cookies\">En savoir plus</a></p>" +
       '<div class="sa-cb-actions">' +
         '<button type="button" class="sa-cb-refuse">Refuser</button>' +
         '<button type="button" class="sa-cb-accept">Accepter</button>' +
       "</div>";
     document.body.appendChild(el);
+    requestAnimationFrame(function() { requestAnimationFrame(function() { el.classList.add("sa-cb-in"); }); });
 
     function resolve(granted) {
       try { localStorage.setItem("sa_consent_analytics", granted ? "granted" : "denied"); } catch (e) {}
