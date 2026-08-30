@@ -190,11 +190,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   text-transform:uppercase;letter-spacing:.08em;padding:5px 16px;border-radius:999px;
   white-space:nowrap;box-shadow:0 4px 12px rgba(232,69,51,0.35)
 }
-.sa-counter-item{display:flex;align-items:center;gap:14px;justify-self:center}
+.sa-counter-item{display:flex;flex-direction:column;align-items:center;gap:10px;justify-self:center;text-align:center}
+.sa-counter-item-top{display:flex;align-items:center;gap:14px}
 .sa-counter-icon{width:48px;height:48px;border-radius:13px;background:rgba(232,69,51,0.18);border:1px solid rgba(232,69,51,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .sa-counter-icon i{color:#ff7a68;font-size:21px}
 .sa-counter-num{font-size:32px;font-weight:700;color:white;letter-spacing:-0.7px;line-height:1;font-variant-numeric:tabular-nums}
-.sa-counter-label{font-size:13px;color:rgba(255,255,255,0.68);margin-top:4px;line-height:1.3;max-width:170px}
+.sa-counter-label{font-size:13px;color:rgba(255,255,255,0.68);line-height:1.35;max-width:210px}
 .sa-counter-sep{width:1px;align-self:stretch;background:rgba(255,255,255,0.1)}
 @media (max-width:640px){
   .sa-counter-banner{grid-template-columns:1fr;gap:20px;padding:1.5rem 1.4rem;justify-items:center}
@@ -668,19 +669,19 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
   <div class="sa-counter-banner">
     <div class="sa-counter-eyebrow">Nos chiffres</div>
     <div class="sa-counter-item" id="counterSoldItem" style="display:none">
-      <div class="sa-counter-icon"><i class="ti ti-key"></i></div>
-      <div>
+      <div class="sa-counter-item-top">
+        <div class="sa-counter-icon"><i class="ti ti-key"></i></div>
         <div class="sa-counter-num" id="counterSoldNum">0</div>
-        <div class="sa-counter-label">biens vendus entre particuliers</div>
       </div>
+      <div class="sa-counter-label">biens vendus entre particuliers</div>
     </div>
     <div class="sa-counter-sep" id="counterSep" style="display:none"></div>
     <div class="sa-counter-item" id="counterRentedItem" style="display:none">
-      <div class="sa-counter-icon"><i class="ti ti-home-check"></i></div>
-      <div>
+      <div class="sa-counter-item-top">
+        <div class="sa-counter-icon"><i class="ti ti-home-check"></i></div>
         <div class="sa-counter-num" id="counterRentedNum">0</div>
-        <div class="sa-counter-label">locations conclues</div>
       </div>
+      <div class="sa-counter-label">locations conclues</div>
     </div>
   </div>
 </div>
