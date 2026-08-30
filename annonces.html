@@ -360,7 +360,7 @@ body.sa-map-active .sa-an-body{padding-bottom:0}
 
 <!-- ── BANDEAU OFFRE DE LANCEMENT ── -->
 <div class="sa-announce-bar" id="announceBar" style="display:none">
-  <i class="ti ti-rocket"></i>Offre de lancement : <strong>0% de commission</strong> pour toute annonce publiée avant le <strong id="announceDate">—</strong>
+  <i class="ti ti-rocket"></i>Offre de lancement : <strong>0% de commission</strong> pour toute annonce publiée dès maintenant
 </div>
 
 <!-- ── NAV ── -->
@@ -1691,7 +1691,6 @@ function initFromParams() {
 }
 
 if (SA.isLaunchFree()) {
-  document.getElementById('announceDate').textContent = SA.launchFreeUntilLabel();
   document.getElementById('announceBar').style.display = 'block';
 }
 

@@ -1171,11 +1171,10 @@ SA.init().then(function(){ if (!SA.getUser()) { document.getElementById('authGat
       </div>
       <div class="d-gfb-tip" id="gfbLaunchTip" style="display:none">
         <div class="d-gfb-tip-ico"><i class="ti ti-rocket"></i></div>
-        <div class="d-gfb-tip-text"><strong>Offre de lancement :</strong> toute annonce publiée avant le <strong id="gfbLaunchDate">—</strong> est définitivement exonérée de la commission de 1%, même si la vente se conclut après cette date.</div>
+        <div class="d-gfb-tip-text"><strong>Offre de lancement :</strong> toute annonce publiée dès maintenant est définitivement exonérée de la commission de 1%, même si la vente se conclut plus tard.</div>
       </div>
       <script>
       if (SA.isLaunchFree()) {
-        document.getElementById('gfbLaunchDate').textContent = SA.launchFreeUntilLabel();
         document.getElementById('gfbLaunchTip').style.display = 'flex';
       }
       </script>
@@ -2221,7 +2220,7 @@ function gfbPrevScreen(){
       document.getElementById('rPrixLabel').textContent = 'Prix de vente';
       document.getElementById('rPrix').textContent = p ? p.toLocaleString('fr-FR') + ' €' : '—';
       if (SA.isLaunchFree()) {
-        feeTxt.innerHTML = `Publication <strong>100% gratuite</strong>. Votre annonce est publiée sous l'<strong>offre de lancement</strong> : <strong>0% de commission</strong>, même si la vente se conclut après le ${SA.launchFreeUntilLabel()}. Cet avantage est acquis définitivement dès la publication.`;
+        feeTxt.innerHTML = `Publication <strong>100% gratuite</strong>. Votre annonce est publiée sous l'<strong>offre de lancement</strong> : <strong>0% de commission</strong>, quelle que soit la date à laquelle la vente se conclut. Cet avantage est acquis définitivement dès la publication.`;
       } else {
         feeTxt.innerHTML = `Publication <strong>100% gratuite</strong>. En cas de vente conclue, SansAgents perçoit <strong>1% du prix de vente final signé</strong> — soit <strong>${fee} à titre indicatif</strong> (montant définitif calculé sur le prix réel de la transaction). Aucune agence ne touche un centime.`;
       }

@@ -1233,10 +1233,9 @@ SA.init().then(function(){
 });
 SA.wireLeadForm(document.getElementById('leadForm'), 'guide-vendeur-mobile');
 if (SA.isLaunchFree()) {
-  var mvLabel = SA.launchFreeUntilLabel();
   document.getElementById('mvCommVal').innerHTML = '<span style="color:#4ade80">0%</span>';
-  document.getElementById('mvCommLbl').textContent = 'Offre de lancement, jusqu\'au ' + mvLabel;
-  document.getElementById('mvTipText').innerHTML = 'Publication 100% gratuite. Offre de lancement : <strong>aucune commission</strong> avant le ' + mvLabel + ' — 1% ensuite, uniquement en cas de vente conclue, jamais sur une location.';
+  document.getElementById('mvCommLbl').textContent = 'Offre de lancement, garanti dès maintenant';
+  document.getElementById('mvTipText').innerHTML = 'Publication 100% gratuite. Offre de lancement : <strong>aucune commission</strong> pour toute annonce publiée dès maintenant — 1% ensuite, uniquement en cas de vente conclue, jamais sur une location.';
 }
 
 // Ouverture automatique d'un document depuis /documents ("Générer" -> /guide?doc=TYPE

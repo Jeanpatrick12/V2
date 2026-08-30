@@ -1663,11 +1663,10 @@ function copyDesc(){
 SA.init();
 SA.wireLeadForm(document.getElementById('leadForm'), 'guide-vendeur');
 if (SA.isLaunchFree()) {
-  var gvLabel = SA.launchFreeUntilLabel();
   document.getElementById('gvCommVal').innerHTML = '<span style="color:#4ade80">0%</span>';
-  document.getElementById('gvCommLbl').innerHTML = 'offre de lancement,<br>jusqu\'au ' + gvLabel;
-  document.getElementById('gvTipText').innerHTML = '<strong>Rappel :</strong> La publication est 100% gratuite. Offre de lancement : <strong>aucune commission</strong> pour toute annonce publiée avant le ' + gvLabel + ' — 1% ensuite, uniquement en cas de vente conclue, jamais sur une location.';
-  document.getElementById('gvFaqCost').innerHTML = 'Pendant l\'offre de lancement (annonce publiée avant le ' + gvLabel + '), SansAgents ne prélève <strong>aucune commission</strong>. Après cette date, la commission est de 1%, uniquement si la vente se conclut. La publication de l\'annonce est gratuite dans tous les cas. Une agence traditionnelle facture en moyenne 3 à 8% du prix de vente.';
+  document.getElementById('gvCommLbl').innerHTML = 'offre de lancement,<br>garanti dès maintenant';
+  document.getElementById('gvTipText').innerHTML = '<strong>Rappel :</strong> La publication est 100% gratuite. Offre de lancement : <strong>aucune commission</strong> pour toute annonce publiée dès maintenant — 1% ensuite, uniquement en cas de vente conclue, jamais sur une location.';
+  document.getElementById('gvFaqCost').innerHTML = 'Pendant l\'offre de lancement (annonce publiée dès maintenant), SansAgents ne prélève <strong>aucune commission</strong>. Plus tard, la commission est de 1%, uniquement si la vente se conclut. La publication de l\'annonce est gratuite dans tous les cas. Une agence traditionnelle facture en moyenne 3 à 8% du prix de vente.';
 }
 
 function addPrixRow(){

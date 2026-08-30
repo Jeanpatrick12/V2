@@ -1404,7 +1404,7 @@ function copyDesc(){
 SA.init();
 SA.wireLeadForm(document.getElementById('leadForm'), 'guide-acheteur');
 if (SA.isLaunchFree()) {
-  document.getElementById('gaFaqComm').innerHTML = 'Non. L\'acheteur ne paie jamais de commission ni de frais pour consulter les annonces ou contacter un vendeur sur SansAgents. Pendant l\'offre de lancement (annonce publiée avant le ' + SA.launchFreeUntilLabel() + '), le vendeur non plus : <strong>aucune commission</strong>. Après cette date, le vendeur règle 1% du prix, uniquement si la vente se conclut.';
+  document.getElementById('gaFaqComm').innerHTML = 'Non. L\'acheteur ne paie jamais de commission ni de frais pour consulter les annonces ou contacter un vendeur sur SansAgents. Pendant l\'offre de lancement (annonce publiée dès maintenant), le vendeur non plus : <strong>aucune commission</strong>. Plus tard, le vendeur règle 1% du prix, uniquement si la vente se conclut.';
 }
 
 function addPrixRow(){

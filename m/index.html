@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SansAgents — L'immobilier sans intermédiaire</title>
-<meta name="description" content="Vendez ou louez sans agence. SansAgents ne prélève aucune commission pour toute annonce publiée avant le 1er juin 2028.">
+<meta name="description" content="Vendez ou louez sans agence. SansAgents ne prélève aucune commission pendant l'offre de lancement.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <meta name="theme-color" content="#E84533">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
@@ -163,7 +163,7 @@
 
 <!-- ─── BANDEAU OFFRE DE LANCEMENT ─────────────────────────── -->
 <div class="m-announce-bar" id="mAnnounceBar" style="display:none">
-  <i class="ti ti-rocket"></i>0% de commission avant le <strong id="mAnnounceDate">—</strong>
+  <i class="ti ti-rocket"></i>0% de commission — offre de lancement
 </div>
 
 <!-- ─── SLIDE MENU ─────────────────────────────────────────── -->
@@ -790,15 +790,13 @@ function renderStaticPros() {
 var M_RATE = SA.isLaunchFree() ? 0 : 0.01;
 
 function applyMobileLaunchMessaging() {
-  var launchLabel = SA.launchFreeUntilLabel();
-  document.getElementById('mAnnounceDate').textContent = launchLabel;
   document.getElementById('mAnnounceBar').style.display = 'block';
 
   document.getElementById('mHeroSub').innerHTML =
-    'Vendez ou louez directement à un particulier et gardez 2 à 9% de plus dans votre poche. SansAgents ne prélève <strong style="color:#4ade80">aucune commission</strong> avant le ' + launchLabel + '.';
+    'Vendez ou louez directement à un particulier et gardez 2 à 9% de plus dans votre poche. SansAgents ne prélève <strong style="color:#4ade80">aucune commission</strong> pendant l\'offre de lancement.';
 
   document.getElementById('mHeroStatComm').innerHTML = 'Commission <em style="color:#4ade80">à 0%</em>';
-  document.getElementById('mHeroStatCommLabel').textContent = 'offre de lancement, jusqu\'au ' + launchLabel;
+  document.getElementById('mHeroStatCommLabel').textContent = 'offre de lancement, garanti dès maintenant';
 
   document.getElementById('mTrustCommTitle').textContent = '0% si vente conclue';
   document.getElementById('mTrustCommSub').textContent = 'Offre de lancement';
@@ -807,12 +805,12 @@ function applyMobileLaunchMessaging() {
     'Les agences traditionnelles facturent entre 3% et 10% du prix de vente, en moyenne 5%. SansAgents, c\'est <strong style="color:#4ade80">0% pendant l\'offre de lancement</strong>, puis 1%.';
 
   document.getElementById('mCompareGoodBig').innerHTML = '0 € <span class="m-offert-badge">offert</span>';
-  document.getElementById('mCompareGoodDetail').textContent = 'Offre de lancement : aucune commission avant le ' + launchLabel + ' — 1% ensuite, uniquement si la vente se conclut';
+  document.getElementById('mCompareGoodDetail').textContent = 'Offre de lancement : aucune commission pour toute annonce publiée dès maintenant — 1% ensuite, uniquement si la vente se conclut';
 
   document.getElementById('mTableSaHeader').innerHTML = 'SansAgents <span style="color:#4ade80">(0%)</span>';
 
   document.getElementById('mFaqCostAnswer').innerHTML =
-    'La publication est toujours gratuite. Pendant l\'offre de lancement (annonce publiée avant le ' + launchLabel + '), SansAgents ne perçoit <strong>aucune commission</strong>. Après cette date, en cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.';
+    'La publication est toujours gratuite. Pendant l\'offre de lancement (annonce publiée dès maintenant), SansAgents ne perçoit <strong>aucune commission</strong>. Plus tard, en cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.';
 
   var agenceByRow = { 180: 9000, 250: 12500, 350: 17500, 500: 25000 };
   Object.keys(agenceByRow).forEach(function(k) {

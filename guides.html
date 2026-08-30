@@ -198,7 +198,7 @@ button{font-family:inherit;cursor:pointer}
 
 <!-- ── BANDEAU OFFRE DE LANCEMENT ── -->
 <div class="sa-announce-bar" id="announceBar" style="display:none">
-  <i class="ti ti-rocket"></i>Offre de lancement : <strong>0% de commission</strong> pour toute annonce publiée avant le <strong id="announceDate">—</strong>
+  <i class="ti ti-rocket"></i>Offre de lancement : <strong>0% de commission</strong> pour toute annonce publiée dès maintenant
 </div>
 
 <!-- NAV -->
@@ -426,8 +426,6 @@ function selectGuideTab(type) {
   if (type === 'acheteur' || type === 'loueur') selectGuideTab(type);
 })();
 if (SA.isLaunchFree()) {
-  var launchLabel = SA.launchFreeUntilLabel();
-  document.getElementById('announceDate').textContent = launchLabel;
   document.getElementById('announceBar').style.display = 'block';
   document.getElementById('guideCommVal').textContent = '0%';
   document.getElementById('guideCommLbl').textContent = 'offre de lancement — 1% ensuite, uniquement si vente conclue';

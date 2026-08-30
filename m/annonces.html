@@ -221,7 +221,7 @@
 
 <!-- BANDEAU OFFRE DE LANCEMENT -->
 <div class="m-announce-bar" id="mAnnounceBar" style="display:none">
-  <i class="ti ti-rocket"></i>0% de commission avant le <strong id="mAnnounceDate">—</strong>
+  <i class="ti ti-rocket"></i>0% de commission — offre de lancement
 </div>
 
 <!-- TOP NAV -->
@@ -1108,7 +1108,6 @@ function initFromURL() {
 }
 
 if (SA.isLaunchFree()) {
-  document.getElementById('mAnnounceDate').textContent = SA.launchFreeUntilLabel();
   document.getElementById('mAnnounceBar').style.display = 'block';
 }
 var mPreviewStats = /[?&]demo_stats=1/.test(location.search);
