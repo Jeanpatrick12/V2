@@ -34,7 +34,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=42"></script>
+<script src="sa-shared.js?v=43"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -1282,9 +1282,6 @@ document.addEventListener('DOMContentLoaded', function() {
   SA.init().then(function() {
     renderHomeListings(SA.getAllListings());
   });
-  if (SA.isLaunchFree()) {
-    applyLaunchMessaging();
-  }
   var previewStats = /[?&]demo_stats=1/.test(location.search);
   SA.init().then(function() {
     (previewStats ? Promise.resolve({ sold: 47, rented: 132 }) : SA.getPublicStats()).then(function(stats) {
@@ -1306,6 +1303,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+if (SA.isLaunchFree()) {
+  applyLaunchMessaging();
+}
 
 function animateCounter(elId, target) {
   var el = document.getElementById(elId);

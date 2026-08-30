@@ -364,7 +364,7 @@
     const sellerConvos = _cache.conversations.filter(c => c.seller_id === userId && c.buyer_id);
     if (sellerConvos.length > 0) {
       const buyerIds = [...new Set(sellerConvos.map(c => c.buyer_id))];
-      const { data: buyerProfiles } = await _sb.from("profiles").select("id,prenom,nom").in("id", buyerIds);
+      const { data: buyerProfiles } = await _sb.from("profiles_public").select("id,prenom,nom").in("id", buyerIds);
       if (buyerProfiles) {
         const pm = {};
         buyerProfiles.forEach(p => { pm[p.id] = p; });
@@ -784,7 +784,7 @@
     if (!ownerId || !_sb) return null;
     try {
       const [{ data: profile }, { data: stats }] = await Promise.all([
-        _sb.from("profiles").select("created_at,email_verified").eq("id", ownerId).single(),
+        _sb.from("profiles_public").select("created_at,email_verified").eq("id", ownerId).single(),
         _sb.rpc("get_response_stats", { target_user_id: ownerId })
       ]);
       if (!profile) return null;

@@ -316,13 +316,24 @@ ALTER TABLE public.favorites    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.avis         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.signalements ENABLE ROW LEVEL SECURITY;
 
--- profiles : tout le monde peut lire, chacun modifie le sien
+-- profiles : chacun ne lit/modifie que sa propre ligne (contient l'email, sensible).
+-- Les autres profils sont exposés via la vue profiles_public ci-dessous (sans email).
 DROP POLICY IF EXISTS "profiles_select" ON public.profiles;
 DROP POLICY IF EXISTS "profiles_insert" ON public.profiles;
 DROP POLICY IF EXISTS "profiles_update" ON public.profiles;
-CREATE POLICY "profiles_select" ON public.profiles FOR SELECT USING (true);
+CREATE POLICY "profiles_select" ON public.profiles FOR SELECT USING (id = auth.uid());
 CREATE POLICY "profiles_insert" ON public.profiles FOR INSERT WITH CHECK (id = auth.uid());
 CREATE POLICY "profiles_update" ON public.profiles FOR UPDATE USING (id = auth.uid());
+
+-- Vue publique : mêmes lignes que profiles, sans la colonne email.
+-- Les vues Postgres s'exécutent avec les droits de leur propriétaire (souvent
+-- postgres/admin) et contournent donc la RLS de la table sous-jacente — c'est
+-- volontaire ici : c'est ce qui permet à tout le monde (y compris anonyme) de
+-- lire prénom/nom/photo des autres utilisateurs malgré la policy restrictive
+-- ci-dessus.
+CREATE OR REPLACE VIEW public.profiles_public AS
+  SELECT id, prenom, nom, photo, role, created_at, email_verified FROM public.profiles;
+GRANT SELECT ON public.profiles_public TO anon, authenticated;
 
 -- listings : annonces actives visibles de tous, vendues visibles du proprio seulement
 DROP POLICY IF EXISTS "listings_select" ON public.listings;
