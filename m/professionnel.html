@@ -75,6 +75,9 @@
 }
 .m-contact-bar-btn.primary { background: var(--red); color: white; }
 .m-contact-bar-btn.secondary { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); }
+.m-pro-contact-form { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.m-pro-contact-form input, .m-pro-contact-form textarea { border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; }
+.m-pro-contact-form textarea { resize: vertical; min-height: 70px; }
 </style>
 </head>
 <body>
@@ -101,8 +104,8 @@
   <button class="m-contact-bar-btn secondary" onclick="callPro()">
     <i class="ti ti-phone"></i> Appeler
   </button>
-  <button class="m-contact-bar-btn primary" onclick="messagePro()">
-    <i class="ti ti-message-circle"></i> Envoyer un message
+  <button class="m-contact-bar-btn primary" onclick="toggleProContactForm()">
+    <i class="ti ti-send"></i> Demander un devis
   </button>
 </div>
 
@@ -120,7 +123,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=44"></script>
+<script src="../sa-shared.js?v=45"></script>
 <script>
 var COLORS = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2'];
 var currentPro = null;
@@ -149,10 +152,28 @@ function callPro() {
   alert('Numéro non disponible — contactez ce professionnel par message.');
 }
 
-function messagePro() {
-  var u = SA.getUser();
-  if(!u) { window.top.location = '/connexion?redirect=/professionnels'; return; }
-  if(currentPro) window.top.location = '/messages?pro=' + currentPro.id;
+function toggleProContactForm() {
+  var box = document.getElementById('proContactForm');
+  var btn = document.getElementById('proQuoteBtn');
+  if (!box) return;
+  var opening = box.style.display === 'none';
+  box.style.display = opening ? 'flex' : 'none';
+  if (btn) btn.style.display = opening ? 'none' : 'flex';
+  if (opening) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+async function sendProContact() {
+  if (!currentPro) return;
+  var name = document.getElementById('pcName').value.trim();
+  var email = document.getElementById('pcEmail').value.trim();
+  var message = document.getElementById('pcMsg').value.trim();
+  if (!name || !email || !message) { SA.toast('Merci de remplir tous les champs', 'ti-alert-circle'); return; }
+  try {
+    await SA.submitProContact({ proId: currentPro.id, senderName: name, senderEmail: email, message: message });
+    SA.toast('Demande envoyée au professionnel', 'ti-circle-check');
+    toggleProContactForm();
+  } catch (e) {
+    SA.toast('Erreur : ' + e.message, 'ti-alert-circle');
+  }
 }
 
 function renderPro(p) {
@@ -216,14 +237,20 @@ function renderPro(p) {
       '<span style="font-size:14px;font-weight:600;color:var(--text)">'+phone+'</span>' +
     '</a>' : '') +
     // Email
-    (email ? '<a href="mailto:'+email+'" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bg);text-decoration:none">' +
+    (email ? '<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bg)">' +
       '<i class="ti ti-mail" style="color:var(--red);font-size:18px;width:20px"></i>' +
       '<span style="font-size:13px;color:var(--text)">'+email+'</span>' +
-    '</a>' : '') +
+    '</div>' : '') +
     // CTA
-    '<button onclick="messagePro()" style="width:100%;background:var(--red);color:white;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px">' +
+    '<button id="proQuoteBtn" onclick="toggleProContactForm()" style="width:100%;background:var(--red);color:white;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px">' +
       '<i class="ti ti-send"></i> Demander un devis' +
     '</button>' +
+    '<div class="m-pro-contact-form" id="proContactForm" style="display:none">' +
+      '<input type="text" id="pcName" placeholder="Votre nom">' +
+      '<input type="email" id="pcEmail" placeholder="Votre email">' +
+      '<textarea id="pcMsg" rows="3" placeholder="Décrivez votre besoin (mentionnez le code SANSAGENTS5 pour -5%)"></textarea>' +
+      '<button onclick="sendProContact()" style="width:100%;background:var(--red);color:white;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px"><i class="ti ti-check"></i> Envoyer la demande</button>' +
+    '</div>' +
     '<div style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px;line-height:1.5">Les coordonnées des professionnels sont publiques — l\'annuaire est conçu pour être contacté directement.</div>' +
   '</div>';
 

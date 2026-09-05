@@ -20,5 +20,11 @@ window.SA_CONFIG = {
   // date passee, tout le site (textes "0%", bandeau, tableau de prix, FAQ...)
   // repasse automatiquement a l'affichage normal a 1% - c'est deja pilote
   // par cette seule valeur (voir SA.isLaunchFree() dans sa-shared.js).
-  commissionFreeUntil: "2028-06-01"
+  commissionFreeUntil: "2028-06-01",
+  // Mise en avant payante des annonces ("Mettre en avant" dans mes-annonces) :
+  // desactivee pour le moment, le temps d'avoir assez de trafic pour que ce
+  // soit interessant pour les vendeurs/loueurs. Remettre a true pour
+  // reactiver le bouton partout (desktop + mobile + section admin) sans
+  // aucun autre changement de code.
+  boostsEnabled: false
 };

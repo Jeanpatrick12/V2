@@ -552,6 +552,42 @@ DROP TRIGGER IF EXISTS trg_protect_featured_until ON public.listings;
 CREATE TRIGGER trg_protect_featured_until BEFORE UPDATE ON public.listings
   FOR EACH ROW EXECUTE FUNCTION public.protect_featured_until();
 
+-- ── COMPTEUR DE VUES SUR LES ANNONCES ──────────────────────────────
+-- Ajouté le 2026-09-05. Incrémenté via la fonction increment_listing_views
+-- (SECURITY DEFINER) plutôt qu'un UPDATE direct : listings_update exige
+-- owner_id = auth.uid(), donc un visiteur anonyme qui consulte l'annonce
+-- de quelqu'un d'autre ne pourrait jamais faire ce +1 autrement.
+ALTER TABLE public.listings ADD COLUMN IF NOT EXISTS views_count integer NOT NULL DEFAULT 0;
+
+CREATE OR REPLACE FUNCTION public.increment_listing_views(p_listing_id uuid)
+RETURNS void LANGUAGE sql SECURITY DEFINER AS $$
+  UPDATE public.listings SET views_count = views_count + 1 WHERE id = p_listing_id;
+$$;
+GRANT EXECUTE ON FUNCTION public.increment_listing_views(uuid) TO anon, authenticated;
+
+-- ── CONTACTS PROFESSIONNELS (suivi des demandes de devis) ──────────
+-- Ajoutée le 2026-09-05. Remplace le mailto: direct sur la fiche pro :
+-- chaque "Demander un devis" passe par ce formulaire, ce qui donne un
+-- décompte fiable par professionnel (utile pour facturer une commission
+-- sur les devis signés sans dépendre de la parole du partenaire).
+-- Un webhook Database (INSERT) à configurer manuellement dans Supabase
+-- déclenche la fonction notify-pro-contact qui relaie le message par email
+-- au professionnel via Brevo (même principe que notify-message).
+CREATE TABLE IF NOT EXISTS public.pro_contacts (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  pro_id       text NOT NULL,
+  sender_name  text NOT NULL DEFAULT '',
+  sender_email text NOT NULL DEFAULT '',
+  message      text NOT NULL DEFAULT '',
+  created_at   timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.pro_contacts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "pro_contacts_insert" ON public.pro_contacts;
+CREATE POLICY "pro_contacts_insert" ON public.pro_contacts FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "pro_contacts_select_admin" ON public.pro_contacts;
+CREATE POLICY "pro_contacts_select_admin" ON public.pro_contacts FOR SELECT
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+
 -- ═══════════════════════════════════════════════════════════════════
 -- BUCKET STORAGE — à créer MANUELLEMENT dans Supabase
 --

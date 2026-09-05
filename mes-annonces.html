@@ -22,7 +22,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=44"></script>
+<script src="sa-shared.js?v=45"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -84,6 +84,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-mbuyer-alert-icon{width:32px;height:32px;border-radius:9px;background:#E84533;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .sa-mbuyer-alert-text{font-size:13px;color:#5c2a20;font-weight:500;line-height:1.45}
 .sa-mbuyer-alert-text strong{color:#E84533;font-weight:700}
+.sa-mcard.featured{border-color:#E84533;box-shadow:0 0 0 1px #E84533}
+.sa-mfeatured-alert{display:flex;align-items:center;gap:13px;background:linear-gradient(135deg,#fff5f2,#ffe4de);padding:14px 20px;border-bottom:1px solid #ffc5bd}
+.sa-mfeatured-alert-icon{width:32px;height:32px;border-radius:9px;background:#E84533;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sa-mfeatured-alert-text{font-size:13px;color:#5c2a20;font-weight:500;line-height:1.45}
+.sa-mfeatured-alert-text strong{color:#E84533;font-weight:700}
 .sa-mcard:hover{border-color:#ddd}
 .sa-mcard.sold{opacity:.65;background:#fafafa}
 .sa-mphoto{width:56%;height:320px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center}
@@ -116,10 +121,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-mbtn.boost.active{background:#E84533;border-color:#E84533;color:#fff;cursor:default}
 .sa-mbtn.boost.pending{background:#f5f5f5;border-color:#ddd;color:#999;cursor:default}
 
-.sa-boost-durations{display:flex;gap:10px;margin:16px 0}
-.sa-boost-dur{flex:1;border:1.5px solid #ddd;border-radius:10px;padding:12px;text-align:center;cursor:pointer}
+.sa-boost-modal{max-width:460px}
+.sa-boost-hero{position:relative;background:linear-gradient(135deg,#0f1923,#1a2c3d);border-radius:18px 18px 0 0;padding:28px 26px 22px;color:#fff;text-align:center;flex-shrink:0}
+.sa-boost-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.12);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+.sa-boost-close:hover{background:rgba(255,255,255,0.22)}
+.sa-boost-hero-icon{width:52px;height:52px;border-radius:14px;background:#E84533;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px;box-shadow:0 6px 18px rgba(232,69,51,0.4)}
+.sa-boost-hero h2{font-size:19px;font-weight:800;letter-spacing:-0.3px;margin-bottom:6px}
+.sa-boost-hero p{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:18px}
+.sa-boost-perks{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.sa-boost-perks span{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.08);border-radius:999px;padding:6px 11px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.85)}
+.sa-boost-perks i{color:#ff7a68;font-size:13px}
+.sa-boost-step-label{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.03em;margin:22px 0 12px}
+.sa-boost-step-label:first-child{margin-top:0}
+.sa-boost-step-label span{width:19px;height:19px;border-radius:50%;background:#111;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-boost-durations{display:flex;gap:10px}
+.sa-boost-dur{flex:1;border:1.5px solid #e2e2e2;border-radius:12px;padding:16px 12px;text-align:center;cursor:pointer;position:relative;transition:border-color .15s,background .15s}
+.sa-boost-dur:hover{border-color:#f0b3aa}
 .sa-boost-dur.selected{border-color:#E84533;background:#fff5f2}
-.iban-box{background:#f0f0f0;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:13px;color:#333;margin-top:8px;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between}
+.sa-boost-dur-radio{width:16px;height:16px;border-radius:50%;border:2px solid #ccc;margin:0 auto 10px}
+.sa-boost-dur.selected .sa-boost-dur-radio{border-color:#E84533;background:#E84533;box-shadow:inset 0 0 0 3px #fff}
+.sa-boost-dur-days{font-weight:700;font-size:14.5px;color:#111}
+.sa-boost-dur-price{font-weight:800;font-size:19px;color:#E84533;margin-top:4px}
+.sa-boost-dur-sub{font-size:11px;color:#999;margin-top:2px}
+.sa-boost-dur-tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#111;color:#fff;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.sa-boost-pay-card{border:1px solid #eee;border-radius:12px;padding:14px 16px;background:#fafafa}
+.sa-boost-pay-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#555;padding:6px 0}
+.sa-boost-pay-row strong{color:#111;font-size:14px}
+.sa-boost-pay-row strong.mono{font-family:monospace}
+.sa-boost-footnote{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:#aaa;line-height:1.5;margin-top:10px}
+.sa-boost-footnote i{margin-top:1px;flex-shrink:0}
+.iban-box{background:#f0f0f0;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:13px;color:#333;margin-top:6px;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between}
 .iban-copy{background:#E84533;color:white;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
 
 .sa-empty{text-align:center;padding:5rem 1rem;color:#999}
@@ -315,28 +346,51 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
 <!-- ── Modal de mise en avant ── -->
 <div class="sa-edit-overlay" id="boostOverlay" onclick="if(event.target===this)closeBoost()">
-  <div class="sa-edit-modal" style="max-width:460px">
-    <div class="sa-edit-head">
-      <h2><i class="ti ti-bolt" style="color:#E84533"></i> Mettre l'annonce en avant</h2>
-      <button onclick="closeBoost()"><i class="ti ti-x"></i></button>
+  <div class="sa-edit-modal sa-boost-modal">
+    <div class="sa-boost-hero">
+      <button class="sa-boost-close" onclick="closeBoost()"><i class="ti ti-x"></i></button>
+      <div class="sa-boost-hero-icon"><i class="ti ti-bolt"></i></div>
+      <h2>Mettre l'annonce en avant</h2>
+      <p>Remontez en tête des résultats de recherche pendant toute la durée choisie.</p>
+      <div class="sa-boost-perks">
+        <span><i class="ti ti-arrow-up-circle"></i> Priorité de recherche</span>
+        <span><i class="ti ti-star-filled"></i> Badge "En avant"</span>
+        <span><i class="ti ti-eye"></i> Visible partout sur le site</span>
+      </div>
     </div>
     <div class="sa-edit-body">
-      <p style="font-size:13.5px;color:#555;margin:0 0 4px">Votre annonce apparaît en tête des résultats de recherche et porte un badge "En avant" pendant toute la durée choisie.</p>
+      <div class="sa-boost-step-label"><span>1</span> Choisissez une durée</div>
       <div class="sa-boost-durations">
-        <div class="sa-boost-dur" data-days="7" onclick="pickBoostDuration(7)"><div style="font-weight:700;font-size:15px">7 jours</div><div style="font-size:12px;color:#888">9 €</div></div>
-        <div class="sa-boost-dur" data-days="30" onclick="pickBoostDuration(30)"><div style="font-weight:700;font-size:15px">30 jours</div><div style="font-size:12px;color:#888">19 €</div></div>
+        <div class="sa-boost-dur" data-days="7" onclick="pickBoostDuration(7)">
+          <div class="sa-boost-dur-radio"></div>
+          <div class="sa-boost-dur-days">7 jours</div>
+          <div class="sa-boost-dur-price">9 €</div>
+          <div class="sa-boost-dur-sub">1,29 €/jour</div>
+        </div>
+        <div class="sa-boost-dur" data-days="30" onclick="pickBoostDuration(30)">
+          <span class="sa-boost-dur-tag">Meilleure offre</span>
+          <div class="sa-boost-dur-radio"></div>
+          <div class="sa-boost-dur-days">30 jours</div>
+          <div class="sa-boost-dur-price">19 €</div>
+          <div class="sa-boost-dur-sub">0,63 €/jour</div>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;background:#f7f7f7;border-radius:10px;padding:12px 16px;margin-top:4px">
-        <span style="font-size:13px;color:#555">Montant à régler</span>
-        <span style="font-size:18px;font-weight:700;color:#E84533" id="boostAmount">9 €</span>
-      </div>
-      <div style="margin-top:16px">
-        <div style="font-size:12.5px;color:#888;margin-bottom:6px">Réglez par virement bancaire, avec cette référence en objet :</div>
-        <div class="iban-box" style="margin-bottom:8px"><span id="boostRef" style="font-weight:700"></span></div>
+
+      <div class="sa-boost-step-label"><span>2</span> Réglez par virement bancaire</div>
+      <div class="sa-boost-pay-card">
+        <div class="sa-boost-pay-row">
+          <span>Montant à régler</span>
+          <strong id="boostAmount">9 €</strong>
+        </div>
+        <div class="sa-boost-pay-row">
+          <span>Référence à indiquer</span>
+          <strong id="boostRef" class="mono"></strong>
+        </div>
         <div class="iban-box"><span id="boostIban"></span><button class="iban-copy" onclick="copyBoostIban()">Copier</button></div>
       </div>
-      <button class="sa-mbtn success" style="width:100%;justify-content:center;margin-top:18px" onclick="confirmBoostPaid()"><i class="ti ti-circle-check"></i> J'ai effectué le virement</button>
-      <p style="font-size:11px;color:#aaa;margin-top:10px">La mise en avant est activée sous 24h ouvrées après vérification de la réception du virement.</p>
+
+      <button class="sa-mbtn success" style="width:100%;justify-content:center;margin-top:16px" onclick="confirmBoostPaid()"><i class="ti ti-circle-check"></i> J'ai effectué le virement</button>
+      <p class="sa-boost-footnote"><i class="ti ti-clock"></i> Activée sous 24h ouvrées après vérification de la réception du virement — vous recevrez un email de confirmation.</p>
     </div>
   </div>
 </div>
@@ -577,7 +631,8 @@ function render() {
           </div>
         </div>`;
     return `
-    <div class="sa-mcard${sold ? ' sold' : ''}">
+    <div class="sa-mcard${sold ? ' sold' : ''}${SA.isFeatured(l) ? ' featured' : ''}">
+      ${SA.isFeatured(l) ? `<div class="sa-mfeatured-alert"><div class="sa-mfeatured-alert-icon"><i class="ti ti-bolt"></i></div><div class="sa-mfeatured-alert-text">Cette annonce est <strong>mise en avant</strong> jusqu'au ${new Date(l.featuredUntil).toLocaleDateString('fr-FR')} — elle remonte en tête des résultats de recherche.</div></div>` : ''}
       ${buyerConfirmed ? `<div class="sa-mbuyer-alert"><div class="sa-mbuyer-alert-icon"><i class="ti ti-alert-triangle"></i></div><div class="sa-mbuyer-alert-text">Une personne a indiqué avoir conclu cette ${l.transaction === 'vente' ? 'vente' : 'location'} avec vous — <strong>pensez à mettre à jour le statut de votre annonce.</strong></div></div>` : ''}
       <div class="sa-mcard-row">
       <div class="sa-mphoto" style="${main ? "background-image:url('" + main + "');background-size:cover;background-position:center" : 'background:' + grad}">
@@ -598,6 +653,7 @@ function render() {
           <span><i class="ti ti-door"></i> ${l.pieces || '—'} pièce${l.pieces > 1 ? 's' : ''}</span>
           ${l.chambres ? `<span><i class="ti ti-bed"></i> ${l.chambres} ch.</span>` : ''}
           ${l.dpe ? `<span><i class="ti ti-bolt"></i> DPE ${l.dpe}</span>` : ''}
+          <span title="Nombre de fois où l'annonce a été consultée"><i class="ti ti-eye"></i> ${l.viewsCount || 0} vue${(l.viewsCount || 0) > 1 ? 's' : ''}</span>
         </div>
         <div class="sa-maddr"><i class="ti ti-map-pin"></i> ${SA.escapeHtml(l.ville || '')}${l.postal ? ' (' + l.postal + ')' : ''}</div>
         ${msgCount ? `<div class="sa-mmsg-count"><i class="ti ti-message-2"></i> ${msgCount} conversation${msgCount > 1 ? 's' : ''}</div>` : ''}
@@ -622,6 +678,7 @@ function boostButtonHtml(l, sold) {
   }
   const pending = SA.getBoostRequestForListing(l.id);
   if (pending) return `<span class="sa-mbtn boost pending"><i class="ti ti-clock"></i> Mise en avant en attente</span>`;
+  if (!window.SA_CONFIG.boostsEnabled) return '';
   return `<button class="sa-mbtn boost" onclick="openBoost('${l.id}')"><i class="ti ti-bolt"></i> Mettre en avant</button>`;
 }
 

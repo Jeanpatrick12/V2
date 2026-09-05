@@ -192,6 +192,7 @@
       status:            row.status || "active",
       isDemo:            !!row.is_demo,
       featuredUntil:     row.featured_until ? new Date(row.featured_until).getTime() : null,
+      viewsCount:        row.views_count || 0,
       createdAt:         row.created_at ? new Date(row.created_at).getTime() : Date.now(),
       isUserListing:     true
     };
@@ -353,7 +354,7 @@
         .or("buyer_id.eq." + userId + ",seller_id.eq." + userId)
         .order("created_at", { ascending: false }),
       _sb.from("listings")
-        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,contact_email,contact_tel,status,is_demo,featured_until,created_at")
+        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,contact_email,contact_tel,status,is_demo,featured_until,views_count,created_at")
         .eq("owner_id", userId),
       _sb.from("user_documents").select("doc_type,doc_data,updated_at").eq("user_id", userId).order("updated_at", { ascending: false }),
       _sb.from("saved_searches").select("id,label,criteria,email_alerts,created_at").eq("user_id", userId).order("created_at", { ascending: false }),
@@ -419,7 +420,7 @@
     const [sessionRes, listingsRes, prosRes] = await Promise.all([
       _sb.auth.getSession(),
       _sb.from("listings")
-        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,status,is_demo,featured_until,created_at")
+        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,status,is_demo,featured_until,views_count,created_at")
         .eq("status", "active")
         .order("created_at", { ascending: false }),
       _sb.from("pros")
@@ -613,7 +614,21 @@
   async function getAllBoostRequestsAdmin() {
     const { data, error } = await _sb.from("boost_requests").select("*").order("created_at", { ascending: false });
     if (error) { console.error("getAllBoostRequestsAdmin error:", error); return []; }
-    return data || [];
+    const rows = data || [];
+    const ownerIds = [...new Set(rows.map((r) => r.owner_id))];
+    if (ownerIds.length) {
+      const { data: profs } = await _sb.from("profiles_public").select("id,prenom,nom").in("id", ownerIds);
+      const pm = {};
+      (profs || []).forEach((p) => { pm[p.id] = p; });
+      rows.forEach((r) => {
+        const p = pm[r.owner_id];
+        r.ownerName = p ? ((p.prenom || "") + " " + (p.nom || "")).trim() : "";
+      });
+    }
+    return rows;
+  }
+  async function incrementListingViews(listingId) {
+    try { await _sb.rpc("increment_listing_views", { p_listing_id: listingId }); } catch (e) { /* silencieux : un compteur de vues ne doit jamais bloquer l'affichage */ }
   }
   async function confirmBoostRequest(id, listingId, durationDays) {
     const until = new Date(Date.now() + durationDays * 86400000).toISOString();
@@ -1159,6 +1174,29 @@
     if (error) throw error;
   }
 
+  /* ── Contacts professionnels (suivi des demandes de devis) ────────
+     Remplace le mailto: direct sur la fiche pro par un envoi trace, pour
+     pouvoir facturer une commission sur les devis signes sans dependre
+     de la parole du partenaire. */
+  async function submitProContact(payload) {
+    const row = {
+      pro_id:       String(payload.proId || ""),
+      sender_name:  (payload.senderName || "").slice(0, 200),
+      sender_email: (payload.senderEmail || "").slice(0, 200),
+      message:      (payload.message || "").slice(0, 3000)
+    };
+    if (!row.pro_id || !row.sender_email || !row.message) throw new Error("champs-manquants");
+    const { error } = await _sb.from("pro_contacts").insert(row);
+    if (error) throw error;
+  }
+  async function getProContactCountsAdmin() {
+    const { data, error } = await _sb.from("pro_contacts").select("pro_id");
+    if (error) { console.error("getProContactCountsAdmin error:", error); return {}; }
+    const counts = {};
+    (data || []).forEach((r) => { counts[r.pro_id] = (counts[r.pro_id] || 0) + 1; });
+    return counts;
+  }
+
   /* ── Modération (réservé aux comptes profiles.role = 'admin') ────── */
   async function getAllAvisAdmin() {
     const { data, error } = await _sb.from("avis").select("*").order("created_at", { ascending: false });
@@ -1611,7 +1649,7 @@
     init,
     // Annonces
     getAllListings, getListingById, getUserListings, addListing, updateListing,
-    isFeatured, requestBoost, getBoostRequestForListing, getAllBoostRequestsAdmin, confirmBoostRequest, rejectBoostRequest,
+    isFeatured, requestBoost, getBoostRequestForListing, getAllBoostRequestsAdmin, confirmBoostRequest, rejectBoostRequest, incrementListingViews,
     // Favoris
     getFavorites, getFavoritesData, isFavorite, toggleFavorite, toggleFavoriteUI,
     // Recherches
@@ -1625,6 +1663,7 @@
     getListingContact,
     // Pros
     getAllPros, getProById, getUserPros, addPro, setProVerified, setProGoogleRating, proGoogleMapsUrl, proWebsiteUrl, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
+    submitProContact, getProContactCountsAdmin,
     getAllAvisAdmin, updateAvisStatus, getAllSignalementsAdmin, updateSignalementStatus,
     // Documents
     saveDoc, getDocs, deleteDoc,
