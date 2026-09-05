@@ -22,7 +22,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=43"></script>
+<script src="sa-shared.js?v=44"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#f7f8fa}
@@ -149,6 +149,14 @@ a{text-decoration:none;color:inherit}
     </div>
     <div id="signalementsZone"></div>
   </div>
+
+  <div class="adm-card">
+    <div class="adm-card-head">
+      <div class="adm-card-ico"><i class="ti ti-bolt"></i></div>
+      <div><div class="adm-card-title">Mises en avant</div><div class="adm-card-sub">Confirmez uniquement après avoir vérifié la réception du virement (référence = BOOST- + 8 premiers caractères de l'id de l'annonce).</div></div>
+    </div>
+    <div id="boostZone"></div>
+  </div>
 </div>
 
 <script>
@@ -268,6 +276,48 @@ async function moderateSignalement(id, status) {
   renderSignalements();
 }
 
+async function renderBoosts() {
+  const zone = document.getElementById('boostZone');
+  if (!SA.getUser()) {
+    zone.innerHTML = LOGIN_PROMPT;
+    return;
+  }
+  const rows = await SA.getAllBoostRequestsAdmin();
+  if (!rows.length) { zone.innerHTML = '<div class="sa-admin-empty">Aucune demande de mise en avant pour le moment (ou votre compte n\'a pas le rôle administrateur).</div>'; return; }
+  const BOOST_STATUS_LABELS = { pending: 'En attente', confirmed: 'Confirmée', rejected: 'Rejetée' };
+  zone.innerHTML = `<table class="sa-admin-table">
+    <thead><tr><th>Annonce</th><th>Référence</th><th>Durée</th><th>Montant</th><th>Statut</th><th></th></tr></thead>
+    <tbody>${rows.map(r => {
+      const l = SA.getListingById(r.listing_id);
+      return `
+      <tr>
+        <td>${SA.escapeHtml(l ? (l.title || l.ville || l.id) : 'Annonce supprimée')}</td>
+        <td><span class="sa-admin-siret">BOOST-${r.listing_id.slice(0,8).toUpperCase()}</span></td>
+        <td>${r.duration_days} jours</td>
+        <td>${r.amount_eur} €</td>
+        <td><span class="sa-admin-badge ${r.status === 'confirmed' ? 'yes' : (r.status === 'rejected' ? 'no' : 'pending')}">${BOOST_STATUS_LABELS[r.status] || r.status}</span></td>
+        <td><div class="sa-admin-actions">
+          ${r.status === 'pending' ? `<button class="sa-admin-btn approve" onclick="moderateBoost('${r.id}','${r.listing_id}',${r.duration_days})">Confirmer le virement</button><button class="sa-admin-btn reject" onclick="rejectBoost('${r.id}')">Rejeter</button>` : ''}
+        </div></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+async function moderateBoost(id, listingId, durationDays) {
+  if (!confirm('Confirmez-vous avoir bien reçu le virement pour cette mise en avant ?')) return;
+  try {
+    await SA.confirmBoostRequest(id, listingId, durationDays);
+    SA.toast('Mise en avant activée', 'ti-circle-check');
+  } catch (e) {
+    SA.toast('Erreur : ' + e.message, 'ti-alert-circle');
+  }
+  renderBoosts();
+}
+async function rejectBoost(id) {
+  await SA.rejectBoostRequest(id);
+  renderBoosts();
+}
+
 SA.init().then(function(){
   renderAuthStatus();
   if (!SA.isAdmin()) {
@@ -283,6 +333,7 @@ SA.init().then(function(){
   render();
   renderAvis();
   renderSignalements();
+  renderBoosts();
 });
 </script>
 </body>

@@ -33,7 +33,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <!-- Leaflet est chargé à la demande (voir loadLeaflet()) une fois les données de l'annonce disponibles -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=43"></script>
+<script src="sa-shared.js?v=44"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -86,6 +86,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-gallery-chiprow{position:absolute;bottom:14px;left:14px;display:flex;gap:6px;z-index:2}
 .sa-gallery-chip{font-size:11px;font-weight:700;color:#fff;padding:4px 10px;border-radius:6px}
 .sa-gallery-chip.new{background:#1a8c4e}
+.sa-gallery-chip.boost{background:#E84533;display:flex;align-items:center;gap:4px}
 .sa-gallery-fav{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.92);border:none;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:#ccc;z-index:2}
 .sa-gallery-fav.active{color:#E84533}
 .sa-gallery-allphotos{position:absolute;bottom:14px;right:14px;background:rgba(17,17,17,0.55);backdrop-filter:blur(2px);color:#fff;font-size:12px;font-weight:700;padding:7px 14px;border-radius:9px;display:flex;align-items:center;gap:7px;z-index:2;cursor:pointer;border:1.5px solid rgba(255,255,255,0.55);font-family:inherit}
@@ -538,6 +539,7 @@ function render() {
             <button class="sa-gallery-nav-btn next" onclick="galleryStep(1)"><i class="ti ti-chevron-right"></i></button>
           ` : ''}
           <div class="sa-gallery-chiprow">
+            ${SA.isFeatured(l) ? '<span class="sa-gallery-chip boost"><i class="ti ti-bolt"></i> En avant</span>' : ''}
             ${isNew ? '<span class="sa-gallery-chip new">Nouveau</span>' : ''}
             ${l.dpe ? `<span class="sa-gallery-chip" style="background:${dpeColor(l.dpe)}">DPE ${l.dpe}</span>` : ''}
           </div>

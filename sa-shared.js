@@ -53,6 +53,7 @@
     favoritesData: [],
     conversations: [],
     searches:      _readLocalJSON("sa_searches_v1", []),
+    boostRequests: [],
     initialized:   false
   };
 
@@ -190,6 +191,7 @@
       contactTel:        row.contact_tel || "",
       status:            row.status || "active",
       isDemo:            !!row.is_demo,
+      featuredUntil:     row.featured_until ? new Date(row.featured_until).getTime() : null,
       createdAt:         row.created_at ? new Date(row.created_at).getTime() : Date.now(),
       isUserListing:     true
     };
@@ -344,21 +346,23 @@
 
   /* ── Chargement des données utilisateur (après login) ──────────── */
   async function _loadUserData(userId) {
-    const [favRes, convoRes, soldRes, docsRes, searchesRes] = await Promise.all([
+    const [favRes, convoRes, soldRes, docsRes, searchesRes, boostRes] = await Promise.all([
       _sb.from("favorites").select("item_id,item_type").eq("user_id", userId),
       _sb.from("conversations")
         .select("id,listing_id,listing_title,contact_name,contact_shared,buyer_confirmed_sale,buyer_confirmed_at,buyer_id,seller_id,last_message_at,last_read_at,created_at,messages(id,from_role,sender_id,text,created_at)")
         .or("buyer_id.eq." + userId + ",seller_id.eq." + userId)
         .order("created_at", { ascending: false }),
       _sb.from("listings")
-        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,contact_email,contact_tel,status,is_demo,created_at")
+        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,contact_email,contact_tel,status,is_demo,featured_until,created_at")
         .eq("owner_id", userId),
       _sb.from("user_documents").select("doc_type,doc_data,updated_at").eq("user_id", userId).order("updated_at", { ascending: false }),
-      _sb.from("saved_searches").select("id,label,criteria,email_alerts,created_at").eq("user_id", userId).order("created_at", { ascending: false })
+      _sb.from("saved_searches").select("id,label,criteria,email_alerts,created_at").eq("user_id", userId).order("created_at", { ascending: false }),
+      _sb.from("boost_requests").select("id,listing_id,duration_days,amount_eur,status,created_at").eq("owner_id", userId).order("created_at", { ascending: false })
     ]);
     _cache.favorites     = (favRes.data || []).map(f => f.item_id);
     _cache.favoritesData = (favRes.data || []);
     _cache.searches       = (searchesRes.data || []).map(_normSearch);
+    _cache.boostRequests  = boostRes.data || [];
     _cache.conversations = (convoRes.data || []).map(_normConvo);
     // Pour les conversations où je suis vendeur, récupérer le prénom/nom de l'acheteur
     const sellerConvos = _cache.conversations.filter(c => c.seller_id === userId && c.buyer_id);
@@ -415,7 +419,7 @@
     const [sessionRes, listingsRes, prosRes] = await Promise.all([
       _sb.auth.getSession(),
       _sb.from("listings")
-        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,status,is_demo,created_at")
+        .select("id,owner_id,type,transaction,title,ville,postal,adresse,lat,lng,price,charges,surface,pieces,chambres,sdb,dpe,ges,facture_energie,meuble,etage,annee_construction,etat_general,terrain,niveaux_maison,hauteur_plafond,origine_batiment,chauffage_mode,source_energie,chauffage,eau_chaude,config_maison,img,photos,plans,equipements,description,contact_prenom,contact_nom,status,is_demo,featured_until,created_at")
         .eq("status", "active")
         .order("created_at", { ascending: false }),
       _sb.from("pros")
@@ -583,6 +587,45 @@
     return !!(l && l.isDemo);
   }
   function getUserListings() { return _cache.dbListings.filter(l => _cache.user && l.owner_id === _cache.user.id); }
+
+  /* ── Mise en avant ("boost") ──────────────────────────────────────
+     featuredUntil est fixé uniquement par un admin (cf. trigger SQL
+     protect_featured_until) après confirmation manuelle d'un virement. */
+  function isFeatured(listingOrId) {
+    const l = typeof listingOrId === "string" ? getListingById(listingOrId) : listingOrId;
+    return !!(l && l.featuredUntil && l.featuredUntil > Date.now());
+  }
+  const BOOST_PRICES = { 7: 9, 30: 19 };
+  async function requestBoost(listingId, durationDays) {
+    if (!_cache.user) throw new Error("auth-required");
+    const amount = BOOST_PRICES[durationDays];
+    if (!amount) throw new Error("duree-invalide");
+    const { data, error } = await _sb.from("boost_requests").insert({
+      listing_id: listingId, owner_id: _cache.user.id, duration_days: durationDays, amount_eur: amount
+    }).select().single();
+    if (error) throw error;
+    _cache.boostRequests.unshift(data);
+    return data;
+  }
+  function getBoostRequestForListing(listingId) {
+    return _cache.boostRequests.find((r) => r.listing_id === listingId && r.status === "pending") || null;
+  }
+  async function getAllBoostRequestsAdmin() {
+    const { data, error } = await _sb.from("boost_requests").select("*").order("created_at", { ascending: false });
+    if (error) { console.error("getAllBoostRequestsAdmin error:", error); return []; }
+    return data || [];
+  }
+  async function confirmBoostRequest(id, listingId, durationDays) {
+    const until = new Date(Date.now() + durationDays * 86400000).toISOString();
+    const { error: e1 } = await _sb.from("listings").update({ featured_until: until }).eq("id", listingId);
+    if (e1) throw e1;
+    const { error: e2 } = await _sb.from("boost_requests").update({ status: "confirmed", confirmed_at: new Date().toISOString() }).eq("id", id);
+    if (e2) throw e2;
+  }
+  async function rejectBoostRequest(id) {
+    const { error } = await _sb.from("boost_requests").update({ status: "rejected" }).eq("id", id);
+    if (error) throw error;
+  }
 
   async function addListing(data) {
     if (!_cache.user) throw new Error("auth-required");
@@ -1568,6 +1611,7 @@
     init,
     // Annonces
     getAllListings, getListingById, getUserListings, addListing, updateListing,
+    isFeatured, requestBoost, getBoostRequestForListing, getAllBoostRequestsAdmin, confirmBoostRequest, rejectBoostRequest,
     // Favoris
     getFavorites, getFavoritesData, isFavorite, toggleFavorite, toggleFavoriteUI,
     // Recherches

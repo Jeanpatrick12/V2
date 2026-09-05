@@ -259,6 +259,12 @@ input, select, textarea { font-family: inherit; font-size: 16px; }
   padding: 2px 7px; border-radius: 5px; text-transform: uppercase;
   letter-spacing: .03em; vertical-align: middle;
 }
+.m-boost-tag {
+  font-size: 9px; font-weight: 700; color: #fff; background: #E84533;
+  padding: 2px 7px; border-radius: 5px; text-transform: uppercase;
+  letter-spacing: .03em; vertical-align: middle; display: inline-flex;
+  align-items: center; gap: 3px;
+}
 .m-listing-body { padding: 10px 12px 12px; }
 .m-listing-price { font-size: 15px; font-weight: 700; color: var(--red); margin-bottom: 3px; }
 .m-listing-title { font-size: 12px; color: var(--text); margin-bottom: 5px; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

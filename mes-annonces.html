@@ -22,7 +22,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=43"></script>
+<script src="sa-shared.js?v=44"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -111,6 +111,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .sa-mbtn.primary:hover{background:#E84533;border-color:#E84533}
 .sa-mbtn.success{background:#1a8c4e;border-color:#1a8c4e;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(26,140,78,0.3);font-size:13.5px;padding:10px 18px}
 .sa-mbtn.success:hover{background:#147a40;border-color:#147a40}
+.sa-mbtn.boost{background:#fff5f2;border-color:#E84533;color:#E84533}
+.sa-mbtn.boost:hover{background:#E84533;color:#fff}
+.sa-mbtn.boost.active{background:#E84533;border-color:#E84533;color:#fff;cursor:default}
+.sa-mbtn.boost.pending{background:#f5f5f5;border-color:#ddd;color:#999;cursor:default}
+
+.sa-boost-durations{display:flex;gap:10px;margin:16px 0}
+.sa-boost-dur{flex:1;border:1.5px solid #ddd;border-radius:10px;padding:12px;text-align:center;cursor:pointer}
+.sa-boost-dur.selected{border-color:#E84533;background:#fff5f2}
+.iban-box{background:#f0f0f0;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:13px;color:#333;margin-top:8px;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between}
+.iban-copy{background:#E84533;color:white;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
 
 .sa-empty{text-align:center;padding:5rem 1rem;color:#999}
 .sa-empty i{font-size:42px;color:#f0c9c0;margin-bottom:16px;display:block}
@@ -299,6 +309,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
         <div class="sa-vf-full"><label>Note (optionnel)</label><textarea id="vfNote" rows="2" placeholder="Très intéressé, attend l'estimation de sa banque..."></textarea></div>
         <button class="sa-visit-add-btn" onclick="addVisit()"><i class="ti ti-plus"></i> Enregistrer la visite</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal de mise en avant ── -->
+<div class="sa-edit-overlay" id="boostOverlay" onclick="if(event.target===this)closeBoost()">
+  <div class="sa-edit-modal" style="max-width:460px">
+    <div class="sa-edit-head">
+      <h2><i class="ti ti-bolt" style="color:#E84533"></i> Mettre l'annonce en avant</h2>
+      <button onclick="closeBoost()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="sa-edit-body">
+      <p style="font-size:13.5px;color:#555;margin:0 0 4px">Votre annonce apparaît en tête des résultats de recherche et porte un badge "En avant" pendant toute la durée choisie.</p>
+      <div class="sa-boost-durations">
+        <div class="sa-boost-dur" data-days="7" onclick="pickBoostDuration(7)"><div style="font-weight:700;font-size:15px">7 jours</div><div style="font-size:12px;color:#888">9 €</div></div>
+        <div class="sa-boost-dur" data-days="30" onclick="pickBoostDuration(30)"><div style="font-weight:700;font-size:15px">30 jours</div><div style="font-size:12px;color:#888">19 €</div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;background:#f7f7f7;border-radius:10px;padding:12px 16px;margin-top:4px">
+        <span style="font-size:13px;color:#555">Montant à régler</span>
+        <span style="font-size:18px;font-weight:700;color:#E84533" id="boostAmount">9 €</span>
+      </div>
+      <div style="margin-top:16px">
+        <div style="font-size:12.5px;color:#888;margin-bottom:6px">Réglez par virement bancaire, avec cette référence en objet :</div>
+        <div class="iban-box" style="margin-bottom:8px"><span id="boostRef" style="font-weight:700"></span></div>
+        <div class="iban-box"><span id="boostIban"></span><button class="iban-copy" onclick="copyBoostIban()">Copier</button></div>
+      </div>
+      <button class="sa-mbtn success" style="width:100%;justify-content:center;margin-top:18px" onclick="confirmBoostPaid()"><i class="ti ti-circle-check"></i> J'ai effectué le virement</button>
+      <p style="font-size:11px;color:#aaa;margin-top:10px">La mise en avant est activée sous 24h ouvrées après vérification de la réception du virement.</p>
     </div>
   </div>
 </div>
@@ -567,12 +605,57 @@ function render() {
           <button class="sa-mbtn primary" onclick="openEdit('${l.id}')" ${sold ? 'disabled' : ''}><i class="ti ti-edit"></i> Modifier</button>
           <button class="sa-mbtn" onclick="window.location.href='/annonce/${SA.listingSlug(l)}'"><i class="ti ti-eye"></i> Voir l'annonce</button>
           ${!sold ? `<button class="sa-mbtn" data-visit-btn="${l.id}" onclick="openVisitJournal('${l.id}')"><i class="ti ti-calendar-event"></i> ${visitCount ? visitCount + ' visite' + (visitCount > 1 ? 's' : '') : 'Journal des visites'}</button>` : ''}
+          ${boostButtonHtml(l, sold)}
           ${!sold ? `<button class="sa-mbtn success" onclick="markSold('${l.id}','${l.transaction}')"><i class="ti ti-circle-check"></i> Marquer ${l.transaction === 'vente' ? 'vendue' : 'louée'}</button>` : ''}
         </div>
       </div>
       </div>
     </div>`;
   }).join('');
+}
+
+function boostButtonHtml(l, sold) {
+  if (sold) return '';
+  if (SA.isFeatured(l)) {
+    const until = new Date(l.featuredUntil).toLocaleDateString('fr-FR');
+    return `<span class="sa-mbtn boost active"><i class="ti ti-bolt"></i> En avant jusqu'au ${until}</span>`;
+  }
+  const pending = SA.getBoostRequestForListing(l.id);
+  if (pending) return `<span class="sa-mbtn boost pending"><i class="ti ti-clock"></i> Mise en avant en attente</span>`;
+  return `<button class="sa-mbtn boost" onclick="openBoost('${l.id}')"><i class="ti ti-bolt"></i> Mettre en avant</button>`;
+}
+
+let boostListingId = null;
+let boostDuration = 7;
+function openBoost(id) {
+  boostListingId = id;
+  boostDuration = 7;
+  updateBoostModal();
+  document.getElementById('boostOverlay').classList.add('show');
+}
+function closeBoost() { document.getElementById('boostOverlay').classList.remove('show'); }
+function pickBoostDuration(days) { boostDuration = days; updateBoostModal(); }
+function updateBoostModal() {
+  document.querySelectorAll('.sa-boost-dur').forEach(function(el) {
+    el.classList.toggle('selected', Number(el.dataset.days) === boostDuration);
+  });
+  const amount = boostDuration === 30 ? 19 : 9;
+  document.getElementById('boostAmount').textContent = amount + ' €';
+  document.getElementById('boostIban').textContent = window.SA_CONFIG.iban;
+  document.getElementById('boostRef').textContent = 'BOOST-' + boostListingId.slice(0, 8).toUpperCase();
+}
+function copyBoostIban() {
+  navigator.clipboard.writeText(window.SA_CONFIG.iban).then(function() { SA.toast('IBAN copié', 'ti-copy'); });
+}
+async function confirmBoostPaid() {
+  try {
+    await SA.requestBoost(boostListingId, boostDuration);
+    SA.toast('Demande envoyée — nous activons la mise en avant dès réception du virement', 'ti-circle-check');
+    closeBoost();
+    render();
+  } catch (e) {
+    SA.toast('Erreur : ' + e.message, 'ti-alert-circle');
+  }
 }
 
 async function markSold(id, transaction) {

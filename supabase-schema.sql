@@ -500,6 +500,58 @@ ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "leads_insert" ON public.leads;
 CREATE POLICY "leads_insert" ON public.leads FOR INSERT WITH CHECK (true);
 
+-- ── MISE EN AVANT PAYANTE ("boosts") ──────────────────────────────
+-- Ajoutée le 2026-09-05. Une annonce (vente ou location) mise en avant
+-- remonte en tête des résultats de recherche et porte un badge "En avant"
+-- jusqu'à featured_until. Paiement géré manuellement (virement, même
+-- principe que la commission dans accord.html) : le propriétaire dépose une
+-- demande depuis mes-annonces.html, un admin la confirme depuis admin.html
+-- une fois le virement reçu, ce qui fixe featured_until.
+ALTER TABLE public.listings ADD COLUMN IF NOT EXISTS featured_until timestamptz;
+
+CREATE TABLE IF NOT EXISTS public.boost_requests (
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  listing_id    uuid NOT NULL REFERENCES public.listings(id) ON DELETE CASCADE,
+  owner_id      uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  duration_days int  NOT NULL CHECK (duration_days IN (7,30)),
+  amount_eur    numeric NOT NULL,
+  status        text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','confirmed','rejected')),
+  created_at    timestamptz NOT NULL DEFAULT now(),
+  confirmed_at  timestamptz
+);
+ALTER TABLE public.boost_requests ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "boost_requests_insert" ON public.boost_requests;
+CREATE POLICY "boost_requests_insert" ON public.boost_requests FOR INSERT WITH CHECK (owner_id = auth.uid());
+
+DROP POLICY IF EXISTS "boost_requests_select_own" ON public.boost_requests;
+CREATE POLICY "boost_requests_select_own" ON public.boost_requests FOR SELECT USING (owner_id = auth.uid());
+
+DROP POLICY IF EXISTS "boost_requests_select_admin" ON public.boost_requests;
+DROP POLICY IF EXISTS "boost_requests_update_admin" ON public.boost_requests;
+CREATE POLICY "boost_requests_select_admin" ON public.boost_requests FOR SELECT
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "boost_requests_update_admin" ON public.boost_requests FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+
+-- listings_update n'autorise que owner_id = auth.uid(), sans restriction de
+-- colonne (RLS Postgres est ligne par ligne) : sans ce garde-fou, un
+-- propriétaire pourrait s'attribuer lui-même featured_until en appelant
+-- l'API directement, sans jamais passer par la confirmation d'un admin.
+CREATE OR REPLACE FUNCTION public.protect_featured_until()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
+BEGIN
+  IF NEW.featured_until IS DISTINCT FROM OLD.featured_until
+     AND NOT EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin') THEN
+    NEW.featured_until := OLD.featured_until;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_protect_featured_until ON public.listings;
+CREATE TRIGGER trg_protect_featured_until BEFORE UPDATE ON public.listings
+  FOR EACH ROW EXECUTE FUNCTION public.protect_featured_until();
+
 -- ═══════════════════════════════════════════════════════════════════
 -- BUCKET STORAGE — à créer MANUELLEMENT dans Supabase
 --

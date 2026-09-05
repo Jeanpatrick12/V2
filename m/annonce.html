@@ -171,7 +171,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=43"></script>
+<script src="../sa-shared.js?v=44"></script>
 <script>
 var listingId = new URLSearchParams(window.location.search).get('id');
 var photos = [];
@@ -405,6 +405,7 @@ function render(l) {
       '<div style="display:flex;align-items:baseline;gap:0;flex-wrap:wrap">' +
         '<span class="m-detail-price">' + priceStr + '</span>' +
         (priceM2 ? '<span class="m-detail-price-m2">' + priceM2 + '</span>' : '') +
+        (SA.isFeatured(l) ? ' <span class="m-boost-tag"><i class="ti ti-bolt"></i> En avant</span>' : '') +
         (SA.isDemoListing(l.id) ? ' <span class="m-demo-tag">Démo</span>' : '') +
       '</div>' +
       '<div class="m-detail-title">' + (l.titre || l.title || ((l.type?l.type.charAt(0).toUpperCase()+l.type.slice(1):'Bien') + (l.ville?' — '+l.ville:''))) + '</div>' +
