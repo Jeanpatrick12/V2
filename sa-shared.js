@@ -1469,12 +1469,18 @@
   }
 
   /* ── Modale / Navigation ────────────────────────────────────────── */
+  // Retire les accents avant de remplacer les caracteres non alphanumeriques :
+  // sans ca, "Maître" devenait "ma-tre" (le î isole transforme en tiret) au
+  // lieu de "maitre" dans les URLs /annonce/... et /pro/....
+  function _slugPart(s) {
+    return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/gi, "-").toLowerCase();
+  }
   function listingSlug(l) {
     if (!l) return "";
     var parts = [];
     if (l.transaction) parts.push(l.transaction === "vente" ? "vente" : "location");
-    if (l.type) parts.push(l.type.replace(/\s*\/.*/, "").replace(/[^a-z0-9]/gi, "-").toLowerCase());
-    if (l.ville) parts.push(l.ville.replace(/[^a-z0-9]/gi, "-").toLowerCase());
+    if (l.type) parts.push(_slugPart(l.type.replace(/\s*\/.*/, "")));
+    if (l.ville) parts.push(_slugPart(l.ville));
     if (l.postal) parts.push(l.postal);
     parts.push(l.id.substring(0, 8));
     return parts.join("-");
@@ -1482,9 +1488,9 @@
   function proSlug(p) {
     if (!p) return "";
     var parts = [];
-    if (p.name) parts.push(p.name.replace(/[^a-z0-9]/gi, "-").toLowerCase());
-    if (p.job) parts.push(p.job.replace(/[^a-z0-9]/gi, "-").toLowerCase());
-    if (p.city) parts.push(p.city.replace(/[^a-z0-9]/gi, "-").toLowerCase());
+    if (p.name) parts.push(_slugPart(p.name));
+    if (p.job) parts.push(_slugPart(p.job));
+    if (p.city) parts.push(_slugPart(p.city));
     parts.push(p.id.length > 8 ? p.id.substring(0, 8) : p.id);
     return parts.join("-");
   }
