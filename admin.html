@@ -22,7 +22,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=45"></script>
+<script src="sa-shared.js?v=46"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#f7f8fa}
@@ -156,6 +156,14 @@ a{text-decoration:none;color:inherit}
       <div><div class="adm-card-title">Mises en avant</div><div class="adm-card-sub">Confirmez uniquement après avoir vérifié la réception du virement (référence = BOOST- + 8 premiers caractères de l'id de l'annonce).</div></div>
     </div>
     <div id="boostZone"></div>
+  </div>
+
+  <div class="adm-card">
+    <div class="adm-card-head">
+      <div class="adm-card-ico"><i class="ti ti-receipt"></i></div>
+      <div><div class="adm-card-title">Réclamations de commission</div><div class="adm-card-sub">Ouvrez la facture et la preuve de paiement avant d'approuver. "Marquer payé" seulement après avoir envoyé le virement au particulier.</div></div>
+    </div>
+    <div id="claimsZone"></div>
   </div>
 </div>
 
@@ -321,6 +329,56 @@ async function rejectBoost(id) {
   renderBoosts();
 }
 
+async function renderClaims() {
+  const zone = document.getElementById('claimsZone');
+  if (!SA.getUser()) {
+    zone.innerHTML = LOGIN_PROMPT;
+    return;
+  }
+  const rows = await SA.getAllCommissionClaimsAdmin();
+  if (!rows.length) { zone.innerHTML = '<div class="sa-admin-empty">Aucune réclamation de commission pour le moment (ou votre compte n\'a pas le rôle administrateur).</div>'; return; }
+  const CLAIM_STATUS_LABELS = { pending: 'En attente', approved: 'Approuvée', paid: 'Payée', rejected: 'Rejetée' };
+  zone.innerHTML = `<table class="sa-admin-table">
+    <thead><tr><th>Réclamé par</th><th>Professionnel</th><th>Contrat</th><th>À facturer au pro (13%)</th><th>À reverser (5%)</th><th>Pièces</th><th>IBAN</th><th>Statut</th><th></th></tr></thead>
+    <tbody>${rows.map(r => {
+      const p = SA.getProById(r.pro_id);
+      return `
+      <tr>
+        <td><div class="sa-admin-name">${SA.escapeHtml(r.claimantName || 'Utilisateur supprimé')}</div></td>
+        <td>${SA.escapeHtml(p ? p.name : 'Professionnel introuvable')}</td>
+        <td>${r.contract_amount} €</td>
+        <td>${r.pro_commission_amount} €</td>
+        <td><strong>${r.reward_amount} €</strong></td>
+        <td><div class="sa-admin-actions">
+          <button class="sa-admin-btn" onclick="viewClaimFile('${r.invoice_path}')"><i class="ti ti-receipt"></i> Facture</button>
+          <button class="sa-admin-btn" onclick="viewClaimFile('${r.payment_proof_path}')"><i class="ti ti-credit-card"></i> Preuve</button>
+        </div></td>
+        <td><div class="sa-admin-job">${SA.escapeHtml(r.iban_holder_name)}</div><span class="sa-admin-siret">${SA.escapeHtml(r.iban)}</span></td>
+        <td><span class="sa-admin-badge ${r.status === 'paid' ? 'yes' : (r.status === 'rejected' ? 'no' : 'pending')}">${CLAIM_STATUS_LABELS[r.status] || r.status}</span></td>
+        <td><div class="sa-admin-actions">
+          ${r.status === 'pending' ? `<button class="sa-admin-btn approve" onclick="moderateClaim('${r.id}','approved')">Approuver</button><button class="sa-admin-btn reject" onclick="moderateClaim('${r.id}','rejected')">Rejeter</button>` : ''}
+          ${r.status === 'approved' ? `<button class="sa-admin-btn approve" onclick="moderateClaim('${r.id}','paid')">Marquer payé</button>` : ''}
+        </div></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+async function viewClaimFile(path) {
+  const url = await SA.getCommissionClaimFileUrl(path);
+  if (url) window.open(url, '_blank');
+  else SA.toast('Impossible d\'ouvrir ce fichier', 'ti-alert-circle');
+}
+async function moderateClaim(id, status) {
+  if (status === 'paid' && !confirm('Confirmez-vous avoir bien envoyé le virement au particulier ?')) return;
+  try {
+    await SA.updateCommissionClaimStatus(id, status);
+    SA.toast('Réclamation mise à jour', 'ti-circle-check');
+  } catch (e) {
+    SA.toast('Erreur : ' + e.message, 'ti-alert-circle');
+  }
+  renderClaims();
+}
+
 SA.init().then(function(){
   renderAuthStatus();
   if (!SA.isAdmin()) {
@@ -336,6 +394,7 @@ SA.init().then(function(){
   render();
   renderAvis();
   renderSignalements();
+  renderClaims();
   if (window.SA_CONFIG.boostsEnabled) {
     renderBoosts();
   } else {

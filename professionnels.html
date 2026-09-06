@@ -32,7 +32,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=45"></script>
+<script src="sa-shared.js?v=46"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
@@ -265,7 +265,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
       <input class="sa-pro-search-input" id="proSearchInput" type="text" placeholder="Quel professionnel recherchez-vous ? (ex. électricien, notaire…)" oninput="applyFilters()">
       <button class="sa-pro-search-btn" onclick="applyFilters()"><i class="ti ti-search"></i> Rechercher</button>
     </div>
-    <div class="sa-trust-badge"><i class="ti ti-discount-2"></i><span class="sa-trust-code">SANSAGENTS5</span><span class="sa-trust-text">= <span class="sa-trust-percent">-5%</span> sur votre devis, sans démarche</span></div>
+    <div class="sa-trust-badge"><i class="ti ti-coin"></i><span class="sa-trust-text">Signez un devis avec un pro de l'annuaire → <span class="sa-trust-percent">5%</span> du montant vous sont reversés</span></div>
   </div>
 </div>
 
@@ -359,11 +359,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
     </div>
     <div class="sa-pro-terms">
       <div class="sa-pro-terms-title"><i class="ti ti-file-text"></i> Comment fonctionne la commission professionnelle</div>
-      <div class="sa-pro-term"><i class="ti ti-number-1"></i> <span>Le particulier trouve un professionnel sur SansAgents et mentionne le code <strong>SANSAGENTS5</strong> en demandant son devis.</span></div>
-      <div class="sa-pro-term"><i class="ti ti-number-2"></i> <span>Le professionnel applique <strong>5% de réduction</strong> sur le montant du devis grâce à ce code.</span></div>
-      <div class="sa-pro-term"><i class="ti ti-number-3"></i> <span>Si le particulier <strong>signe ce devis réduit</strong>, SansAgents facture au professionnel une commission de <strong>8%</strong>, calculée sur le <strong>montant du devis après réduction</strong>. <strong>Le particulier ne paie jamais cette commission</strong> — elle est entièrement à la charge du professionnel.</span></div>
-      <div class="sa-pro-term"><i class="ti ti-calculator"></i> <span>Exemple : devis initial de 2 000 € → le particulier paie 1 900 € (-5%) → SansAgents facture au professionnel 8% de 1 900 €, soit <strong>152 €</strong> de commission.</span></div>
-      <div class="sa-pro-term"><i class="ti ti-alert-circle"></i> <span><strong>Condition d'inscription :</strong> tout professionnel référencé sur SansAgents accepte ce principe de commission sur les devis signés via la plateforme. En cas de refus, son profil est retiré de l'annuaire.</span></div>
+      <div class="sa-pro-term"><i class="ti ti-number-1"></i> <span>Le particulier trouve un professionnel sur SansAgents, le contacte et signe un devis avec lui — au prix normal, sans réduction.</span></div>
+      <div class="sa-pro-term"><i class="ti ti-number-2"></i> <span>Après signature, il peut envoyer sa facture et une preuve de paiement à SansAgents pour réclamer <strong>5% du montant du contrat</strong>.</span></div>
+      <div class="sa-pro-term"><i class="ti ti-number-3"></i> <span>Une fois la réclamation vérifiée, SansAgents facture au professionnel une commission de <strong>13%</strong> du montant du contrat, et reverse <strong>5%</strong> au particulier — SansAgents conserve <strong>8%</strong> net. <strong>Le particulier n'avance jamais cette commission</strong> — elle est entièrement à la charge du professionnel.</span></div>
+      <div class="sa-pro-term"><i class="ti ti-calculator"></i> <span>Exemple : contrat de 2 000 € → SansAgents facture 13% au professionnel, soit <strong>260 €</strong> → SansAgents reverse 5% au particulier, soit <strong>100 €</strong> → SansAgents conserve <strong>160 €</strong> nets.</span></div>
+      <div class="sa-pro-term"><i class="ti ti-alert-circle"></i> <span><strong>Condition d'inscription :</strong> tout professionnel référencé sur SansAgents accepte ce principe de commission sur les contrats signés via la plateforme. En cas de refus, son profil est retiré de l'annuaire.</span></div>
     </div>
   </div>
 </div>
@@ -469,7 +469,7 @@ function renderResults(results) {
   noResults.style.display = 'none';
 
   list.innerHTML = results.map(p => `
-    <div class="sa-pro-row" onclick="window.location.href='/pro/'+SA.proSlug(p)">
+    <div class="sa-pro-row" onclick="window.location.href='/pro/${SA.proSlug(p)}'">
       <div class="sa-pro-row-avatar" style="${p.logo ? `background-image:url('${p.logo}');background-size:cover;background-position:center` : `background:${p.color}`}">${!p.logo ? `<i class="ti ${p.icon}"></i>` : ''}</div>
       <div class="sa-pro-row-info">
         <div class="sa-pro-row-top">
@@ -485,12 +485,12 @@ function renderResults(results) {
             ? `<span class="sa-pro-row-rating"><i class="ti ti-star-filled"></i> ${p.rating.toFixed(1)} <em>(${p.reviews} avis)</em></span>`
             : `<span class="sa-pro-row-rating"><em>Pas encore d'avis</em></span>`}
           <span><i class="ti ti-map-pin"></i> ${SA.escapeHtml(p.city)}</span>
-          <span class="sa-pro-row-discount"><i class="ti ti-discount-2" style="color:#E84533"></i><strong style="color:#E84533;font-weight:800">-5%</strong> avec le code <span class="sa-pro-row-discount-code">SANSAGENTS5</span></span>
+          <span class="sa-pro-row-discount"><i class="ti ti-coin" style="color:#E84533"></i><strong style="color:#E84533;font-weight:800">5%</strong> reversés si vous signez</span>
         </div>
       </div>
       <div class="sa-pro-row-action">
         <button class="sa-pro-fav${SA.isFavorite(p.id) ? ' active' : ''}" onclick="event.stopPropagation();SA.toggleFavoriteUI(this,'${p.id}')" title="Ajouter aux favoris"><i class="ti ti-heart${SA.isFavorite(p.id) ? '-filled' : ''}"></i></button>
-        <button class="primary-fill" onclick="event.stopPropagation();window.location.href='/pro/'+SA.proSlug(p)">Voir le profil</button>
+        <button class="primary-fill" onclick="event.stopPropagation();window.location.href='/pro/${SA.proSlug(p)}'">Voir le profil</button>
       </div>
     </div>
   `).join('');

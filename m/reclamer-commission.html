@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><!--sa_mguard--><script>if(window.self===window.top&&location.pathname.indexOf("/m/")===0){var _f=location.pathname.replace(/^\/m\//,"").replace(/\.html$/,"");var _map={vendre:"guide-vendeur",professionnel:"pro",index:""};var _t=_map.hasOwnProperty(_f)?_map[_f]:_f;location.replace("/"+_t+location.search);}</script><base target="_top">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Réclamer ma commission — SansAgents</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#E84533">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
+<link rel="stylesheet" href="m.css">
+<style>
+.rc-hero { background: linear-gradient(135deg,#0f1923,#1a2c3d); padding: 20px var(--pad) 24px; }
+.rc-hero-back { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.8); cursor: pointer; font-family: inherit; margin-bottom: 18px; }
+.rc-hero-target { display: flex; gap: 14px; align-items: center; }
+.rc-hero-avatar { width: 52px; height: 52px; border-radius: 14px; background: var(--red); color: white; font-size: 22px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.rc-hero-name { font-size: 17px; font-weight: 800; color: white; margin-bottom: 2px; }
+.rc-hero-type { font-size: 12px; color: rgba(255,255,255,0.55); }
+
+.rc-guarantee { background: white; margin: -14px var(--pad) 0; border-radius: 16px; padding: 16px 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative; z-index: 2; }
+.rc-guarantee-title { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+.rc-guarantee-title i { color: #1a8c4e; font-size: 17px; }
+.rc-guarantee p { font-size: 12.5px; color: var(--text2); line-height: 1.6; margin-bottom: 8px; }
+.rc-guarantee p:last-child { margin-bottom: 0; }
+.rc-guarantee strong { color: var(--text); }
+
+.rc-section { padding: 22px var(--pad) 0; }
+.rc-label { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.rc-input { width: 100%; box-sizing: border-box; border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 14px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; }
+.rc-input:focus { border-color: var(--red); }
+.rc-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.rc-reward-preview { display: none; align-items: center; justify-content: space-between; background: #f0f9f2; border: 1px solid #cdecd6; border-radius: 12px; padding: 12px 16px; margin-top: 10px; }
+.rc-reward-preview span { font-size: 12.5px; color: #1a8c4e; font-weight: 600; }
+.rc-reward-preview strong { font-size: 18px; color: #1a8c4e; font-weight: 800; }
+
+.rc-file { display: block; border: 1.5px dashed var(--border); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; }
+.rc-file.has-file { border-style: solid; border-color: #1a8c4e; background: #f0f9f2; }
+.rc-file i { font-size: 20px; color: #bbb; display: block; margin-bottom: 6px; }
+.rc-file.has-file i { color: #1a8c4e; }
+.rc-file-label { font-size: 12.5px; color: var(--text2); font-weight: 600; }
+.rc-file.has-file .rc-file-label { color: #1a8c4e; }
+.rc-file input { display: none; }
+</style>
+</head>
+<body>
+
+<div id="notLoggedIn" style="display:none;padding:60px var(--pad);text-align:center">
+  <i class="ti ti-lock" style="font-size:40px;color:#ddd;display:block;margin-bottom:14px"></i>
+  <h2 style="font-size:18px;font-weight:700;margin-bottom:8px">Connectez-vous</h2>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Nous devons pouvoir vous identifier pour vérifier votre dossier et organiser le virement.</p>
+  <button class="m-btn m-btn-primary m-btn-full" onclick="window.top.location='/connexion?redirect='+encodeURIComponent(window.top.location.pathname+window.top.location.search)">
+    <i class="ti ti-login"></i> Se connecter
+  </button>
+</div>
+
+<div id="mainContent">
+
+<div class="rc-hero">
+  <button class="rc-hero-back" onclick="history.back()"><i class="ti ti-arrow-left"></i> Retour</button>
+  <div style="font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:12px">Réclamer ma commission</div>
+  <div class="rc-hero-target">
+    <div class="rc-hero-avatar" id="heroAvatar">?</div>
+    <div>
+      <div class="rc-hero-name" id="heroName">Chargement…</div>
+      <div class="rc-hero-type">Contrat signé avec ce professionnel</div>
+    </div>
+  </div>
+</div>
+
+<div class="rc-guarantee">
+  <div class="rc-guarantee-title"><i class="ti ti-shield-check"></i> Notre engagement</div>
+  <p>Envoyez votre <strong>facture</strong> et une <strong>preuve de paiement</strong>, nous vous reversons <strong>5% du montant du contrat</strong> (12 € minimum, 200 € maximum) par virement.</p>
+  <p>Dossier vérifié manuellement, virement envoyé sous quelques jours ouvrés une fois validé.</p>
+</div>
+
+<form id="claimForm" onsubmit="submitClaim(event)">
+
+  <div class="rc-section">
+    <div class="rc-label">Montant total du contrat signé (€) <span style="color:var(--red)">*</span></div>
+    <input class="rc-input" type="number" id="cAmount" min="1" step="0.01" placeholder="Ex : 2000" oninput="updateRewardPreview()">
+    <div class="rc-reward-preview" id="rewardPreview">
+      <span>Vous recevrez</span>
+      <strong id="rewardValue">0 €</strong>
+    </div>
+  </div>
+
+  <div class="rc-section">
+    <div class="rc-label">Votre facture <span style="color:var(--red)">*</span></div>
+    <label class="rc-file" id="invoiceBox">
+      <input type="file" id="cInvoice" accept="image/*,application/pdf" onchange="handleFileChange('cInvoice','invoiceBox','Facture sélectionnée')">
+      <i class="ti ti-receipt"></i>
+      <div class="rc-file-label" id="invoiceLabel">Photo ou PDF de la facture</div>
+    </label>
+  </div>
+
+  <div class="rc-section">
+    <div class="rc-label">Preuve de paiement <span style="color:var(--red)">*</span></div>
+    <label class="rc-file" id="proofBox">
+      <input type="file" id="cProof" accept="image/*,application/pdf" onchange="handleFileChange('cProof','proofBox','Preuve sélectionnée')">
+      <i class="ti ti-credit-card"></i>
+      <div class="rc-file-label" id="proofLabel">Capture d'écran de votre virement ou relevé</div>
+    </label>
+  </div>
+
+  <div class="rc-section">
+    <div class="rc-label">Où vous envoyer le virement <span style="color:var(--red)">*</span></div>
+    <div class="rc-grid-2">
+      <input class="rc-input" type="text" id="cIbanHolder" placeholder="Titulaire">
+      <input class="rc-input" type="text" id="cIban" placeholder="IBAN">
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:8px;display:flex;align-items:center;gap:5px"><i class="ti ti-lock" style="font-size:13px"></i> Visible uniquement par l'équipe SansAgents.</div>
+  </div>
+
+  <div id="claimError" style="display:none;margin:16px var(--pad) 0;background:#fff5f4;border:1px solid #ffc5bd;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--red);align-items:center;gap:8px">
+    <i class="ti ti-alert-circle"></i> <span id="claimErrorMsg"></span>
+  </div>
+
+  <div style="padding:26px var(--pad) 12px">
+    <button type="submit" id="submitBtn" style="width:100%;background:var(--red);color:white;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
+      <i class="ti ti-send"></i> Envoyer ma réclamation
+    </button>
+    <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:10px;line-height:1.5">Un dossier fictif ou une facture falsifiée entraîne le rejet définitif de la demande.</p>
+  </div>
+
+  <div style="height:30px"></div>
+</form>
+
+</div>
+
+<div id="successScreen" style="display:none;text-align:center;padding:60px var(--pad) 40px">
+  <div style="width:72px;height:72px;border-radius:50%;background:#ecfdf5;border:2px solid #6ee7b7;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;color:#1a8c4e"><i class="ti ti-check"></i></div>
+  <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px">Réclamation envoyée !</div>
+  <div style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:32px">Nous vérifions votre dossier et vous recontactons par email sous quelques jours ouvrés avant l'envoi du virement.</div>
+  <button onclick="history.back()" style="width:100%;background:var(--red);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit"><i class="ti ti-arrow-left"></i> Retour</button>
+  <button onclick="window.top.location='/'" style="width:100%;background:white;color:var(--text);border:1.5px solid var(--border);border-radius:14px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px">Accueil</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../sa-config.js"></script>
+<script src="../sa-shared.js?v=46"></script>
+<script>
+var proId = '';
+var invoiceFile = null;
+var proofFile = null;
+
+function updateRewardPreview() {
+  var amount = parseFloat(document.getElementById('cAmount').value);
+  var preview = document.getElementById('rewardPreview');
+  if (!amount || amount <= 0) { preview.style.display = 'none'; return; }
+  var reward = SA.computeCommissionReward(amount);
+  document.getElementById('rewardValue').textContent = reward.toLocaleString('fr-FR') + ' €';
+  preview.style.display = 'flex';
+}
+
+function handleFileChange(inputId, boxId, label) {
+  var input = document.getElementById(inputId);
+  var box = document.getElementById(boxId);
+  var file = input.files[0];
+  if (inputId === 'cInvoice') invoiceFile = file || null;
+  if (inputId === 'cProof') proofFile = file || null;
+  if (file) {
+    box.classList.add('has-file');
+    box.querySelector('.rc-file-label').textContent = label + ' : ' + file.name;
+  } else {
+    box.classList.remove('has-file');
+  }
+}
+
+function showError(msg) {
+  var el = document.getElementById('claimError');
+  el.style.display = 'flex';
+  el.style.alignItems = 'center';
+  document.getElementById('claimErrorMsg').textContent = msg;
+}
+function hideError() {
+  document.getElementById('claimError').style.display = 'none';
+}
+
+function submitClaim(e) {
+  e.preventDefault();
+  hideError();
+
+  var amount = parseFloat(document.getElementById('cAmount').value);
+  var ibanHolder = document.getElementById('cIbanHolder').value.trim();
+  var iban = document.getElementById('cIban').value.trim();
+
+  if (!amount || amount <= 0) { showError('Merci d\'indiquer le montant du contrat.'); return; }
+  if (!invoiceFile) { showError('Merci de joindre votre facture.'); return; }
+  if (!proofFile) { showError('Merci de joindre une preuve de paiement.'); return; }
+  if (!ibanHolder || !iban) { showError('Merci de renseigner vos coordonnées bancaires.'); return; }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Envoi en cours…';
+
+  SA.submitCommissionClaim({
+    proId: proId,
+    contractAmount: amount,
+    invoiceFile: invoiceFile,
+    paymentProofFile: proofFile,
+    iban: iban,
+    ibanHolder: ibanHolder
+  }).then(function() {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+  }).catch(function(err) {
+    console.error('submitCommissionClaim error:', err);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> Envoyer ma réclamation';
+    showError("Erreur lors de l'envoi. Réessayez dans un instant.");
+  });
+}
+
+SA.init().then(function() {
+  if (!SA.getUser()) {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('notLoggedIn').style.display = 'block';
+    return;
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  proId = params.get('pro') || '';
+  var name = params.get('name') || 'Professionnel';
+
+  document.getElementById('heroAvatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('heroName').textContent = name;
+  document.title = 'Réclamer ma commission — ' + name + ' — SansAgents';
+});
+</script>
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</body>
+</html>

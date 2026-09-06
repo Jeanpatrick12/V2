@@ -123,7 +123,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=45"></script>
+<script src="../sa-shared.js?v=46"></script>
 <script>
 var COLORS = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2'];
 var currentPro = null;
@@ -225,11 +225,10 @@ function renderPro(p) {
 
   // ── Carte contact ───────────────────────────────────────
   html += '<div style="background:white;padding:20px var(--pad);border-bottom:1px solid var(--border)">' +
-    // Code promo
+    // Cashback
     '<div style="display:flex;align-items:center;gap:10px;background:#fff5f4;border:1px solid #ffc5bd;border-radius:10px;padding:10px 14px;margin-bottom:16px">' +
-      '<i class="ti ti-discount-2" style="color:var(--red);font-size:20px;flex-shrink:0"></i>' +
-      '<div><div style="font-size:11px;color:var(--text3)">-5% avec le code</div>' +
-      '<div style="font-size:15px;font-weight:800;color:var(--red);letter-spacing:0.5px">SANSAGENTS5</div></div>' +
+      '<i class="ti ti-coin" style="color:var(--red);font-size:20px;flex-shrink:0"></i>' +
+      '<div style="font-size:12.5px;font-weight:700;color:var(--red)">5% reversés si vous signez avec ce professionnel</div>' +
     '</div>' +
     // Phone
     (phone ? '<a href="tel:'+phone+'" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bg);text-decoration:none">' +
@@ -248,9 +247,10 @@ function renderPro(p) {
     '<div class="m-pro-contact-form" id="proContactForm" style="display:none">' +
       '<input type="text" id="pcName" placeholder="Votre nom">' +
       '<input type="email" id="pcEmail" placeholder="Votre email">' +
-      '<textarea id="pcMsg" rows="3" placeholder="Décrivez votre besoin (mentionnez le code SANSAGENTS5 pour -5%)"></textarea>' +
+      '<textarea id="pcMsg" rows="3" placeholder="Décrivez votre besoin"></textarea>' +
       '<button onclick="sendProContact()" style="width:100%;background:var(--red);color:white;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px"><i class="ti ti-check"></i> Envoyer la demande</button>' +
     '</div>' +
+    '<button onclick="window.top.location=\'/reclamer-commission?pro='+p.id+'&name='+encodeURIComponent(p.name||'')+'\'" style="width:100%;margin-top:8px;background:#fff5f2;color:var(--red);border:1.5px solid #ffd8cf;border-radius:12px;padding:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px"><i class="ti ti-receipt"></i> J\'ai déjà signé — réclamer mes 5%</button>' +
     '<div style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px;line-height:1.5">Les coordonnées des professionnels sont publiques — l\'annuaire est conçu pour être contacté directement.</div>' +
   '</div>';
 

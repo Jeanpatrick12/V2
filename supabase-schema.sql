@@ -588,6 +588,45 @@ DROP POLICY IF EXISTS "pro_contacts_select_admin" ON public.pro_contacts;
 CREATE POLICY "pro_contacts_select_admin" ON public.pro_contacts FOR SELECT
   USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
+-- ── RÉCLAMATIONS DE COMMISSION (cashback client sur devis pro signé) ──
+-- Ajoutée le 2026-09-05. Remplace le code SANSAGENTS5 (-5% instantané) :
+-- le professionnel paie désormais 13% du contrat signé, dont 5% sont
+-- reversés au particulier qui en fait la demande avec facture + preuve de
+-- paiement à l'appui (contre 8% net conservé par SansAgents, comme avant).
+-- reward_amount et pro_commission_amount sont calculés côté client au
+-- moment de la demande (cf SA.computeCommissionReward) et rejoués/vérifiés
+-- manuellement par l'admin avant tout virement — jamais de paiement
+-- automatique.
+CREATE TABLE IF NOT EXISTS public.commission_claims (
+  id                  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  pro_id              text NOT NULL,
+  claimant_id         uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  contract_amount     numeric NOT NULL CHECK (contract_amount > 0),
+  reward_amount       numeric NOT NULL,
+  pro_commission_amount numeric NOT NULL,
+  invoice_path        text NOT NULL,
+  payment_proof_path  text NOT NULL,
+  iban                text NOT NULL,
+  iban_holder_name    text NOT NULL,
+  status              text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','paid','rejected')),
+  created_at          timestamptz NOT NULL DEFAULT now(),
+  reviewed_at         timestamptz
+);
+ALTER TABLE public.commission_claims ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "commission_claims_insert" ON public.commission_claims;
+CREATE POLICY "commission_claims_insert" ON public.commission_claims FOR INSERT WITH CHECK (claimant_id = auth.uid());
+
+DROP POLICY IF EXISTS "commission_claims_select_own" ON public.commission_claims;
+CREATE POLICY "commission_claims_select_own" ON public.commission_claims FOR SELECT USING (claimant_id = auth.uid());
+
+DROP POLICY IF EXISTS "commission_claims_select_admin" ON public.commission_claims;
+DROP POLICY IF EXISTS "commission_claims_update_admin" ON public.commission_claims;
+CREATE POLICY "commission_claims_select_admin" ON public.commission_claims FOR SELECT
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "commission_claims_update_admin" ON public.commission_claims FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+
 -- ═══════════════════════════════════════════════════════════════════
 -- BUCKET STORAGE — à créer MANUELLEMENT dans Supabase
 --
@@ -596,4 +635,28 @@ CREATE POLICY "pro_contacts_select_admin" ON public.pro_contacts FOR SELECT
 --   Public : OUI (coche "Public bucket")
 --
 -- Cela permettra d'héberger les photos des annonces.
+--
+-- ─────────────────────────────────────────────────────────────────
+-- Second bucket, à créer de la même façon :
+--   Nom    : commission-proofs
+--   Public : NON (laisse la case décochée)
+--
+-- Contient les factures et captures de virement envoyées avec une
+-- réclamation de commission — des documents personnels/financiers, jamais
+-- publics contrairement aux photos d'annonces. Une fois le bucket créé,
+-- exécute les policies ci-dessous pour que chacun ne puisse déposer/lire
+-- que ses propres fichiers (ou que l'admin lise tout, pour la vérification
+-- des réclamations dans admin.html) :
+
+DROP POLICY IF EXISTS "commission_proofs_insert" ON storage.objects;
+CREATE POLICY "commission_proofs_insert" ON storage.objects FOR INSERT
+  WITH CHECK (bucket_id = 'commission-proofs' AND (storage.foldername(name))[1] = auth.uid()::text);
+
+DROP POLICY IF EXISTS "commission_proofs_select_own" ON storage.objects;
+CREATE POLICY "commission_proofs_select_own" ON storage.objects FOR SELECT
+  USING (bucket_id = 'commission-proofs' AND (storage.foldername(name))[1] = auth.uid()::text);
+
+DROP POLICY IF EXISTS "commission_proofs_select_admin" ON storage.objects;
+CREATE POLICY "commission_proofs_select_admin" ON storage.objects FOR SELECT
+  USING (bucket_id = 'commission-proofs' AND EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 -- ═══════════════════════════════════════════════════════════════════

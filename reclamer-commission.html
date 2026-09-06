@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWT8PG68M3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_consent_analytics')==='granted')?'granted':'denied', 'ad_storage': 'denied'});
+  gtag('js', new Date());
+  gtag('config', 'G-RWT8PG68M3');
+</script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="robots" content="noindex,follow">
+<meta name="description" content="Réclamez votre reversement de 5% après avoir signé un devis avec un professionnel de l'annuaire SansAgents.">
+<meta name="theme-color" content="#E84533">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><!--sa_mloader--><script>(function(){if(window.innerWidth>768||localStorage.sa_force_desktop||/[?&]desktop=1/.test(location.search))return;document.documentElement.style.visibility="hidden";document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML="";document.body.style.margin="0";document.body.style.overflow="hidden";var f=document.createElement("iframe");f.src="/m/reclamer-commission.html"+location.search;f.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;border:0;background:#fff";f.onload=function(){try{document.title=f.contentDocument.title}catch(e){}document.documentElement.style.visibility=""};f.setAttribute("scrolling","yes");document.body.appendChild(f);});})();</script>
+<title>Réclamer ma commission — SansAgents</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sa-config.js"></script>
+<script src="sa-shared.js?v=46"></script>
+<link rel="stylesheet" href="sa-mobile.css?v=4">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fafafa;min-height:100vh}
+
+.sa-auth-gate{position:fixed;inset:0;background:#fff;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.sa-auth-gate-card{max-width:380px;text-align:center}
+.sa-auth-gate-card i{font-size:38px;color:#E84533;margin-bottom:14px;display:block}
+.sa-auth-gate-card h2{font-size:20px;font-weight:700;color:#111;margin-bottom:10px;letter-spacing:-0.3px}
+.sa-auth-gate-card p{font-size:13.5px;color:#777;line-height:1.6;margin-bottom:20px}
+.sa-auth-gate-card button{background:#E84533;color:#fff;border:none;padding:13px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+
+.sa-nav-wrapper{background:white;border-bottom:1px solid #efefef;position:sticky;top:0;z-index:100}
+.sa-nav{max-width:1240px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:64px;gap:0}
+.sa-nav-left{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.sa-logo{background:#E84533;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-logo i{color:white;font-size:18px}
+.sa-brand{font-size:19px;font-weight:700;color:#111;letter-spacing:-0.3px}
+.sa-brand span{color:#E84533}
+
+.rc-hero{background:linear-gradient(135deg,#0c1622 0%,#152233 60%,#1c2e44 100%);padding:2.2rem 40px 3.2rem}
+.rc-hero-inner{max-width:680px;margin:0 auto}
+.rc-hero-back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;color:rgba(255,255,255,.75);cursor:pointer;font-family:inherit;margin-bottom:24px}
+.rc-hero-back:hover{background:rgba(255,255,255,.14);color:white}
+.rc-hero-eyebrow{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.rc-hero-target{display:flex;gap:16px;align-items:center}
+.rc-hero-avatar{width:60px;height:60px;border-radius:16px;background:#E84533;color:white;font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rc-hero-name{font-size:21px;font-weight:800;color:white;letter-spacing:-.3px;margin-bottom:3px}
+.rc-hero-type{font-size:13px;color:rgba(255,255,255,.5)}
+
+.rc-wrap{max-width:680px;margin:-1.6rem auto 4rem;padding:0 40px}
+
+.rc-guarantee{background:white;border:1px solid #e8e8e8;border-radius:18px;padding:1.5rem 1.7rem;margin-bottom:18px;box-shadow:0 20px 50px rgba(0,0,0,.05)}
+.rc-guarantee-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#111;margin-bottom:10px}
+.rc-guarantee-title i{color:#1a8c4e;font-size:18px}
+.rc-guarantee p{font-size:13px;color:#555;line-height:1.65;margin-bottom:10px}
+.rc-guarantee p:last-child{margin-bottom:0}
+.rc-guarantee strong{color:#111}
+
+.rc-card{background:white;border:1px solid #e8e8e8;border-radius:20px;padding:2rem 2.2rem;box-shadow:0 20px 50px rgba(0,0,0,.06)}
+.rc-section{margin-bottom:22px}
+.rc-section:last-of-type{margin-bottom:0}
+.rc-label{font-size:13.5px;font-weight:700;color:#111;margin-bottom:8px;display:block}
+.rc-label span{color:#E84533}
+.rc-hint{font-size:11.5px;color:#aaa;margin-top:6px;display:flex;align-items:center;gap:5px}
+
+.rc-input{width:100%;box-sizing:border-box;border:1.5px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px;font-family:inherit;color:#111;outline:none;transition:border-color .15s}
+.rc-input:focus{border-color:#E84533}
+
+.rc-reward-preview{display:flex;align-items:center;justify-content:space-between;background:#f0f9f2;border:1px solid #cdecd6;border-radius:12px;padding:14px 18px;margin-top:10px}
+.rc-reward-preview span{font-size:13px;color:#1a8c4e;font-weight:600}
+.rc-reward-preview strong{font-size:20px;color:#1a8c4e;font-weight:800}
+
+.rc-file{border:1.5px dashed #ddd;border-radius:11px;padding:16px;text-align:center;cursor:pointer;transition:border-color .15s}
+.rc-file:hover{border-color:#E84533}
+.rc-file.has-file{border-style:solid;border-color:#1a8c4e;background:#f0f9f2}
+.rc-file i{font-size:22px;color:#bbb;display:block;margin-bottom:6px}
+.rc-file.has-file i{color:#1a8c4e}
+.rc-file-label{font-size:13px;color:#888;font-weight:600}
+.rc-file.has-file .rc-file-label{color:#1a8c4e}
+.rc-file input{display:none}
+
+.rc-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.rc-error{display:none;margin-bottom:20px;background:#fff5f4;border:1px solid #ffc5bd;border-radius:10px;padding:12px 14px;font-size:13px;color:#E84533;align-items:center;gap:8px}
+
+.rc-submit{width:100%;background:#E84533;color:white;border:none;border-radius:12px;padding:15px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+.rc-submit:hover{background:#c93a2a}
+.rc-submit:disabled{opacity:.6;cursor:default}
+.rc-fineprint{text-align:center;font-size:11.5px;color:#aaa;margin-top:14px;line-height:1.5}
+
+.rc-success{display:none;text-align:center;padding:1rem 0 .5rem}
+.rc-success-icon{width:76px;height:76px;border-radius:50%;background:#ecfdf5;border:2px solid #6ee7b7;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:34px;color:#1a8c4e}
+.rc-success h2{font-size:21px;font-weight:800;color:#111;margin-bottom:10px}
+.rc-success p{font-size:14px;color:#777;line-height:1.6;margin-bottom:28px}
+.rc-success-actions{display:flex;gap:10px}
+.rc-success-actions button{flex:1;border-radius:12px;padding:13px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.rc-btn-primary{background:#E84533;color:white;border:none}
+.rc-btn-primary:hover{background:#c93a2a}
+.rc-btn-ghost{background:white;color:#111;border:1.5px solid #e0e0e0}
+.rc-btn-ghost:hover{border-color:#ccc}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:760px){
+  .sa-nav{padding:0 20px}
+  .rc-hero{padding:1.6rem 20px 2.6rem}
+  .rc-wrap{padding:0 20px}
+  .rc-card,.rc-guarantee{padding:1.5rem 1.4rem}
+  .rc-grid-2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="sa-auth-gate" id="authGate">
+  <div class="sa-auth-gate-card">
+    <i class="ti ti-lock"></i>
+    <h2>Connectez-vous pour réclamer votre commission</h2>
+    <p>Nous devons pouvoir vous identifier pour vérifier votre dossier et organiser le virement.</p>
+    <button onclick="window.location.href='connexion?redirect=' + encodeURIComponent(location.pathname + location.search)">Se connecter ou créer un compte</button>
+  </div>
+</div>
+
+<div class="sa-nav-wrapper">
+  <nav class="sa-nav">
+    <div class="sa-nav-left" onclick="window.location.href='./'">
+      <div class="sa-logo"><i class="ti ti-key"></i></div>
+      <div class="sa-brand">Sans<span>Agents</span></div>
+    </div>
+  </nav>
+</div>
+
+<div id="mainContent">
+  <div class="rc-hero">
+    <div class="rc-hero-inner">
+      <button class="rc-hero-back" onclick="history.back()"><i class="ti ti-arrow-left"></i> Retour</button>
+      <div class="rc-hero-eyebrow">Réclamer ma commission</div>
+      <div class="rc-hero-target">
+        <div class="rc-hero-avatar" id="heroAvatar">?</div>
+        <div>
+          <div class="rc-hero-name" id="heroName">Chargement…</div>
+          <div class="rc-hero-type">Contrat signé avec ce professionnel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rc-wrap">
+    <div class="rc-guarantee">
+      <div class="rc-guarantee-title"><i class="ti ti-shield-check"></i> Notre engagement</div>
+      <p>Si vous avez signé un devis avec ce professionnel via SansAgents et que vous nous envoyez votre <strong>facture</strong> et une <strong>preuve de paiement</strong>, nous vous reversons <strong>5% du montant du contrat</strong> (12 € minimum, 200 € maximum) par virement bancaire.</p>
+      <p>Votre dossier est vérifié manuellement, puis le virement est envoyé sous quelques jours ouvrés une fois validé. Vous recevrez un email de confirmation dès son envoi.</p>
+    </div>
+
+    <div class="rc-card">
+      <form id="claimForm" onsubmit="submitClaim(event)">
+
+        <div class="rc-section">
+          <label class="rc-label">Montant total du contrat signé (€) <span>*</span></label>
+          <input class="rc-input" type="number" id="cAmount" min="1" step="0.01" placeholder="Ex : 2000" oninput="updateRewardPreview()">
+          <div class="rc-reward-preview" id="rewardPreview" style="display:none">
+            <span>Vous recevrez</span>
+            <strong id="rewardValue">0 €</strong>
+          </div>
+        </div>
+
+        <div class="rc-section">
+          <label class="rc-label">Votre facture <span>*</span></label>
+          <label class="rc-file" id="invoiceBox">
+            <input type="file" id="cInvoice" accept="image/*,application/pdf" onchange="handleFileChange('cInvoice','invoiceBox','Facture sélectionnée')">
+            <i class="ti ti-receipt"></i>
+            <div class="rc-file-label" id="invoiceLabel">Photo ou PDF de la facture</div>
+          </label>
+        </div>
+
+        <div class="rc-section">
+          <label class="rc-label">Preuve de paiement <span>*</span></label>
+          <label class="rc-file" id="proofBox">
+            <input type="file" id="cProof" accept="image/*,application/pdf" onchange="handleFileChange('cProof','proofBox','Preuve sélectionnée')">
+            <i class="ti ti-credit-card"></i>
+            <div class="rc-file-label" id="proofLabel">Capture d'écran de votre virement ou relevé</div>
+          </label>
+        </div>
+
+        <div class="rc-section">
+          <label class="rc-label">Où vous envoyer le virement <span>*</span></label>
+          <div class="rc-grid-2">
+            <input class="rc-input" type="text" id="cIbanHolder" placeholder="Titulaire du compte">
+            <input class="rc-input" type="text" id="cIban" placeholder="IBAN">
+          </div>
+          <div class="rc-hint"><i class="ti ti-lock"></i> Vos coordonnées bancaires ne sont visibles que par l'équipe SansAgents.</div>
+        </div>
+
+        <div class="rc-error" id="claimError"><i class="ti ti-alert-circle"></i> <span id="claimErrorMsg"></span></div>
+
+        <button type="submit" class="rc-submit" id="submitBtn"><i class="ti ti-send"></i> Envoyer ma réclamation</button>
+        <p class="rc-fineprint">Un dossier fictif ou une facture falsifiée entraîne le rejet définitif de la demande.</p>
+      </form>
+
+      <div class="rc-success" id="successScreen">
+        <div class="rc-success-icon"><i class="ti ti-check"></i></div>
+        <h2>Réclamation envoyée !</h2>
+        <p>Nous vérifions votre dossier et vous recontactons par email sous quelques jours ouvrés avant l'envoi du virement.</p>
+        <div class="rc-success-actions">
+          <button class="rc-btn-ghost" onclick="history.back()"><i class="ti ti-arrow-left"></i> Retour</button>
+          <button class="rc-btn-primary" onclick="window.location='/'">Accueil</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var proId = '';
+var invoiceFile = null;
+var proofFile = null;
+
+function updateRewardPreview() {
+  var amount = parseFloat(document.getElementById('cAmount').value);
+  var preview = document.getElementById('rewardPreview');
+  if (!amount || amount <= 0) { preview.style.display = 'none'; return; }
+  var reward = SA.computeCommissionReward(amount);
+  document.getElementById('rewardValue').textContent = reward.toLocaleString('fr-FR') + ' €';
+  preview.style.display = 'flex';
+}
+
+function handleFileChange(inputId, boxId, label) {
+  var input = document.getElementById(inputId);
+  var box = document.getElementById(boxId);
+  var file = input.files[0];
+  if (inputId === 'cInvoice') invoiceFile = file || null;
+  if (inputId === 'cProof') proofFile = file || null;
+  if (file) {
+    box.classList.add('has-file');
+    box.querySelector('.rc-file-label').textContent = label + ' : ' + file.name;
+  } else {
+    box.classList.remove('has-file');
+  }
+}
+
+function showError(msg) {
+  var el = document.getElementById('claimError');
+  el.style.display = 'flex';
+  document.getElementById('claimErrorMsg').textContent = msg;
+}
+function hideError() {
+  document.getElementById('claimError').style.display = 'none';
+}
+
+function submitClaim(e) {
+  e.preventDefault();
+  hideError();
+
+  var amount = parseFloat(document.getElementById('cAmount').value);
+  var ibanHolder = document.getElementById('cIbanHolder').value.trim();
+  var iban = document.getElementById('cIban').value.trim();
+
+  if (!amount || amount <= 0) { showError('Merci d\'indiquer le montant du contrat.'); return; }
+  if (!invoiceFile) { showError('Merci de joindre votre facture.'); return; }
+  if (!proofFile) { showError('Merci de joindre une preuve de paiement.'); return; }
+  if (!ibanHolder || !iban) { showError('Merci de renseigner vos coordonnées bancaires.'); return; }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Envoi en cours…';
+
+  SA.submitCommissionClaim({
+    proId: proId,
+    contractAmount: amount,
+    invoiceFile: invoiceFile,
+    paymentProofFile: proofFile,
+    iban: iban,
+    ibanHolder: ibanHolder
+  }).then(function() {
+    document.getElementById('claimForm').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+  }).catch(function(err) {
+    console.error('submitCommissionClaim error:', err);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> Envoyer ma réclamation';
+    showError("Erreur lors de l'envoi. Réessayez dans un instant.");
+  });
+}
+
+SA.init().then(function() {
+  if (!SA.getUser()) { document.getElementById('authGate').style.display = 'flex'; return; }
+
+  var params = new URLSearchParams(window.location.search);
+  proId = params.get('pro') || '';
+  var name = params.get('name') || 'Professionnel';
+
+  document.getElementById('heroAvatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('heroName').textContent = name;
+  document.title = 'Réclamer ma commission — ' + name + ' — SansAgents';
+});
+</script>
+</body>
+</html>

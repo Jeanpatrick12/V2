@@ -274,6 +274,19 @@
     } catch (e) { console.error("Upload photo:", e); return null; }
   }
 
+  /* ── Upload pièce jointe vers le bucket privé commission-proofs ───
+     Bucket non public : le chemin commence par l'id utilisateur pour que
+     les policies storage.objects (voir supabase-schema.sql) réservent la
+     lecture au déposant et à l'admin — jamais d'URL publique. */
+  async function _uploadClaimFile(file, label) {
+    if (!_sb || !_cache.user) return null;
+    const ext = (file.name && file.name.includes(".")) ? file.name.split(".").pop() : "jpg";
+    const path = _cache.user.id + "/" + Date.now() + "-" + label + "." + ext;
+    const { error } = await _sb.storage.from("commission-proofs").upload(path, file, { contentType: file.type });
+    if (error) throw error;
+    return path;
+  }
+
   /* ── Documents locaux ──────────────────────────────────────────── */
   // Purge unique : les documents mélangés entre comptes (ancien bug) sont
   // supprimés du stockage local une fois pour toutes chez chaque visiteur.
@@ -1197,6 +1210,76 @@
     return counts;
   }
 
+  /* ── Réclamations de commission (cashback client) ──────────────────
+     Remplace le code SANSAGENTS5 : le professionnel paie 13% du contrat
+     signé, dont 5% sont reversés au particulier sur présentation de sa
+     facture et d'une preuve de paiement. SansAgents conserve 8% net. */
+  const COMMISSION_PRO_RATE   = 0.13;
+  const COMMISSION_CLIENT_RATE = 0.05;
+  const COMMISSION_THRESHOLD  = 300;
+  const COMMISSION_FLAT_REWARD = 12;
+  const COMMISSION_REWARD_CAP  = 200;
+
+  function computeCommissionReward(contractAmount) {
+    const amount = Number(contractAmount) || 0;
+    if (amount <= 0) return 0;
+    if (amount < COMMISSION_THRESHOLD) return COMMISSION_FLAT_REWARD;
+    return Math.min(Math.round(amount * COMMISSION_CLIENT_RATE * 100) / 100, COMMISSION_REWARD_CAP);
+  }
+  function computeProCommission(contractAmount) {
+    return Math.round((Number(contractAmount) || 0) * COMMISSION_PRO_RATE * 100) / 100;
+  }
+
+  async function submitCommissionClaim(payload) {
+    if (!_cache.user) throw new Error("auth-required");
+    const amount = Number(payload.contractAmount);
+    if (!amount || amount <= 0) throw new Error("montant-invalide");
+    if (!payload.invoiceFile || !payload.paymentProofFile) throw new Error("fichiers-manquants");
+    if (!payload.iban || !payload.ibanHolder) throw new Error("iban-manquant");
+
+    const invoicePath = await _uploadClaimFile(payload.invoiceFile, "facture");
+    const proofPath   = await _uploadClaimFile(payload.paymentProofFile, "virement");
+
+    const row = {
+      pro_id: String(payload.proId || ""),
+      claimant_id: _cache.user.id,
+      contract_amount: amount,
+      reward_amount: computeCommissionReward(amount),
+      pro_commission_amount: computeProCommission(amount),
+      invoice_path: invoicePath,
+      payment_proof_path: proofPath,
+      iban: payload.iban.trim(),
+      iban_holder_name: payload.ibanHolder.trim()
+    };
+    const { error } = await _sb.from("commission_claims").insert(row);
+    if (error) throw error;
+  }
+  async function getAllCommissionClaimsAdmin() {
+    const { data, error } = await _sb.from("commission_claims").select("*").order("created_at", { ascending: false });
+    if (error) { console.error("getAllCommissionClaimsAdmin error:", error); return []; }
+    const rows = data || [];
+    const claimantIds = [...new Set(rows.map((r) => r.claimant_id))];
+    if (claimantIds.length) {
+      const { data: profs } = await _sb.from("profiles_public").select("id,prenom,nom").in("id", claimantIds);
+      const pm = {};
+      (profs || []).forEach((p) => { pm[p.id] = p; });
+      rows.forEach((r) => {
+        const p = pm[r.claimant_id];
+        r.claimantName = p ? ((p.prenom || "") + " " + (p.nom || "")).trim() : "";
+      });
+    }
+    return rows;
+  }
+  async function getCommissionClaimFileUrl(path) {
+    const { data, error } = await _sb.storage.from("commission-proofs").createSignedUrl(path, 300);
+    if (error) { console.error("getCommissionClaimFileUrl error:", error); return null; }
+    return data.signedUrl;
+  }
+  async function updateCommissionClaimStatus(id, status) {
+    const { error } = await _sb.from("commission_claims").update({ status: status, reviewed_at: new Date().toISOString() }).eq("id", id);
+    if (error) throw error;
+  }
+
   /* ── Modération (réservé aux comptes profiles.role = 'admin') ────── */
   async function getAllAvisAdmin() {
     const { data, error } = await _sb.from("avis").select("*").order("created_at", { ascending: false });
@@ -1664,6 +1747,7 @@
     // Pros
     getAllPros, getProById, getUserPros, addPro, setProVerified, setProGoogleRating, proGoogleMapsUrl, proWebsiteUrl, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
     submitProContact, getProContactCountsAdmin,
+    computeCommissionReward, computeProCommission, submitCommissionClaim, getAllCommissionClaimsAdmin, getCommissionClaimFileUrl, updateCommissionClaimStatus,
     getAllAvisAdmin, updateAvisStatus, getAllSignalementsAdmin, updateSignalementStatus,
     // Documents
     saveDoc, getDocs, deleteDoc,
