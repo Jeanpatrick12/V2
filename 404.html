@@ -21,7 +21,7 @@
     });
     return;
   }
-  fetch("/annonce.html").then(function(r){ return r.text(); }).then(function(html){
+  fetch("/annonce.html?_=" + Date.now(), { cache: "no-store" }).then(function(r){ return r.text(); }).then(function(html){
     document.open();
     document.write(html);
     document.close();
@@ -48,7 +48,7 @@
     });
     return;
   }
-  fetch("/pro.html").then(function(r){ return r.text(); }).then(function(html){
+  fetch("/pro.html?_=" + Date.now(), { cache: "no-store" }).then(function(r){ return r.text(); }).then(function(html){
     document.open();
     document.write(html);
     document.close();
