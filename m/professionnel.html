@@ -226,13 +226,12 @@ function renderPro(p) {
   // ── Carte contact ───────────────────────────────────────
   html += '<div style="background:white;padding:20px var(--pad);border-bottom:1px solid var(--border)">' +
     // Cashback
-    '<div style="display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#ff5c46,#d63b28);border-radius:12px;padding:13px 17px;margin-bottom:16px;box-shadow:0 8px 20px rgba(232,69,51,0.35)">' +
-      '<div style="flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start">' +
-        '<div style="font-weight:800;color:#fff;line-height:1;letter-spacing:-1px;font-size:26px">5<sup style="font-size:12px;font-weight:700">%</sup></div>' +
-        '<div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.85);text-transform:uppercase;letter-spacing:.05em;margin-top:2px">Reversés</div>' +
+    '<div style="display:flex;gap:12px;align-items:flex-start;background:#fff8f7;border:1px solid #ffd8d3;border-radius:14px;padding:13px 15px;margin-bottom:16px">' +
+      '<div style="width:34px;height:34px;border-radius:10px;background:#ffe4df;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0"><i class="ti ti-gift"></i></div>' +
+      '<div>' +
+        '<div style="font-size:13px;font-weight:700;color:#111;line-height:1.4;margin-bottom:4px"><strong style="color:#E84533">5%</strong> reversés si vous signez avec lui</div>' +
+        '<div style="font-size:11.5px;color:#888;line-height:1.5">SansAgents facture une commission aux professionnels de l\'annuaire. Pour vous remercier de l\'avoir choisi ici, on vous en reverse une partie par virement, dès que le professionnel a réglé la sienne.</div>' +
       '</div>' +
-      '<div style="width:1px;align-self:stretch;background:rgba(255,255,255,0.28);flex-shrink:0"></div>' +
-      '<div style="font-size:11.5px;color:rgba(255,255,255,0.85);line-height:1.45">Après signature d\'un devis avec ce professionnel, facture à l\'appui : versé dès réception de son règlement.</div>' +
     '</div>' +
     // Phone
     (phone ? '<a href="tel:'+phone+'" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bg);text-decoration:none">' +
