@@ -70,8 +70,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .rc-label{font-size:13.5px;font-weight:700;color:#111;margin-bottom:8px;display:block}
 .rc-label span{color:#E84533}
 .rc-hint{font-size:11.5px;color:#aaa;margin-top:6px;display:flex;align-items:center;gap:5px}
-.rc-warning{display:flex;gap:9px;background:#fbf3da;border:1px solid #f0dfa8;border-radius:10px;padding:11px 14px;margin-bottom:12px;font-size:12px;color:#7a5c10;line-height:1.55}
-.rc-warning i{color:#b7791f;flex-shrink:0;margin-top:1px;font-size:15px}
+.rc-warning{display:flex;align-items:flex-start;gap:12px;background:#fbf3da;border:1px solid #f0dfa8;border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.rc-warning i{color:#b7791f;flex-shrink:0;margin-top:2px;font-size:17px}
+.rc-warning span{font-size:12.5px;color:#7a5c10;line-height:1.6}
 .rc-warning strong{color:#5c4409}
 .rc-iban-feedback{font-size:12px;margin-top:7px;display:none;align-items:center;gap:5px}
 .rc-iban-feedback.valid{display:flex;color:#1a8c4e}
@@ -204,7 +205,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
         <div class="rc-section">
           <label class="rc-label">Où vous envoyer le virement <span>*</span></label>
-          <div class="rc-warning"><i class="ti ti-alert-triangle"></i> Indiquez votre <strong>véritable identité</strong> et un <strong>compte bancaire à votre nom</strong>. Un virement envoyé à un compte qui n'appartient pas au titulaire déclaré ne pourra pas être régularisé.</div>
+          <div class="rc-warning"><i class="ti ti-alert-triangle"></i> <span>Indiquez votre <strong>véritable identité</strong> et un <strong>compte bancaire à votre nom</strong>. Un virement envoyé à un compte qui n'appartient pas au titulaire déclaré ne pourra pas être régularisé.</span></div>
           <div class="rc-grid-2">
             <input class="rc-input" type="text" id="cIbanHolder" placeholder="Titulaire du compte (nom complet)">
             <input class="rc-input" type="text" id="cIban" placeholder="IBAN" oninput="checkIbanLive()">
