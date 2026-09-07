@@ -419,14 +419,12 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
   border-radius:14px;padding:14px 24px;
   box-shadow:0 10px 28px rgba(232,69,51,0.4)
 }
-.sa-pros-discount-pct{
-  flex-shrink:0;font-weight:800;color:#fff;line-height:1;letter-spacing:-1px;
-  font-size:36px;font-variant-numeric:tabular-nums
-}
-.sa-pros-discount-pct sup{font-size:17px;font-weight:700;margin-left:1px}
+.sa-pros-discount-pct{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start}
+.sa-pros-discount-pct-num{font-weight:800;color:#fff;line-height:1;letter-spacing:-1px;font-size:34px;font-variant-numeric:tabular-nums}
+.sa-pros-discount-pct-num sup{font-size:16px;font-weight:700;margin-left:1px}
+.sa-pros-discount-pct-label{font-size:10.5px;font-weight:700;color:rgba(255,255,255,0.85);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
 .sa-pros-discount-divider{width:1px;align-self:stretch;background:rgba(255,255,255,0.28);flex-shrink:0}
 .sa-pros-discount-text{font-size:12px;color:rgba(255,255,255,0.85);line-height:1.5;max-width:250px}
-.sa-pros-discount-text strong{color:#fff;font-size:14.5px;display:block;margin-bottom:3px}
 .sa-pros-banner button{background:#fff;color:#E84533;border:1.5px solid #E84533;padding:11.5px 26px;border-radius:999px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
 .sa-pros-banner button:hover{background:#fff5f4}
 
@@ -928,9 +926,12 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
       <p>Consultez les fiches, comparez les avis et trouvez le bon professionnel selon votre ville et votre besoin.</p>
     </div>
     <div class="sa-pros-discount">
-      <div class="sa-pros-discount-pct">5<sup>%</sup></div>
+      <div class="sa-pros-discount-pct">
+        <div class="sa-pros-discount-pct-num">5<sup>%</sup></div>
+        <div class="sa-pros-discount-pct-label">Reversés</div>
+      </div>
       <div class="sa-pros-discount-divider"></div>
-      <div class="sa-pros-discount-text"><strong>Reversés après signature</strong>Avec un professionnel de l'annuaire : facture à l'appui, versé dès réception de son règlement.</div>
+      <div class="sa-pros-discount-text">Après signature d'un devis avec un professionnel de l'annuaire, facture à l'appui : versé dès réception de son règlement.</div>
     </div>
     <button onclick="window.open('professionnels','_blank')">Voir l'annuaire <i class="ti ti-arrow-right"></i></button>
   </div>
