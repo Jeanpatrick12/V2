@@ -100,9 +100,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
 /* contact card */
 .sa-contact-card{border:1px solid #e8e8e8;border-radius:18px;padding:1.4rem;position:sticky;top:88px}
-.sa-discount-tag{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:#888;background:#f7f7f7;padding:5px 8px 5px 12px;border-radius:999px;margin-bottom:1rem}
-.sa-discount-tag i{font-size:13px;color:#E84533}
-.sa-discount-tag-code{background:#E84533;color:#fff;font-weight:800;font-size:10.5px;letter-spacing:.02em;padding:3px 9px;border-radius:999px}
+.sa-cashback-box{display:flex;align-items:flex-start;gap:12px;background:#fff6f4;border:1px solid #ffe1d9;border-radius:12px;padding:14px 16px;margin-bottom:1rem}
+.sa-cashback-icon{width:34px;height:34px;border-radius:9px;flex-shrink:0;background:#E84533;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.sa-cashback-icon i{color:#fff;font-size:16px}
+.sa-cashback-text{font-size:12px;color:#888;line-height:1.45}
+.sa-cashback-text strong{color:#111;font-size:14px;display:block;margin-bottom:2px}
 .sa-contact-coords-row{font-size:13.5px;color:#333;display:flex;align-items:center;gap:9px;padding:8px 0}
 .sa-contact-coords-row i{color:#E84533;width:16px}
 .sa-contact-coords-row a{color:#333;text-decoration:none}
@@ -266,7 +268,10 @@ function render() {
       </div>
 
       <div class="sa-contact-card">
-        <span class="sa-discount-tag"><i class="ti ti-coin"></i> <strong style="color:#E84533;font-weight:800">5%</strong> reversés si vous signez avec ce professionnel</span>
+        <div class="sa-cashback-box">
+          <div class="sa-cashback-icon"><i class="ti ti-coin"></i></div>
+          <div class="sa-cashback-text"><strong>5% reversés après signature</strong>Signez un devis avec ce professionnel, envoyez votre facture, et récupérez 5% du montant.</div>
+        </div>
         ${hasCoords ? `
           ${p.phone ? `<div class="sa-contact-coords-row"><i class="ti ti-phone"></i> ${SA.escapeHtml(p.phone)}</div>` : ''}
           ${p.email ? `<div class="sa-contact-coords-row"><i class="ti ti-mail"></i> ${SA.escapeHtml(p.email)}</div>` : ''}
