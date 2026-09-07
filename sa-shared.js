@@ -1211,20 +1211,48 @@
   }
 
   /* ── Réclamations de commission (cashback client) ──────────────────
-     Remplace le code SANSAGENTS5 : le professionnel paie 13% du contrat
-     signé, dont 5% sont reversés au particulier sur présentation de sa
-     facture et d'une preuve de paiement. SansAgents conserve 8% net. */
-  const COMMISSION_PRO_RATE   = 0.13;
-  const COMMISSION_CLIENT_RATE = 0.05;
-  const COMMISSION_THRESHOLD  = 300;
-  const COMMISSION_FLAT_REWARD = 12;
-  const COMMISSION_REWARD_CAP  = 200;
+     Remplace le code SANSAGENTS5 : le professionnel paie toujours 13% du
+     contrat signé. Le reversement au particulier est un pourcentage (pas
+     de palier a montant fixe) pour ne jamais depasser ce que le
+     professionnel doit — 5%/8% restent tous les deux sous les 13% percus,
+     donc SansAgents reste beneficiaire a n'importe quelle taille de
+     contrat. Sous COMMISSION_MIN_CONTRACT, la reclamation est simplement
+     refusee : sur un tres petit contrat, le montant en jeu ne justifie
+     pas le temps de verification du dossier. Pas de plafond en haut :
+     un contrat elevé genere une grosse commission pour SansAgents, donc
+     un reversement plus genereux (bascule a 8% a partir de 10 000€) reste
+     largement benef pour SansAgents tout en remerciant vraiment le
+     client d'avoir apporte une grosse affaire. */
+  const COMMISSION_PRO_RATE          = 0.13;
+  const COMMISSION_MIN_CONTRACT      = 80;
+  const COMMISSION_CLIENT_RATE       = 0.05;
+  const COMMISSION_CLIENT_RATE_BONUS = 0.08;
+  const COMMISSION_BONUS_THRESHOLD   = 10000;
+
+  // Validation IBAN par la cle MOD-97 standard (norme ISO 7064) — repere une
+  // faute de frappe (chiffre manquant, inverse...) avant meme d'enregistrer
+  // la reclamation, plutot que de decouvrir l'erreur au moment du virement.
+  // Le calcul se fait par blocs pour rester dans les entiers surs de JS,
+  // un IBAN complet convertit en chiffres depassant largement 2^53.
+  function isValidIban(iban) {
+    if (!iban) return false;
+    const s = String(iban).replace(/\s+/g, "").toUpperCase();
+    if (!/^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/.test(s)) return false;
+    const rearranged = s.slice(4) + s.slice(0, 4);
+    const numeric = rearranged.replace(/[A-Z]/g, (c) => (c.charCodeAt(0) - 55).toString());
+    let remainder = numeric;
+    while (remainder.length > 9) {
+      const block = remainder.slice(0, 9);
+      remainder = (parseInt(block, 10) % 97).toString() + remainder.slice(block.length);
+    }
+    return parseInt(remainder, 10) % 97 === 1;
+  }
 
   function computeCommissionReward(contractAmount) {
     const amount = Number(contractAmount) || 0;
-    if (amount <= 0) return 0;
-    if (amount < COMMISSION_THRESHOLD) return COMMISSION_FLAT_REWARD;
-    return Math.min(Math.round(amount * COMMISSION_CLIENT_RATE * 100) / 100, COMMISSION_REWARD_CAP);
+    if (amount < COMMISSION_MIN_CONTRACT) return 0;
+    const rate = amount >= COMMISSION_BONUS_THRESHOLD ? COMMISSION_CLIENT_RATE_BONUS : COMMISSION_CLIENT_RATE;
+    return Math.round(amount * rate * 100) / 100;
   }
   function computeProCommission(contractAmount) {
     return Math.round((Number(contractAmount) || 0) * COMMISSION_PRO_RATE * 100) / 100;
@@ -1233,9 +1261,10 @@
   async function submitCommissionClaim(payload) {
     if (!_cache.user) throw new Error("auth-required");
     const amount = Number(payload.contractAmount);
-    if (!amount || amount <= 0) throw new Error("montant-invalide");
+    if (!amount || amount < COMMISSION_MIN_CONTRACT) throw new Error("montant-invalide");
     if (!payload.invoiceFile || !payload.paymentProofFile) throw new Error("fichiers-manquants");
     if (!payload.iban || !payload.ibanHolder) throw new Error("iban-manquant");
+    if (!isValidIban(payload.iban)) throw new Error("iban-invalide");
 
     const invoicePath = await _uploadClaimFile(payload.invoiceFile, "facture");
     const proofPath   = await _uploadClaimFile(payload.paymentProofFile, "virement");
@@ -1754,6 +1783,7 @@
     getAllPros, getProById, getUserPros, addPro, setProVerified, setProGoogleRating, proGoogleMapsUrl, proWebsiteUrl, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
     submitProContact, getProContactCountsAdmin,
     computeCommissionReward, computeProCommission, submitCommissionClaim, getAllCommissionClaimsAdmin, getCommissionClaimFileUrl, updateCommissionClaimStatus,
+    COMMISSION_MIN_CONTRACT, COMMISSION_BONUS_THRESHOLD, isValidIban,
     getAllAvisAdmin, updateAvisStatus, getAllSignalementsAdmin, updateSignalementStatus,
     // Documents
     saveDoc, getDocs, deleteDoc,

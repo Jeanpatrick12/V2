@@ -36,8 +36,17 @@
 .rc-reward-preview { display: none; align-items: center; justify-content: space-between; background: #f0f9f2; border: 1px solid #cdecd6; border-radius: 12px; padding: 12px 16px; margin-top: 10px; }
 .rc-reward-preview span { font-size: 12.5px; color: #1a8c4e; font-weight: 600; }
 .rc-reward-preview strong { font-size: 18px; color: #1a8c4e; font-weight: 800; }
+.rc-reward-preview.ineligible { background: #fbf3da; border-color: #f0dfa8; }
+.rc-reward-preview.ineligible span, .rc-reward-preview.ineligible strong { color: #7a5c10; }
 
-.rc-file { display: block; border: 1.5px dashed var(--border); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; }
+.rc-warning { display: flex; gap: 8px; background: #fbf3da; border: 1px solid #f0dfa8; border-radius: 10px; padding: 10px 13px; margin-bottom: 12px; font-size: 11.5px; color: #7a5c10; line-height: 1.5; }
+.rc-warning i { color: #b7791f; flex-shrink: 0; margin-top: 1px; font-size: 14px; }
+.rc-warning strong { color: #5c4409; }
+.rc-iban-feedback { font-size: 11.5px; margin-top: 6px; display: none; align-items: center; gap: 5px; }
+.rc-iban-feedback.valid { display: flex; color: #1a8c4e; }
+.rc-iban-feedback.invalid { display: flex; color: var(--red); }
+
+.rc-file { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px dashed var(--border); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; }
 .rc-file.has-file { border-style: solid; border-color: #1a8c4e; background: #f0f9f2; }
 .rc-file i { font-size: 20px; color: #bbb; display: block; margin-bottom: 6px; }
 .rc-file.has-file i { color: #1a8c4e; }
@@ -73,12 +82,12 @@
 
 <div class="rc-guarantee">
   <div class="rc-guarantee-title"><i class="ti ti-shield-check"></i> Notre engagement</div>
-  <p>Envoyez votre <strong>facture</strong> et une <strong>preuve de paiement</strong>, nous vous reversons par virement :</p>
+  <p>Pour un devis d'au moins <strong>80 €</strong>, envoyez votre <strong>facture</strong> et une <strong>preuve de paiement</strong>, nous vous reversons par virement :</p>
   <div class="rc-tiers">
-    <div class="rc-tier"><span class="rc-tier-amount">12 €</span><span class="rc-tier-label">contrat de moins de 300 €</span></div>
-    <div class="rc-tier"><span class="rc-tier-amount">5%</span><span class="rc-tier-label">du montant si 300 € ou plus (200 € max)</span></div>
+    <div class="rc-tier"><span class="rc-tier-amount">5%</span><span class="rc-tier-label">du montant du contrat</span></div>
+    <div class="rc-tier"><span class="rc-tier-amount">8%</span><span class="rc-tier-label">à partir de 10 000 € de contrat</span></div>
   </div>
-  <p>Dossier vérifié manuellement, virement envoyé sous quelques jours ouvrés une fois validé.</p>
+  <p>Dossier vérifié manuellement — quelques semaines avant l'envoi, le temps de s'assurer que la prestation a bien eu lieu.</p>
 </div>
 
 <form id="claimForm" onsubmit="submitClaim(event)">
@@ -112,10 +121,12 @@
 
   <div class="rc-section">
     <div class="rc-label">Où vous envoyer le virement <span style="color:var(--red)">*</span></div>
+    <div class="rc-warning"><i class="ti ti-alert-triangle"></i> Indiquez votre <strong>véritable identité</strong> et un <strong>compte à votre nom</strong>. Un virement vers un compte qui n'appartient pas au titulaire déclaré ne pourra pas être régularisé.</div>
     <div class="rc-grid-2">
-      <input class="rc-input" type="text" id="cIbanHolder" placeholder="Titulaire">
-      <input class="rc-input" type="text" id="cIban" placeholder="IBAN">
+      <input class="rc-input" type="text" id="cIbanHolder" placeholder="Titulaire (nom complet)">
+      <input class="rc-input" type="text" id="cIban" placeholder="IBAN" oninput="checkIbanLive()">
     </div>
+    <div class="rc-iban-feedback" id="ibanFeedback"></div>
     <div style="font-size:11px;color:var(--text3);margin-top:8px;display:flex;align-items:center;gap:5px"><i class="ti ti-lock" style="font-size:13px"></i> Visible uniquement par l'équipe SansAgents.</div>
   </div>
 
@@ -145,7 +156,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=46"></script>
+<script src="../sa-shared.js?v=47"></script>
 <script>
 var proId = '';
 var invoiceFile = null;
@@ -155,9 +166,31 @@ function updateRewardPreview() {
   var amount = parseFloat(document.getElementById('cAmount').value);
   var preview = document.getElementById('rewardPreview');
   if (!amount || amount <= 0) { preview.style.display = 'none'; return; }
+  if (amount < SA.COMMISSION_MIN_CONTRACT) {
+    preview.style.display = 'flex';
+    preview.classList.add('ineligible');
+    document.querySelector('#rewardPreview span').textContent = 'Non éligible';
+    document.getElementById('rewardValue').textContent = 'contrat de ' + SA.COMMISSION_MIN_CONTRACT + ' € minimum';
+    return;
+  }
+  preview.classList.remove('ineligible');
+  document.querySelector('#rewardPreview span').textContent = 'Vous recevrez';
   var reward = SA.computeCommissionReward(amount);
   document.getElementById('rewardValue').textContent = reward.toLocaleString('fr-FR') + ' €';
   preview.style.display = 'flex';
+}
+
+function checkIbanLive() {
+  var iban = document.getElementById('cIban').value.trim();
+  var fb = document.getElementById('ibanFeedback');
+  if (!iban) { fb.className = 'rc-iban-feedback'; return; }
+  if (SA.isValidIban(iban)) {
+    fb.className = 'rc-iban-feedback valid';
+    fb.innerHTML = '<i class="ti ti-circle-check"></i> IBAN valide';
+  } else {
+    fb.className = 'rc-iban-feedback invalid';
+    fb.innerHTML = '<i class="ti ti-alert-circle"></i> Cet IBAN ne semble pas valide';
+  }
 }
 
 function handleFileChange(inputId, boxId, label) {
@@ -193,9 +226,11 @@ function submitClaim(e) {
   var iban = document.getElementById('cIban').value.trim();
 
   if (!amount || amount <= 0) { showError('Merci d\'indiquer le montant du contrat.'); return; }
+  if (amount < SA.COMMISSION_MIN_CONTRACT) { showError('Le contrat doit être d\'au moins ' + SA.COMMISSION_MIN_CONTRACT + ' € pour être éligible.'); return; }
   if (!invoiceFile) { showError('Merci de joindre votre facture.'); return; }
   if (!proofFile) { showError('Merci de joindre une preuve de paiement.'); return; }
   if (!ibanHolder || !iban) { showError('Merci de renseigner vos coordonnées bancaires.'); return; }
+  if (!SA.isValidIban(iban)) { showError('Cet IBAN ne semble pas valide — vérifiez qu\'il est complet et sans erreur.'); return; }
 
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
