@@ -226,9 +226,10 @@ function renderPro(p) {
   // ── Carte contact ───────────────────────────────────────
   html += '<div style="background:white;padding:20px var(--pad);border-bottom:1px solid var(--border)">' +
     // Cashback
-    '<div style="display:flex;align-items:flex-start;gap:12px;background:linear-gradient(135deg,#ff5c46,#d63b28);border-radius:12px;padding:13px 15px;margin-bottom:16px;box-shadow:0 8px 20px rgba(232,69,51,0.35)">' +
-      '<div style="width:32px;height:32px;border-radius:9px;flex-shrink:0;background:rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;margin-top:1px"><i class="ti ti-coin" style="color:#fff;font-size:15px"></i></div>' +
-      '<div><div style="font-size:13.5px;font-weight:800;color:#fff;margin-bottom:2px">5% reversés après signature</div><div style="font-size:11.5px;color:rgba(255,255,255,0.8);line-height:1.4">Signez un devis avec ce professionnel, envoyez votre facture, et récupérez 5% du montant.</div></div>' +
+    '<div style="display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#ff5c46,#d63b28);border-radius:12px;padding:13px 17px;margin-bottom:16px;box-shadow:0 8px 20px rgba(232,69,51,0.35)">' +
+      '<div style="flex-shrink:0;font-weight:800;color:#fff;line-height:1;letter-spacing:-1px;font-size:28px">5<sup style="font-size:13px;font-weight:700">%</sup></div>' +
+      '<div style="width:1px;align-self:stretch;background:rgba(255,255,255,0.28);flex-shrink:0"></div>' +
+      '<div><div style="font-size:13.5px;font-weight:800;color:#fff;margin-bottom:2px">Reversés après signature</div><div style="font-size:11.5px;color:rgba(255,255,255,0.85);line-height:1.45">Signez un devis, envoyez votre facture, récupérez votre commission.</div></div>' +
     '</div>' +
     // Phone
     (phone ? '<a href="tel:'+phone+'" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bg);text-decoration:none">' +
