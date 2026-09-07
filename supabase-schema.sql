@@ -627,6 +627,15 @@ CREATE POLICY "commission_claims_select_admin" ON public.commission_claims FOR S
 CREATE POLICY "commission_claims_update_admin" ON public.commission_claims FOR UPDATE
   USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
+-- Ajoutée le 2026-09-07 : le virement au particulier n'est jamais envoyé
+-- avant que le professionnel n'ait lui-même réglé sa commission de 13% à
+-- SansAgents — sans quoi un contrat annulé après coup ferait perdre de
+-- l'argent (le particulier payé, mais aucune commission jamais reçue du
+-- professionnel). admin.html n'affiche le bouton "Marquer payé" (au
+-- particulier) qu'une fois cette case cochée manuellement.
+ALTER TABLE public.commission_claims ADD COLUMN IF NOT EXISTS pro_commission_received boolean NOT NULL DEFAULT false;
+ALTER TABLE public.commission_claims ADD COLUMN IF NOT EXISTS pro_commission_received_at timestamptz;
+
 -- ═══════════════════════════════════════════════════════════════════
 -- BUCKET STORAGE — à créer MANUELLEMENT dans Supabase
 --

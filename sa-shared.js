@@ -1308,6 +1308,10 @@
     const { error } = await _sb.from("commission_claims").update({ status: status, reviewed_at: new Date().toISOString() }).eq("id", id);
     if (error) throw error;
   }
+  async function confirmProCommissionReceived(id) {
+    const { error } = await _sb.from("commission_claims").update({ pro_commission_received: true, pro_commission_received_at: new Date().toISOString() }).eq("id", id);
+    if (error) throw error;
+  }
 
   /* ── Modération (réservé aux comptes profiles.role = 'admin') ────── */
   async function getAllAvisAdmin() {
@@ -1782,7 +1786,7 @@
     // Pros
     getAllPros, getProById, getUserPros, addPro, setProVerified, setProGoogleRating, proGoogleMapsUrl, proWebsiteUrl, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
     submitProContact, getProContactCountsAdmin,
-    computeCommissionReward, computeProCommission, submitCommissionClaim, getAllCommissionClaimsAdmin, getCommissionClaimFileUrl, updateCommissionClaimStatus,
+    computeCommissionReward, computeProCommission, submitCommissionClaim, getAllCommissionClaimsAdmin, getCommissionClaimFileUrl, updateCommissionClaimStatus, confirmProCommissionReceived,
     COMMISSION_MIN_CONTRACT, COMMISSION_BONUS_THRESHOLD, isValidIban,
     getAllAvisAdmin, updateAvisStatus, getAllSignalementsAdmin, updateSignalementStatus,
     // Documents

@@ -22,7 +22,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=47"></script>
+<script src="sa-shared.js?v=48"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#f7f8fa}
@@ -339,16 +339,21 @@ async function renderClaims() {
   if (!rows.length) { zone.innerHTML = '<div class="sa-admin-empty">Aucune réclamation de commission pour le moment (ou votre compte n\'a pas le rôle administrateur).</div>'; return; }
   const CLAIM_STATUS_LABELS = { pending: 'En attente', approved: 'Approuvée', paid: 'Payée', rejected: 'Rejetée' };
   zone.innerHTML = `<table class="sa-admin-table">
-    <thead><tr><th>Réclamé par</th><th>Professionnel</th><th>Contrat</th><th>À facturer au pro (13%)</th><th>À reverser</th><th>Pièces</th><th>IBAN</th><th>Statut</th><th></th></tr></thead>
+    <thead><tr><th>Réclamé par</th><th>Professionnel</th><th>Contrat</th><th>Commission pro (13%)</th><th>À reverser</th><th>Pièces</th><th>IBAN</th><th>Statut</th><th></th></tr></thead>
     <tbody>${rows.map(r => {
       const p = SA.getProById(r.pro_id);
       const daysSinceReview = r.reviewed_at ? Math.floor((Date.now() - new Date(r.reviewed_at).getTime()) / 86400000) : null;
+      const proCommissionCell = r.pro_commission_received
+        ? `<span class="sa-admin-badge yes">Reçue</span><div class="sa-admin-job" style="margin-top:4px">${r.pro_commission_amount} €</div>`
+        : (r.status === 'approved'
+            ? `<span class="sa-admin-badge pending">En attente</span><div class="sa-admin-job" style="margin-top:4px">${r.pro_commission_amount} € — <button class="sa-admin-btn approve" style="margin-top:4px" onclick="confirmProReceived('${r.id}')">Confirmer réception</button></div>`
+            : `<span class="sa-admin-job">${r.pro_commission_amount} €</span>`);
       return `
       <tr>
         <td><div class="sa-admin-name">${SA.escapeHtml(r.claimantName || 'Utilisateur supprimé')}</div></td>
         <td>${SA.escapeHtml(p ? p.name : 'Professionnel introuvable')}</td>
         <td>${r.contract_amount} €</td>
-        <td>${r.pro_commission_amount} €</td>
+        <td>${proCommissionCell}</td>
         <td><strong>${r.reward_amount} €</strong></td>
         <td><div class="sa-admin-actions">
           <button class="sa-admin-btn" onclick="viewClaimFile('${r.invoice_path}')"><i class="ti ti-receipt"></i> Facture</button>
@@ -358,7 +363,8 @@ async function renderClaims() {
         <td><span class="sa-admin-badge ${r.status === 'paid' ? 'yes' : (r.status === 'rejected' ? 'no' : 'pending')}">${CLAIM_STATUS_LABELS[r.status] || r.status}</span>${r.status === 'approved' && daysSinceReview !== null ? `<div class="sa-admin-job" style="margin-top:4px">Approuvée il y a ${daysSinceReview} j</div>` : ''}</td>
         <td><div class="sa-admin-actions">
           ${r.status === 'pending' ? `<button class="sa-admin-btn approve" onclick="moderateClaim('${r.id}','approved')">Approuver</button><button class="sa-admin-btn reject" onclick="moderateClaim('${r.id}','rejected')">Rejeter</button>` : ''}
-          ${r.status === 'approved' ? `<button class="sa-admin-btn approve" onclick="moderateClaim('${r.id}','paid',${daysSinceReview})">Marquer payé</button>` : ''}
+          ${r.status === 'approved' && r.pro_commission_received ? `<button class="sa-admin-btn approve" onclick="moderateClaim('${r.id}','paid',${daysSinceReview})">Marquer payé</button>` : ''}
+          ${r.status === 'approved' && !r.pro_commission_received ? `<span class="sa-admin-job">En attente du règlement du professionnel</span>` : ''}
         </div></td>
       </tr>`;
     }).join('')}</tbody>
@@ -373,12 +379,22 @@ const CLAIM_MIN_HOLD_DAYS = 14;
 async function moderateClaim(id, status, daysSinceApproval) {
   if (status === 'paid') {
     if (daysSinceApproval != null && daysSinceApproval < CLAIM_MIN_HOLD_DAYS) {
-      if (!confirm(`Cette réclamation n'a été approuvée qu'il y a ${daysSinceApproval} jour(s) (recommandé : ${CLAIM_MIN_HOLD_DAYS}+ avant de payer, le temps de vérifier que la prestation a bien eu lieu et que le professionnel vous a réglé sa commission). Payer quand même maintenant ?`)) return;
+      if (!confirm(`Cette réclamation n'a été approuvée qu'il y a ${daysSinceApproval} jour(s) (recommandé : ${CLAIM_MIN_HOLD_DAYS}+ avant de payer, le temps de vérifier que la prestation a bien eu lieu). Payer quand même maintenant ?`)) return;
     } else if (!confirm('Confirmez-vous avoir bien envoyé le virement au particulier ?')) return;
   }
   try {
     await SA.updateCommissionClaimStatus(id, status);
     SA.toast('Réclamation mise à jour', 'ti-circle-check');
+  } catch (e) {
+    SA.toast('Erreur : ' + e.message, 'ti-alert-circle');
+  }
+  renderClaims();
+}
+async function confirmProReceived(id) {
+  if (!confirm('Confirmez-vous avoir bien reçu le règlement des 13% de la part du professionnel ? Le virement au particulier ne sera possible qu\'après cette confirmation.')) return;
+  try {
+    await SA.confirmProCommissionReceived(id);
+    SA.toast('Commission professionnelle confirmée reçue', 'ti-circle-check');
   } catch (e) {
     SA.toast('Erreur : ' + e.message, 'ti-alert-circle');
   }
