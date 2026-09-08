@@ -305,7 +305,7 @@ function renderPro(p) {
 
   // ── Signalement ─────────────────────────────────────────
   html += '<div style="background:white;padding:16px var(--pad);border-bottom:1px solid var(--border)">' +
-    '<button onclick="window.top.location=\'/aide-signaler?type=pro&target=' + p.id + '&name=' + encodeURIComponent(p.name || '') + '\'" style="width:100%;background:#fff5f4;border:1px solid #ffd8d3;border-radius:10px;padding:11px 12px;font-size:12.5px;font-weight:600;color:var(--red);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px">' +
+    '<button onclick="window.top.location=\'/aide-signaler?type=pro&target=' + p.id + '&name=' + encodeURIComponent(p.name || '') + '\'" style="width:100%;box-sizing:border-box;background:#fff5f4;border:1px solid #ffd8d3;border-radius:10px;padding:11px 12px;font-size:12.5px;font-weight:600;color:var(--red);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;text-align:center;gap:6px">' +
       '<i class="ti ti-flag"></i> Profil suspect ou agence déguisée ? Signalez-le' +
     '</button>' +
   '</div>';
