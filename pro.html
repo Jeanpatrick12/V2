@@ -100,11 +100,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
 /* contact card */
 .sa-contact-card{border:1px solid #e8e8e8;border-radius:18px;padding:1.4rem;position:sticky;top:88px}
-.sa-cashback-box{display:flex;gap:12px;align-items:flex-start;background:#fff8f7;border:1px solid #ffd8d3;border-radius:14px;padding:14px 16px;margin-bottom:1rem}
-.sa-cashback-icon{width:36px;height:36px;border-radius:10px;background:#ffe4df;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
-.sa-cashback-title{font-size:13.5px;font-weight:700;color:#111;line-height:1.4;margin-bottom:4px}
+.sa-cashback-box{background:#fff8f7;border:1px solid #ffd8d3;border-radius:14px;padding:14px 16px;margin-bottom:1rem}
+.sa-cashback-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sa-cashback-icon{width:32px;height:32px;border-radius:9px;background:#ffe4df;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sa-cashback-title{font-size:13.5px;font-weight:700;color:#111;line-height:1.35}
 .sa-cashback-title strong{color:#E84533}
-.sa-cashback-desc{font-size:12px;color:#888;line-height:1.5}
+.sa-cashback-desc{font-size:12px;color:#888;line-height:1.55}
 .sa-contact-coords-row{font-size:13.5px;color:#333;display:flex;align-items:center;gap:9px;padding:8px 0}
 .sa-contact-coords-row i{color:#E84533;width:16px}
 .sa-contact-coords-row a{color:#333;text-decoration:none}
@@ -269,11 +270,11 @@ function render() {
 
       <div class="sa-contact-card">
         <div class="sa-cashback-box">
-          <div class="sa-cashback-icon"><i class="ti ti-gift"></i></div>
-          <div>
+          <div class="sa-cashback-head">
+            <div class="sa-cashback-icon"><i class="ti ti-gift"></i></div>
             <div class="sa-cashback-title"><strong>5%</strong> reversés si vous signez avec lui</div>
-            <div class="sa-cashback-desc">SansAgents facture une commission aux professionnels de l'annuaire. Pour vous remercier de l'avoir choisi ici, on vous en reverse une partie par virement, dès que le professionnel a réglé la sienne.</div>
           </div>
+          <div class="sa-cashback-desc">SansAgents facture une commission aux professionnels de l'annuaire. Pour vous remercier de l'avoir choisi ici, on vous en reverse une partie par virement, dès que le professionnel a réglé la sienne.</div>
         </div>
         ${hasCoords ? `
           ${p.phone ? `<div class="sa-contact-coords-row"><i class="ti ti-phone"></i> ${SA.escapeHtml(p.phone)}</div>` : ''}
