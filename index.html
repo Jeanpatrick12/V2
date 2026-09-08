@@ -946,8 +946,7 @@ td.td-gain-custom{color:#1a8c4e !important;font-weight:700 !important;font-size:
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Les agences peuvent-elles publier sur SansAgents ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Non. Seuls les particuliers non professionnels peuvent publier une annonce. Toute annonce d'agence est supprimée et peut faire l'objet de poursuites judiciaires conformément aux CGU.</div></div>
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Comment estimer le prix de vente de mon bien ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Croisez les ventes récentes de votre secteur (DVF Étalab, notaires de France) avec des biens comparables, puis ajustez selon l'état de votre bien. <a href="estimer-son-bien" style="color:#E84533;font-weight:600">Voir la méthode complète et les outils gratuits</a>.</div></div>
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Combien ça coûte exactement ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a" id="faqCostAnswer">La publication est toujours gratuite. En cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.</div></div>
-    <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Quand dois-je payer la commission de 1% ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Uniquement au moment où la vente est effectivement conclue, jamais avant. Si votre bien ne se vend pas, vous ne payez rien.</div></div>
-    <div class="sa-faq-item" id="faqLaunchOffer" style="display:none"><div class="sa-faq-q" onclick="toggleFaq(this)">Et l'offre de lancement à 0% ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Pendant la phase de lancement, toute annonce publiée dès maintenant est <strong>définitivement exonérée</strong> de la commission de 1%, même si la vente se conclut plus tard. Les conditions précises et à jour de cette offre figurent dans nos <a href="cgu">CGU</a>.</div></div>
+    <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Quand dois-je payer la commission ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">Uniquement au moment où la vente est effectivement conclue chez le notaire, jamais avant. Si votre bien ne se vend pas, vous ne payez rien.</div></div>
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Comment savoir quels documents sont obligatoires ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">La plateforme génère automatiquement la liste exacte des documents requis selon le type de bien, la transaction et le bail, avec une explication en clair pour chaque document.</div></div>
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Que se passe-t-il si mon logement est en zone tendue ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">La plateforme vous alerte si l'encadrement des loyers s'applique à votre ville, pour que vous fixiez un loyer conforme à la loi avant publication.</div></div>
     <div class="sa-faq-item"><div class="sa-faq-q" onclick="toggleFaq(this)">Suis-je accompagné sur le plan juridique ? <i class="ti ti-chevron-down"></i></div><div class="sa-faq-a">SansAgents vous guide sur les obligations légales mais n'est pas un cabinet juridique. Pour la vente, l'acte est toujours signé chez un notaire, garant de la légalité.</div></div>
@@ -1249,7 +1248,6 @@ var SA_RATE = (SA.isLaunchFree()) ? 0 : 0.01;
 
 function applyLaunchMessaging() {
   document.getElementById('announceBar').style.display = 'block';
-  document.getElementById('faqLaunchOffer').style.display = 'block';
 
   document.getElementById('heroSub').innerHTML =
     'Vendez ou louez directement à un particulier et gardez jusqu\'à 9% de plus dans votre poche. SansAgents ne prélève <strong style="color:#4ade80">aucune commission</strong> pendant l\'offre de lancement — et seulement si la vente se conclut.';
@@ -1271,7 +1269,7 @@ function applyLaunchMessaging() {
     'Commission agence : moyenne nationale ~5% (réseaux traditionnels, 2025). Publication gratuite, aucune commission sur les locations. <strong>Colonne SansAgents à 0% pendant l\'offre de lancement</strong> (annonce publiée dès maintenant), 1% ensuite.';
 
   document.getElementById('faqCostAnswer').innerHTML =
-    'La publication est toujours gratuite. Pendant l\'offre de lancement (annonce publiée dès maintenant), SansAgents ne perçoit <strong>aucune commission</strong>. Plus tard, en cas de vente conclue, SansAgents perçoit 1% du prix de vente. Aucune commission pour une location, quelle que soit sa durée.';
+    'La publication est toujours gratuite. Pendant l\'offre de lancement, SansAgents ne perçoit <strong>aucune commission</strong> sur les ventes conclues à partir d\'une annonce publiée dès maintenant — cette exonération est définitive, même si la vente se conclut après la fin de l\'offre. Une fois l\'offre terminée, la commission sera de 1% du prix de vente, uniquement en cas de vente conclue. Aucune commission n\'est jamais prélevée sur les locations.';
 
   var agenceByRow = { 180: 9000, 250: 12500, 350: 17500, 500: 25000 };
   Object.keys(agenceByRow).forEach(function(k) {
