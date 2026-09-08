@@ -22,7 +22,7 @@ gtag('consent', 'default', {'analytics_storage': (localStorage.getItem('sa_conse
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sa-config.js"></script>
-<script src="sa-shared.js?v=48"></script>
+<script src="sa-shared.js?v=49"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111;background:#f7f8fa}
@@ -136,6 +136,14 @@ a{text-decoration:none;color:inherit}
 
   <div class="adm-card">
     <div class="adm-card-head">
+      <div class="adm-card-ico"><i class="ti ti-cash-off"></i></div>
+      <div><div class="adm-card-title">Commissions professionnels impayées</div><div class="adm-card-sub">Relances automatiques envoyées par email à J+0, J+7 et J+15 après l'échéance (15 jours après approbation d'une réclamation). Suspension automatique de la fiche à J+22 si toujours impayé.</div></div>
+    </div>
+    <div id="debtsZone"></div>
+  </div>
+
+  <div class="adm-card">
+    <div class="adm-card-head">
       <div class="adm-card-ico"><i class="ti ti-star"></i></div>
       <div><div class="adm-card-title">Avis à modérer</div><div class="adm-card-sub">Un avis approuvé devient visible publiquement sur la fiche du professionnel ou de l'annonce concernée.</div></div>
     </div>
@@ -170,13 +178,13 @@ a{text-decoration:none;color:inherit}
 <script>
 async function render() {
   const admin = SA.isAdmin();
-  const pros = SA.getAllPros().sort((a, b) => a.name.localeCompare(b.name));
+  const pros = SA.getAllProsAdmin().sort((a, b) => a.name.localeCompare(b.name));
   const contactCounts = admin ? await SA.getProContactCountsAdmin() : {};
   document.getElementById('proTbody').innerHTML = pros.map(p => `
     <tr>
       <td><div class="sa-admin-name">${SA.escapeHtml(p.name)}</div><div class="sa-admin-job">${SA.escapeHtml(p.job)} · ${SA.escapeHtml(p.city)}</div></td>
       <td>${p.siret ? `<span class="sa-admin-siret">${SA.escapeHtml(p.siret)}</span>` : `<span class="sa-admin-siret missing">Non renseigné</span>`}</td>
-      <td><span class="sa-admin-badge ${p.verified ? 'yes' : 'no'}">${p.verified ? 'Vérifié' : 'Non vérifié'}</span></td>
+      <td><span class="sa-admin-badge ${p.verified ? 'yes' : 'no'}">${p.verified ? 'Vérifié' : 'Non vérifié'}</span>${p.suspended ? ' <span class="sa-admin-badge no" title="'+SA.escapeHtml(p.suspendedReason||'')+'">Suspendu</span>' : ''}</td>
       <td>${admin ? `<div style="display:flex;align-items:center;gap:6px"><input type="number" min="0" max="5" step="0.1" id="grate_${p.id}" value="${p.googleRating != null ? p.googleRating : ''}" placeholder="—" style="width:56px;padding:5px 7px;border:1px solid #ddd;border-radius:6px;font-size:12.5px;font-family:inherit"><button class="sa-admin-btn" onclick="saveGoogleRating('${p.id}')">OK</button><a href="${SA.proGoogleMapsUrl(p)}" target="_blank" title="Voir sur Google" style="color:#888"><i class="ti ti-external-link"></i></a></div>` : (p.googleRating != null ? p.googleRating.toFixed(1) : '—')}</td>
       <td>${contactCounts[p.id] || 0}</td>
       <td>${admin ? `<button class="sa-admin-toggle${p.verified ? ' on' : ''}" onclick="toggleVerified('${p.id}', ${!p.verified})">${p.verified ? 'Retirer' : 'Vérifier'}</button>` : ''}</td>
@@ -401,6 +409,63 @@ async function confirmProReceived(id) {
   renderClaims();
 }
 
+async function renderDebts() {
+  const zone = document.getElementById('debtsZone');
+  if (!SA.getUser()) { zone.innerHTML = LOGIN_PROMPT; return; }
+  const debts = await SA.getProCommissionDebtsAdmin();
+  if (!debts.length) { zone.innerHTML = '<div class="sa-admin-empty">Aucune commission professionnelle en attente de règlement pour le moment.</div>'; return; }
+  const tierLabel = (d) => {
+    if (d.suspended) return { cls: 'no', label: 'Fiche suspendue' };
+    if (d.daysOverdue == null) return { cls: 'pending', label: 'Délai en cours' };
+    if (d.daysOverdue < 0) return { cls: 'pending', label: `Échéance dans ${-d.daysOverdue} j` };
+    if (d.daysOverdue < 7) return { cls: 'pending', label: `${d.daysOverdue} j de retard — 1ère relance` };
+    if (d.daysOverdue < 15) return { cls: 'pending', label: `${d.daysOverdue} j de retard — relance ferme` };
+    if (d.daysOverdue < 22) return { cls: 'no', label: `${d.daysOverdue} j de retard — dernier avis` };
+    return { cls: 'no', label: `${d.daysOverdue} j de retard — à suspendre` };
+  };
+  zone.innerHTML = `<table class="sa-admin-table">
+    <thead><tr><th>Professionnel</th><th>Dû à SansAgents</th><th>Réclamations</th><th>Échéance la plus ancienne</th><th>Statut</th><th></th></tr></thead>
+    <tbody>${debts.map(d => {
+      const t = tierLabel(d);
+      return `
+      <tr>
+        <td><div class="sa-admin-name">${SA.escapeHtml(d.proName)}</div></td>
+        <td><strong>${d.owed.toFixed(2)} €</strong></td>
+        <td>${d.claimsCount}</td>
+        <td>${d.earliestDueAt ? new Date(d.earliestDueAt).toLocaleDateString('fr-FR') : '—'}</td>
+        <td><span class="sa-admin-badge ${t.cls}">${t.label}</span></td>
+        <td><div class="sa-admin-actions">
+          ${d.suspended
+            ? `<button class="sa-admin-btn approve" onclick="reactivatePro('${d.proId}')">Réactiver la fiche</button>`
+            : `<button class="sa-admin-btn reject" onclick="suspendPro('${d.proId}','${SA.escapeHtml(d.proName).replace(/'/g,"\\'")}')">Suspendre maintenant</button>`}
+        </div></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+async function suspendPro(id, name) {
+  if (!confirm(`Suspendre la fiche de ${name} de l'annuaire public jusqu'au règlement de sa commission ? Elle redeviendra visible dès que vous cliquerez sur "Réactiver".`)) return;
+  try {
+    await SA.suspendProAdmin(id, 'Commission impayée');
+    SA.toast('Fiche suspendue', 'ti-circle-check');
+  } catch (e) {
+    SA.toast('Erreur : ' + e.message, 'ti-alert-circle');
+  }
+  render();
+  renderDebts();
+}
+async function reactivatePro(id) {
+  if (!confirm('Réactiver cette fiche dans l\'annuaire public ? Le compteur de relances repart de zéro.')) return;
+  try {
+    await SA.reactivateProAdmin(id);
+    SA.toast('Fiche réactivée', 'ti-circle-check');
+  } catch (e) {
+    SA.toast('Erreur : ' + e.message, 'ti-alert-circle');
+  }
+  render();
+  renderDebts();
+}
+
 SA.init().then(function(){
   renderAuthStatus();
   if (!SA.isAdmin()) {
@@ -417,6 +482,7 @@ SA.init().then(function(){
   renderAvis();
   renderSignalements();
   renderClaims();
+  renderDebts();
   if (window.SA_CONFIG.boostsEnabled) {
     renderBoosts();
   } else {

@@ -219,6 +219,8 @@
       icon:      row.icon || "ti-briefcase",
       logo:      row.logo,
       verified:  !!row.verified,
+      suspended: !!row.suspended,
+      suspendedReason: row.suspended_reason || "",
       googleRating: row.google_rating !== undefined && row.google_rating !== null ? parseFloat(row.google_rating) : null,
       createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
       isUserPro: true
@@ -437,7 +439,7 @@
         .eq("status", "active")
         .order("created_at", { ascending: false }),
       _sb.from("pros")
-        .select("id,owner_id,name,job,cat,city,zone,siret,phone,email,description,long_desc,services,rating,reviews,color,icon,logo,verified,created_at")
+        .select("id,owner_id,name,job,cat,city,zone,siret,phone,email,description,long_desc,services,rating,reviews,color,icon,logo,verified,suspended,suspended_reason,created_at")
         .order("created_at", { ascending: false })
     ]);
 
@@ -1072,7 +1074,12 @@
   }
 
   /* ── Annuaire professionnels ─────────────────────────────────────── */
-  function getAllPros() { return DEMO_PROS.concat(_cache.dbPros); }
+  // Les professionnels suspendus (commission de 13% impayée, voir
+  // enforce-pro-commissions) restent en base mais disparaissent de
+  // l'annuaire public — getAllProsAdmin() ci-dessous les garde visibles
+  // pour que l'admin puisse les gérer/réactiver.
+  function getAllPros() { return DEMO_PROS.concat(_cache.dbPros.filter((p) => !p.suspended)); }
+  function getAllProsAdmin() { return DEMO_PROS.concat(_cache.dbPros); }
   function getProById(id) { return getAllPros().find(p => p.id === id) || null; }
   function isDemoPro(id) { return DEMO_PROS.some((p) => p.id === id); }
   function getUserPros() { return _cache.dbPros.filter(p => _cache.user && p.owner_id === _cache.user.id); }
@@ -1228,6 +1235,9 @@
   const COMMISSION_CLIENT_RATE       = 0.05;
   const COMMISSION_CLIENT_RATE_BONUS = 0.08;
   const COMMISSION_BONUS_THRESHOLD   = 10000;
+  // Délai laissé au professionnel pour régler sa commission de 13% après
+  // validation de la réclamation du client (voir enforce-pro-commissions).
+  const COMMISSION_PRO_PAYMENT_GRACE_DAYS = 15;
 
   // Validation IBAN par la cle MOD-97 standard (norme ISO 7064) — repere une
   // faute de frappe (chiffre manquant, inverse...) avant meme d'enregistrer
@@ -1305,11 +1315,62 @@
     return data.signedUrl;
   }
   async function updateCommissionClaimStatus(id, status) {
-    const { error } = await _sb.from("commission_claims").update({ status: status, reviewed_at: new Date().toISOString() }).eq("id", id);
+    const patch = { status: status, reviewed_at: new Date().toISOString() };
+    // Dès que le dossier du client est validé, le compte à rebours de
+    // paiement du professionnel démarre (voir enforce-pro-commissions).
+    if (status === "approved") {
+      const due = new Date();
+      due.setDate(due.getDate() + COMMISSION_PRO_PAYMENT_GRACE_DAYS);
+      patch.pro_payment_due_at = due.toISOString();
+    }
+    const { error } = await _sb.from("commission_claims").update(patch).eq("id", id);
     if (error) throw error;
   }
   async function confirmProCommissionReceived(id) {
     const { error } = await _sb.from("commission_claims").update({ pro_commission_received: true, pro_commission_received_at: new Date().toISOString() }).eq("id", id);
+    if (error) throw error;
+  }
+  // Dette de commission par professionnel : somme des réclamations
+  // approuvées mais pas encore réglées par le pro, pour l'affichage admin
+  // et pour décider s'il faut relancer / suspendre (voir aussi la fonction
+  // planifiée enforce-pro-commissions qui fait le même calcul côté serveur).
+  async function getProCommissionDebtsAdmin() {
+    const { data, error } = await _sb
+      .from("commission_claims")
+      .select("pro_id,pro_commission_amount,pro_payment_due_at")
+      .eq("status", "approved")
+      .eq("pro_commission_received", false);
+    if (error) { console.error("getProCommissionDebtsAdmin error:", error); return []; }
+    const byPro = {};
+    (data || []).forEach((r) => {
+      if (!byPro[r.pro_id]) byPro[r.pro_id] = { proId: r.pro_id, owed: 0, claimsCount: 0, earliestDueAt: null };
+      const d = byPro[r.pro_id];
+      d.owed += Number(r.pro_commission_amount) || 0;
+      d.claimsCount += 1;
+      if (r.pro_payment_due_at && (!d.earliestDueAt || r.pro_payment_due_at < d.earliestDueAt)) {
+        d.earliestDueAt = r.pro_payment_due_at;
+      }
+    });
+    const debts = Object.values(byPro);
+    debts.forEach((d) => {
+      d.owed = Math.round(d.owed * 100) / 100;
+      d.daysOverdue = d.earliestDueAt ? Math.floor((Date.now() - new Date(d.earliestDueAt).getTime()) / 86400000) : null;
+    });
+    const pros = getAllProsAdmin();
+    debts.forEach((d) => {
+      const p = pros.find((x) => x.id === d.proId);
+      d.proName = p ? p.name : "Professionnel inconnu";
+      d.suspended = p ? !!p.suspended : false;
+    });
+    debts.sort((a, b) => (b.daysOverdue || 0) - (a.daysOverdue || 0));
+    return debts;
+  }
+  async function suspendProAdmin(id, reason) {
+    const { error } = await _sb.from("pros").update({ suspended: true, suspended_at: new Date().toISOString(), suspended_reason: reason || "Commission impayée" }).eq("id", id);
+    if (error) throw error;
+  }
+  async function reactivateProAdmin(id) {
+    const { error } = await _sb.from("pros").update({ suspended: false, suspended_at: null, suspended_reason: null, commission_reminder_count: 0, commission_reminder_last_sent_at: null }).eq("id", id);
     if (error) throw error;
   }
 
@@ -1784,9 +1845,10 @@
     markConversationRead, deleteConversation, getUnreadMessageCount, isMessageFromOther,
     getListingContact,
     // Pros
-    getAllPros, getProById, getUserPros, addPro, setProVerified, setProGoogleRating, proGoogleMapsUrl, proWebsiteUrl, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
+    getAllPros, getAllProsAdmin, getProById, getUserPros, addPro, setProVerified, setProGoogleRating, proGoogleMapsUrl, proWebsiteUrl, submitReview, getReviews, getReviewsForListing, timeAgo, submitReport, isDemoListing, isDemoPro,
     submitProContact, getProContactCountsAdmin,
     computeCommissionReward, computeProCommission, submitCommissionClaim, getAllCommissionClaimsAdmin, getCommissionClaimFileUrl, updateCommissionClaimStatus, confirmProCommissionReceived,
+    getProCommissionDebtsAdmin, suspendProAdmin, reactivateProAdmin,
     COMMISSION_MIN_CONTRACT, COMMISSION_BONUS_THRESHOLD, isValidIban,
     getAllAvisAdmin, updateAvisStatus, getAllSignalementsAdmin, updateSignalementStatus,
     // Documents

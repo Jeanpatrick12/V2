@@ -636,6 +636,23 @@ CREATE POLICY "commission_claims_update_admin" ON public.commission_claims FOR U
 ALTER TABLE public.commission_claims ADD COLUMN IF NOT EXISTS pro_commission_received boolean NOT NULL DEFAULT false;
 ALTER TABLE public.commission_claims ADD COLUMN IF NOT EXISTS pro_commission_received_at timestamptz;
 
+-- Ajoutée le 2026-09-08 : mise en demeure / suspension automatique des
+-- professionnels qui ne paient pas leur commission de 13% à SansAgents.
+-- pro_payment_due_at est posé au moment où l'admin fait passer la
+-- réclamation à "approved" (le dossier du client est validé, donc le
+-- professionnel doit désormais régler sa commission) : voir
+-- updateCommissionClaimStatus dans sa-shared.js. La fonction planifiée
+-- enforce-pro-commissions (voir supabase/functions/enforce-pro-commissions)
+-- s'appuie ensuite sur cette date pour envoyer des relances graduées, puis
+-- suspendre automatiquement la fiche du professionnel si rien n'est réglé.
+ALTER TABLE public.commission_claims ADD COLUMN IF NOT EXISTS pro_payment_due_at timestamptz;
+
+ALTER TABLE public.pros ADD COLUMN IF NOT EXISTS suspended boolean NOT NULL DEFAULT false;
+ALTER TABLE public.pros ADD COLUMN IF NOT EXISTS suspended_at timestamptz;
+ALTER TABLE public.pros ADD COLUMN IF NOT EXISTS suspended_reason text;
+ALTER TABLE public.pros ADD COLUMN IF NOT EXISTS commission_reminder_count int NOT NULL DEFAULT 0;
+ALTER TABLE public.pros ADD COLUMN IF NOT EXISTS commission_reminder_last_sent_at timestamptz;
+
 -- ═══════════════════════════════════════════════════════════════════
 -- BUCKET STORAGE — à créer MANUELLEMENT dans Supabase
 --
