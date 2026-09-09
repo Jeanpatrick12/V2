@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="m.css">
 <style>
 .m-pro-detail-hero {
-  background: linear-gradient(135deg,#0f1923,#1a2c3d);
+  background: linear-gradient(135deg,#0c1622,#1c2e44);
   padding: 20px var(--pad) 24px;
   display: flex; gap: 16px; align-items: flex-start;
 }
@@ -123,7 +123,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../sa-config.js"></script>
-<script src="../sa-shared.js?v=49"></script>
+<script src="../sa-shared.js?v=50"></script>
 <script>
 var COLORS = ['#E84533','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2'];
 var currentPro = null;
@@ -199,7 +199,7 @@ function renderPro(p) {
   var html = '';
 
   // ── Hero dark ───────────────────────────────────────────
-  html += '<div style="background:linear-gradient(135deg,#0f1923,#1a2c3d);padding:20px var(--pad) 24px">' +
+  html += '<div style="background:linear-gradient(135deg,#0c1622,#1c2e44);padding:20px var(--pad) 24px">' +
     '<div style="display:flex;gap:16px;align-items:center;margin-bottom:14px">' +
       '<div style="width:64px;height:64px;border-radius:16px;background:'+color+';color:white;font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+init+'</div>' +
       '<div>' +
@@ -228,7 +228,7 @@ function renderPro(p) {
     // Cashback
     '<div style="background:#fff8f7;border:1px solid #ffd8d3;border-radius:14px;padding:13px 15px;margin-bottom:16px">' +
       '<div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">' +
-        '<div style="width:30px;height:30px;border-radius:9px;background:#ffe4df;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0"><i class="ti ti-gift"></i></div>' +
+        '<div style="width:32px;height:32px;border-radius:9px;background:#ffe4df;color:#E84533;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0"><i class="ti ti-gift"></i></div>' +
         '<div style="font-size:13px;font-weight:700;color:#111;line-height:1.35"><strong style="color:#E84533">5%</strong> reversés si vous signez avec lui</div>' +
       '</div>' +
       '<div style="font-size:11.5px;color:#888;line-height:1.55">SansAgents facture une commission aux professionnels de l\'annuaire. Pour vous remercier de l\'avoir choisi ici, on vous en reverse une partie par virement, dès que le professionnel a réglé la sienne.</div>' +

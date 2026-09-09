@@ -114,7 +114,7 @@
       "#saCookieBanner .sa-cb-refuse{background:#f2f2f2;color:#333}" +
       "#saCookieBanner .sa-cb-refuse:hover{background:#e7e7e7}" +
       "#saCookieBanner .sa-cb-accept{background:#E84533;color:#fff}" +
-      "#saCookieBanner .sa-cb-accept:hover{background:#d13a2a}" +
+      "#saCookieBanner .sa-cb-accept:hover{background:#c93a2a}" +
       "@media(max-width:480px){#saCookieBanner{bottom:12px;padding:20px 18px 16px}}";
     document.head.appendChild(style);
 
