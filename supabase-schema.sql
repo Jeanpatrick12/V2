@@ -654,6 +654,72 @@ ALTER TABLE public.pros ADD COLUMN IF NOT EXISTS commission_reminder_count int N
 ALTER TABLE public.pros ADD COLUMN IF NOT EXISTS commission_reminder_last_sent_at timestamptz;
 
 -- ═══════════════════════════════════════════════════════════════════
+-- CORRECTIF CRITIQUE — 2026-09-14 (revue de sécurité)
+--
+-- "profiles_update" (plus haut) autorise chaque utilisateur à modifier SA
+-- PROPRE ligne (id = auth.uid()), ce qui est voulu pour prénom/nom/photo...
+-- Mais rien n'empêchait un utilisateur connecté de modifier aussi sa
+-- propre colonne "role" et de passer directement de 'user' à 'admin' via
+-- un simple appel à l'API Supabase — sans jamais toucher le site. Une fois
+-- admin, il aurait un accès total à admin.html : IBAN et pièces jointes de
+-- TOUS les réclamants de commission, modération des avis/signalements,
+-- suspension/vérification des professionnels, etc.
+--
+-- Exécuter ce bloc en priorité, avant tout le reste de ce fichier si
+-- besoin — c'est la faille la plus grave trouvée dans cette revue.
+CREATE OR REPLACE FUNCTION public.protect_profile_role()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
+BEGIN
+  IF NEW.role IS DISTINCT FROM OLD.role
+     AND NOT EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin') THEN
+    NEW.role := OLD.role;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_protect_profile_role ON public.profiles;
+CREATE TRIGGER trg_protect_profile_role BEFORE UPDATE ON public.profiles
+  FOR EACH ROW EXECUTE FUNCTION public.protect_profile_role();
+-- ═══════════════════════════════════════════════════════════════════
+
+-- Rattrapage 2026-09-14 : colonne déjà présente en production (ajoutée
+-- manuellement dans le dashboard Supabase lors de l'ajout de la "Note
+-- Google" dans admin.html) mais jamais reportée dans ce fichier — la
+-- ligne ci-dessous ne fait rien si elle existe déjà.
+ALTER TABLE public.pros ADD COLUMN IF NOT EXISTS google_rating numeric;
+
+-- Ajoutée le 2026-09-14 (revue de sécurité) : la policy "pros_update"
+-- autorise le propriétaire (owner_id = auth.uid()) à modifier SA fiche, ce
+-- qui est voulu pour son nom/description/services... mais RLS ne restreint
+-- pas quelles COLONNES sont modifiables. Sans ce trigger, un professionnel
+-- connecté pouvait, via un simple appel direct à l'API Supabase (hors du
+-- site), repasser lui-même "suspended" à false après une suspension pour
+-- commission impayée, s'auto-attribuer le badge "verified" sans aucun
+-- contrôle de SIRET, ou modifier sa note/ses avis. Même principe que
+-- protect_featured_until ci-dessus : on annule silencieusement tout
+-- changement sur ces colonnes si l'auteur n'est pas admin.
+CREATE OR REPLACE FUNCTION public.protect_pro_admin_fields()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin') THEN
+    NEW.verified                       := OLD.verified;
+    NEW.rating                         := OLD.rating;
+    NEW.reviews                        := OLD.reviews;
+    NEW.google_rating                  := OLD.google_rating;
+    NEW.suspended                      := OLD.suspended;
+    NEW.suspended_at                   := OLD.suspended_at;
+    NEW.suspended_reason               := OLD.suspended_reason;
+    NEW.commission_reminder_count      := OLD.commission_reminder_count;
+    NEW.commission_reminder_last_sent_at := OLD.commission_reminder_last_sent_at;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_protect_pro_admin_fields ON public.pros;
+CREATE TRIGGER trg_protect_pro_admin_fields BEFORE UPDATE ON public.pros
+  FOR EACH ROW EXECUTE FUNCTION public.protect_pro_admin_fields();
+
+-- ═══════════════════════════════════════════════════════════════════
 -- BUCKET STORAGE — à créer MANUELLEMENT dans Supabase
 --
 -- Va dans Storage (menu de gauche) > New bucket
