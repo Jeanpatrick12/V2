@@ -14,9 +14,22 @@ Choses identifiées mais volontairement pas construites maintenant — pas oubli
 - [ ] **Faire évoluer l'admin au-delà d'une seule personne.** Modération des réclamations/mises en avant/signalements entièrement manuelle sur une seule page. Pas un problème tant que le volume reste faible — à revisiter si ça devient un goulot d'étranglement.
 - [ ] **Suite en cas de non-paiement après suspension automatique.** Le système envoie relances + suspend automatiquement à J+22, mais ne va pas plus loin. Si un professionnel suspendu ne réagit toujours pas : mise en demeure formelle par courrier recommandé (l'email automatique ne vaut que comme relance informelle) puis, en dernier recours, injonction de payer auprès du tribunal de commerce. Décision humaine à chaque fois, pas automatisée.
 
+## Visibilité (voir le Guide de visibilité)
+
+- [ ] **Search Console : demander l'indexation** de /annonces, /guide-vendeur, /professionnels, /estimer-son-bien (quota ~10/jour).
+- [ ] **Search Console : revérifier dans ~2 semaines** (Indexation > Pages) — les 14 pages « Découvertes, actuellement non indexées » devraient diminuer.
+- [ ] **Démarcher 10-15 professionnels locaux** pour lancer l'annuaire (il est inutile vide).
+- [ ] **Page LinkedIn entreprise** — reportée (compte personnel compliqué pour l'instant).
+- [ ] **Trustpilot / avis** — reporté tant qu'il n'y a aucune transaction à évaluer.
+- [ ] **Publicité Google Ads, presse startup, backlinks** — phases 2 et 3 du guide, quand le reste est en place.
+
 ## Fait (pour référence)
 
 - [x] Sitemap dynamique (annonces + pros, régénéré chaque jour) — 08/09/2026
-- [x] Relances + suspension automatique des pros qui ne paient pas leur commission — 08/09/2026
+- [x] Relances + suspension automatique des pros qui ne paient pas leur commission (avec copie de chaque email envoyée au fondateur) — 08/09/2026
 - [x] Charte graphique / design system — 08/09/2026
 - [x] Unification des 3 incohérences de couleurs/tailles relevées dans la charte — 08/09/2026
+- [x] Correctif critique de sécurité (auto-attribution du rôle admin, contournement de suspension) — 14/09/2026
+- [x] Sitemap nettoyé (pages noindex retirées), description ajoutée sur cgu.html — 14/09/2026
+- [x] Search Console : propriété vérifiée, sitemap accepté (statut Succès), accueil indexé — 20/09/2026
+- Écarté : Profil d'établissement Google (site 100 % en ligne, sans adresse ni zone de service : non éligible)
