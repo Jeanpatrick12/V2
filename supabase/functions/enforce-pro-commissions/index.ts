@@ -73,6 +73,14 @@ async function sendBrevo(to: string, subject: string, html: string) {
   return res.ok
 }
 
+// Envoie au fondateur (ADMIN_ALERT_EMAIL) une copie de chaque email parti
+// vers un professionnel, précédée d'un bandeau qui dit à qui il a été envoyé.
+async function sendAdminCopy(proName: string, proEmail: string, subject: string, html: string) {
+  if (!ADMIN_ALERT_EMAIL) return
+  const banner = `<div style="background:#111;color:#fff;padding:10px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:12px">Copie de l'email envoyé à <strong>${proName}</strong> (${proEmail})</div>`
+  await sendBrevo(ADMIN_ALERT_EMAIL, `[Copie] ${subject} — ${proName}`, banner + html)
+}
+
 function emailShell(headerColor: string, title: string, subtitle: string, bodyHtml: string) {
   return `<div style="background:#f0f0f0;padding:28px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
 <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08)">
@@ -145,14 +153,18 @@ Deno.serve(async (_req) => {
 ${isFirm ? `<p style="color:#7a3226;background:#fff5f4;border:1px solid #ffd8d3;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6;margin:0 0 16px">Passé ce délai, une pénalité de retard s'applique de plein droit (10%/an + indemnité forfaitaire de recouvrement de 40€, art. L441-10 du Code de commerce), soit environ <strong>${fee} €</strong> à ce jour.</p>` : ''}
 ${tier.minDays === 15 ? `<p style="color:#7a3226;background:#fff5f4;border:1px solid #ffd8d3;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6;margin:0 0 16px"><strong>Sans règlement sous 7 jours</strong>, votre fiche sera automatiquement retirée de l'annuaire public SansAgents, conformément à nos CGU.</p>` : ''}
 <p style="color:#555;font-size:14px;line-height:1.65;margin:0">Merci de régulariser au plus vite par virement, ou de nous contacter à <a href="mailto:contact@sansagents.fr">contact@sansagents.fr</a> en cas de difficulté.</p>`
-        await sendBrevo(proEmail, subject, emailShell(isFirm ? '#c0392b' : '#E84533', isFirm ? 'Commission en retard' : 'Commission à régler', 'SansAgents · Annuaire professionnels', body))
+        const html = emailShell(isFirm ? '#c0392b' : '#E84533', isFirm ? 'Commission en retard' : 'Commission à régler', 'SansAgents · Annuaire professionnels', body)
+        await sendBrevo(proEmail, subject, html)
+        await sendAdminCopy(pro.name, proEmail, subject, html)
       } else {
         // Palier final : suspension automatique.
         await supabase.from('pros').update({ suspended: true, suspended_at: new Date().toISOString(), suspended_reason: 'Commission impayée (relance automatique)' }).eq('id', pro.id)
         const body = `<p style="color:#555;font-size:14px;line-height:1.65;margin:0 0 16px">Bonjour <strong>${pro.name}</strong>,</p>
 <p style="color:#555;font-size:14px;line-height:1.65;margin:0 0 16px">Votre fiche a été retirée de l'annuaire public SansAgents : la commission de <strong style="color:#111">${owed} €</strong> due sur un contrat signé via la plateforme n'a pas été réglée dans les délais prévus par nos <a href="https://sansagents.fr/cgu">CGU</a>.</p>
 <p style="color:#555;font-size:14px;line-height:1.65;margin:0">Votre fiche sera réactivée dès réception du règlement. Contactez-nous à <a href="mailto:contact@sansagents.fr">contact@sansagents.fr</a>.</p>`
-        await sendBrevo(proEmail, 'Votre fiche SansAgents a été suspendue', emailShell('#111', 'Fiche suspendue', 'SansAgents · Annuaire professionnels', body))
+        const suspendHtml = emailShell('#111', 'Fiche suspendue', 'SansAgents · Annuaire professionnels', body)
+        await sendBrevo(proEmail, 'Votre fiche SansAgents a été suspendue', suspendHtml)
+        await sendAdminCopy(pro.name, proEmail, 'Votre fiche SansAgents a été suspendue', suspendHtml)
 
         if (ADMIN_ALERT_EMAIL) {
           await sendBrevo(ADMIN_ALERT_EMAIL, `Pro suspendu automatiquement : ${pro.name} (${owed} €)`,
