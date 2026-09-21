@@ -295,6 +295,13 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
           </div>
           <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
         </a>
+        <a href="https://immobilier.pappers.fr/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#111">Pappers Immobilier</div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px">Prix immobiliers très précis selon la localisation</div>
+          </div>
+          <i class="ti ti-external-link" style="color:#E84533;font-size:16px;flex-shrink:0"></i>
+        </a>
         <a href="https://www.castorus.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #eeeff2;text-decoration:none;color:inherit">
           <div style="flex:1;min-width:0">
             <div style="font-size:13px;font-weight:700;color:#111">Castorus</div>
@@ -897,7 +904,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
         <div class="ep-row" style="margin-bottom:10px">
           <div class="vh-mgrid" style="gap:8px">
             <div class="vh-field"><label class="vh-label">Source</label>
-              <select class="vh-input ep-src" onchange="buildDoc('prix')"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
+              <select class="vh-input ep-src" onchange="buildDoc('prix')"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>Pappers Immobilier</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
             </div>
             <div class="vh-field"><label class="vh-label">Prix/m² (€)</label><input class="vh-input ep-pm2" type="number" placeholder="3 500" oninput="buildDoc('prix')"></div>
           </div>
@@ -906,7 +913,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
         <div class="ep-row" style="margin-bottom:10px">
           <div class="vh-mgrid" style="gap:8px">
             <div class="vh-field"><label class="vh-label">Source</label>
-              <select class="vh-input ep-src" onchange="buildDoc('prix')"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
+              <select class="vh-input ep-src" onchange="buildDoc('prix')"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>Pappers Immobilier</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
             </div>
             <div class="vh-field"><label class="vh-label">Prix/m² (€)</label><input class="vh-input ep-pm2" type="number" placeholder="" oninput="buildDoc('prix')"></div>
           </div>
@@ -915,7 +922,7 @@ body { background: var(--bg); padding-bottom: calc(var(--bot-h) + 20px); overflo
         <div class="ep-row" style="margin-bottom:10px">
           <div class="vh-mgrid" style="gap:8px">
             <div class="vh-field"><label class="vh-label">Source</label>
-              <select class="vh-input ep-src" onchange="buildDoc('prix')"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
+              <select class="vh-input ep-src" onchange="buildDoc('prix')"><option value="">— Choisir —</option><option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>Pappers Immobilier</option><option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select>
             </div>
             <div class="vh-field"><label class="vh-label">Prix/m² (€)</label><input class="vh-input ep-pm2" type="number" placeholder="" oninput="buildDoc('prix')"></div>
           </div>
@@ -1086,7 +1093,7 @@ function addMPrixRow(){
     '<div class="vh-mgrid" style="gap:8px">'+
     '<div class="vh-field"><label class="vh-label">Source</label>'+
     '<select class="vh-input ep-src" onchange="buildDoc(\'prix\')"><option value="">— Choisir —</option>'+
-    '<option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option>'+
+    '<option>DVF Étalab</option><option>Notaires de France</option><option>Castorus</option><option>Pappers Immobilier</option>'+
     '<option>MeilleursAgents</option><option>PAP Estimation</option><option>Autre</option></select></div>'+
     '<div class="vh-field"><label class="vh-label">Prix/m² (€)</label><input class="vh-input ep-pm2" type="number" placeholder="" oninput="buildDoc(\'prix\')"></div>'+
     '</div><div class="vh-field"><label class="vh-label">Notes</label><input class="vh-input ep-note" type="text" placeholder="" oninput="buildDoc(\'prix\')"></div></div>';
